@@ -1,0 +1,269 @@
+﻿<UserControl x:Class="DOInventoryManager.Views.PurchasesView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <Grid Margin="20">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <!-- Header -->
+                <RowDefinition Height="Auto"/>
+                <!-- Purchase Form -->
+                <RowDefinition Height="Auto"/>
+                <!-- Calculations Display -->
+                <RowDefinition Height="*"/>
+                <!-- Purchases List -->
+            </Grid.RowDefinitions>
+
+            <!-- Header -->
+            <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0,0,0,30">
+                <TextBlock Text="🛒" FontSize="32" VerticalAlignment="Center" Margin="0,0,10,0"/>
+                <TextBlock Text="Purchase Entry" FontSize="28" FontWeight="Bold" 
+                         VerticalAlignment="Center" Foreground="#2c3e50"/>
+            </StackPanel>
+
+            <!-- Purchase Entry Form -->
+            <Border Grid.Row="1" Background="White" BorderBrush="#dee2e6" BorderThickness="1" 
+                  CornerRadius="8" Padding="25" Margin="0,0,0,20">
+                <StackPanel>
+                    <TextBlock Text="New Fuel Purchase" FontSize="18" FontWeight="SemiBold" 
+                             Margin="0,0,0,20" Foreground="#2c3e50"/>
+
+                    <!-- Row 1: Basic Information -->
+                    <Grid Margin="0,0,0,15">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <!-- Vessel -->
+                        <StackPanel Grid.Column="0" Margin="0,0,15,0">
+                            <TextBlock Text="Vessel *" FontWeight="SemiBold" Margin="0,0,0,5"/>
+                            <ComboBox x:Name="VesselComboBox" Padding="10" BorderBrush="#ced4da" 
+                                    BorderThickness="1" DisplayMemberPath="Name" SelectedValuePath="Id"/>
+                        </StackPanel>
+
+                        <!-- Purchase Date -->
+                        <StackPanel Grid.Column="1" Margin="0,0,15,0">
+                            <TextBlock Text="Purchase Date *" FontWeight="SemiBold" Margin="0,0,0,5"/>
+                            <DatePicker x:Name="PurchaseDatePicker" Padding="10" BorderBrush="#ced4da" 
+                                      BorderThickness="1" SelectedDate="{x:Static System:DateTime.Now}"
+                                      xmlns:System="clr-namespace:System;assembly=mscorlib"/>
+                        </StackPanel>
+
+                        <!-- Supplier -->
+                        <StackPanel Grid.Column="2">
+                            <TextBlock Text="Supplier *" FontWeight="SemiBold" Margin="0,0,0,5"/>
+                            <ComboBox x:Name="SupplierComboBox" Padding="10" BorderBrush="#ced4da" 
+                                    BorderThickness="1" DisplayMemberPath="Name" SelectedValuePath="Id"
+                                    SelectionChanged="SupplierComboBox_SelectionChanged"/>
+                        </StackPanel>
+                    </Grid>
+
+                    <!-- Row 2: Quantities and Invoice -->
+                    <Grid Margin="0,0,0,15">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <!-- Quantity Liters -->
+                        <StackPanel Grid.Column="0" Margin="0,0,15,0">
+                            <TextBlock Text="Quantity (Liters) *" FontWeight="SemiBold" Margin="0,0,0,5"/>
+                            <TextBox x:Name="QuantityLitersTextBox" Padding="10" BorderBrush="#ced4da" 
+                                   BorderThickness="1" TextChanged="QuantityTextBox_TextChanged"/>
+                        </StackPanel>
+
+                        <!-- Quantity Tons -->
+                        <StackPanel Grid.Column="1" Margin="0,0,15,0">
+                            <TextBlock Text="Quantity (Tons) *" FontWeight="SemiBold" Margin="0,0,0,5"/>
+                            <TextBox x:Name="QuantityTonsTextBox" Padding="10" BorderBrush="#ced4da" 
+                                   BorderThickness="1" TextChanged="QuantityTextBox_TextChanged"/>
+                        </StackPanel>
+
+                        <!-- Invoice Reference -->
+                        <StackPanel Grid.Column="2">
+                            <TextBlock Text="Invoice Reference *" FontWeight="SemiBold" Margin="0,0,0,5"/>
+                            <TextBox x:Name="InvoiceRefTextBox" Padding="10" BorderBrush="#ced4da" 
+                                   BorderThickness="1"/>
+                        </StackPanel>
+                    </Grid>
+
+                    <!-- Row 3: Financial Information -->
+                    <Grid Margin="0,0,0,15">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <!-- Total Value (Supplier Currency) -->
+                        <StackPanel Grid.Column="0" Margin="0,0,15,0">
+                            <TextBlock x:Name="TotalValueLabel" Text="Total Value *" FontWeight="SemiBold" Margin="0,0,0,5"/>
+                            <TextBox x:Name="TotalValueTextBox" Padding="10" BorderBrush="#ced4da" 
+                                   BorderThickness="1" TextChanged="TotalValueTextBox_TextChanged"/>
+                        </StackPanel>
+
+                        <!-- Exchange Rate (if needed) -->
+                        <StackPanel Grid.Column="1" Margin="0,0,15,0">
+                            <TextBlock Text="Exchange Rate" FontWeight="SemiBold" Margin="0,0,0,5"/>
+                            <TextBox x:Name="ExchangeRateTextBox" Padding="10" BorderBrush="#ced4da" 
+                                   BorderThickness="1" IsEnabled="False"
+                                   TextChanged="TotalValueTextBox_TextChanged"/>
+                        </StackPanel>
+
+                        <!-- Total USD Value (Auto-calculated) -->
+                        <StackPanel Grid.Column="2">
+                            <TextBlock Text="Total USD Value" FontWeight="SemiBold" Margin="0,0,0,5"/>
+                            <Border Background="#f8f9fa" BorderBrush="#ced4da" BorderThickness="1" CornerRadius="3">
+                                <TextBlock x:Name="TotalUSDValueText" Text="$0.00" Padding="10" 
+                                         FontWeight="SemiBold" Foreground="#28a745"/>
+                            </Border>
+                        </StackPanel>
+                    </Grid>
+
+                    <!-- Row 4: Invoice Tracking (Optional) -->
+                    <Border Background="#e3f2fd" BorderBrush="#2196f3" BorderThickness="1" 
+                          CornerRadius="6" Padding="15" Margin="0,0,0,15">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+
+                            <!-- Invoice Receipt Date -->
+                            <StackPanel Grid.Column="0" Margin="0,0,15,0">
+                                <TextBlock Text="Invoice Receipt Date" FontWeight="SemiBold" Margin="0,0,0,5"/>
+                                <DatePicker x:Name="InvoiceReceiptDatePicker" Padding="8" 
+                                          BorderBrush="#90caf9" BorderThickness="1"
+                                          SelectedDateChanged="InvoiceDatePicker_SelectedDateChanged"/>
+                            </StackPanel>
+
+                            <!-- Due Date -->
+                            <StackPanel Grid.Column="1" Margin="0,0,15,0">
+                                <TextBlock Text="Due Date" FontWeight="SemiBold" Margin="0,0,0,5"/>
+                                <DatePicker x:Name="DueDatePicker" Padding="8" 
+                                          BorderBrush="#90caf9" BorderThickness="1"
+                                          SelectedDateChanged="InvoiceDatePicker_SelectedDateChanged"/>
+                            </StackPanel>
+
+                            <!-- Payment Status -->
+                            <StackPanel Grid.Column="2" VerticalAlignment="Center">
+                                <TextBlock x:Name="PaymentStatusText" Text="📋 Optional Invoice Tracking" 
+                                         FontSize="12" Foreground="#1976d2" FontWeight="SemiBold"/>
+                            </StackPanel>
+                        </Grid>
+                    </Border>
+
+                    <!-- Action Buttons -->
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                        <Button x:Name="EditPurchaseBtn" Content="✏️ Edit Selected" 
+                          Background="#f39c12" Foreground="White" BorderThickness="0" 
+                          Padding="15,10" Margin="0,0,10,0" FontWeight="SemiBold"
+                          IsEnabled="False" Click="EditPurchase_Click"/>
+
+                        <Button x:Name="DeletePurchaseBtn" Content="🗑️ Delete Selected" 
+                          Background="#dc3545" Foreground="White" BorderThickness="0" 
+                          Padding="15,10" Margin="0,0,15,0" FontWeight="SemiBold"
+                          IsEnabled="False" Click="DeletePurchase_Click"/>
+
+                        <Button x:Name="SavePurchaseBtn" Content="💾 Complete Purchase" 
+                          Background="#27ae60" Foreground="White" BorderThickness="0" 
+                          Padding="20,12" Margin="0,0,15,0" FontWeight="SemiBold"
+                          Click="SavePurchase_Click"/>
+
+                        <Button x:Name="ClearFormBtn" Content="🔄 Clear Form" 
+                          Background="#6c757d" Foreground="White" BorderThickness="0" 
+                          Padding="15,12" FontWeight="SemiBold"
+                          Click="ClearForm_Click"/>
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+
+            <!-- Auto-Calculations Display -->
+            <Border Grid.Row="2" Background="#fff3cd" BorderBrush="#ffc107" BorderThickness="1" 
+                  CornerRadius="6" Padding="20" Margin="0,0,0,20">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <StackPanel Grid.Column="0" HorizontalAlignment="Center">
+                        <TextBlock Text="💰 Price per Liter" FontWeight="SemiBold" HorizontalAlignment="Center" FontSize="12"/>
+                        <TextBlock x:Name="PricePerLiterText" Text="$0.000" FontSize="18" FontWeight="Bold" 
+                                 HorizontalAlignment="Center" Foreground="#856404"/>
+                    </StackPanel>
+
+                    <StackPanel Grid.Column="1" HorizontalAlignment="Center">
+                        <TextBlock Text="⚖️ Price per Ton" FontWeight="SemiBold" HorizontalAlignment="Center" FontSize="12"/>
+                        <TextBlock x:Name="PricePerTonText" Text="$0.00" FontSize="18" FontWeight="Bold" 
+                                 HorizontalAlignment="Center" Foreground="#856404"/>
+                    </StackPanel>
+
+                    <StackPanel Grid.Column="2" HorizontalAlignment="Center">
+                        <TextBlock Text="🧪 Density" FontWeight="SemiBold" HorizontalAlignment="Center" FontSize="12"/>
+                        <TextBlock x:Name="DensityText" Text="0.000" FontSize="18" FontWeight="Bold" 
+                                 HorizontalAlignment="Center" Foreground="#856404"/>
+                    </StackPanel>
+
+                    <StackPanel Grid.Column="3" HorizontalAlignment="Center">
+                        <TextBlock Text="💱 Exchange Rate" FontWeight="SemiBold" HorizontalAlignment="Center" FontSize="12"/>
+                        <TextBlock x:Name="ExchangeRateDisplayText" Text="1.000" FontSize="18" FontWeight="Bold" 
+                                 HorizontalAlignment="Center" Foreground="#856404"/>
+                    </StackPanel>
+                </Grid>
+            </Border>
+
+            <!-- Recent Purchases List -->
+            <Border Grid.Row="3" Background="White" BorderBrush="#dee2e6" BorderThickness="1" 
+                  CornerRadius="6" Padding="20">
+                <StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="0,0,0,15">
+                        <TextBlock Text="📋 Recent Purchases" FontSize="16" FontWeight="SemiBold" 
+                                 VerticalAlignment="Center" Foreground="#2c3e50"/>
+                        <Rectangle Width="20"/>
+                        <Button Content="🔄 Refresh" Background="#17a2b8" Foreground="White" 
+                              BorderThickness="0" Padding="10,5" FontSize="12"
+                              Click="RefreshPurchases_Click"/>
+                    </StackPanel>
+
+                    <DataGrid x:Name="PurchasesGrid" 
+                        AutoGenerateColumns="False" 
+                        CanUserAddRows="False"
+                        CanUserDeleteRows="False"
+                        CanUserReorderColumns="False"
+                        CanUserResizeRows="False"
+                        CanUserSortColumns="True"
+                        GridLinesVisibility="Horizontal"
+                        HeadersVisibility="Column"
+                        Background="White"
+                        BorderThickness="0"
+                        MaxHeight="400"
+                        SelectionMode="Single"
+                        SelectionChanged="PurchasesGrid_SelectionChanged">
+
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Date" Binding="{Binding PurchaseDate, StringFormat=yyyy-MM-dd}" Width="100"/>
+                            <DataGridTextColumn Header="Vessel" Binding="{Binding Vessel.Name}" Width="120"/>
+                            <DataGridTextColumn Header="Supplier" Binding="{Binding Supplier.Name}" Width="120"/>
+                            <DataGridTextColumn Header="Invoice Ref" Binding="{Binding InvoiceReference}" Width="100"/>
+                            <DataGridTextColumn Header="Qty (L)" Binding="{Binding QuantityLiters, StringFormat=N0}" Width="80"/>
+                            <DataGridTextColumn Header="Qty (T)" Binding="{Binding QuantityTons, StringFormat=N3}" Width="80"/>
+                            <DataGridTextColumn Header="Value" Binding="{Binding TotalValue, StringFormat=C2}" Width="100"/>
+                            <DataGridTextColumn Header="USD Value" Binding="{Binding TotalValueUSD, StringFormat=C2}" Width="100"/>
+                            <DataGridTextColumn Header="Price/L" Binding="{Binding PricePerLiter, StringFormat=C3}" Width="80"/>
+                            <DataGridTextColumn Header="Remaining" Binding="{Binding RemainingQuantity, StringFormat=N0}" Width="80"/>
+                            <DataGridTextColumn Header="Due Date" Binding="{Binding DueDate, StringFormat=yyyy-MM-dd}" Width="100"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </StackPanel>
+            </Border>
+        </Grid>
+    </ScrollViewer>
+</UserControl>

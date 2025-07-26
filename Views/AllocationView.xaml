@@ -1,0 +1,183 @@
+﻿<UserControl x:Class="DOInventoryManager.Views.AllocationView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <Grid Margin="20">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <!-- Header -->
+                <RowDefinition Height="Auto"/>
+                <!-- Control Panel -->
+                <RowDefinition Height="Auto"/>
+                <!-- Summary -->
+                <RowDefinition Height="*"/>
+                <!-- Allocation Results -->
+            </Grid.RowDefinitions>
+
+            <!-- Header -->
+            <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0,0,0,20">
+                <TextBlock Text="📋" FontSize="32" VerticalAlignment="Center" Margin="0,0,10,0"/>
+                <TextBlock Text="Monthly Allocation - FIFO Results" FontSize="28" FontWeight="Bold" 
+                         VerticalAlignment="Center" Foreground="#2c3e50"/>
+            </StackPanel>
+
+            <!-- Control Panel -->
+            <Border Grid.Row="1" Background="#f8f9fa" BorderBrush="#dee2e6" BorderThickness="1" 
+                  CornerRadius="8" Padding="20" Margin="0,0,0,20">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+
+                    <StackPanel Grid.Column="0" Orientation="Horizontal">
+                        <Button x:Name="RunFIFOBtn" Content="🔄 Run FIFO Allocation" 
+                              Background="#e74c3c" Foreground="White" BorderThickness="0" 
+                              Padding="20,12" Margin="0,0,15,0" FontWeight="SemiBold"
+                              Click="RunFIFO_Click"/>
+
+                        <Button x:Name="RefreshBtn" Content="📊 Refresh Results" 
+                              Background="#17a2b8" Foreground="White" BorderThickness="0" 
+                              Padding="15,12" Margin="0,0,15,0" FontWeight="SemiBold"
+                              Click="Refresh_Click"/>
+
+                        <ComboBox x:Name="MonthFilterComboBox" MinWidth="120" Padding="10,8" 
+                                Margin="0,0,15,0" SelectionChanged="MonthFilter_SelectionChanged"/>
+
+                        <Button x:Name="ExportBtn" Content="📤 Export to Excel" 
+                              Background="#28a745" Foreground="White" BorderThickness="0" 
+                              Padding="15,12" FontWeight="SemiBold"
+                              Click="Export_Click"/>
+                    </StackPanel>
+
+                    <StackPanel Grid.Column="1" Orientation="Horizontal">
+                        <Border Background="#dc3545" CornerRadius="4" Padding="10,5">
+                            <TextBlock x:Name="StatusText" Text="Ready to run FIFO allocation" 
+                                     Foreground="White" FontWeight="SemiBold"/>
+                        </Border>
+                    </StackPanel>
+                </Grid>
+            </Border>
+
+            <!-- Summary Cards -->
+            <Border Grid.Row="2" Background="#e8f5e8" BorderBrush="#4caf50" BorderThickness="1" 
+                  CornerRadius="8" Padding="20" Margin="0,0,0,20">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <StackPanel Grid.Column="0" HorizontalAlignment="Center">
+                        <TextBlock Text="📅 Month" FontWeight="SemiBold" HorizontalAlignment="Center" FontSize="12"/>
+                        <TextBlock x:Name="CurrentMonthText" Text="Not Selected" FontSize="16" FontWeight="Bold" 
+                                 HorizontalAlignment="Center" Foreground="#2e7d32"/>
+                    </StackPanel>
+
+                    <StackPanel Grid.Column="1" HorizontalAlignment="Center">
+                        <TextBlock Text="📊 Total Allocations" FontWeight="SemiBold" HorizontalAlignment="Center" FontSize="12"/>
+                        <TextBlock x:Name="TotalAllocationsText" Text="0" FontSize="16" FontWeight="Bold" 
+                                 HorizontalAlignment="Center" Foreground="#2e7d32"/>
+                    </StackPanel>
+
+                    <StackPanel Grid.Column="2" HorizontalAlignment="Center">
+                        <TextBlock Text="⛽ Allocated Quantity" FontWeight="SemiBold" HorizontalAlignment="Center" FontSize="12"/>
+                        <TextBlock x:Name="AllocatedQuantityText" Text="0 L" FontSize="16" FontWeight="Bold" 
+                                 HorizontalAlignment="Center" Foreground="#2e7d32"/>
+                    </StackPanel>
+
+                    <StackPanel Grid.Column="3" HorizontalAlignment="Center">
+                        <TextBlock Text="💰 Allocated Value" FontWeight="SemiBold" HorizontalAlignment="Center" FontSize="12"/>
+                        <TextBlock x:Name="AllocatedValueText" Text="$0.00" FontSize="16" FontWeight="Bold" 
+                                 HorizontalAlignment="Center" Foreground="#2e7d32"/>
+                    </StackPanel>
+
+                    <StackPanel Grid.Column="4" HorizontalAlignment="Center">
+                        <TextBlock Text="🚢 Vessels Processed" FontWeight="SemiBold" HorizontalAlignment="Center" FontSize="12"/>
+                        <TextBlock x:Name="VesselsProcessedText" Text="0" FontSize="16" FontWeight="Bold" 
+                                 HorizontalAlignment="Center" Foreground="#2e7d32"/>
+                    </StackPanel>
+                </Grid>
+            </Border>
+
+            <!-- Allocation Results -->
+            <Border Grid.Row="3" Background="White" BorderBrush="#dee2e6" BorderThickness="1" 
+                  CornerRadius="6" Padding="20">
+                <StackPanel>
+                    <TextBlock Text="🔍 FIFO Allocation Details" FontSize="16" FontWeight="SemiBold" 
+                             Margin="0,0,0,15" Foreground="#2c3e50"/>
+
+                    <DataGrid x:Name="AllocationGrid" 
+                            AutoGenerateColumns="False" 
+                            CanUserAddRows="False"
+                            CanUserDeleteRows="False"
+                            CanUserReorderColumns="False"
+                            CanUserResizeRows="False"
+                            CanUserSortColumns="True"
+                            GridLinesVisibility="Horizontal"
+                            HeadersVisibility="Column"
+                            Background="White"
+                            BorderThickness="0"
+                            MaxHeight="500">
+
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Vessel" Binding="{Binding Purchase.Vessel.Name}" Width="120"/>
+                            <DataGridTextColumn Header="Purchase Date" Binding="{Binding Purchase.PurchaseDate, StringFormat=yyyy-MM-dd}" Width="120"/>
+                            <DataGridTextColumn Header="Invoice Ref" Binding="{Binding Purchase.InvoiceReference}" Width="100"/>
+                            <DataGridTextColumn Header="Supplier" Binding="{Binding Purchase.Supplier.Name}" Width="120"/>
+                            <DataGridTextColumn Header="Invoice Qty" Binding="{Binding Purchase.QuantityLiters, StringFormat=N0}" Width="100"/>
+                            <DataGridTextColumn Header="Allocated Qty" Binding="{Binding AllocatedQuantity, StringFormat=N2}" Width="120"/>
+                            <DataGridTextColumn Header="Allocated Value" Binding="{Binding AllocatedValue, StringFormat=C2}" Width="120"/>
+                            <DataGridTextColumn Header="USD Value" Binding="{Binding AllocatedValueUSD, StringFormat=C2}" Width="100"/>
+                            <DataGridTextColumn Header="Consumption Date" Binding="{Binding Consumption.ConsumptionDate, StringFormat=yyyy-MM-dd}" Width="130"/>
+                            <DataGridTextColumn Header="Legs" Binding="{Binding Consumption.LegsCompleted}" Width="60"/>
+                            <DataGridTextColumn Header="Month" Binding="{Binding Month}" Width="80"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+
+                    <!-- Process Log -->
+                    <Expander Header="📋 FIFO Process Log" Margin="0,20,0,0" IsExpanded="False">
+                        <Border Background="#f8f9fa" BorderBrush="#dee2e6" BorderThickness="1" 
+                              CornerRadius="4" Padding="10" MaxHeight="200">
+                            <ScrollViewer VerticalScrollBarVisibility="Auto">
+                                <TextBlock x:Name="ProcessLogText" Text="No allocation process run yet." 
+                                         FontFamily="Consolas" FontSize="12" TextWrapping="Wrap"/>
+                            </ScrollViewer>
+                        </Border>
+                    </Expander>
+
+                    <!-- FIFO Information Panel -->
+                    <Border Background="#fff3cd" BorderBrush="#ffc107" BorderThickness="1" 
+                          CornerRadius="4" Padding="15" Margin="0,20,0,0">
+                        <StackPanel>
+                            <TextBlock Text="🔄 FIFO Allocation Process" FontWeight="SemiBold" 
+                                     Foreground="#856404" Margin="0,0,0,10"/>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+
+                                <StackPanel Grid.Column="0">
+                                    <TextBlock Text="1. Process consumption chronologically by month" FontSize="12" Margin="0,0,0,3"/>
+                                    <TextBlock Text="2. For each vessel, allocate against oldest purchases first" FontSize="12" Margin="0,0,0,3"/>
+                                    <TextBlock Text="3. Only use purchases made before/during consumption month" FontSize="12" Margin="0,0,0,3"/>
+                                </StackPanel>
+
+                                <StackPanel Grid.Column="1">
+                                    <TextBlock Text="4. Update remaining quantities on purchases" FontSize="12" Margin="0,0,0,3"/>
+                                    <TextBlock Text="5. Calculate consumption values from allocated costs" FontSize="12" Margin="0,0,0,3"/>
+                                    <TextBlock Text="6. Create detailed allocation records for reporting" FontSize="12" Margin="0,0,0,3"/>
+                                </StackPanel>
+                            </Grid>
+                        </StackPanel>
+                    </Border>
+                </StackPanel>
+            </Border>
+        </Grid>
+    </ScrollViewer>
+</UserControl>
