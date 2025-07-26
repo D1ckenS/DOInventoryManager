@@ -16,13 +16,76 @@ namespace DOInventoryManager
             LoadDashboard(); // Load dashboard by default
         }
 
-        private void InitializeWindow()
+        private async void InitializeWindow()
         {
             // Set current date in header
             CurrentDateText.Text = DateTime.Now.ToString("dddd, MMMM dd, yyyy");
 
             // Set window title with version
             this.Title = "DO Inventory Manager - v1.0.0";
+
+            // Check for due date alerts on startup
+            await CheckStartupAlertsAsync();
+        }
+
+        private async Task CheckStartupAlertsAsync()
+        {
+            try
+            {
+                var alertService = new AlertService();
+                var alerts = await alertService.GetDueDateAlertsAsync();
+
+                if (alerts.Any())
+                {
+                    // Update status bar with alert count
+                    var alertSummary = alertService.GetAlertSummary(alerts);
+                    DatabaseStatus.Text = $"⚠️ Alerts: {alertSummary}";
+                    DatabaseStatus.Foreground = alerts.Any(a => a.AlertLevel == AlertService.DueDateAlertLevel.Overdue ||
+                                                               a.AlertLevel == AlertService.DueDateAlertLevel.DueToday)
+                                                               ? System.Windows.Media.Brushes.Red
+                                                               : System.Windows.Media.Brushes.Orange;
+
+                    // Show startup alert popup for critical alerts
+                    var criticalAlerts = alerts.Where(a => a.AlertLevel == AlertService.DueDateAlertLevel.Overdue ||
+                                                          a.AlertLevel == AlertService.DueDateAlertLevel.DueToday).ToList();
+
+                    if (criticalAlerts.Any())
+                    {
+                        ShowStartupAlertPopup(criticalAlerts);
+                    }
+                }
+                else
+                {
+                    DatabaseStatus.Text = "Database: Connected";
+                    DatabaseStatus.Foreground = System.Windows.Media.Brushes.Green;
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Error checking startup alerts: {ex.Message}");
+            }
+        }
+
+        private void ShowStartupAlertPopup(List<AlertService.DueDateAlert> criticalAlerts)
+        {
+            var alertMessage = "🚨 CRITICAL PAYMENT ALERTS 🚨\n\n";
+
+            foreach (var alert in criticalAlerts.Take(5)) // Show max 5 in popup
+            {
+                alertMessage += $"• {alert.AlertMessage}\n";
+                alertMessage += $"  Invoice: {alert.InvoiceReference} | Supplier: {alert.SupplierName}\n";
+                alertMessage += $"  Amount: {alert.FormattedValue} | Due: {alert.FormattedDueDate}\n\n";
+            }
+
+            if (criticalAlerts.Count > 5)
+            {
+                alertMessage += $"... and {criticalAlerts.Count - 5} more alerts\n\n";
+            }
+
+            alertMessage += "Go to Purchase Entry to view all payment alerts.";
+
+            MessageBox.Show(alertMessage, "Payment Due Date Alerts",
+                           MessageBoxButton.OK, MessageBoxImage.Warning);
         }
 
         #region Navigation Methods

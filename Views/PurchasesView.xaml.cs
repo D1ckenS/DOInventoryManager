@@ -13,6 +13,7 @@ namespace DOInventoryManager.Views
         private Supplier? _selectedSupplier = null;
         private Purchase? _editingPurchase = null;
         private bool _isEditMode = false;
+        private List<AlertService.DueDateAlert> _currentAlerts = new List<AlertService.DueDateAlert>();
 
         public PurchasesView()
         {
@@ -43,6 +44,9 @@ namespace DOInventoryManager.Views
 
                 // Load recent purchases
                 await LoadPurchasesAsync();
+
+                // Load alerts
+                await LoadAlertsAsync();
             }
             catch (Exception ex)
             {
@@ -64,11 +68,67 @@ namespace DOInventoryManager.Views
                     .ToListAsync();
 
                 PurchasesGrid.ItemsSource = purchases;
+
+                // Apply alert row styling
+                ApplyAlertRowStyling();
             }
             catch (Exception ex)
             {
                 MessageBox.Show($"Error loading purchases: {ex.Message}", "Error",
                               MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        private void ApplyAlertRowStyling()
+        {
+            // This will be called after the grid is loaded
+            PurchasesGrid.LoadingRow += (sender, e) =>
+            {
+                if (e.Row.Item is Purchase purchase)
+                {
+                    var alert = _currentAlerts.FirstOrDefault(a => a.PurchaseId == purchase.Id);
+                    if (alert != null)
+                    {
+                        switch (alert.AlertLevel)
+                        {
+                            case AlertService.DueDateAlertLevel.Overdue:
+                                e.Row.Style = (Style)FindResource("OverdueRowStyle");
+                                break;
+                            case AlertService.DueDateAlertLevel.DueToday:
+                                e.Row.Style = (Style)FindResource("DueTodayRowStyle");
+                                break;
+                            case AlertService.DueDateAlertLevel.DueTomorrow:
+                            case AlertService.DueDateAlertLevel.AlertDay:
+                                e.Row.Style = (Style)FindResource("DueSoonRowStyle");
+                                break;
+                        }
+                    }
+                }
+            };
+        }
+
+        private async Task LoadAlertsAsync()
+        {
+            try
+            {
+                var alertService = new AlertService();
+                _currentAlerts = await alertService.GetDueDateAlertsAsync();
+
+                if (_currentAlerts.Any())
+                {
+                    var alertSummary = alertService.GetAlertSummary(_currentAlerts);
+                    AlertStatusText.Text = $"Payment Alerts: {alertSummary}";
+                    AlertStatusPanel.Visibility = Visibility.Visible;
+                }
+                else
+                {
+                    AlertStatusPanel.Visibility = Visibility.Collapsed;
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Error loading alerts: {ex.Message}");
+                AlertStatusPanel.Visibility = Visibility.Collapsed;
             }
         }
 
@@ -630,6 +690,35 @@ namespace DOInventoryManager.Views
         private async void RefreshPurchases_Click(object sender, RoutedEventArgs e)
         {
             await LoadPurchasesAsync();
+        }
+
+        private void ViewAlerts_Click(object sender, RoutedEventArgs e)
+        {
+            if (_currentAlerts.Any())
+            {
+                ShowDetailedAlertsPopup(_currentAlerts);
+            }
+        }
+
+        private void ShowDetailedAlertsPopup(List<AlertService.DueDateAlert> alerts)
+        {
+            var alertMessage = "💳 PAYMENT DUE DATE ALERTS 💳\n\n";
+
+            foreach (var alert in alerts)
+            {
+                alertMessage += $"{alert.AlertMessage}\n";
+                alertMessage += $"Invoice: {alert.InvoiceReference}\n";
+                alertMessage += $"Supplier: {alert.SupplierName} | Vessel: {alert.VesselName}\n";
+                alertMessage += $"Amount: {alert.FormattedValue}\n";
+                alertMessage += $"Due Date: {alert.FormattedDueDate}\n";
+                alertMessage += new string('-', 50) + "\n";
+            }
+
+            alertMessage += "\n💡 Tip: Payments are highlighted in the purchase list with colors:\n";
+            alertMessage += "🔴 Red = Overdue | 🟠 Orange = Due Today | 🟢 Green = Due Soon";
+
+            MessageBox.Show(alertMessage, "All Payment Alerts",
+                           MessageBoxButton.OK, MessageBoxImage.Information);
         }
 
         #endregion
