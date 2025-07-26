@@ -37,11 +37,6 @@
                               Padding="20,12" Margin="0,0,15,0" FontWeight="SemiBold"
                               Click="RunFIFO_Click"/>
 
-                        <Button x:Name="RefreshBtn" Content="📊 Refresh Results" 
-                              Background="#17a2b8" Foreground="White" BorderThickness="0" 
-                              Padding="15,12" Margin="0,0,15,0" FontWeight="SemiBold"
-                              Click="Refresh_Click"/>
-
                         <ComboBox x:Name="MonthFilterComboBox" MinWidth="120" Padding="10,8" 
                                 Margin="0,0,15,0" SelectionChanged="MonthFilter_SelectionChanged"/>
 
@@ -49,6 +44,11 @@
                               Background="#28a745" Foreground="White" BorderThickness="0" 
                               Padding="15,12" FontWeight="SemiBold"
                               Click="Export_Click"/>
+
+                        <Button x:Name="RecoveryBtn" Content="🔧 Data Recovery" 
+                              Background="#dc3545" Foreground="White" BorderThickness="0" 
+                              Padding="15,12" Margin="15,0,0,0" FontWeight="SemiBold"
+                              Click="Recovery_Click"/>
                     </StackPanel>
 
                     <StackPanel Grid.Column="1" Orientation="Horizontal">
@@ -86,8 +86,8 @@
 
                     <StackPanel Grid.Column="2" HorizontalAlignment="Center">
                         <TextBlock Text="⛽ Allocated Quantity" FontWeight="SemiBold" HorizontalAlignment="Center" FontSize="12"/>
-                        <TextBlock x:Name="AllocatedQuantityText" Text="0 L" FontSize="16" FontWeight="Bold" 
-                                 HorizontalAlignment="Center" Foreground="#2e7d32"/>
+                        <TextBlock x:Name="AllocatedQuantityText" Text="0.000 L" FontSize="16" FontWeight="Bold" 
+                                HorizontalAlignment="Center" Foreground="#2e7d32"/>
                     </StackPanel>
 
                     <StackPanel Grid.Column="3" HorizontalAlignment="Center">
@@ -125,17 +125,27 @@
                             MaxHeight="500">
 
                         <DataGrid.Columns>
-                            <DataGridTextColumn Header="Vessel" Binding="{Binding Purchase.Vessel.Name}" Width="120"/>
-                            <DataGridTextColumn Header="Purchase Date" Binding="{Binding Purchase.PurchaseDate, StringFormat=yyyy-MM-dd}" Width="120"/>
-                            <DataGridTextColumn Header="Invoice Ref" Binding="{Binding Purchase.InvoiceReference}" Width="100"/>
-                            <DataGridTextColumn Header="Supplier" Binding="{Binding Purchase.Supplier.Name}" Width="120"/>
-                            <DataGridTextColumn Header="Invoice Qty" Binding="{Binding Purchase.QuantityLiters, StringFormat=N0}" Width="100"/>
-                            <DataGridTextColumn Header="Allocated Qty" Binding="{Binding AllocatedQuantity, StringFormat=N2}" Width="120"/>
-                            <DataGridTextColumn Header="Allocated Value" Binding="{Binding AllocatedValue, StringFormat=C2}" Width="120"/>
+                            <DataGridTextColumn Header="Vessel" Binding="{Binding Purchase.Vessel.Name}" Width="100"/>
+                            <DataGridTextColumn Header="Purchase Date" Binding="{Binding Purchase.PurchaseDate, StringFormat=dd/MM/yyyy}" Width="110"/>
+                            <DataGridTextColumn Header="Invoice Ref" Binding="{Binding Purchase.InvoiceReference}" Width="90"/>
+                            <DataGridTextColumn Header="Supplier" Binding="{Binding Purchase.Supplier.Name}" Width="110"/>
+                            <DataGridTextColumn Header="Invoice Qty (L)" Binding="{Binding Purchase.QuantityLiters, StringFormat=N3}" Width="110"/>
+                            <DataGridTextColumn Header="Allocated Qty (L)" Binding="{Binding AllocatedQuantity, StringFormat=N3}" Width="120"/>
+                            <DataGridTextColumn Header="Allocated Qty (T)" Binding="{Binding AllocatedQuantityTons, StringFormat=N3}" Width="120"/>
+                            <DataGridTextColumn Header="Balance After (L)" Binding="{Binding PurchaseBalanceAfter, StringFormat=N3}" Width="120"/>
+                            <DataGridTextColumn Header="Balance After (T)" Binding="{Binding PurchaseBalanceAfterTons, StringFormat=N3}" Width="120"/>
+                            <DataGridTextColumn Header="Allocated Value" Width="120">
+                                <DataGridTextColumn.Binding>
+                                    <MultiBinding StringFormat="{}{0:N3} {1}">
+                                        <Binding Path="AllocatedValue"/>
+                                        <Binding Path="Purchase.Supplier.Currency"/>
+                                    </MultiBinding>
+                                </DataGridTextColumn.Binding>
+                            </DataGridTextColumn>
                             <DataGridTextColumn Header="USD Value" Binding="{Binding AllocatedValueUSD, StringFormat=C2}" Width="100"/>
-                            <DataGridTextColumn Header="Consumption Date" Binding="{Binding Consumption.ConsumptionDate, StringFormat=yyyy-MM-dd}" Width="130"/>
-                            <DataGridTextColumn Header="Legs" Binding="{Binding Consumption.LegsCompleted}" Width="60"/>
-                            <DataGridTextColumn Header="Month" Binding="{Binding Month}" Width="80"/>
+                            <DataGridTextColumn Header="Consumption Date" Binding="{Binding Consumption.ConsumptionDate, StringFormat=dd/MM/yyyy}" Width="120"/>
+                            <DataGridTextColumn Header="Legs" Binding="{Binding Consumption.LegsCompleted}" Width="50"/>
+                            <DataGridTextColumn Header="Month" Binding="{Binding Month}" Width="70"/>
                         </DataGrid.Columns>
                     </DataGrid>
 

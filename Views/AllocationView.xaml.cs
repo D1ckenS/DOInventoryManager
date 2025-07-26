@@ -127,7 +127,7 @@ namespace DOInventoryManager.Views
                     .Count();
 
                 TotalAllocationsText.Text = totalAllocations.ToString();
-                AllocatedQuantityText.Text = $"{allocatedQuantity:N0} L";
+                AllocatedQuantityText.Text = $"{allocatedQuantity:N3} L";
                 AllocatedValueText.Text = allocatedValue.ToString("C2");
                 VesselsProcessedText.Text = vesselsProcessed.ToString();
 
@@ -150,6 +150,23 @@ namespace DOInventoryManager.Views
                 AllocatedQuantityText.Text = "0 L";
                 AllocatedValueText.Text = "$0.00";
                 VesselsProcessedText.Text = "0";
+            }
+        }
+
+        #endregion
+
+        #region Backup Management
+
+        private async Task CreateAutoBackupAsync(string operation)
+        {
+            try
+            {
+                var backupService = new BackupService();
+                await backupService.CreateBackupAsync(operation);
+            }
+            catch
+            {
+                // Don't show errors for auto-backup failures
             }
         }
 
@@ -182,6 +199,11 @@ namespace DOInventoryManager.Views
 
                 // Run FIFO allocation
                 var allocationResult = await _fifoService.RunFIFOAllocationAsync();
+
+                if (allocationResult.Success)
+                {
+                    await CreateAutoBackupAsync("FIFO");
+                }
 
                 // Update process log
                 ProcessLogText.Text = string.Join("\n", allocationResult.Details);
@@ -222,9 +244,73 @@ namespace DOInventoryManager.Views
             }
         }
 
-        private async void Refresh_Click(object sender, RoutedEventArgs e)
+        private async void Recovery_Click(object sender, RoutedEventArgs e)
         {
-            await LoadDataAsync();
+            var recoveryService = new DataRecoveryService();
+
+            // First show current issues
+            var issues = await recoveryService.GetDataInconsistencyReportAsync();
+            var issueReport = string.Join("\n", issues);
+
+            var choice = MessageBox.Show(
+                $"Data Consistency Report:\n{issueReport}\n\n" +
+                "Choose recovery option:\n\n" +
+                "YES = Re-run Complete FIFO Allocation (clears all allocations and recalculates)\n" +
+                "NO = Manual Cleanup (fixes inconsistencies, keeps valid allocations)\n" +
+                "CANCEL = Do nothing",
+                "Data Recovery Options",
+                MessageBoxButton.YesNoCancel,
+                MessageBoxImage.Question);
+
+            if (choice == MessageBoxResult.Cancel) return;
+
+            try
+            {
+                StatusText.Text = "Running data recovery...";
+                ((Border)StatusText.Parent).Background = System.Windows.Media.Brushes.Orange;
+
+                DataRecoveryService.RecoveryResult result;
+
+                if (choice == MessageBoxResult.Yes)
+                {
+                    result = await recoveryService.RerunFIFOAllocationAsync();
+                }
+                else
+                {
+                    result = await recoveryService.ManualCleanupInconsistentDataAsync();
+                }
+
+                // Update process log
+                ProcessLogText.Text = string.Join("\n", result.Details);
+
+                // Show result
+                MessageBox.Show(result.Message,
+                              result.Success ? "Recovery Completed" : "Recovery Failed",
+                              MessageBoxButton.OK,
+                              result.Success ? MessageBoxImage.Information : MessageBoxImage.Error);
+
+                if (result.Success)
+                {
+                    await CreateAutoBackupAsync(choice == MessageBoxResult.Yes ? "DataRecovery-Complete" : "DataRecovery-Manual");
+
+                    StatusText.Text = "Data recovery completed successfully";
+                    ((Border)StatusText.Parent).Background = System.Windows.Media.Brushes.Green;
+
+                    // Refresh all data
+                    await LoadAllocationDataAsync();
+                    await UpdateSummaryAsync();
+                }
+                else
+                {
+                    StatusText.Text = "Data recovery failed";
+                    ((Border)StatusText.Parent).Background = System.Windows.Media.Brushes.Red;
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error during recovery: {ex.Message}", "Recovery Error",
+                              MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
 
         private async void MonthFilter_SelectionChanged(object sender, SelectionChangedEventArgs e)

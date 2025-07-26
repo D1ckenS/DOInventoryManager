@@ -33,5 +33,15 @@ namespace DOInventoryManager.Models
         
         // Navigation properties
         public virtual ICollection<Allocation> Allocations { get; set; } = new List<Allocation>();
+
+        public decimal GetConsumptionTons(decimal fifoDepth)
+        {
+            return (ConsumptionLiters / 1000) * fifoDepth;
+        }
+
+        public decimal GetTonsPerLeg(decimal fifoDepth)
+        {
+            return LegsCompleted > 0 ? GetConsumptionTons(fifoDepth) / LegsCompleted : 0;
+        }
     }
 }

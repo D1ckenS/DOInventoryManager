@@ -152,27 +152,37 @@
                             </Grid.ColumnDefinitions>
 
                             <StackPanel Grid.Column="0" HorizontalAlignment="Center">
-                                <TextBlock Text="🚢 Vessel Type" FontWeight="SemiBold" HorizontalAlignment="Center" FontSize="12"/>
+                                <TextBlock Text="🚢 Consumption (T)" FontWeight="SemiBold" HorizontalAlignment="Center" FontSize="12"/>
                                 <TextBlock x:Name="VesselTypeText" Text="Not Selected" FontSize="16" FontWeight="Bold" 
-                                         HorizontalAlignment="Center" Foreground="#856404"/>
+                                        HorizontalAlignment="Center" Foreground="#856404"/>
                             </StackPanel>
 
                             <StackPanel Grid.Column="1" HorizontalAlignment="Center">
                                 <TextBlock Text="⛽ Consumption per Leg" FontWeight="SemiBold" HorizontalAlignment="Center" FontSize="12"/>
-                                <TextBlock x:Name="ConsumptionPerLegText" Text="0.00 L/leg" FontSize="16" FontWeight="Bold" 
-                                         HorizontalAlignment="Center" Foreground="#856404"/>
+                                <TextBlock x:Name="ConsumptionPerLegText" Text="0.000 L/leg | 0.000 T/leg" FontSize="14" FontWeight="Bold" 
+                                        HorizontalAlignment="Center" Foreground="#856404"/>
                             </StackPanel>
 
                             <StackPanel Grid.Column="2" HorizontalAlignment="Center">
-                                <TextBlock Text="📈 Efficiency Rating" FontWeight="SemiBold" HorizontalAlignment="Center" FontSize="12"/>
-                                <TextBlock x:Name="EfficiencyRatingText" Text="Calculate" FontSize="16" FontWeight="Bold" 
-                                         HorizontalAlignment="Center" Foreground="#856404"/>
+                                <TextBlock Text="📦 Inventory Status" FontWeight="SemiBold" HorizontalAlignment="Center" FontSize="12"/>
+                                <TextBlock x:Name="EfficiencyRatingText" Text="Select Vessel" FontSize="16" FontWeight="Bold" 
+                                        HorizontalAlignment="Center" Foreground="#856404"/>
                             </StackPanel>
                         </Grid>
                     </Border>
 
                     <!-- Action Buttons -->
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                        <Button x:Name="EditConsumptionBtn" Content="✏️ Edit Selected" 
+                              Background="#f39c12" Foreground="White" BorderThickness="0" 
+                              Padding="15,12" Margin="0,0,10,0" FontWeight="SemiBold"
+                              IsEnabled="False" Click="EditConsumption_Click"/>
+
+                        <Button x:Name="DeleteConsumptionBtn" Content="🗑️ Delete Selected" 
+                              Background="#dc3545" Foreground="White" BorderThickness="0" 
+                              Padding="15,12" Margin="0,0,15,0" FontWeight="SemiBold"
+                              IsEnabled="False" Click="DeleteConsumption_Click"/>
+
                         <Button x:Name="SaveConsumptionBtn" Content="💾 Save Consumption" 
                               Background="#27ae60" Foreground="White" BorderThickness="0" 
                               Padding="20,12" Margin="0,0,15,0" FontWeight="SemiBold"
@@ -230,18 +240,36 @@
                             HeadersVisibility="Column"
                             Background="White"
                             BorderThickness="0"
-                            MaxHeight="400">
+                            MaxHeight="400"
+                            SelectionMode="Single"
+                            SelectionChanged="ConsumptionGrid_SelectionChanged">
 
                         <DataGrid.Columns>
-                            <DataGridTextColumn Header="Date" Binding="{Binding ConsumptionDate, StringFormat=yyyy-MM-dd}" Width="100"/>
+                            <DataGridTextColumn Header="Date" Binding="{Binding ConsumptionDate, StringFormat=dd/MM/yyyy}" Width="100"/>
                             <DataGridTextColumn Header="Vessel" Binding="{Binding Vessel.Name}" Width="120"/>
                             <DataGridTextColumn Header="Type" Binding="{Binding Vessel.Type}" Width="80"/>
                             <DataGridTextColumn Header="Route" Binding="{Binding Vessel.Route}" Width="180"/>
-                            <DataGridTextColumn Header="Consumption (L)" Binding="{Binding ConsumptionLiters, StringFormat=N2}" Width="120"/>
+                            <DataGridTextColumn Header="Consumption (L)" Binding="{Binding ConsumptionLiters, StringFormat=N3}" Width="130"/>
+                            <DataGridTextColumn Header="Consumption (T)" Width="130">
+                                <DataGridTextColumn.Binding>
+                                    <MultiBinding StringFormat="{}{0:N3}">
+                                        <!-- This will need to be calculated in code-behind -->
+                                        <Binding Path="ConsumptionTons"/>
+                                    </MultiBinding>
+                                </DataGridTextColumn.Binding>
+                            </DataGridTextColumn>
                             <DataGridTextColumn Header="Legs" Binding="{Binding LegsCompleted}" Width="60"/>
-                            <DataGridTextColumn Header="L/Leg" Binding="{Binding ConsumptionPerLeg, StringFormat=N2}" Width="80"/>
+                            <DataGridTextColumn Header="L/Leg" Binding="{Binding ConsumptionPerLeg, StringFormat=N3}" Width="80"/>
+                            <DataGridTextColumn Header="T/Leg" Width="80">
+                                <DataGridTextColumn.Binding>
+                                    <MultiBinding StringFormat="{}{0:N3}">
+                                        <!-- This will need to be calculated in code-behind -->
+                                        <Binding Path="TonsPerLeg"/>
+                                    </MultiBinding>
+                                </DataGridTextColumn.Binding>
+                            </DataGridTextColumn>
                             <DataGridTextColumn Header="Month" Binding="{Binding Month}" Width="80"/>
-                            <DataGridTextColumn Header="Created" Binding="{Binding CreatedDate, StringFormat=yyyy-MM-dd HH:mm}" Width="140"/>
+                            <DataGridTextColumn Header="Created" Binding="{Binding CreatedDate, StringFormat=dd/MM/yyyy HH:mm}" Width="140"/>
                         </DataGrid.Columns>
                     </DataGrid>
 

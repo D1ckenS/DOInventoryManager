@@ -51,7 +51,16 @@ namespace DOInventoryManager.Models
         
         [Column(TypeName = "decimal(8,6)")]
         public decimal Density => QuantityLiters > 0 ? QuantityTons / (QuantityLiters / 1000) : 0;
-        
+
+        [Column(TypeName = "decimal(18,6)")]
+        public decimal PricePerLiterUSD => QuantityLiters > 0 ? TotalValueUSD / QuantityLiters : 0;
+
+        [Column(TypeName = "decimal(18,2)")]
+        public decimal PricePerTonUSD => QuantityTons > 0 ? TotalValueUSD / QuantityTons : 0;
+
+        [Column(TypeName = "decimal(18,3)")]
+        public decimal RemainingQuantityTons => RemainingQuantity > 0 && QuantityLiters > 0 ? (RemainingQuantity / 1000) * Density : 0;
+
         // FIFO tracking
         [Column(TypeName = "decimal(18,3)")]
         public decimal RemainingQuantity { get; set; } // For FIFO allocation

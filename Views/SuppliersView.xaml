@@ -75,7 +75,7 @@
                             <DataGridTextColumn Header="Supplier Name" Binding="{Binding Name}" Width="*" IsReadOnly="True"/>
                             <DataGridTextColumn Header="Currency" Binding="{Binding Currency}" Width="80" IsReadOnly="True"/>
                             <DataGridTextColumn Header="Exchange Rate" Binding="{Binding ExchangeRate, StringFormat=F6}" Width="120" IsReadOnly="True"/>
-                            <DataGridTextColumn Header="Created Date" Binding="{Binding CreatedDate, StringFormat=yyyy-MM-dd}" Width="120" IsReadOnly="True"/>
+                            <DataGridTextColumn Header="Created Date" Binding="{Binding CreatedDate, StringFormat=dd/MM/yyyy}" Width="120" IsReadOnly="True"/>
                         </DataGrid.Columns>
                     </DataGrid>
                 </StackPanel>

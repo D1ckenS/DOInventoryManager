@@ -152,57 +152,70 @@ namespace DOInventoryManager.Services
                 return result;
             }
 
-            // Allocate consumption against purchases using FIFO
-            var remainingConsumption = totalConsumption;
+            // Sort consumption records chronologically for TRUE FIFO processing
+            var sortedConsumptions = vesselConsumptions
+                .OrderBy(c => c.ConsumptionDate)
+                .ThenBy(c => c.Id)
+                .ToList();
+
             var allocationsCreated = new List<Allocation>();
 
+            // Process each purchase against consumptions using TRUE FIFO
             foreach (var purchase in availablePurchases)
             {
-                if (remainingConsumption <= 0) break;
+                if (purchase.RemainingQuantity <= 0) continue;
 
-                var allocatedQuantity = Math.Min(remainingConsumption, purchase.RemainingQuantity);
+                var remainingPurchaseQuantity = purchase.RemainingQuantity;
 
-                if (allocatedQuantity > 0)
+                // Process consumptions in chronological order
+                foreach (var consumption in sortedConsumptions)
                 {
-                    // Calculate allocated value (proportional to quantity)
-                    var allocatedValue = (allocatedQuantity / purchase.QuantityLiters) * purchase.TotalValue;
-                    var allocatedValueUSD = (allocatedQuantity / purchase.QuantityLiters) * purchase.TotalValueUSD;
+                    if (remainingPurchaseQuantity <= 0) break;
 
-                    // Create allocation records for each consumption record (proportionally)
-                    foreach (var consumption in vesselConsumptions)
+                    // Check how much of this consumption is still unallocated
+                    var alreadyAllocated = allocationsCreated
+                        .Where(a => a.ConsumptionId == consumption.Id)
+                        .Sum(a => a.AllocatedQuantity);
+
+                    var unallocatedConsumption = consumption.ConsumptionLiters - alreadyAllocated;
+
+                    if (unallocatedConsumption <= 0) continue; // This consumption is fully allocated
+
+                    // Allocate as much as possible to this consumption (TRUE FIFO)
+                    var allocationAmount = Math.Min(remainingPurchaseQuantity, unallocatedConsumption);
+
+                    if (allocationAmount > 0)
                     {
-                        var consumptionProportion = consumption.ConsumptionLiters / totalConsumption;
-                        var allocationForThisConsumption = allocatedQuantity * consumptionProportion;
-                        var valueForThisConsumption = allocatedValue * consumptionProportion;
-                        var valueUSDForThisConsumption = allocatedValueUSD * consumptionProportion;
+                        // Calculate allocated value (proportional to quantity)
+                        var allocatedValue = (allocationAmount / purchase.QuantityLiters) * purchase.TotalValue;
+                        var allocatedValueUSD = (allocationAmount / purchase.QuantityLiters) * purchase.TotalValueUSD;
 
-                        if (allocationForThisConsumption > 0)
+                        // Update tracking variables BEFORE creating allocation to get balance
+                        remainingPurchaseQuantity -= allocationAmount;
+                        result.TotalAllocatedQuantity += allocationAmount;
+                        result.TotalAllocatedValue += allocatedValueUSD;
+
+                        var allocation = new Allocation
                         {
-                            var allocation = new Allocation
-                            {
-                                PurchaseId = purchase.Id,
-                                ConsumptionId = consumption.Id,
-                                AllocatedQuantity = allocationForThisConsumption,
-                                AllocatedValue = valueForThisConsumption,
-                                AllocatedValueUSD = valueUSDForThisConsumption,
-                                Month = month,
-                                CreatedDate = DateTime.Now
-                            };
+                            PurchaseId = purchase.Id,
+                            ConsumptionId = consumption.Id,
+                            AllocatedQuantity = allocationAmount,
+                            AllocatedValue = allocatedValue,
+                            AllocatedValueUSD = allocatedValueUSD,
+                            PurchaseBalanceAfter = remainingPurchaseQuantity, // Balance after this allocation
+                            Month = month,
+                            CreatedDate = DateTime.Now
+                        };
 
-                            allocationsCreated.Add(allocation);
-                        }
+                        allocationsCreated.Add(allocation);
+
+                        result.Details.Add($"    Allocated {allocationAmount:N2} L from purchase {purchase.InvoiceReference} to consumption {consumption.ConsumptionDate:dd/MM/yyyy} (Balance: {remainingPurchaseQuantity:N2} L)");
+
                     }
-
-                    // Update purchase remaining quantity
-                    purchase.RemainingQuantity -= allocatedQuantity;
-
-                    // Update totals
-                    result.TotalAllocatedQuantity += allocatedQuantity;
-                    result.TotalAllocatedValue += allocatedValueUSD;
-                    remainingConsumption -= allocatedQuantity;
-
-                    result.Details.Add($"    Allocated {allocatedQuantity:N2} L from purchase {purchase.InvoiceReference} ({purchase.PurchaseDate:yyyy-MM-dd})");
                 }
+
+                // Update purchase remaining quantity
+                purchase.RemainingQuantity = remainingPurchaseQuantity;
             }
 
             // Add all allocations to context
@@ -211,9 +224,27 @@ namespace DOInventoryManager.Services
             result.ProcessedConsumptions = vesselConsumptions.Count;
             result.AllocationsCreated = allocationsCreated.Count;
 
-            if (remainingConsumption > 0.01m) // Small tolerance for rounding
+            // Check for unallocated consumption and provide detailed reporting
+            var totalAllocated = allocationsCreated.Sum(a => a.AllocatedQuantity);
+            var unallocatedAmount = totalConsumption - totalAllocated;
+
+            if (unallocatedAmount > 0.01m) // Small tolerance for rounding
             {
-                result.Details.Add($"    WARNING: Unallocated consumption remaining: {remainingConsumption:N2} L for vessel {vesselName}");
+                result.Details.Add($"    WARNING: Unallocated consumption remaining: {unallocatedAmount:N2} L for vessel {vesselName}");
+
+                // List which specific consumptions are partially unallocated
+                foreach (var consumption in sortedConsumptions)
+                {
+                    var allocatedToThis = allocationsCreated
+                        .Where(a => a.ConsumptionId == consumption.Id)
+                        .Sum(a => a.AllocatedQuantity);
+
+                    var shortfall = consumption.ConsumptionLiters - allocatedToThis;
+                    if (shortfall > 0.01m)
+                    {
+                        result.Details.Add($"      Consumption {consumption.ConsumptionDate:dd/MM/yyyy}: {shortfall:N2} L unallocated (needed {consumption.ConsumptionLiters:N2} L, got {allocatedToThis:N2} L)");
+                    }
+                }
             }
 
             return result;

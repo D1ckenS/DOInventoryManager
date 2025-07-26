@@ -1,9 +1,10 @@
-using System.Windows;
-using System.Windows.Controls;
 using DOInventoryManager.Data;
 using DOInventoryManager.Models;
+using DOInventoryManager.Services;
 using Microsoft.EntityFrameworkCore;
 using System.Globalization;
+using System.Windows;
+using System.Windows.Controls;
 
 namespace DOInventoryManager.Views
 {
@@ -113,6 +114,23 @@ namespace DOInventoryManager.Views
             }
 
             return true;
+        }
+
+        #endregion
+
+        #region Backup Management
+
+        private async Task CreateAutoBackupAsync(string operation)
+        {
+            try
+            {
+                var backupService = new BackupService();
+                await backupService.CreateBackupAsync(operation);
+            }
+            catch
+            {
+                // Don't show errors for auto-backup failures
+            }
         }
 
         #endregion
@@ -227,15 +245,18 @@ namespace DOInventoryManager.Views
                 // Delete supplier
                 var supplierToDelete = await context.Suppliers
                     .FindAsync(selectedSupplier.Id);
-                
+
                 if (supplierToDelete != null)
                 {
                     context.Suppliers.Remove(supplierToDelete);
                     await context.SaveChangesAsync();
-                    
-                    MessageBox.Show("Supplier deleted successfully!", "Success", 
+
+                    // Add auto-backup after successful delete
+                    await CreateAutoBackupAsync("SupplierDelete");
+
+                    MessageBox.Show("Supplier deleted successfully!", "Success",
                                   MessageBoxButton.OK, MessageBoxImage.Information);
-                    
+
                     await LoadSuppliersAsync();
                     ClearForm();
                 }
@@ -287,8 +308,11 @@ namespace DOInventoryManager.Views
 
                     context.Suppliers.Add(newSupplier);
                     await context.SaveChangesAsync();
-                    
-                    MessageBox.Show("Supplier added successfully!", "Success", 
+
+                    // Add auto-backup after successful save
+                    await CreateAutoBackupAsync("SupplierAdd");
+
+                    MessageBox.Show("Supplier added successfully!", "Success",
                                   MessageBoxButton.OK, MessageBoxImage.Information);
                 }
                 else
@@ -296,16 +320,19 @@ namespace DOInventoryManager.Views
                     // Update existing supplier
                     var supplierToUpdate = await context.Suppliers
                         .FindAsync(_editingSupplier.Id);
-                    
+
                     if (supplierToUpdate != null)
                     {
                         supplierToUpdate.Name = supplierName;
                         supplierToUpdate.Currency = currency;
                         supplierToUpdate.ExchangeRate = exchangeRate;
-                        
+
                         await context.SaveChangesAsync();
-                        
-                        MessageBox.Show("Supplier updated successfully!", "Success", 
+
+                        // Add auto-backup after successful update
+                        await CreateAutoBackupAsync("SupplierEdit");
+
+                        MessageBox.Show("Supplier updated successfully!", "Success",
                                       MessageBoxButton.OK, MessageBoxImage.Information);
                     }
                 }

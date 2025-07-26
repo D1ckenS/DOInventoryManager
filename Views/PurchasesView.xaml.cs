@@ -1,9 +1,10 @@
-﻿using System.Windows;
-using System.Windows.Controls;
-using DOInventoryManager.Data;
+﻿using DOInventoryManager.Data;
 using DOInventoryManager.Models;
+using DOInventoryManager.Services;
 using Microsoft.EntityFrameworkCore;
 using System.Globalization;
+using System.Windows;
+using System.Windows.Controls;
 
 namespace DOInventoryManager.Views
 {
@@ -133,38 +134,43 @@ namespace DOInventoryManager.Views
                 var totalValue = GetDecimalValue(TotalValueTextBox.Text);
                 var exchangeRate = GetDecimalValue(ExchangeRateTextBox.Text);
 
+                string currency = _selectedSupplier?.Currency ?? "USD";
+
                 // Calculate Price per Liter
                 if (quantityLiters > 0 && totalValue > 0)
                 {
                     var pricePerLiter = totalValue / quantityLiters;
-                    PricePerLiterText.Text = pricePerLiter.ToString("C3");
+                    PricePerLiterText.Text = $"{pricePerLiter:N6} {currency}";
                 }
                 else
                 {
-                    PricePerLiterText.Text = "$0.000";
+                    PricePerLiterText.Text = $"0.000000 {currency}";
                 }
 
                 // Calculate Price per Ton
                 if (quantityTons > 0 && totalValue > 0)
                 {
                     var pricePerTon = totalValue / quantityTons;
-                    PricePerTonText.Text = pricePerTon.ToString("C2");
+                    PricePerTonText.Text = $"{pricePerTon:N3} {currency}";
                 }
                 else
                 {
-                    PricePerTonText.Text = "$0.00";
+                    PricePerTonText.Text = $"0.000 {currency}";
                 }
 
                 // Calculate Density = Ton / (Liters / 1000)
                 if (quantityLiters > 0 && quantityTons > 0)
                 {
                     var density = quantityTons / (quantityLiters / 1000);
-                    DensityText.Text = density.ToString("F3");
+                    DensityText.Text = density.ToString("N3");
                 }
                 else
                 {
                     DensityText.Text = "0.000";
                 }
+
+                // Display Exchange Rate
+                ExchangeRateDisplayText.Text = exchangeRate.ToString("N3");
 
                 // Calculate USD Value
                 if (totalValue > 0 && exchangeRate > 0)
@@ -180,10 +186,12 @@ namespace DOInventoryManager.Views
             catch
             {
                 // Reset to defaults if calculation fails
-                PricePerLiterText.Text = "$0.000";
-                PricePerTonText.Text = "$0.00";
+                string currency = _selectedSupplier?.Currency ?? "USD";
+                PricePerLiterText.Text = $"0.000000 {currency}";
+                PricePerTonText.Text = $"0.000 {currency}";
                 DensityText.Text = "0.000";
                 TotalUSDValueText.Text = "$0.00";
+                ExchangeRateDisplayText.Text = "1.000";
             }
         }
 
@@ -309,6 +317,24 @@ namespace DOInventoryManager.Views
             }
 
             return true;
+        }
+
+        #endregion
+
+        #region Backup Management
+
+        private async Task CreateAutoBackupAsync(string operation)
+        {
+            try
+            {
+                var backupService = new BackupService();
+                await backupService.CreateBackupAsync(operation);
+            }
+            catch
+            {
+                // Don't show errors for auto-backup failures
+                // Just continue with normal operation
+            }
         }
 
         #endregion
@@ -439,7 +465,7 @@ namespace DOInventoryManager.Views
                 var confirmResult = MessageBox.Show(
                     $"Are you sure you want to delete this purchase?\n\n" +
                     $"Invoice: {selectedPurchase.InvoiceReference}\n" +
-                    $"Date: {selectedPurchase.PurchaseDate:yyyy-MM-dd}\n" +
+                    $"Date: {selectedPurchase.PurchaseDate:dd/MM/yyyy}\n" +
                     $"Amount: {selectedPurchase.TotalValueUSD:C2}\n\n" +
                     "This action cannot be undone.",
                     "Confirm Delete Purchase",
@@ -457,6 +483,8 @@ namespace DOInventoryManager.Views
                     context.Purchases.Remove(purchaseToDelete);
                     await context.SaveChangesAsync();
 
+                    await CreateAutoBackupAsync("PurchaseDelete");
+
                     MessageBox.Show("Purchase deleted successfully!", "Success",
                                   MessageBoxButton.OK, MessageBoxImage.Information);
 
@@ -471,6 +499,45 @@ namespace DOInventoryManager.Views
             }
         }
 
+        private async Task<bool> ValidateEditQuantityAsync(int purchaseId, decimal newQuantityLiters)
+        {
+            try
+            {
+                using var context = new InventoryContext();
+
+                // Get all allocations for this purchase and sum in memory to avoid SQLite decimal issues
+                var allocations = await context.Allocations
+                    .Where(a => a.PurchaseId == purchaseId)
+                    .Select(a => a.AllocatedQuantity)
+                    .ToListAsync();
+
+                var totalAllocated = allocations.Sum();
+
+                if (newQuantityLiters < totalAllocated)
+                {
+                    MessageBox.Show(
+                        $"Cannot reduce purchase quantity to {newQuantityLiters:N3} L\n\n" +
+                        $"This purchase has {totalAllocated:N3} L already allocated to consumption records.\n" +
+                        $"Minimum allowed quantity: {totalAllocated:N3} L\n\n" +
+                        $"To reduce this purchase:\n" +
+                        $"1. Delete related consumption records, or\n" +
+                        $"2. Re-run FIFO allocation after other changes",
+                        "Cannot Reduce Purchase Quantity",
+                        MessageBoxButton.OK,
+                        MessageBoxImage.Warning);
+                    return false;
+                }
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error validating purchase quantity: {ex.Message}", "Validation Error",
+                              MessageBoxButton.OK, MessageBoxImage.Error);
+                return false;
+            }
+        }
+
         private async void SavePurchase_Click(object sender, RoutedEventArgs e)
         {
             if (!ValidateForm()) return;
@@ -481,26 +548,41 @@ namespace DOInventoryManager.Views
 
                 if (_isEditMode && _editingPurchase != null)
                 {
+                    // Validate quantity reduction against allocations
+                    var newQuantity = GetDecimalValue(QuantityLitersTextBox.Text);
+                    if (!await ValidateEditQuantityAsync(_editingPurchase.Id, newQuantity))
+                    {
+                        return; // Validation failed, don't save
+                    }
+
                     // Update existing purchase
                     var purchaseToUpdate = await context.Purchases
                         .FindAsync(_editingPurchase.Id);
 
                     if (purchaseToUpdate != null)
                     {
+                        var oldQuantity = purchaseToUpdate.QuantityLiters;
+                        var quantityDifference = newQuantity - oldQuantity;
+
                         purchaseToUpdate.VesselId = (int)VesselComboBox.SelectedValue;
                         purchaseToUpdate.SupplierId = (int)SupplierComboBox.SelectedValue;
                         purchaseToUpdate.PurchaseDate = PurchaseDatePicker.SelectedDate!.Value;
                         purchaseToUpdate.InvoiceReference = InvoiceRefTextBox.Text.Trim();
-                        purchaseToUpdate.QuantityLiters = GetDecimalValue(QuantityLitersTextBox.Text);
+                        purchaseToUpdate.QuantityLiters = newQuantity;
                         purchaseToUpdate.QuantityTons = GetDecimalValue(QuantityTonsTextBox.Text);
                         purchaseToUpdate.TotalValue = GetDecimalValue(TotalValueTextBox.Text);
                         purchaseToUpdate.TotalValueUSD = GetDecimalValue(TotalValueTextBox.Text) * GetDecimalValue(ExchangeRateTextBox.Text);
                         purchaseToUpdate.InvoiceReceiptDate = InvoiceReceiptDatePicker.SelectedDate;
                         purchaseToUpdate.DueDate = DueDatePicker.SelectedDate;
 
+                        // Update remaining quantity proportionally
+                        purchaseToUpdate.RemainingQuantity += quantityDifference;
+
                         await context.SaveChangesAsync();
 
-                        MessageBox.Show("Purchase updated successfully!", "Success",
+                        await CreateAutoBackupAsync(_isEditMode ? "PurchaseEdit" : "PurchaseAdd");
+
+                        MessageBox.Show(_isEditMode ? "Purchase updated successfully!" : "Purchase saved successfully!", "Success",
                                       MessageBoxButton.OK, MessageBoxImage.Information);
                     }
                 }

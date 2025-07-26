@@ -185,7 +185,7 @@
 
             <!-- Auto-Calculations Display -->
             <Border Grid.Row="2" Background="#fff3cd" BorderBrush="#ffc107" BorderThickness="1" 
-                  CornerRadius="6" Padding="20" Margin="0,0,0,20">
+      CornerRadius="6" Padding="20" Margin="0,0,0,20">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"/>
@@ -196,26 +196,26 @@
 
                     <StackPanel Grid.Column="0" HorizontalAlignment="Center">
                         <TextBlock Text="💰 Price per Liter" FontWeight="SemiBold" HorizontalAlignment="Center" FontSize="12"/>
-                        <TextBlock x:Name="PricePerLiterText" Text="$0.000" FontSize="18" FontWeight="Bold" 
-                                 HorizontalAlignment="Center" Foreground="#856404"/>
+                        <TextBlock x:Name="PricePerLiterText" Text="0.000" FontSize="18" FontWeight="Bold" 
+                     HorizontalAlignment="Center" Foreground="#856404"/>
                     </StackPanel>
 
                     <StackPanel Grid.Column="1" HorizontalAlignment="Center">
                         <TextBlock Text="⚖️ Price per Ton" FontWeight="SemiBold" HorizontalAlignment="Center" FontSize="12"/>
-                        <TextBlock x:Name="PricePerTonText" Text="$0.00" FontSize="18" FontWeight="Bold" 
-                                 HorizontalAlignment="Center" Foreground="#856404"/>
+                        <TextBlock x:Name="PricePerTonText" Text="0.000" FontSize="18" FontWeight="Bold" 
+                     HorizontalAlignment="Center" Foreground="#856404"/>
                     </StackPanel>
 
                     <StackPanel Grid.Column="2" HorizontalAlignment="Center">
                         <TextBlock Text="🧪 Density" FontWeight="SemiBold" HorizontalAlignment="Center" FontSize="12"/>
                         <TextBlock x:Name="DensityText" Text="0.000" FontSize="18" FontWeight="Bold" 
-                                 HorizontalAlignment="Center" Foreground="#856404"/>
+                     HorizontalAlignment="Center" Foreground="#856404"/>
                     </StackPanel>
 
                     <StackPanel Grid.Column="3" HorizontalAlignment="Center">
                         <TextBlock Text="💱 Exchange Rate" FontWeight="SemiBold" HorizontalAlignment="Center" FontSize="12"/>
                         <TextBlock x:Name="ExchangeRateDisplayText" Text="1.000" FontSize="18" FontWeight="Bold" 
-                                 HorizontalAlignment="Center" Foreground="#856404"/>
+                     HorizontalAlignment="Center" Foreground="#856404"/>
                     </StackPanel>
                 </Grid>
             </Border>
@@ -249,17 +249,47 @@
                         SelectionChanged="PurchasesGrid_SelectionChanged">
 
                         <DataGrid.Columns>
-                            <DataGridTextColumn Header="Date" Binding="{Binding PurchaseDate, StringFormat=yyyy-MM-dd}" Width="100"/>
+                            <DataGridTextColumn Header="Date" Binding="{Binding PurchaseDate, StringFormat=dd/MM/yyyy}" Width="100"/>
                             <DataGridTextColumn Header="Vessel" Binding="{Binding Vessel.Name}" Width="120"/>
                             <DataGridTextColumn Header="Supplier" Binding="{Binding Supplier.Name}" Width="120"/>
                             <DataGridTextColumn Header="Invoice Ref" Binding="{Binding InvoiceReference}" Width="100"/>
-                            <DataGridTextColumn Header="Qty (L)" Binding="{Binding QuantityLiters, StringFormat=N0}" Width="80"/>
+                            <DataGridTextColumn Header="Qty (L)" Binding="{Binding QuantityLiters, StringFormat=N3}" Width="100"/>
                             <DataGridTextColumn Header="Qty (T)" Binding="{Binding QuantityTons, StringFormat=N3}" Width="80"/>
-                            <DataGridTextColumn Header="Value" Binding="{Binding TotalValue, StringFormat=C2}" Width="100"/>
+                            <DataGridTextColumn Header="Value" Width="120">
+                                <DataGridTextColumn.Binding>
+                                    <MultiBinding StringFormat="{}{0:N3} {1}">
+                                        <Binding Path="TotalValue"/>
+                                        <Binding Path="Supplier.Currency"/>
+                                    </MultiBinding>
+                                </DataGridTextColumn.Binding>
+                            </DataGridTextColumn>
                             <DataGridTextColumn Header="USD Value" Binding="{Binding TotalValueUSD, StringFormat=C2}" Width="100"/>
-                            <DataGridTextColumn Header="Price/L" Binding="{Binding PricePerLiter, StringFormat=C3}" Width="80"/>
-                            <DataGridTextColumn Header="Remaining" Binding="{Binding RemainingQuantity, StringFormat=N0}" Width="80"/>
-                            <DataGridTextColumn Header="Due Date" Binding="{Binding DueDate, StringFormat=yyyy-MM-dd}" Width="100"/>
+                            <DataGridTextColumn Header="Price/L" Width="100">
+                                <DataGridTextColumn.Binding>
+                                    <MultiBinding StringFormat="{}{0:N6} {1}">
+                                        <Binding Path="PricePerLiter"/>
+                                        <Binding Path="Supplier.Currency"/>
+                                    </MultiBinding>
+                                </DataGridTextColumn.Binding>
+                            </DataGridTextColumn>
+                            <DataGridTextColumn Header="Price/L USD" Width="100">
+                                <DataGridTextColumn.Binding>
+                                    <MultiBinding StringFormat="{}{0:N6} USD">
+                                        <Binding Path="PricePerLiterUSD"/>
+                                    </MultiBinding>
+                                </DataGridTextColumn.Binding>
+                            </DataGridTextColumn>
+                            <DataGridTextColumn Header="Price/T USD" Width="100">
+                                <DataGridTextColumn.Binding>
+                                    <MultiBinding StringFormat="{}{0:N3} USD">
+                                        <Binding Path="PricePerTonUSD"/>
+                                    </MultiBinding>
+                                </DataGridTextColumn.Binding>
+                            </DataGridTextColumn>
+                            <DataGridTextColumn Header="Density" Binding="{Binding Density, StringFormat=N3}" Width="80"/>
+                            <DataGridTextColumn Header="Remaining L" Binding="{Binding RemainingQuantity, StringFormat=N3}" Width="100"/>
+                            <DataGridTextColumn Header="Remaining T" Binding="{Binding RemainingQuantityTons, StringFormat=N3}" Width="100"/>
+                            <DataGridTextColumn Header="Due Date" Binding="{Binding DueDate, StringFormat=dd/MM/yyyy}" Width="100"/>
                         </DataGrid.Columns>
                     </DataGrid>
                 </StackPanel>

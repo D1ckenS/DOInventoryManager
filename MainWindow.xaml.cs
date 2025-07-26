@@ -1,6 +1,9 @@
+﻿using DOInventoryManager.Services;
+using DOInventoryManager.Views;
 using System.Windows;
 using System.Windows.Controls;
-using DOInventoryManager.Views;
+using System.IO;
+
 
 namespace DOInventoryManager
 {
@@ -188,11 +191,46 @@ namespace DOInventoryManager
                           MessageBoxButton.OK, MessageBoxImage.Information);
         }
 
-        private void Backup_Click(object sender, RoutedEventArgs e)
+        private async void Backup_Click(object sender, RoutedEventArgs e)
         {
-            // TODO: Implement backup functionality
-            MessageBox.Show("Backup feature coming soon!", "DO Inventory Manager",
-                          MessageBoxButton.OK, MessageBoxImage.Information);
+            try
+            {
+                StatusText.Text = "Creating backup...";
+                var backupService = new BackupService();
+
+                var result = await backupService.CreateBackupAsync("Manual");
+
+                if (result.Success)
+                {
+                    StatusText.Text = $"Backup completed - {result.TotalBackups} total backups";
+
+                    var message = $"✅ {result.Message}\n\n" +
+                                 $"📁 Backup Location: {Path.GetFileName(result.BackupPath)}\n" +
+                                 $"📏 File Size: {result.BackupSizeBytes / 1024.0 / 1024.0:F2} MB\n" +
+                                 $"📊 Total Backups: {result.TotalBackups}\n\n" +
+                                 $"Would you like to open the backup folder?";
+
+                    var openFolder = MessageBox.Show(message, "Backup Completed",
+                                                   MessageBoxButton.YesNo, MessageBoxImage.Information);
+
+                    if (openFolder == MessageBoxResult.Yes)
+                    {
+                        backupService.OpenBackupFolder();
+                    }
+                }
+                else
+                {
+                    StatusText.Text = "Backup failed";
+                    MessageBox.Show($"❌ {result.Message}", "Backup Failed",
+                                  MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+            }
+            catch (Exception ex)
+            {
+                StatusText.Text = "Backup error";
+                MessageBox.Show($"Backup error: {ex.Message}", "Error",
+                              MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
 
         private void Settings_Click(object sender, RoutedEventArgs e)

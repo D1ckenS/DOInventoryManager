@@ -81,7 +81,7 @@
                             <DataGridTextColumn Header="Vessel Name" Binding="{Binding Name}" Width="*" IsReadOnly="True"/>
                             <DataGridTextColumn Header="Type" Binding="{Binding Type}" Width="80" IsReadOnly="True"/>
                             <DataGridTextColumn Header="Route" Binding="{Binding Route}" Width="200" IsReadOnly="True"/>
-                            <DataGridTextColumn Header="Created Date" Binding="{Binding CreatedDate, StringFormat=yyyy-MM-dd}" Width="120" IsReadOnly="True"/>
+                            <DataGridTextColumn Header="Created Date" Binding="{Binding CreatedDate, StringFormat=dd/MM/yyyy}" Width="120" IsReadOnly="True"/>
                         </DataGrid.Columns>
                     </DataGrid>
 

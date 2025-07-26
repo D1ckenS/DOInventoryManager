@@ -1,8 +1,9 @@
-﻿using System.Windows;
-using System.Windows.Controls;
-using DOInventoryManager.Data;
+﻿using DOInventoryManager.Data;
 using DOInventoryManager.Models;
+using DOInventoryManager.Services;
 using Microsoft.EntityFrameworkCore;
+using System.Windows;
+using System.Windows.Controls;
 
 namespace DOInventoryManager.Views
 {
@@ -130,6 +131,23 @@ namespace DOInventoryManager.Views
 
         #endregion
 
+        #region Backup Management
+
+        private async Task CreateAutoBackupAsync(string operation)
+        {
+            try
+            {
+                var backupService = new BackupService();
+                await backupService.CreateBackupAsync(operation);
+            }
+            catch
+            {
+                // Don't show errors for auto-backup failures
+            }
+        }
+
+        #endregion
+
         #region Event Handlers
 
         private void VesselsGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -223,6 +241,9 @@ namespace DOInventoryManager.Views
                     context.Vessels.Remove(vesselToDelete);
                     await context.SaveChangesAsync();
 
+                    // Add auto-backup after successful delete
+                    await CreateAutoBackupAsync("VesselDelete");
+
                     MessageBox.Show("Vessel deleted successfully!", "Success",
                                   MessageBoxButton.OK, MessageBoxImage.Information);
 
@@ -276,6 +297,9 @@ namespace DOInventoryManager.Views
                     context.Vessels.Add(newVessel);
                     await context.SaveChangesAsync();
 
+                    // Add auto-backup after successful save
+                    await CreateAutoBackupAsync("VesselAdd");
+
                     MessageBox.Show("Vessel added successfully!", "Success",
                                   MessageBoxButton.OK, MessageBoxImage.Information);
                 }
@@ -291,6 +315,9 @@ namespace DOInventoryManager.Views
                         vesselToUpdate.Type = vesselType;
 
                         await context.SaveChangesAsync();
+
+                        // Add auto-backup after successful update
+                        await CreateAutoBackupAsync("VesselEdit");
 
                         MessageBox.Show("Vessel updated successfully!", "Success",
                                       MessageBoxButton.OK, MessageBoxImage.Information);

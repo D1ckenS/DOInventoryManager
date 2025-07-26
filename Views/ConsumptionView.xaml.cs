@@ -12,6 +12,8 @@ namespace DOInventoryManager.Views
     {
         private Vessel? _selectedVessel = null;
         private string _currentFilterMonth = "";
+        private Consumption? _editingConsumption = null;
+        private bool _isEditMode = false;
 
         public ConsumptionView()
         {
@@ -142,6 +144,47 @@ namespace DOInventoryManager.Views
             }
         }
 
+        private async Task<decimal> GetAvailableInventoryAsync(int vesselId)
+        {
+            try
+            {
+                using var context = new InventoryContext();
+
+                // Sum remaining quantities for this vessel
+                var remainingQuantities = await context.Purchases
+                    .Where(p => p.VesselId == vesselId)
+                    .Select(p => p.RemainingQuantity)
+                    .ToListAsync();
+
+                return remainingQuantities.Sum();
+            }
+            catch
+            {
+                return 0; // Return 0 if error to be safe
+            }
+        }
+
+        private async Task<decimal> GetFIFODensityAsync(int vesselId)
+        {
+            try
+            {
+                using var context = new InventoryContext();
+
+                // Get oldest purchase with remaining quantity (FIFO logic)
+                var oldestPurchase = await context.Purchases
+                    .Where(p => p.VesselId == vesselId && p.RemainingQuantity > 0)
+                    .OrderBy(p => p.PurchaseDate)
+                    .ThenBy(p => p.Id)
+                    .FirstOrDefaultAsync();
+
+                return oldestPurchase?.Density ?? 0.85m; // Default density if no purchases found
+            }
+            catch
+            {
+                return 0.834m; // Safe default density
+            }
+        }
+
         #endregion
 
         #region Form Management
@@ -173,8 +216,9 @@ namespace DOInventoryManager.Views
             LegsCompletedTextBox.Text = "";
 
             _selectedVessel = null;
+            ExitEditMode(); // Exit edit mode
             UpdateVesselDisplay();
-            CalculateConsumptionPerLeg();
+            _ = CalculateConsumptionTonsAsync();
             UpdateMonthDisplay();
         }
 
@@ -271,7 +315,7 @@ namespace DOInventoryManager.Views
             return 0;
         }
 
-        private bool ValidateForm()
+        private async Task<bool> ValidateFormAsync()
         {
             if (VesselComboBox.SelectedValue == null)
             {
@@ -305,17 +349,225 @@ namespace DOInventoryManager.Views
                 return false;
             }
 
+            // Add inventory validation
+            if (!await ValidateInventoryAsync())
+            {
+                ConsumptionLitersTextBox.Focus();
+                return false;
+            }
+
             return true;
+        }
+
+        private async Task<bool> ValidateInventoryAsync()
+        {
+            if (VesselComboBox.SelectedValue == null) return true;
+
+            var vesselId = (int)VesselComboBox.SelectedValue;
+            var consumptionAmount = GetDecimalValue(ConsumptionLitersTextBox.Text);
+
+            if (consumptionAmount <= 0) return true;
+
+            var availableInventory = await GetAvailableInventoryAsync(vesselId);
+
+            if (consumptionAmount > availableInventory)
+            {
+                var vesselName = ((Vessel)VesselComboBox.SelectedItem)?.Name ?? "Unknown";
+
+                MessageBox.Show(
+                    $"⚠️ INVENTORY SHORTAGE ALERT\n\n" +
+                    $"Vessel: {vesselName}\n" +
+                    $"Consumption Requested: {consumptionAmount:N2} L\n" +
+                    $"Available Inventory: {availableInventory:N2} L\n" +
+                    $"Shortage: {(consumptionAmount - availableInventory):N2} L\n\n" +
+                    $"This consumption exceeds available fuel inventory.\n\n" +
+                    $"Options:\n" +
+                    $"• Reduce consumption amount to {availableInventory:N2} L or less\n" +
+                    $"• Add fuel purchases for this vessel first\n" +
+                    $"• Proceed anyway (will create allocation deficit)",
+                    "Inventory Shortage Warning",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Warning);
+
+                return false;
+            }
+
+            return true;
+        }
+
+        private async Task UpdateInventoryDisplayAsync()
+        {
+            if (VesselComboBox.SelectedValue == null)
+            {
+                // Update efficiency rating text to show inventory info
+                EfficiencyRatingText.Text = "Select Vessel";
+                EfficiencyRatingText.Foreground = System.Windows.Media.Brushes.Gray;
+                return;
+            }
+
+            var vesselId = (int)VesselComboBox.SelectedValue;
+            var availableInventory = await GetAvailableInventoryAsync(vesselId);
+            var consumptionAmount = GetDecimalValue(ConsumptionLitersTextBox.Text);
+
+            if (consumptionAmount > 0 && consumptionAmount > availableInventory)
+            {
+                var shortage = consumptionAmount - availableInventory;
+                EfficiencyRatingText.Text = $"⚠️ {shortage:N0}L Short";
+                EfficiencyRatingText.Foreground = System.Windows.Media.Brushes.Red;
+            }
+            else if (availableInventory > 0)
+            {
+                EfficiencyRatingText.Text = $"✅ {availableInventory:N0}L Available";
+                EfficiencyRatingText.Foreground = System.Windows.Media.Brushes.Green;
+            }
+            else
+            {
+                EfficiencyRatingText.Text = "❌ No Inventory";
+                EfficiencyRatingText.Foreground = System.Windows.Media.Brushes.Red;
+            }
+        }
+
+        private async Task CalculateConsumptionTonsAsync()
+        {
+            try
+            {
+                var consumption = GetDecimalValue(ConsumptionLitersTextBox.Text);
+                var legs = GetIntValue(LegsCompletedTextBox.Text);
+                var vesselId = VesselComboBox.SelectedValue as int?;
+
+                if (consumption > 0 && vesselId.HasValue)
+                {
+                    var density = await GetFIFODensityAsync(vesselId.Value);
+                    var consumptionTons = (consumption / 1000) * density;
+
+                    // Update consumption per leg calculation
+                    if (legs > 0)
+                    {
+                        var consumptionPerLeg = consumption / legs;
+                        var tonsPerLeg = consumptionTons / legs;
+                        ConsumptionPerLegText.Text = $"{consumptionPerLeg:N3} L/leg | {tonsPerLeg:N3} T/leg";
+                    }
+                    else
+                    {
+                        ConsumptionPerLegText.Text = $"0.000 L/leg | 0.000 T/leg";
+                    }
+
+                    // Update vessel type to show consumption tons
+                    VesselTypeText.Text = $"{consumptionTons:N3} T";
+                }
+                else
+                {
+                    ConsumptionPerLegText.Text = $"0.000 L/leg | 0.000 T/leg";
+                    VesselTypeText.Text = _selectedVessel?.Type ?? "Not Selected";
+                }
+            }
+            catch
+            {
+                ConsumptionPerLegText.Text = $"0.000 L/leg | 0.000 T/leg";
+                VesselTypeText.Text = _selectedVessel?.Type ?? "Not Selected";
+            }
+        }
+
+        private void EnableEditMode(Consumption consumption)
+        {
+            _editingConsumption = consumption;
+            _isEditMode = true;
+
+            // Populate form with consumption data
+            VesselComboBox.SelectedValue = consumption.VesselId;
+            ConsumptionDatePicker.SelectedDate = consumption.ConsumptionDate;
+            ConsumptionLitersTextBox.Text = consumption.ConsumptionLiters.ToString("F3");
+            LegsCompletedTextBox.Text = consumption.LegsCompleted.ToString();
+
+            // Update UI
+            SaveConsumptionBtn.Content = "💾 Update Consumption";
+            RunFIFOBtn.Content = "🔄 Update & Run FIFO";
+            EditConsumptionBtn.IsEnabled = false;
+            DeleteConsumptionBtn.IsEnabled = false;
+        }
+
+        private void ExitEditMode()
+        {
+            _editingConsumption = null;
+            _isEditMode = false;
+            SaveConsumptionBtn.Content = "💾 Save Consumption";
+            RunFIFOBtn.Content = "🔄 Save & Run FIFO";
+            EditConsumptionBtn.IsEnabled = false;
+            DeleteConsumptionBtn.IsEnabled = false;
+        }
+
+        private async Task<bool> ValidateConsumptionEditAsync()
+        {
+            if (_editingConsumption == null) return true;
+
+            try
+            {
+                using var context = new InventoryContext();
+
+                // Check if this consumption has allocations
+                var hasAllocations = await context.Allocations
+                    .AnyAsync(a => a.ConsumptionId == _editingConsumption.Id);
+
+                if (hasAllocations)
+                {
+                    var newQuantity = GetDecimalValue(ConsumptionLitersTextBox.Text);
+                    var oldQuantity = _editingConsumption.ConsumptionLiters;
+
+                    if (Math.Abs(newQuantity - oldQuantity) > 0.001m) // Allow small rounding differences
+                    {
+                        var result = MessageBox.Show(
+                            $"⚠️ ALLOCATION IMPACT WARNING\n\n" +
+                            $"This consumption record has FIFO allocations.\n\n" +
+                            $"Original Quantity: {oldQuantity:N3} L\n" +
+                            $"New Quantity: {newQuantity:N3} L\n\n" +
+                            $"Changing the quantity will affect existing allocations.\n" +
+                            $"You may need to re-run FIFO allocation afterward.\n\n" +
+                            $"Continue with the change?",
+                            "Allocation Impact Warning",
+                            MessageBoxButton.YesNo,
+                            MessageBoxImage.Warning);
+
+                        return result == MessageBoxResult.Yes;
+                    }
+                }
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error validating consumption edit: {ex.Message}", "Validation Error",
+                              MessageBoxButton.OK, MessageBoxImage.Error);
+                return false;
+            }
+        }
+
+        #endregion
+
+        #region Backup Management
+
+        private async Task CreateAutoBackupAsync(string operation)
+        {
+            try
+            {
+                var backupService = new BackupService();
+                await backupService.CreateBackupAsync(operation);
+            }
+            catch
+            {
+                // Don't show errors for auto-backup failures
+            }
         }
 
         #endregion
 
         #region Event Handlers
 
-        private void VesselComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private async void VesselComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             _selectedVessel = VesselComboBox.SelectedItem as Vessel;
             UpdateVesselDisplay();
+            await UpdateInventoryDisplayAsync();
+            await CalculateConsumptionTonsAsync();
         }
 
         private void ConsumptionDatePicker_SelectedDateChanged(object sender, SelectionChangedEventArgs e)
@@ -323,9 +575,11 @@ namespace DOInventoryManager.Views
             UpdateMonthDisplay();
         }
 
-        private void ConsumptionTextBox_TextChanged(object sender, TextChangedEventArgs e)
+        private async void ConsumptionTextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
             CalculateConsumptionPerLeg();
+            await UpdateInventoryDisplayAsync();
+            await CalculateConsumptionTonsAsync();
         }
 
         private async void MonthFilterComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -338,13 +592,32 @@ namespace DOInventoryManager.Views
             }
         }
 
+        private void ConsumptionGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            var selectedConsumption = ConsumptionGrid.SelectedItem as Consumption;
+
+            if (selectedConsumption != null)
+            {
+                EditConsumptionBtn.IsEnabled = true;
+                DeleteConsumptionBtn.IsEnabled = true;
+            }
+            else
+            {
+                EditConsumptionBtn.IsEnabled = false;
+                DeleteConsumptionBtn.IsEnabled = false;
+            }
+        }
+
         #endregion
 
         #region Button Click Events
 
         private async void SaveConsumption_Click(object sender, RoutedEventArgs e)
         {
-            if (!ValidateForm()) return;
+            if (!await ValidateFormAsync()) return;
+
+            // Additional validation for edits
+            if (_isEditMode && !await ValidateConsumptionEditAsync()) return;
 
             try
             {
@@ -352,25 +625,51 @@ namespace DOInventoryManager.Views
 
                 var month = ConsumptionDatePicker.SelectedDate!.Value.ToString("yyyy-MM");
 
-                var consumption = new Consumption
+                if (_isEditMode && _editingConsumption != null)
                 {
-                    VesselId = (int)VesselComboBox.SelectedValue,
-                    ConsumptionDate = ConsumptionDatePicker.SelectedDate.Value,
-                    ConsumptionLiters = GetDecimalValue(ConsumptionLitersTextBox.Text),
-                    Month = month,
-                    LegsCompleted = GetIntValue(LegsCompletedTextBox.Text),
-                    CreatedDate = DateTime.Now
-                };
+                    // Update existing consumption
+                    var consumptionToUpdate = await context.Consumptions
+                        .FindAsync(_editingConsumption.Id);
 
-                context.Consumptions.Add(consumption);
-                await context.SaveChangesAsync();
+                    if (consumptionToUpdate != null)
+                    {
+                        consumptionToUpdate.VesselId = (int)VesselComboBox.SelectedValue;
+                        consumptionToUpdate.ConsumptionDate = ConsumptionDatePicker.SelectedDate.Value;
+                        consumptionToUpdate.ConsumptionLiters = GetDecimalValue(ConsumptionLitersTextBox.Text);
+                        consumptionToUpdate.Month = month;
+                        consumptionToUpdate.LegsCompleted = GetIntValue(LegsCompletedTextBox.Text);
 
-                MessageBox.Show("Consumption record saved successfully!", "Success",
-                              MessageBoxButton.OK, MessageBoxImage.Information);
+                        await context.SaveChangesAsync();
+
+                        await CreateAutoBackupAsync(_isEditMode ? "ConsumptionEdit" : "ConsumptionAdd");
+
+                        MessageBox.Show(_isEditMode ? "Consumption record updated successfully!" : "Consumption record saved successfully!", "Success",
+                                      MessageBoxButton.OK, MessageBoxImage.Information);
+                    }
+                }
+                else
+                {
+                    // Create new consumption
+                    var consumption = new Consumption
+                    {
+                        VesselId = (int)VesselComboBox.SelectedValue,
+                        ConsumptionDate = ConsumptionDatePicker.SelectedDate.Value,
+                        ConsumptionLiters = GetDecimalValue(ConsumptionLitersTextBox.Text),
+                        Month = month,
+                        LegsCompleted = GetIntValue(LegsCompletedTextBox.Text),
+                        CreatedDate = DateTime.Now
+                    };
+
+                    context.Consumptions.Add(consumption);
+                    await context.SaveChangesAsync();
+
+                    MessageBox.Show("Consumption record saved successfully!", "Success",
+                                  MessageBoxButton.OK, MessageBoxImage.Information);
+                }
 
                 await LoadConsumptionAsync();
                 await UpdateMonthlyStatisticsAsync();
-                await LoadMonthFiltersAsync(); // Refresh month filter in case new month added
+                await LoadMonthFiltersAsync();
                 ClearForm();
             }
             catch (Exception ex)
@@ -383,7 +682,7 @@ namespace DOInventoryManager.Views
         private async void RunFIFO_Click(object sender, RoutedEventArgs e)
         {
             // First save the consumption
-            if (!ValidateForm()) return;
+            if (!await ValidateFormAsync()) return;
 
             try
             {
@@ -453,6 +752,110 @@ namespace DOInventoryManager.Views
         {
             MessageBox.Show("Monthly Summary report feature coming soon!", "DO Inventory Manager",
                           MessageBoxButton.OK, MessageBoxImage.Information);
+        }
+
+        private void EditConsumption_Click(object sender, RoutedEventArgs e)
+        {
+            var selectedConsumption = ConsumptionGrid.SelectedItem as Consumption;
+            if (selectedConsumption != null)
+            {
+                EnableEditMode(selectedConsumption);
+            }
+        }
+
+        private async void DeleteConsumption_Click(object sender, RoutedEventArgs e)
+        {
+            var selectedConsumption = ConsumptionGrid.SelectedItem as Consumption;
+            if (selectedConsumption == null) return;
+
+            try
+            {
+                using var context = new InventoryContext();
+
+                // Check if consumption has allocations
+                var allocations = await context.Allocations
+                    .Where(a => a.ConsumptionId == selectedConsumption.Id)
+                    .ToListAsync();
+
+                string warningMessage;
+                if (allocations.Count > 0)
+                {
+                    var totalAllocated = allocations.Sum(a => a.AllocatedQuantity);
+                    warningMessage =
+                        $"⚠️ ALLOCATION IMPACT WARNING\n\n" +
+                        $"This consumption has {allocations.Count} FIFO allocations totaling {totalAllocated:N3} L.\n\n" +
+                        $"Deleting this consumption will:\n" +
+                        $"• Remove all related allocations\n" +
+                        $"• Increase remaining quantities on related purchases\n" +
+                        $"• May affect other consumption allocations\n\n" +
+                        $"Consumption Details:\n" +
+                        $"Date: {selectedConsumption.ConsumptionDate:dd/MM/yyyy}\n" +
+                        $"Vessel: {selectedConsumption.Vessel?.Name}\n" +
+                        $"Quantity: {selectedConsumption.ConsumptionLiters:N3} L\n" +
+                        $"Legs: {selectedConsumption.LegsCompleted}\n\n" +
+                        $"Consider re-running FIFO allocation after deletion.\n\n" +
+                        $"Are you sure you want to proceed?";
+                }
+                else
+                {
+                    warningMessage =
+                        $"Are you sure you want to delete this consumption?\n\n" +
+                        $"Date: {selectedConsumption.ConsumptionDate:dd/MM/yyyy}\n" +
+                        $"Vessel: {selectedConsumption.Vessel?.Name}\n" +
+                        $"Quantity: {selectedConsumption.ConsumptionLiters:N3} L\n" +
+                        $"Legs: {selectedConsumption.LegsCompleted}\n\n" +
+                        $"This action cannot be undone.";
+                }
+
+                var result = MessageBox.Show(warningMessage, "Confirm Delete Consumption",
+                                           MessageBoxButton.YesNo, MessageBoxImage.Question);
+
+                if (result != MessageBoxResult.Yes) return;
+
+                // Delete related allocations first
+                if (allocations.Count > 0)
+                {
+                    // Restore remaining quantities to purchases
+                    foreach (var allocation in allocations)
+                    {
+                        var purchase = await context.Purchases.FindAsync(allocation.PurchaseId);
+                        if (purchase != null)
+                        {
+                            purchase.RemainingQuantity += allocation.AllocatedQuantity;
+                        }
+                    }
+
+                    context.Allocations.RemoveRange(allocations);
+                }
+
+                // Delete the consumption
+                var consumptionToDelete = await context.Consumptions
+                    .FindAsync(selectedConsumption.Id);
+
+                if (consumptionToDelete != null)
+                {
+                    context.Consumptions.Remove(consumptionToDelete);
+                    await context.SaveChangesAsync();
+
+                    await CreateAutoBackupAsync("ConsumptionDelete");
+
+                    MessageBox.Show(
+                        $"Consumption deleted successfully!\n\n" +
+                        $"• Removed {allocations.Count} related allocations\n" +
+                        $"• Restored quantities to affected purchases\n\n" +
+                        $"Consider re-running FIFO allocation to optimize remaining allocations.",
+                        "Deletion Completed", MessageBoxButton.OK, MessageBoxImage.Information);
+
+                    await LoadConsumptionAsync();
+                    await UpdateMonthlyStatisticsAsync();
+                    ClearForm();
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error deleting consumption: {ex.Message}", "Error",
+                              MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
 
         #endregion

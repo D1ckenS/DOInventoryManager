@@ -108,7 +108,7 @@
                             MaxHeight="300">
                         
                         <DataGrid.Columns>
-                            <DataGridTextColumn Header="Date" Binding="{Binding Date, StringFormat=yyyy-MM-dd}" Width="100"/>
+                            <DataGridTextColumn Header="Date" Binding="{Binding Date, StringFormat=dd/MM/yyyy}" Width="100"/>
                             <DataGridTextColumn Header="Type" Binding="{Binding Type}" Width="100"/>
                             <DataGridTextColumn Header="Vessel" Binding="{Binding Vessel}" Width="150"/>
                             <DataGridTextColumn Header="Description" Binding="{Binding Description}" Width="*"/>
