@@ -34,6 +34,241 @@ namespace DOInventoryManager.Services
             };
         }
 
+        public class PaymentSummary
+        {
+            public decimal TotalOverdueAmount { get; set; }
+            public int OverdueCount { get; set; }
+            public decimal DueTodayAmount { get; set; }
+            public int DueTodayCount { get; set; }
+            public decimal DueThisWeekAmount { get; set; }
+            public int DueThisWeekCount { get; set; }
+            public decimal DueNextWeekAmount { get; set; }
+            public int DueNextWeekCount { get; set; }
+            public decimal TotalOutstandingAmount { get; set; }
+            public int TotalOutstandingCount { get; set; }
+        }
+
+        public class PaymentAgingItem
+        {
+            public int PurchaseId { get; set; }
+            public string InvoiceReference { get; set; } = string.Empty;
+            public string SupplierName { get; set; } = string.Empty;
+            public string VesselName { get; set; } = string.Empty;
+            public DateTime InvoiceReceiptDate { get; set; }
+            public DateTime DueDate { get; set; }
+            public decimal TotalValueUSD { get; set; }
+            public string Currency { get; set; } = string.Empty;
+            public decimal TotalValue { get; set; }
+            public int DaysOverdue { get; set; }
+            public string AgingCategory { get; set; } = string.Empty; // "Current", "1-30 Days", "31-60 Days", "61-90 Days", "90+ Days"
+            public PaymentStatus PaymentStatus { get; set; }
+
+            public string FormattedDueDate => DueDate.ToString("dd/MM/yyyy");
+            public string FormattedReceiptDate => InvoiceReceiptDate.ToString("dd/MM/yyyy");
+            public string FormattedValue => Currency == "USD" ? TotalValueUSD.ToString("C2") : $"{TotalValue:N3} {Currency}";
+            public string StatusText => PaymentStatus switch
+            {
+                PaymentStatus.Overdue => $"OVERDUE {Math.Abs(DaysOverdue)} days",
+                PaymentStatus.DueToday => "DUE TODAY",
+                PaymentStatus.DueTomorrow => "Due Tomorrow", 
+                PaymentStatus.DueThisWeek => $"Due in {DaysOverdue} days",
+                PaymentStatus.DueNextWeek => $"Due in {DaysOverdue} days",
+                _ => "Current"
+            };
+        }
+
+        public enum PaymentStatus
+        {
+            Current,
+            DueNextWeek,
+            DueThisWeek, 
+            DueTomorrow,
+            DueToday,
+            Overdue
+        }
+
+        public class SupplierPaymentSummary
+        {
+            public string SupplierName { get; set; } = string.Empty;
+            public string Currency { get; set; } = string.Empty;
+            public decimal TotalOutstanding { get; set; }
+            public decimal TotalOverdue { get; set; }
+            public int TotalInvoices { get; set; }
+            public int OverdueInvoices { get; set; }
+            public decimal AvgDaysOverdue { get; set; }
+            public string FormattedOutstanding => Currency == "USD" ? TotalOutstanding.ToString("C2") : $"{TotalOutstanding:N3} {Currency}";
+            public string FormattedOverdue => Currency == "USD" ? TotalOverdue.ToString("C2") : $"{TotalOverdue:N3} {Currency}";
+        }
+
+        // Add these new methods to AlertService class:
+
+        public async Task<PaymentSummary> GetPaymentSummaryAsync()
+        {
+            try
+            {
+                using var context = new InventoryContext();
+                var today = DateTime.Today;
+                var endOfWeek = today.AddDays(7 - (int)today.DayOfWeek); // End of current week (Saturday)
+                var endOfNextWeek = endOfWeek.AddDays(7); // End of next week
+
+                var purchasesWithDueDates = await context.Purchases
+                    .Include(p => p.Supplier)
+                    .Include(p => p.Vessel)
+                    .Where(p => p.DueDate.HasValue && p.InvoiceReceiptDate.HasValue)
+                    .ToListAsync();
+
+                var summary = new PaymentSummary();
+
+                foreach (var purchase in purchasesWithDueDates)
+                {
+                    var dueDate = purchase.DueDate!.Value.Date;
+                    var daysUntilDue = (dueDate - today).Days;
+
+                    summary.TotalOutstandingAmount += purchase.TotalValueUSD;
+                    summary.TotalOutstandingCount++;
+
+                    if (daysUntilDue < 0) // Overdue
+                    {
+                        summary.TotalOverdueAmount += purchase.TotalValueUSD;
+                        summary.OverdueCount++;
+                    }
+                    else if (daysUntilDue == 0) // Due today
+                    {
+                        summary.DueTodayAmount += purchase.TotalValueUSD;
+                        summary.DueTodayCount++;
+                    }
+                    else if (dueDate <= endOfWeek) // Due this week
+                    {
+                        summary.DueThisWeekAmount += purchase.TotalValueUSD;
+                        summary.DueThisWeekCount++;
+                    }
+                    else if (dueDate <= endOfNextWeek) // Due next week
+                    {
+                        summary.DueNextWeekAmount += purchase.TotalValueUSD;
+                        summary.DueNextWeekCount++;
+                    }
+                }
+
+                return summary;
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Error getting payment summary: {ex.Message}");
+                return new PaymentSummary();
+            }
+        }
+
+        public async Task<List<PaymentAgingItem>> GetPaymentAgingAnalysisAsync()
+        {
+            try
+            {
+                using var context = new InventoryContext();
+                var today = DateTime.Today;
+
+                var purchasesWithDueDates = await context.Purchases
+                    .Include(p => p.Supplier)
+                    .Include(p => p.Vessel)
+                    .Where(p => p.DueDate.HasValue && p.InvoiceReceiptDate.HasValue)
+                    .ToListAsync();
+
+                var agingItems = new List<PaymentAgingItem>();
+
+                foreach (var purchase in purchasesWithDueDates)
+                {
+                    var dueDate = purchase.DueDate!.Value.Date;
+                    var daysOverdue = (today - dueDate).Days;
+                    var daysUntilDue = (dueDate - today).Days;
+
+                    var agingCategory = daysOverdue switch
+                    {
+                        <= 0 => "Current",
+                        <= 30 => "1-30 Days",
+                        <= 60 => "31-60 Days", 
+                        <= 90 => "61-90 Days",
+                        _ => "90+ Days"
+                    };
+
+                    var paymentStatus = daysUntilDue switch
+                    {
+                        < 0 => PaymentStatus.Overdue,
+                        0 => PaymentStatus.DueToday,
+                        1 => PaymentStatus.DueTomorrow,
+                        <= 7 => PaymentStatus.DueThisWeek,
+                        <= 14 => PaymentStatus.DueNextWeek,
+                        _ => PaymentStatus.Current
+                    };
+
+                    agingItems.Add(new PaymentAgingItem
+                    {
+                        PurchaseId = purchase.Id,
+                        InvoiceReference = purchase.InvoiceReference,
+                        SupplierName = purchase.Supplier.Name,
+                        VesselName = purchase.Vessel.Name,
+                        InvoiceReceiptDate = purchase.InvoiceReceiptDate!.Value,
+                        DueDate = dueDate,
+                        TotalValueUSD = purchase.TotalValueUSD,
+                        Currency = purchase.Supplier.Currency,
+                        TotalValue = purchase.TotalValue,
+                        DaysOverdue = Math.Max(0, daysOverdue),
+                        AgingCategory = agingCategory,
+                        PaymentStatus = paymentStatus
+                    });
+                }
+
+                return agingItems.OrderBy(a => a.DueDate).ThenBy(a => a.SupplierName).ToList();
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Error getting payment aging analysis: {ex.Message}");
+                return [];
+            }
+        }
+
+        public async Task<List<SupplierPaymentSummary>> GetSupplierPaymentSummaryAsync()
+        {
+            try
+            {
+                using var context = new InventoryContext();
+                var today = DateTime.Today;
+
+                var purchasesWithDueDates = await context.Purchases
+                    .Include(p => p.Supplier)
+                    .Where(p => p.DueDate.HasValue && p.InvoiceReceiptDate.HasValue)
+                    .ToListAsync();
+
+                var supplierSummaries = purchasesWithDueDates
+                    .GroupBy(p => new { p.SupplierId, p.Supplier.Name, p.Supplier.Currency })
+                    .Select(g =>
+                    {
+                        var overduePurchases = g.Where(p => p.DueDate!.Value.Date < today).ToList();
+                        var avgDaysOverdue = overduePurchases.Any() 
+                            ? overduePurchases.Average(p => (today - p.DueDate!.Value.Date).Days)
+                            : 0;
+
+                        return new SupplierPaymentSummary
+                        {
+                            SupplierName = g.Key.Name,
+                            Currency = g.Key.Currency,
+                            TotalOutstanding = g.Sum(p => p.TotalValue),
+                            TotalOverdue = overduePurchases.Sum(p => p.TotalValue),
+                            TotalInvoices = g.Count(),
+                            OverdueInvoices = overduePurchases.Count,
+                            AvgDaysOverdue = avgDaysOverdue
+                        };
+                    })
+                    .OrderByDescending(s => s.TotalOverdue)
+                    .ThenByDescending(s => s.TotalOutstanding)
+                    .ToList();
+
+                return supplierSummaries;
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Error getting supplier payment summary: {ex.Message}");
+                return [];
+            }
+        }
+
         public enum DueDateAlertLevel
         {
             None,

@@ -11,6 +11,7 @@ namespace DOInventoryManager.Views
     {
         private readonly SummaryService _summaryService;
         private readonly ReportService _reportService;
+        private readonly AlertService _alertService;
         private SummaryService.MonthlySummaryResult? _currentSummary;
 
         public ReportsView()
@@ -18,6 +19,7 @@ namespace DOInventoryManager.Views
             InitializeComponent();
             _summaryService = new SummaryService();
             _reportService = new ReportService();
+            _alertService = new AlertService(); // Add this line
             _ = LoadDataAsync();
         }
 
@@ -302,6 +304,88 @@ namespace DOInventoryManager.Views
         {
             MessageBox.Show("Supplier account export feature coming soon!", "Export",
                           MessageBoxButton.OK, MessageBoxImage.Information);
+        }
+
+        #endregion
+
+        #region Payment Due Report Tab
+
+        private async Task GeneratePaymentReportAsync()
+        {
+            try
+            {
+                var summary = await _alertService.GetPaymentSummaryAsync();
+                var agingItems = await _alertService.GetPaymentAgingAnalysisAsync();
+                var supplierSummaries = await _alertService.GetSupplierPaymentSummaryAsync();
+
+                // Update summary cards
+                OverdueAmountText.Text = summary.TotalOverdueAmount.ToString("C2");
+                OverdueCountText.Text = $"{summary.OverdueCount} invoices";
+                
+                DueTodayAmountText.Text = summary.DueTodayAmount.ToString("C2");
+                DueTodayCountText.Text = $"{summary.DueTodayCount} invoices";
+                
+                DueThisWeekAmountText.Text = summary.DueThisWeekAmount.ToString("C2");
+                DueThisWeekCountText.Text = $"{summary.DueThisWeekCount} invoices";
+                
+                DueNextWeekAmountText.Text = summary.DueNextWeekAmount.ToString("C2");
+                DueNextWeekCountText.Text = $"{summary.DueNextWeekCount} invoices";
+                
+                TotalOutstandingAmountText.Text = summary.TotalOutstandingAmount.ToString("C2");
+                TotalOutstandingCountText.Text = $"{summary.TotalOutstandingCount} invoices";
+
+                // Update grids
+                PaymentScheduleGrid.ItemsSource = agingItems;
+                AgingAnalysisGrid.ItemsSource = supplierSummaries;
+
+                // Apply row styling to payment schedule
+                ApplyPaymentRowStyling();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error generating payment report: {ex.Message}", "Error",
+                            MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        private void ApplyPaymentRowStyling()
+        {
+            PaymentScheduleGrid.LoadingRow += (sender, e) =>
+            {
+                if (e.Row.Item is AlertService.PaymentAgingItem payment)
+                {
+                    switch (payment.PaymentStatus)
+                    {
+                        case AlertService.PaymentStatus.Overdue:
+                            e.Row.Background = new SolidColorBrush(Color.FromRgb(255, 235, 238)); // Light red
+                            e.Row.Foreground = new SolidColorBrush(Color.FromRgb(220, 53, 69)); // Red text
+                            break;
+                        case AlertService.PaymentStatus.DueToday:
+                            e.Row.Background = new SolidColorBrush(Color.FromRgb(255, 243, 224)); // Light orange
+                            e.Row.Foreground = new SolidColorBrush(Color.FromRgb(253, 126, 20)); // Orange text
+                            break;
+                        case AlertService.PaymentStatus.DueTomorrow:
+                        case AlertService.PaymentStatus.DueThisWeek:
+                            e.Row.Background = new SolidColorBrush(Color.FromRgb(255, 252, 230)); // Light yellow
+                            e.Row.Foreground = new SolidColorBrush(Color.FromRgb(255, 193, 7)); // Yellow text
+                            break;
+                    }
+                }
+            };
+        }
+
+        private async void GeneratePaymentReport_Click(object sender, RoutedEventArgs e)
+        {
+            await GeneratePaymentReportAsync();
+            await CreateAutoBackupAsync("PaymentReportGenerated");
+            MessageBox.Show("Payment due report generated successfully!", "Success",
+                        MessageBoxButton.OK, MessageBoxImage.Information);
+        }
+
+        private void ExportPayment_Click(object sender, RoutedEventArgs e)
+        {
+            MessageBox.Show("Payment report export feature coming soon!", "Export",
+                        MessageBoxButton.OK, MessageBoxImage.Information);
         }
 
         #endregion

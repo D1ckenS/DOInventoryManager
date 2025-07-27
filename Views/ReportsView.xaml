@@ -478,37 +478,39 @@
                                 </DataGrid>
 
                                 <!-- Vessel Account Totals -->
-                                <Border Background="#f8f9fa" BorderBrush="#dee2e6" BorderThickness="1" 
-                                    CornerRadius="4" Padding="15" Margin="0,15,0,0">
-                                    <Grid>
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="100"/>  <!-- Date -->
-                                            <ColumnDefinition Width="100"/>  <!-- Type -->
-                                            <ColumnDefinition Width="120"/>  <!-- Reference -->
-                                            <ColumnDefinition Width="120"/>  <!-- Supplier -->
-                                            <ColumnDefinition Width="100"/>  <!-- Debit (L) -->
-                                            <ColumnDefinition Width="100"/>  <!-- Credit (L) -->
-                                            <ColumnDefinition Width="100"/>  <!-- Balance (L) -->
-                                            <ColumnDefinition Width="100"/>  <!-- Value (USD) -->
-                                            <ColumnDefinition Width="*"/>    <!-- Description -->
-                                        </Grid.ColumnDefinitions>
+                                <Grid Margin="0,15,0,0" Background="#f8f9fa">
+                                    <Border BorderBrush="#dee2e6" BorderThickness="1" CornerRadius="4" 
+                                            Background="#f8f9fa" Margin="1,0,0,0">
+                                        <Grid Margin="6,15,0,15">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="100"/>  <!-- Date -->
+                                                <ColumnDefinition Width="100"/>  <!-- Type -->
+                                                <ColumnDefinition Width="120"/>  <!-- Reference -->
+                                                <ColumnDefinition Width="120"/>  <!-- Supplier -->
+                                                <ColumnDefinition Width="100"/>  <!-- Debit (L) -->
+                                                <ColumnDefinition Width="100"/>  <!-- Credit (L) -->
+                                                <ColumnDefinition Width="100"/>  <!-- Balance (L) -->
+                                                <ColumnDefinition Width="100"/>  <!-- Value (USD) -->
+                                                <ColumnDefinition Width="*"/>    <!-- Description -->
+                                            </Grid.ColumnDefinitions>
 
-                                        <TextBlock Grid.Column="0" Text="" FontWeight="Bold"/>
-                                        <TextBlock Grid.Column="1" Text="" FontWeight="Bold"/>
-                                        <TextBlock Grid.Column="2" Text="" FontWeight="Bold"/>
-                                        <TextBlock Grid.Column="3" Text="TOTALS:" FontWeight="Bold" 
-                                                HorizontalAlignment="Right" Foreground="#2c3e50"/>
-                                        <TextBlock Grid.Column="4" x:Name="VesselTotalDebitsText" Text="0.000" 
-                                                FontWeight="Bold" HorizontalAlignment="Center" Foreground="#2c3e50"/>
-                                        <TextBlock Grid.Column="5" x:Name="VesselTotalCreditsText" Text="0.000" 
-                                                FontWeight="Bold" HorizontalAlignment="Center" Foreground="#2c3e50"/>
-                                        <TextBlock Grid.Column="6" x:Name="VesselNetBalanceText" Text="0.000" 
-                                                FontWeight="Bold" HorizontalAlignment="Center" Foreground="#2c3e50"/>
-                                        <TextBlock Grid.Column="7" x:Name="VesselAccountTotalValueText" Text="$0.00" 
-                                                FontWeight="Bold" HorizontalAlignment="Center" Foreground="#2c3e50"/>
-                                        <TextBlock Grid.Column="8" Text="" FontWeight="Bold"/>
-                                    </Grid>
-                                </Border>
+                                            <TextBlock Grid.Column="0" Text="" FontWeight="Bold"/>
+                                            <TextBlock Grid.Column="1" Text="" FontWeight="Bold"/>
+                                            <TextBlock Grid.Column="2" Text="" FontWeight="Bold"/>
+                                            <TextBlock Grid.Column="3" Text="TOTALS:" FontWeight="Bold" 
+                                                    HorizontalAlignment="Right" Foreground="#2c3e50"/>
+                                            <TextBlock Grid.Column="4" x:Name="VesselTotalDebitsText" Text="0.000" 
+                                                    FontWeight="Bold" HorizontalAlignment="Center" Foreground="#2c3e50"/>
+                                            <TextBlock Grid.Column="5" x:Name="VesselTotalCreditsText" Text="0.000" 
+                                                    FontWeight="Bold" HorizontalAlignment="Center" Foreground="#2c3e50"/>
+                                            <TextBlock Grid.Column="6" x:Name="VesselNetBalanceText" Text="0.000" 
+                                                    FontWeight="Bold" HorizontalAlignment="Center" Foreground="#2c3e50"/>
+                                            <TextBlock Grid.Column="7" x:Name="VesselAccountTotalValueText" Text="$0.00" 
+                                                    FontWeight="Bold" HorizontalAlignment="Center" Foreground="#2c3e50"/>
+                                            <TextBlock Grid.Column="8" Text="" FontWeight="Bold"/>
+                                        </Grid>
+                                    </Border>
+                                </Grid>
                             </StackPanel>
                         </Border>
                     </Grid>
@@ -638,41 +640,206 @@
                                 </DataGrid>
 
                                 <!-- Supplier Account Totals -->
-                                <Border Background="#fff3cd" BorderBrush="#ffc107" BorderThickness="1" 
-                                    CornerRadius="4" Padding="15" Margin="0,15,0,0">
-                                    <Grid>
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="100"/>  <!-- Date -->
-                                            <ColumnDefinition Width="120"/>  <!-- Vessel -->
-                                            <ColumnDefinition Width="100"/>  <!-- Type -->
-                                            <ColumnDefinition Width="120"/>  <!-- Reference -->
-                                            <ColumnDefinition Width="120"/>  <!-- Purchases (L) -->
-                                            <ColumnDefinition Width="120"/>  <!-- Consumption (L) -->
-                                            <ColumnDefinition Width="100"/>  <!-- Balance (L) -->
-                                            <ColumnDefinition Width="120"/>  <!-- Value -->
-                                            <ColumnDefinition Width="100"/>  <!-- USD Value -->
-                                        </Grid.ColumnDefinitions>
+                                <Grid Margin="0,15,0,0" Background="#fff3cd">
+                                    <Border BorderBrush="#ffc107" BorderThickness="1" CornerRadius="4" 
+                                            Background="#fff3cd" Margin="1,0,0,0">
+                                        <Grid Margin="6,15,0,15">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="100"/>  <!-- Date -->
+                                                <ColumnDefinition Width="120"/>  <!-- Vessel -->
+                                                <ColumnDefinition Width="100"/>  <!-- Type -->
+                                                <ColumnDefinition Width="120"/>  <!-- Reference -->
+                                                <ColumnDefinition Width="120"/>  <!-- Purchases (L) -->
+                                                <ColumnDefinition Width="120"/>  <!-- Consumption (L) -->
+                                                <ColumnDefinition Width="120"/>  <!-- Value -->
+                                                <ColumnDefinition Width="100"/>  <!-- USD Value -->
+                                                <ColumnDefinition Width="100"/>  <!-- Balance (L) -->
+                                            </Grid.ColumnDefinitions>
 
-                                        <TextBlock Grid.Column="0" Text="" FontWeight="Bold"/>
-                                        <TextBlock Grid.Column="1" Text="" FontWeight="Bold"/>
-                                        <TextBlock Grid.Column="2" Text="" FontWeight="Bold"/>
-                                        <TextBlock Grid.Column="3" Text="TOTALS:" FontWeight="Bold" 
-                                                HorizontalAlignment="Right" Foreground="#856404"/>
-                                        <TextBlock Grid.Column="4" x:Name="SupplierTotalPurchasesText" Text="0.000" 
-                                                FontWeight="Bold" HorizontalAlignment="Center" Foreground="#856404"/>
-                                        <TextBlock Grid.Column="5" x:Name="SupplierTotalConsumptionText" Text="0.000" 
-                                                FontWeight="Bold" HorizontalAlignment="Center" Foreground="#856404"/>
-                                        <TextBlock Grid.Column="6" x:Name="SupplierNetBalanceText" Text="0.000" 
-                                                FontWeight="Bold" HorizontalAlignment="Center" Foreground="#856404"/>
-                                        <TextBlock Grid.Column="7" x:Name="SupplierAccountTotalValueText" Text="0.000 USD" 
-                                                FontWeight="Bold" HorizontalAlignment="Center" Foreground="#856404"/>
-                                        <TextBlock Grid.Column="8" x:Name="SupplierAccountTotalUSDText" Text="$0.00" 
-                                                FontWeight="Bold" HorizontalAlignment="Center" Foreground="#856404"/>
-                                    </Grid>
-                                </Border>
+                                            <TextBlock Grid.Column="0" Text="" FontWeight="Bold"/>
+                                            <TextBlock Grid.Column="1" Text="" FontWeight="Bold"/>
+                                            <TextBlock Grid.Column="2" Text="" FontWeight="Bold"/>
+                                            <TextBlock Grid.Column="3" Text="TOTALS:" FontWeight="Bold" 
+                                                    HorizontalAlignment="Right" Foreground="#856404"/>
+                                            <TextBlock Grid.Column="4" x:Name="SupplierTotalPurchasesText" Text="0.000" 
+                                                    FontWeight="Bold" HorizontalAlignment="Center" Foreground="#856404"/>
+                                            <TextBlock Grid.Column="5" x:Name="SupplierTotalConsumptionText" Text="0.000" 
+                                                    FontWeight="Bold" HorizontalAlignment="Center" Foreground="#856404"/>
+                                            <TextBlock Grid.Column="6" x:Name="SupplierAccountTotalValueText" Text="0.000 USD" 
+                                                    FontWeight="Bold" HorizontalAlignment="Center" Foreground="#856404"/>
+                                            <TextBlock Grid.Column="7" x:Name="SupplierAccountTotalUSDText" Text="$0.00" 
+                                                    FontWeight="Bold" HorizontalAlignment="Center" Foreground="#856404"/>
+                                            <TextBlock Grid.Column="8" x:Name="SupplierNetBalanceText" Text="0.000" 
+                                                    FontWeight="Bold" HorizontalAlignment="Center" Foreground="#856404"/>
+                                        </Grid>
+                                    </Border>
+                                </Grid>
                                 
                             </StackPanel>
                         </Border>
+                    </Grid>
+                </TabItem>
+
+                <!-- Payment Due Report Tab -->
+                <TabItem Header="💳 Payment Due Report">
+                    <Grid Margin="20">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <!-- Controls -->
+                            <RowDefinition Height="Auto"/>
+                            <!-- Summary -->
+                            <RowDefinition Height="*"/>
+                            <!-- Report -->
+                        </Grid.RowDefinitions>
+
+                        <!-- Controls -->
+                        <Border Grid.Row="0" Background="#f8f9fa" BorderBrush="#dee2e6" BorderThickness="1" 
+                            CornerRadius="8" Padding="20" Margin="0,0,0,20">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+
+                                <StackPanel Grid.Column="0" Orientation="Horizontal">
+                                    <Button x:Name="GeneratePaymentReportBtn" Content="📊 Generate Payment Report" 
+                                        Background="#007bff" Foreground="White" BorderThickness="0" 
+                                        Padding="15,10" FontWeight="SemiBold"
+                                        Click="GeneratePaymentReport_Click"/>
+                                    
+                                    <TextBlock Text="Real-time payment status and aging analysis" 
+                                            VerticalAlignment="Center" Margin="20,0,0,0" 
+                                            FontStyle="Italic" Foreground="Gray"/>
+                                </StackPanel>
+
+                                <StackPanel Grid.Column="1" Orientation="Horizontal">
+                                    <Button x:Name="ExportPaymentBtn" Content="📤 Export" 
+                                        Background="#28a745" Foreground="White" BorderThickness="0" 
+                                        Padding="15,10" FontWeight="SemiBold"
+                                        Click="ExportPayment_Click"/>
+                                </StackPanel>
+                            </Grid>
+                        </Border>
+
+                        <!-- Payment Summary Cards -->
+                        <Border Grid.Row="1" Background="#fff" BorderBrush="#dee2e6" BorderThickness="1" 
+                            CornerRadius="8" Padding="20" Margin="0,0,0,20">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+
+                                <StackPanel Grid.Column="0" HorizontalAlignment="Center">
+                                    <TextBlock Text="🔴 Overdue" FontWeight="SemiBold" HorizontalAlignment="Center" FontSize="12"/>
+                                    <TextBlock x:Name="OverdueAmountText" Text="$0.00" FontSize="16" FontWeight="Bold" 
+                                            HorizontalAlignment="Center" Foreground="#dc3545"/>
+                                    <TextBlock x:Name="OverdueCountText" Text="0 invoices" FontSize="10" 
+                                            HorizontalAlignment="Center" Foreground="#dc3545"/>
+                                </StackPanel>
+
+                                <StackPanel Grid.Column="1" HorizontalAlignment="Center">
+                                    <TextBlock Text="🟠 Due Today" FontWeight="SemiBold" HorizontalAlignment="Center" FontSize="12"/>
+                                    <TextBlock x:Name="DueTodayAmountText" Text="$0.00" FontSize="16" FontWeight="Bold" 
+                                            HorizontalAlignment="Center" Foreground="#fd7e14"/>
+                                    <TextBlock x:Name="DueTodayCountText" Text="0 invoices" FontSize="10" 
+                                            HorizontalAlignment="Center" Foreground="#fd7e14"/>
+                                </StackPanel>
+
+                                <StackPanel Grid.Column="2" HorizontalAlignment="Center">
+                                    <TextBlock Text="🟡 This Week" FontWeight="SemiBold" HorizontalAlignment="Center" FontSize="12"/>
+                                    <TextBlock x:Name="DueThisWeekAmountText" Text="$0.00" FontSize="16" FontWeight="Bold" 
+                                            HorizontalAlignment="Center" Foreground="#ffc107"/>
+                                    <TextBlock x:Name="DueThisWeekCountText" Text="0 invoices" FontSize="10" 
+                                            HorizontalAlignment="Center" Foreground="#ffc107"/>
+                                </StackPanel>
+
+                                <StackPanel Grid.Column="3" HorizontalAlignment="Center">
+                                    <TextBlock Text="🟢 Next Week" FontWeight="SemiBold" HorizontalAlignment="Center" FontSize="12"/>
+                                    <TextBlock x:Name="DueNextWeekAmountText" Text="$0.00" FontSize="16" FontWeight="Bold" 
+                                            HorizontalAlignment="Center" Foreground="#28a745"/>
+                                    <TextBlock x:Name="DueNextWeekCountText" Text="0 invoices" FontSize="10" 
+                                            HorizontalAlignment="Center" Foreground="#28a745"/>
+                                </StackPanel>
+
+                                <StackPanel Grid.Column="4" HorizontalAlignment="Center">
+                                    <TextBlock Text="📊 Total Outstanding" FontWeight="SemiBold" HorizontalAlignment="Center" FontSize="12"/>
+                                    <TextBlock x:Name="TotalOutstandingAmountText" Text="$0.00" FontSize="16" FontWeight="Bold" 
+                                            HorizontalAlignment="Center" Foreground="#6c757d"/>
+                                    <TextBlock x:Name="TotalOutstandingCountText" Text="0 invoices" FontSize="10" 
+                                            HorizontalAlignment="Center" Foreground="#6c757d"/>
+                                </StackPanel>
+                            </Grid>
+                        </Border>
+
+                        <!-- Payment Report Tabs -->
+                        <TabControl Grid.Row="2" x:Name="PaymentTabControl">
+                            
+                            <!-- Payment Schedule Tab -->
+                            <TabItem Header="📅 Payment Schedule">
+                                <StackPanel Margin="20">
+                                    <TextBlock Text="All Outstanding Invoices by Due Date" FontSize="16" FontWeight="SemiBold" 
+                                            Margin="0,0,0,15" Foreground="#2c3e50"/>
+
+                                    <DataGrid x:Name="PaymentScheduleGrid" 
+                                            AutoGenerateColumns="False" 
+                                            CanUserAddRows="False"
+                                            CanUserDeleteRows="False"
+                                            GridLinesVisibility="Horizontal"
+                                            HeadersVisibility="Column"
+                                            Background="White"
+                                            BorderThickness="1"
+                                            BorderBrush="#dee2e6"
+                                            MaxHeight="500">
+
+                                        <DataGrid.Columns>
+                                            <DataGridTextColumn Header="Due Date" Binding="{Binding FormattedDueDate}" Width="100"/>
+                                            <DataGridTextColumn Header="Invoice Ref" Binding="{Binding InvoiceReference}" Width="100"/>
+                                            <DataGridTextColumn Header="Supplier" Binding="{Binding SupplierName}" Width="120"/>
+                                            <DataGridTextColumn Header="Vessel" Binding="{Binding VesselName}" Width="120"/>
+                                            <DataGridTextColumn Header="Amount" Binding="{Binding FormattedValue}" Width="120"/>
+                                            <DataGridTextColumn Header="USD Amount" Binding="{Binding TotalValueUSD, StringFormat=C2}" Width="100"/>
+                                            <DataGridTextColumn Header="Status" Binding="{Binding StatusText}" Width="120"/>
+                                            <DataGridTextColumn Header="Receipt Date" Binding="{Binding FormattedReceiptDate}" Width="100"/>
+                                            <DataGridTextColumn Header="Aging" Binding="{Binding AgingCategory}" Width="100"/>
+                                        </DataGrid.Columns>
+                                    </DataGrid>
+                                </StackPanel>
+                            </TabItem>
+
+                            <!-- Aging Analysis Tab -->
+                            <TabItem Header="📊 Aging Analysis">
+                                <StackPanel Margin="20">
+                                    <TextBlock Text="Payment Aging by Supplier" FontSize="16" FontWeight="SemiBold" 
+                                            Margin="0,0,0,15" Foreground="#2c3e50"/>
+
+                                    <DataGrid x:Name="AgingAnalysisGrid" 
+                                            AutoGenerateColumns="False" 
+                                            CanUserAddRows="False"
+                                            CanUserDeleteRows="False"
+                                            GridLinesVisibility="Horizontal"
+                                            HeadersVisibility="Column"
+                                            Background="White"
+                                            BorderThickness="1"
+                                            BorderBrush="#dee2e6"
+                                            MaxHeight="500">
+
+                                        <DataGrid.Columns>
+                                            <DataGridTextColumn Header="Supplier" Binding="{Binding SupplierName}" Width="150"/>
+                                            <DataGridTextColumn Header="Currency" Binding="{Binding Currency}" Width="80"/>
+                                            <DataGridTextColumn Header="Total Outstanding" Binding="{Binding FormattedOutstanding}" Width="140"/>
+                                            <DataGridTextColumn Header="Total Overdue" Binding="{Binding FormattedOverdue}" Width="120"/>
+                                            <DataGridTextColumn Header="Total Invoices" Binding="{Binding TotalInvoices}" Width="100"/>
+                                            <DataGridTextColumn Header="Overdue Invoices" Binding="{Binding OverdueInvoices}" Width="120"/>
+                                            <DataGridTextColumn Header="Avg Days Overdue" Binding="{Binding AvgDaysOverdue, StringFormat=N1}" Width="130"/>
+                                        </DataGrid.Columns>
+                                    </DataGrid>
+                                </StackPanel>
+                            </TabItem>
+                        </TabControl>
                     </Grid>
                 </TabItem>
 
