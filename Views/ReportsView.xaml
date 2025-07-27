@@ -479,27 +479,18 @@
 
                                 <!-- Vessel Account Totals -->
                                 <Border Background="#f8f9fa" BorderBrush="#dee2e6" BorderThickness="1" 
-                                        CornerRadius="4" Padding="15" Margin="0,15,0,0">
+                                    CornerRadius="4" Padding="15" Margin="0,15,0,0">
                                     <Grid>
                                         <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="100"/>
-                                            <!-- Date -->
-                                            <ColumnDefinition Width="100"/>
-                                            <!-- Type -->
-                                            <ColumnDefinition Width="120"/>
-                                            <!-- Reference -->
-                                            <ColumnDefinition Width="120"/>
-                                            <!-- Supplier -->
-                                            <ColumnDefinition Width="100"/>
-                                            <!-- Debit -->
-                                            <ColumnDefinition Width="100"/>
-                                            <!-- Credit -->
-                                            <ColumnDefinition Width="100"/>
-                                            <!-- Balance -->
-                                            <ColumnDefinition Width="100"/>
-                                            <!-- Value -->
-                                            <ColumnDefinition Width="*"/>
-                                            <!-- Description -->
+                                            <ColumnDefinition Width="100"/>  <!-- Date -->
+                                            <ColumnDefinition Width="100"/>  <!-- Type -->
+                                            <ColumnDefinition Width="120"/>  <!-- Reference -->
+                                            <ColumnDefinition Width="120"/>  <!-- Supplier -->
+                                            <ColumnDefinition Width="100"/>  <!-- Debit (L) -->
+                                            <ColumnDefinition Width="100"/>  <!-- Credit (L) -->
+                                            <ColumnDefinition Width="100"/>  <!-- Balance (L) -->
+                                            <ColumnDefinition Width="100"/>  <!-- Value (USD) -->
+                                            <ColumnDefinition Width="*"/>    <!-- Description -->
                                         </Grid.ColumnDefinitions>
 
                                         <TextBlock Grid.Column="0" Text="" FontWeight="Bold"/>
@@ -508,13 +499,13 @@
                                         <TextBlock Grid.Column="3" Text="TOTALS:" FontWeight="Bold" 
                                                 HorizontalAlignment="Right" Foreground="#2c3e50"/>
                                         <TextBlock Grid.Column="4" x:Name="VesselTotalDebitsText" Text="0.000" 
-                                                FontWeight="Bold" HorizontalAlignment="Right" Foreground="#2c3e50"/>
+                                                FontWeight="Bold" HorizontalAlignment="Center" Foreground="#2c3e50"/>
                                         <TextBlock Grid.Column="5" x:Name="VesselTotalCreditsText" Text="0.000" 
-                                                FontWeight="Bold" HorizontalAlignment="Right" Foreground="#2c3e50"/>
+                                                FontWeight="Bold" HorizontalAlignment="Center" Foreground="#2c3e50"/>
                                         <TextBlock Grid.Column="6" x:Name="VesselNetBalanceText" Text="0.000" 
-                                                FontWeight="Bold" HorizontalAlignment="Right" Foreground="#2c3e50"/>
+                                                FontWeight="Bold" HorizontalAlignment="Center" Foreground="#2c3e50"/>
                                         <TextBlock Grid.Column="7" x:Name="VesselAccountTotalValueText" Text="$0.00" 
-                                                FontWeight="Bold" HorizontalAlignment="Right" Foreground="#2c3e50"/>
+                                                FontWeight="Bold" HorizontalAlignment="Center" Foreground="#2c3e50"/>
                                         <TextBlock Grid.Column="8" Text="" FontWeight="Bold"/>
                                     </Grid>
                                 </Border>
@@ -648,27 +639,18 @@
 
                                 <!-- Supplier Account Totals -->
                                 <Border Background="#fff3cd" BorderBrush="#ffc107" BorderThickness="1" 
-                                        CornerRadius="4" Padding="15" Margin="0,15,0,0">
+                                    CornerRadius="4" Padding="15" Margin="0,15,0,0">
                                     <Grid>
                                         <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="100"/>
-                                            <!-- Date -->
-                                            <ColumnDefinition Width="120"/>
-                                            <!-- Vessel -->
-                                            <ColumnDefinition Width="100"/>
-                                            <!-- Type -->
-                                            <ColumnDefinition Width="120"/>
-                                            <!-- Reference -->
-                                            <ColumnDefinition Width="120"/>
-                                            <!-- Purchases -->
-                                            <ColumnDefinition Width="120"/>
-                                            <!-- Consumption -->
-                                            <ColumnDefinition Width="100"/>
-                                            <!-- Balance -->
-                                            <ColumnDefinition Width="120"/>
-                                            <!-- Value -->
-                                            <ColumnDefinition Width="100"/>
-                                            <!-- USD Value -->
+                                            <ColumnDefinition Width="100"/>  <!-- Date -->
+                                            <ColumnDefinition Width="120"/>  <!-- Vessel -->
+                                            <ColumnDefinition Width="100"/>  <!-- Type -->
+                                            <ColumnDefinition Width="120"/>  <!-- Reference -->
+                                            <ColumnDefinition Width="120"/>  <!-- Purchases (L) -->
+                                            <ColumnDefinition Width="120"/>  <!-- Consumption (L) -->
+                                            <ColumnDefinition Width="100"/>  <!-- Balance (L) -->
+                                            <ColumnDefinition Width="120"/>  <!-- Value -->
+                                            <ColumnDefinition Width="100"/>  <!-- USD Value -->
                                         </Grid.ColumnDefinitions>
 
                                         <TextBlock Grid.Column="0" Text="" FontWeight="Bold"/>
@@ -677,15 +659,15 @@
                                         <TextBlock Grid.Column="3" Text="TOTALS:" FontWeight="Bold" 
                                                 HorizontalAlignment="Right" Foreground="#856404"/>
                                         <TextBlock Grid.Column="4" x:Name="SupplierTotalPurchasesText" Text="0.000" 
-                                                FontWeight="Bold" HorizontalAlignment="Right" Foreground="#856404"/>
+                                                FontWeight="Bold" HorizontalAlignment="Center" Foreground="#856404"/>
                                         <TextBlock Grid.Column="5" x:Name="SupplierTotalConsumptionText" Text="0.000" 
-                                                FontWeight="Bold" HorizontalAlignment="Right" Foreground="#856404"/>
+                                                FontWeight="Bold" HorizontalAlignment="Center" Foreground="#856404"/>
                                         <TextBlock Grid.Column="6" x:Name="SupplierNetBalanceText" Text="0.000" 
-                                                FontWeight="Bold" HorizontalAlignment="Right" Foreground="#856404"/>
+                                                FontWeight="Bold" HorizontalAlignment="Center" Foreground="#856404"/>
                                         <TextBlock Grid.Column="7" x:Name="SupplierAccountTotalValueText" Text="0.000 USD" 
-                                                FontWeight="Bold" HorizontalAlignment="Right" Foreground="#856404"/>
+                                                FontWeight="Bold" HorizontalAlignment="Center" Foreground="#856404"/>
                                         <TextBlock Grid.Column="8" x:Name="SupplierAccountTotalUSDText" Text="$0.00" 
-                                                FontWeight="Bold" HorizontalAlignment="Right" Foreground="#856404"/>
+                                                FontWeight="Bold" HorizontalAlignment="Center" Foreground="#856404"/>
                                     </Grid>
                                 </Border>
                                 
