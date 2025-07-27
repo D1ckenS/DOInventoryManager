@@ -13,6 +13,7 @@ namespace DOInventoryManager.Views
         private readonly SummaryService _summaryService;
         private readonly ReportService _reportService;
         private readonly AlertService _alertService;
+        private readonly InventoryValuationService _inventoryService;
         private SummaryService.MonthlySummaryResult? _currentSummary;
 
         public ReportsView()
@@ -20,7 +21,8 @@ namespace DOInventoryManager.Views
             InitializeComponent();
             _summaryService = new SummaryService();
             _reportService = new ReportService();
-            _alertService = new AlertService(); // Add this line
+            _alertService = new AlertService();
+            _inventoryService = new InventoryValuationService(); // Add this line
             _ = LoadDataAsync();
         }
 
@@ -449,6 +451,49 @@ namespace DOInventoryManager.Views
         {
             MessageBox.Show("Payment report export feature coming soon!", "Export",
                         MessageBoxButton.OK, MessageBoxImage.Information);
+        }
+
+        #endregion
+
+        #region Inventory Valuation Report
+
+        private async Task GenerateInventoryValuationAsync()
+        {
+            try
+            {
+                var inventoryReport = await _inventoryService.GenerateInventoryValuationAsync();
+
+                // Update summary cards
+                InventoryTotalLitersText.Text = $"{inventoryReport.Summary.TotalInventoryLiters:N3} L";
+                InventoryTotalTonsText.Text = $"{inventoryReport.Summary.TotalInventoryTons:N3} T";
+                InventoryTotalFIFOValueText.Text = inventoryReport.Summary.TotalFIFOValueUSD.ToString("C2");
+                InventoryPurchaseLotsText.Text = inventoryReport.Summary.NumberOfPurchaseLots.ToString();
+                InventoryAvgCostPerLiterText.Text = inventoryReport.Summary.AvgCostPerLiterUSD.ToString("C6");
+
+                // Update grids
+                VesselInventoryGrid.ItemsSource = inventoryReport.VesselInventory;
+                SupplierInventoryGrid.ItemsSource = inventoryReport.SupplierInventory;
+                PurchaseLotsGrid.ItemsSource = inventoryReport.PurchaseLots;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error generating inventory valuation: {ex.Message}", "Error",
+                              MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        private async void GenerateInventory_Click(object sender, RoutedEventArgs e)
+        {
+            await GenerateInventoryValuationAsync();
+            await CreateAutoBackupAsync("InventoryValuationGenerated");
+            MessageBox.Show("Inventory valuation report generated successfully!", "Success",
+                          MessageBoxButton.OK, MessageBoxImage.Information);
+        }
+
+        private void ExportInventory_Click(object sender, RoutedEventArgs e)
+        {
+            MessageBox.Show("Inventory valuation export feature coming soon!", "Export",
+                          MessageBoxButton.OK, MessageBoxImage.Information);
         }
 
         #endregion

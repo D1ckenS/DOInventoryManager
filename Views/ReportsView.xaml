@@ -894,6 +894,199 @@
                     </Grid>
                 </TabItem>
 
+                <TabItem Header="📦 Inventory Valuation">
+                    <Grid Margin="20">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <!-- Controls -->
+                            <RowDefinition Height="Auto"/>
+                            <!-- Summary -->
+                            <RowDefinition Height="*"/>
+                            <!-- Content -->
+                        </Grid.RowDefinitions>
+
+                        <!-- Controls -->
+                        <Border Grid.Row="0" Background="#f8f9fa" BorderBrush="#dee2e6" BorderThickness="1" 
+                                CornerRadius="8" Padding="20" Margin="0,0,0,20">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+
+                                <StackPanel Grid.Column="0" Orientation="Horizontal">
+                                    <Button x:Name="GenerateInventoryBtn" Content="📦 Generate Inventory Report" 
+                                          Background="#007bff" Foreground="White" BorderThickness="0" 
+                                          Padding="15,10" FontWeight="SemiBold"
+                                          Click="GenerateInventory_Click"/>
+
+                                    <TextBlock Text="Real-time FIFO inventory valuation" 
+                                        VerticalAlignment="Center" Margin="20,0,0,0" 
+                                        FontStyle="Italic" Foreground="Gray"/>
+                                </StackPanel>
+
+                                <StackPanel Grid.Column="1" Orientation="Horizontal">
+                                    <Button x:Name="ExportInventoryBtn" Content="📤 Export" 
+                                          Background="#28a745" Foreground="White" BorderThickness="0" 
+                                          Padding="15,10" FontWeight="SemiBold"
+                                          Click="ExportInventory_Click"/>
+                                </StackPanel>
+                            </Grid>
+                        </Border>
+
+                        <!-- Summary Cards -->
+                        <Border Grid.Row="1" Background="#e8f5e8" BorderBrush="#4caf50" BorderThickness="1" 
+                                CornerRadius="8" Padding="20" Margin="0,0,0,20">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+
+                                <StackPanel Grid.Column="0" HorizontalAlignment="Center">
+                                    <TextBlock Text="📦 Total Inventory (L)" FontWeight="SemiBold" HorizontalAlignment="Center" FontSize="12"/>
+                                    <TextBlock x:Name="InventoryTotalLitersText" Text="0.000 L" FontSize="16" FontWeight="Bold" 
+                                                HorizontalAlignment="Center" Foreground="#2e7d32"/>
+                                </StackPanel>
+
+                                <StackPanel Grid.Column="1" HorizontalAlignment="Center">
+                                    <TextBlock Text="⚖️ Total Inventory (T)" FontWeight="SemiBold" HorizontalAlignment="Center" FontSize="12"/>
+                                    <TextBlock x:Name="InventoryTotalTonsText" Text="0.000 T" FontSize="16" FontWeight="Bold" 
+                                                HorizontalAlignment="Center" Foreground="#2e7d32"/>
+                                </StackPanel>
+
+                                <StackPanel Grid.Column="2" HorizontalAlignment="Center">
+                                    <TextBlock Text="💰 FIFO Value" FontWeight="SemiBold" HorizontalAlignment="Center" FontSize="12"/>
+                                    <TextBlock x:Name="InventoryTotalFIFOValueText" Text="$0.00" FontSize="16" FontWeight="Bold" 
+                                                HorizontalAlignment="Center" Foreground="#2e7d32"/>
+                                </StackPanel>
+
+                                <StackPanel Grid.Column="3" HorizontalAlignment="Center">
+                                    <TextBlock Text="📄 Purchase Lots" FontWeight="SemiBold" HorizontalAlignment="Center" FontSize="12"/>
+                                    <TextBlock x:Name="InventoryPurchaseLotsText" Text="0" FontSize="16" FontWeight="Bold" 
+                                                HorizontalAlignment="Center" Foreground="#2e7d32"/>
+                                </StackPanel>
+
+                                <StackPanel Grid.Column="4" HorizontalAlignment="Center">
+                                    <TextBlock Text="💲 Avg Cost/Liter" FontWeight="SemiBold" HorizontalAlignment="Center" FontSize="12"/>
+                                    <TextBlock x:Name="InventoryAvgCostPerLiterText" Text="$0.000000" FontSize="16" FontWeight="Bold" 
+                                                HorizontalAlignment="Center" Foreground="#2e7d32"/>
+                                </StackPanel>
+                            </Grid>
+                        </Border>
+
+                        <!-- Inventory Tabs -->
+                        <TabControl Grid.Row="2" x:Name="InventoryTabControl">
+
+                            <!-- Inventory by Vessel Tab -->
+                            <TabItem Header="🚢 By Vessel">
+                                <StackPanel Margin="20">
+                                    <TextBlock Text="Current Inventory by Vessel (FIFO Valuation)" FontSize="16" FontWeight="SemiBold" 
+                                            Margin="0,0,0,15" Foreground="#2c3e50"/>
+
+                                    <DataGrid x:Name="VesselInventoryGrid" 
+                                            AutoGenerateColumns="False" 
+                                            CanUserAddRows="False"
+                                            CanUserDeleteRows="False"
+                                            GridLinesVisibility="Horizontal"
+                                            HeadersVisibility="Column"
+                                            Background="White"
+                                            BorderThickness="1"
+                                            BorderBrush="#dee2e6"
+                                            MaxHeight="500">
+
+                                        <DataGrid.Columns>
+                                            <DataGridTextColumn Header="Vessel" Binding="{Binding VesselName}" Width="120"/>
+                                            <DataGridTextColumn Header="Type" Binding="{Binding VesselType}" Width="80"/>
+                                            <DataGridTextColumn Header="Route" Binding="{Binding Route}" Width="180"/>
+                                            <DataGridTextColumn Header="Inventory (L)" Binding="{Binding CurrentInventoryL, StringFormat=N3}" Width="120"/>
+                                            <DataGridTextColumn Header="Inventory (T)" Binding="{Binding CurrentInventoryT, StringFormat=N3}" Width="120"/>
+                                            <DataGridTextColumn Header="FIFO Value" Binding="{Binding FIFOValueUSD, StringFormat=C2}" Width="120"/>
+                                            <DataGridTextColumn Header="Cost/L USD" Binding="{Binding AvgCostPerLiterUSD, StringFormat=C6}" Width="120"/>
+                                            <DataGridTextColumn Header="Cost/T USD" Binding="{Binding AvgCostPerTonUSD, StringFormat=C2}" Width="120"/>
+                                            <DataGridTextColumn Header="Lots" Binding="{Binding PurchaseLotsCount}" Width="60"/>
+                                            <DataGridTextColumn Header="Oldest Date" Binding="{Binding FormattedOldestDate}" Width="100"/>
+                                            <DataGridTextColumn Header="Days Old" Binding="{Binding DaysOldestInventory}" Width="80"/>
+                                        </DataGrid.Columns>
+                                    </DataGrid>
+                                </StackPanel>
+                            </TabItem>
+
+                            <!-- Inventory by Supplier Tab -->
+                            <TabItem Header="🏢 By Supplier">
+                                <StackPanel Margin="20">
+                                    <TextBlock Text="Current Inventory by Supplier (FIFO Valuation)" FontSize="16" FontWeight="SemiBold" 
+                                            Margin="0,0,0,15" Foreground="#2c3e50"/>
+
+                                    <DataGrid x:Name="SupplierInventoryGrid" 
+                                            AutoGenerateColumns="False" 
+                                            CanUserAddRows="False"
+                                            CanUserDeleteRows="False"
+                                            GridLinesVisibility="Horizontal"
+                                            HeadersVisibility="Column"
+                                            Background="White"
+                                            BorderThickness="1"
+                                            BorderBrush="#dee2e6"
+                                            MaxHeight="500">
+
+                                        <DataGrid.Columns>
+                                            <DataGridTextColumn Header="Supplier" Binding="{Binding SupplierName}" Width="120"/>
+                                            <DataGridTextColumn Header="Currency" Binding="{Binding Currency}" Width="80"/>
+                                            <DataGridTextColumn Header="Inventory (L)" Binding="{Binding RemainingInventoryL, StringFormat=N3}" Width="120"/>
+                                            <DataGridTextColumn Header="Inventory (T)" Binding="{Binding RemainingInventoryT, StringFormat=N3}" Width="120"/>
+                                            <DataGridTextColumn Header="FIFO Value" Binding="{Binding FormattedFIFOValueOriginal}" Width="120"/>
+                                            <DataGridTextColumn Header="USD Value" Binding="{Binding FIFOValueUSD, StringFormat=C2}" Width="100"/>
+                                            <DataGridTextColumn Header="Cost/L" Binding="{Binding FormattedAvgCostOriginal}" Width="120"/>
+                                            <DataGridTextColumn Header="Cost/L USD" Binding="{Binding AvgCostPerLiterUSD, StringFormat=C6}" Width="120"/>
+                                            <DataGridTextColumn Header="Lots" Binding="{Binding PurchaseLotsCount}" Width="60"/>
+                                            <DataGridTextColumn Header="Vessels" Binding="{Binding VesselsSupplied}" Width="70"/>
+                                        </DataGrid.Columns>
+                                    </DataGrid>
+                                </StackPanel>
+                            </TabItem>
+
+                            <!-- Purchase Lot Details Tab -->
+                            <TabItem Header="📄 Purchase Lots">
+                                <StackPanel Margin="20">
+                                    <TextBlock Text="Individual Purchase Lots (FIFO Order)" FontSize="16" FontWeight="SemiBold" 
+                                            Margin="0,0,0,15" Foreground="#2c3e50"/>
+
+                                    <DataGrid x:Name="PurchaseLotsGrid" 
+                                            AutoGenerateColumns="False" 
+                                            CanUserAddRows="False"
+                                            CanUserDeleteRows="False"
+                                            GridLinesVisibility="Horizontal"
+                                            HeadersVisibility="Column"
+                                            Background="White"
+                                            BorderThickness="1"
+                                            BorderBrush="#dee2e6"
+                                            MaxHeight="500">
+
+                                        <DataGrid.Columns>
+                                            <DataGridTextColumn Header="Purchase Date" Binding="{Binding FormattedPurchaseDate}" Width="100"/>
+                                            <DataGridTextColumn Header="Invoice Ref" Binding="{Binding InvoiceReference}" Width="100"/>
+                                            <DataGridTextColumn Header="Vessel" Binding="{Binding VesselName}" Width="100"/>
+                                            <DataGridTextColumn Header="Supplier" Binding="{Binding SupplierName}" Width="100"/>
+                                            <DataGridTextColumn Header="Original (L)" Binding="{Binding OriginalQuantityL, StringFormat=N3}" Width="100"/>
+                                            <DataGridTextColumn Header="Remaining (L)" Binding="{Binding RemainingQuantityL, StringFormat=N3}" Width="110"/>
+                                            <DataGridTextColumn Header="Remaining (T)" Binding="{Binding RemainingQuantityT, StringFormat=N3}" Width="110"/>
+                                            <DataGridTextColumn Header="% Remaining" Binding="{Binding PercentageRemaining, StringFormat=N1}" Width="100"/>
+                                            <DataGridTextColumn Header="FIFO Value" Binding="{Binding FormattedRemainingValue}" Width="120"/>
+                                            <DataGridTextColumn Header="USD Value" Binding="{Binding RemainingValueUSD, StringFormat=C2}" Width="100"/>
+                                            <DataGridTextColumn Header="Cost/L" Binding="{Binding FormattedCostPerLiter}" Width="120"/>
+                                            <DataGridTextColumn Header="Days in Inventory" Binding="{Binding DaysInInventory}" Width="120"/>
+                                            <DataGridTextColumn Header="Aging" Binding="{Binding AgingCategory}" Width="120"/>
+                                        </DataGrid.Columns>
+                                    </DataGrid>
+                                </StackPanel>
+                            </TabItem>
+                        </TabControl>
+                    </Grid>
+                </TabItem>
+
                 <!-- More tabs will be added here -->
             </TabControl>
         </Grid>
