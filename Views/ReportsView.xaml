@@ -484,15 +484,24 @@
                                             Background="#f8f9fa" Margin="1,0,0,0">
                                         <Grid Margin="6,15,0,15">
                                             <Grid.ColumnDefinitions>
-                                                <ColumnDefinition Width="100"/>  <!-- Date -->
-                                                <ColumnDefinition Width="100"/>  <!-- Type -->
-                                                <ColumnDefinition Width="120"/>  <!-- Reference -->
-                                                <ColumnDefinition Width="120"/>  <!-- Supplier -->
-                                                <ColumnDefinition Width="100"/>  <!-- Debit (L) -->
-                                                <ColumnDefinition Width="100"/>  <!-- Credit (L) -->
-                                                <ColumnDefinition Width="100"/>  <!-- Balance (L) -->
-                                                <ColumnDefinition Width="100"/>  <!-- Value (USD) -->
-                                                <ColumnDefinition Width="*"/>    <!-- Description -->
+                                                <ColumnDefinition Width="100"/>
+                                                <!-- Date -->
+                                                <ColumnDefinition Width="100"/>
+                                                <!-- Type -->
+                                                <ColumnDefinition Width="120"/>
+                                                <!-- Reference -->
+                                                <ColumnDefinition Width="120"/>
+                                                <!-- Supplier -->
+                                                <ColumnDefinition Width="100"/>
+                                                <!-- Debit (L) -->
+                                                <ColumnDefinition Width="100"/>
+                                                <!-- Credit (L) -->
+                                                <ColumnDefinition Width="100"/>
+                                                <!-- Balance (L) -->
+                                                <ColumnDefinition Width="100"/>
+                                                <!-- Value (USD) -->
+                                                <ColumnDefinition Width="*"/>
+                                                <!-- Description -->
                                             </Grid.ColumnDefinitions>
 
                                             <TextBlock Grid.Column="0" Text="" FontWeight="Bold"/>
@@ -646,15 +655,24 @@
                                             Background="#fff3cd" Margin="1,0,0,0">
                                         <Grid Margin="6,15,0,15">
                                             <Grid.ColumnDefinitions>
-                                                <ColumnDefinition Width="100"/>  <!-- Date -->
-                                                <ColumnDefinition Width="120"/>  <!-- Vessel -->
-                                                <ColumnDefinition Width="100"/>  <!-- Type -->
-                                                <ColumnDefinition Width="120"/>  <!-- Reference -->
-                                                <ColumnDefinition Width="120"/>  <!-- Purchases (L) -->
-                                                <ColumnDefinition Width="120"/>  <!-- Consumption (L) -->
-                                                <ColumnDefinition Width="120"/>  <!-- Value -->
-                                                <ColumnDefinition Width="100"/>  <!-- USD Value -->
-                                                <ColumnDefinition Width="100"/>  <!-- Balance (L) -->
+                                                <ColumnDefinition Width="100"/>
+                                                <!-- Date -->
+                                                <ColumnDefinition Width="120"/>
+                                                <!-- Vessel -->
+                                                <ColumnDefinition Width="100"/>
+                                                <!-- Type -->
+                                                <ColumnDefinition Width="120"/>
+                                                <!-- Reference -->
+                                                <ColumnDefinition Width="120"/>
+                                                <!-- Purchases (L) -->
+                                                <ColumnDefinition Width="120"/>
+                                                <!-- Consumption (L) -->
+                                                <ColumnDefinition Width="120"/>
+                                                <!-- Value -->
+                                                <ColumnDefinition Width="100"/>
+                                                <!-- USD Value -->
+                                                <ColumnDefinition Width="100"/>
+                                                <!-- Balance (L) -->
                                             </Grid.ColumnDefinitions>
 
                                             <TextBlock Grid.Column="0" Text="" FontWeight="Bold"/>
@@ -675,7 +693,7 @@
                                         </Grid>
                                     </Border>
                                 </Grid>
-                                
+
                             </StackPanel>
                         </Border>
                     </Grid>
@@ -707,7 +725,7 @@
                                         Background="#007bff" Foreground="White" BorderThickness="0" 
                                         Padding="15,10" FontWeight="SemiBold"
                                         Click="GeneratePaymentReport_Click"/>
-                                    
+
                                     <TextBlock Text="Real-time payment status and aging analysis" 
                                             VerticalAlignment="Center" Margin="20,0,0,0" 
                                             FontStyle="Italic" Foreground="Gray"/>
@@ -1424,6 +1442,397 @@
                                                 <DataGridTextColumn Header="YoY Change" Binding="{Binding FormattedYoYChange}" Width="120"/>
                                                 <DataGridTextColumn Header="Weather Impact" Binding="{Binding WeatherImpact}" Width="140"/>
                                                 <DataGridTextColumn Header="Capacity Util" Binding="{Binding CapacityUtilization, StringFormat=N1}" Width="120"/>
+                                            </DataGrid.Columns>
+                                        </DataGrid>
+                                    </StackPanel>
+                                </TabItem>
+
+                            </TabControl>
+                        </Grid>
+                    </ScrollViewer>
+                </TabItem>
+
+                <!-- FIFO Allocation Detail Report Tab -->
+                <TabItem Header="🔍 FIFO Allocation Detail">
+                    <ScrollViewer VerticalScrollBarVisibility="Auto">
+                        <Grid Margin="20">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <!-- Controls -->
+                                <RowDefinition Height="*"/>
+                                <!-- Content -->
+                            </Grid.RowDefinitions>
+
+                            <!-- Controls -->
+                            <Border Grid.Row="0" Background="#f8f9fa" BorderBrush="#dee2e6" BorderThickness="1" 
+                    CornerRadius="8" Padding="20" Margin="0,0,0,20">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <StackPanel Grid.Column="0" Orientation="Horizontal">
+                                        <Button x:Name="GenerateFIFODetailBtn" Content="🔍 Generate FIFO Detail Report" 
+                              Background="#007bff" Foreground="White" BorderThickness="0" 
+                              Padding="15,10" FontWeight="SemiBold"
+                              Click="GenerateFIFODetail_Click"/>
+
+                                        <TextBlock Text="Complete FIFO allocation audit trail and analysis" 
+                            VerticalAlignment="Center" Margin="20,0,0,0" 
+                            FontStyle="Italic" Foreground="Gray"/>
+
+                                        <Border Margin="20,0,0,0" Background="#e3f2fd" BorderBrush="#1976d2" BorderThickness="1" 
+                                CornerRadius="4" Padding="10,5">
+                                            <StackPanel Orientation="Horizontal">
+                                                <TextBlock Text="📅 Period:" FontWeight="SemiBold" VerticalAlignment="Center" Margin="0,0,10,0"/>
+                                                <DatePicker x:Name="FIFOFromDatePicker" SelectedDate="{x:Static sys:DateTime.Today}" 
+                                           Margin="0,0,10,0" FirstDayOfWeek="Sunday"/>
+                                                <TextBlock Text="to" VerticalAlignment="Center" Margin="0,0,10,0"/>
+                                                <DatePicker x:Name="FIFOToDatePicker" SelectedDate="{x:Static sys:DateTime.Today}" 
+                                           FirstDayOfWeek="Sunday"/>
+                                            </StackPanel>
+                                        </Border>
+                                    </StackPanel>
+
+                                    <StackPanel Grid.Column="1" Orientation="Horizontal">
+                                        <Button x:Name="ExportFIFODetailBtn" Content="📤 Export" 
+                              Background="#28a745" Foreground="White" BorderThickness="0" 
+                              Padding="15,10" FontWeight="SemiBold"
+                              Click="ExportFIFODetail_Click"/>
+                                    </StackPanel>
+                                </Grid>
+                            </Border>
+
+                            <!-- FIFO Detail Tabs -->
+                            <TabControl Grid.Row="1" x:Name="FIFODetailTabControl">
+
+                                <!-- Allocation Flow Summary Tab -->
+                                <TabItem Header="📊 Allocation Flow">
+                                    <ScrollViewer VerticalScrollBarVisibility="Auto">
+                                        <StackPanel Margin="20">
+                                            <TextBlock Text="FIFO Allocation Flow Summary" FontSize="16" FontWeight="SemiBold" 
+                                    Margin="0,0,0,15" Foreground="#2c3e50"/>
+
+                                            <!-- Flow Summary Cards -->
+                                            <Border Background="#e8f5e8" BorderBrush="#4caf50" BorderThickness="1" 
+                                    CornerRadius="8" Padding="20" Margin="0,0,0,20">
+                                                <Grid>
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="*"/>
+                                                        <ColumnDefinition Width="*"/>
+                                                        <ColumnDefinition Width="*"/>
+                                                        <ColumnDefinition Width="*"/>
+                                                        <ColumnDefinition Width="*"/>
+                                                    </Grid.ColumnDefinitions>
+
+                                                    <StackPanel Grid.Column="0" HorizontalAlignment="Center">
+                                                        <TextBlock Text="📦 Total Purchases" FontWeight="SemiBold" HorizontalAlignment="Center" FontSize="12"/>
+                                                        <TextBlock x:Name="FIFOTotalPurchasesText" Text="0.000 L" FontSize="16" FontWeight="Bold" 
+                                                   HorizontalAlignment="Center" Foreground="#2e7d32"/>
+                                                    </StackPanel>
+
+                                                    <StackPanel Grid.Column="1" HorizontalAlignment="Center">
+                                                        <TextBlock Text="⛽ Total Consumption" FontWeight="SemiBold" HorizontalAlignment="Center" FontSize="12"/>
+                                                        <TextBlock x:Name="FIFOTotalConsumptionText" Text="0.000 L" FontSize="16" FontWeight="Bold" 
+                                                   HorizontalAlignment="Center" Foreground="#2e7d32"/>
+                                                    </StackPanel>
+
+                                                    <StackPanel Grid.Column="2" HorizontalAlignment="Center">
+                                                        <TextBlock Text="🔄 Total Allocated" FontWeight="SemiBold" HorizontalAlignment="Center" FontSize="12"/>
+                                                        <TextBlock x:Name="FIFOTotalAllocatedText" Text="0.000 L" FontSize="16" FontWeight="Bold" 
+                                                   HorizontalAlignment="Center" Foreground="#2e7d32"/>
+                                                    </StackPanel>
+
+                                                    <StackPanel Grid.Column="3" HorizontalAlignment="Center">
+                                                        <TextBlock Text="💰 FIFO Value" FontWeight="SemiBold" HorizontalAlignment="Center" FontSize="12"/>
+                                                        <TextBlock x:Name="FIFOTotalValueText" Text="$0.00" FontSize="16" FontWeight="Bold" 
+                                                   HorizontalAlignment="Center" Foreground="#2e7d32"/>
+                                                    </StackPanel>
+
+                                                    <StackPanel Grid.Column="4" HorizontalAlignment="Center">
+                                                        <TextBlock Text="📊 Accuracy" FontWeight="SemiBold" HorizontalAlignment="Center" FontSize="12"/>
+                                                        <TextBlock x:Name="FIFOAccuracyText" Text="100.0%" FontSize="16" FontWeight="Bold" 
+                                                   HorizontalAlignment="Center" Foreground="#2e7d32"/>
+                                                    </StackPanel>
+                                                </Grid>
+                                            </Border>
+
+                                            <!-- Activity Summary -->
+                                            <Border Background="#fff3cd" BorderBrush="#ffc107" BorderThickness="1" 
+                                    CornerRadius="8" Padding="20" Margin="0,0,0,20">
+                                                <Grid>
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="*"/>
+                                                        <ColumnDefinition Width="*"/>
+                                                        <ColumnDefinition Width="*"/>
+                                                        <ColumnDefinition Width="*"/>
+                                                        <ColumnDefinition Width="*"/>
+                                                    </Grid.ColumnDefinitions>
+
+                                                    <StackPanel Grid.Column="0" HorizontalAlignment="Center">
+                                                        <TextBlock Text="🔢 Transactions" FontWeight="SemiBold" HorizontalAlignment="Center" FontSize="12"/>
+                                                        <TextBlock x:Name="FIFOTransactionsText" Text="0" FontSize="16" FontWeight="Bold" 
+                                                   HorizontalAlignment="Center" Foreground="#f57c00"/>
+                                                    </StackPanel>
+
+                                                    <StackPanel Grid.Column="1" HorizontalAlignment="Center">
+                                                        <TextBlock Text="📄 Purchase Lots" FontWeight="SemiBold" HorizontalAlignment="Center" FontSize="12"/>
+                                                        <TextBlock x:Name="FIFOPurchaseLotsText" Text="0" FontSize="16" FontWeight="Bold" 
+                                                   HorizontalAlignment="Center" Foreground="#f57c00"/>
+                                                    </StackPanel>
+
+                                                    <StackPanel Grid.Column="2" HorizontalAlignment="Center">
+                                                        <TextBlock Text="🚢 Vessels" FontWeight="SemiBold" HorizontalAlignment="Center" FontSize="12"/>
+                                                        <TextBlock x:Name="FIFOVesselsText" Text="0" FontSize="16" FontWeight="Bold" 
+                                                   HorizontalAlignment="Center" Foreground="#f57c00"/>
+                                                    </StackPanel>
+
+                                                    <StackPanel Grid.Column="3" HorizontalAlignment="Center">
+                                                        <TextBlock Text="🏢 Suppliers" FontWeight="SemiBold" HorizontalAlignment="Center" FontSize="12"/>
+                                                        <TextBlock x:Name="FIFOSuppliersText" Text="0" FontSize="16" FontWeight="Bold" 
+                                                   HorizontalAlignment="Center" Foreground="#f57c00"/>
+                                                    </StackPanel>
+
+                                                    <StackPanel Grid.Column="4" HorizontalAlignment="Center">
+                                                        <TextBlock Text="📅 Date Range" FontWeight="SemiBold" HorizontalAlignment="Center" FontSize="12"/>
+                                                        <TextBlock x:Name="FIFODateRangeText" Text="No Data" FontSize="14" FontWeight="Bold" 
+                                                   HorizontalAlignment="Center" Foreground="#f57c00"/>
+                                                    </StackPanel>
+                                                </Grid>
+                                            </Border>
+                                        </StackPanel>
+                                    </ScrollViewer>
+                                </TabItem>
+
+                                <!-- Allocation Records Tab -->
+                                <TabItem Header="📋 Allocation Records">
+                                    <StackPanel Margin="20">
+                                        <TextBlock Text="Detailed FIFO Allocation Audit Trail" FontSize="16" FontWeight="SemiBold" 
+                                Margin="0,0,0,15" Foreground="#2c3e50"/>
+
+                                        <DataGrid x:Name="AllocationRecordsGrid" 
+                                  AutoGenerateColumns="False" 
+                                  CanUserAddRows="False"
+                                  CanUserDeleteRows="False"
+                                  GridLinesVisibility="Horizontal"
+                                  HeadersVisibility="Column"
+                                  Background="White"
+                                  BorderThickness="1"
+                                  BorderBrush="#dee2e6"
+                                  MaxHeight="600">
+
+                                            <DataGrid.Columns>
+                                                <DataGridTextColumn Header="FIFO #" Binding="{Binding FIFOSequence}" Width="60"/>
+                                                <DataGridTextColumn Header="Allocation Date" Binding="{Binding FormattedAllocationDate}" Width="100"/>
+                                                <DataGridTextColumn Header="Invoice Ref" Binding="{Binding InvoiceReference}" Width="100"/>
+                                                <DataGridTextColumn Header="Purchase Date" Binding="{Binding FormattedPurchaseDate}" Width="100"/>
+                                                <DataGridTextColumn Header="Supplier" Binding="{Binding SupplierName}" Width="120"/>
+                                                <DataGridTextColumn Header="P.Vessel" Binding="{Binding PurchaseVessel}" Width="80"/>
+                                                <DataGridTextColumn Header="C.Vessel" Binding="{Binding ConsumptionVessel}" Width="80"/>
+                                                <DataGridTextColumn Header="Consumption Date" Binding="{Binding FormattedConsumptionDate}" Width="120"/>
+                                                <DataGridTextColumn Header="Allocated (L)" Binding="{Binding AllocatedQuantityL, StringFormat=N3}" Width="100"/>
+                                                <DataGridTextColumn Header="Allocated (T)" Binding="{Binding AllocatedQuantityT, StringFormat=N3}" Width="100"/>
+                                                <DataGridTextColumn Header="Allocated Value" Binding="{Binding FormattedAllocatedValue}" Width="120"/>
+                                                <DataGridTextColumn Header="Balance After (L)" Binding="{Binding PurchaseBalanceAfterL, StringFormat=N3}" Width="120"/>
+                                                <DataGridTextColumn Header="Price/L" Binding="{Binding FormattedPricePerLiter}" Width="100"/>
+                                                <DataGridTextColumn Header="% of Purchase" Binding="{Binding AllocationPercentageOfPurchase, StringFormat=N1}" Width="100"/>
+                                                <DataGridTextColumn Header="Status" Binding="{Binding AllocationStatus}" Width="80"/>
+                                                <DataGridTextColumn Header="Vessel Match" Binding="{Binding VesselMatchStatus}" Width="100"/>
+                                            </DataGrid.Columns>
+                                        </DataGrid>
+                                    </StackPanel>
+                                </TabItem>
+
+                                <!-- Purchase Lot Tracking Tab -->
+                                <TabItem Header="📦 Purchase Lot Tracking">
+                                    <StackPanel Margin="20">
+                                        <TextBlock Text="Purchase Lot Consumption Tracking" FontSize="16" FontWeight="SemiBold" 
+                                Margin="0,0,0,15" Foreground="#2c3e50"/>
+
+                                        <DataGrid x:Name="PurchaseLotTrackingGrid" 
+                                  AutoGenerateColumns="False" 
+                                  CanUserAddRows="False"
+                                  CanUserDeleteRows="False"
+                                  GridLinesVisibility="Horizontal"
+                                  HeadersVisibility="Column"
+                                  Background="White"
+                                  BorderThickness="1"
+                                  BorderBrush="#dee2e6"
+                                  MaxHeight="600">
+
+                                            <DataGrid.Columns>
+                                                <DataGridTextColumn Header="Invoice Ref" Binding="{Binding InvoiceReference}" Width="100"/>
+                                                <DataGridTextColumn Header="Purchase Date" Binding="{Binding FormattedPurchaseDate}" Width="100"/>
+                                                <DataGridTextColumn Header="Supplier" Binding="{Binding SupplierName}" Width="120"/>
+                                                <DataGridTextColumn Header="Vessel" Binding="{Binding VesselName}" Width="100"/>
+                                                <DataGridTextColumn Header="Original (L)" Binding="{Binding OriginalQuantityL, StringFormat=N3}" Width="100"/>
+                                                <DataGridTextColumn Header="Remaining (L)" Binding="{Binding RemainingQuantityL, StringFormat=N3}" Width="100"/>
+                                                <DataGridTextColumn Header="Allocated (L)" Binding="{Binding TotalAllocatedL, StringFormat=N3}" Width="100"/>
+                                                <DataGridTextColumn Header="Progress" Binding="{Binding FormattedConsumptionProgress}" Width="80"/>
+                                                <DataGridTextColumn Header="Status" Binding="{Binding LotStatus}" Width="120"/>
+                                                <DataGridTextColumn Header="Allocations" Binding="{Binding AllocationCount}" Width="80"/>
+                                                <DataGridTextColumn Header="First Allocation" Binding="{Binding FormattedFirstAllocation}" Width="120"/>
+                                                <DataGridTextColumn Header="Last Allocation" Binding="{Binding FormattedLastAllocation}" Width="120"/>
+                                                <DataGridTextColumn Header="Days in Inventory" Binding="{Binding DaysInInventory}" Width="120"/>
+                                                <DataGridTextColumn Header="Turnover Rate" Binding="{Binding InventoryTurnoverRate, StringFormat=N2}" Width="100"/>
+                                                <DataGridTextColumn Header="Remaining Value" Binding="{Binding FormattedRemainingValue}" Width="120"/>
+                                            </DataGrid.Columns>
+                                        </DataGrid>
+                                    </StackPanel>
+                                </TabItem>
+
+                                <!-- Balance Verification Tab -->
+                                <TabItem Header="⚖️ Balance Verification">
+                                    <ScrollViewer VerticalScrollBarVisibility="Auto">
+                                        <StackPanel Margin="20">
+                                            <TextBlock Text="FIFO Data Integrity and Balance Verification" FontSize="16" FontWeight="SemiBold" 
+                                    Margin="0,0,0,15" Foreground="#2c3e50"/>
+
+                                            <!-- Balance Status Card -->
+                                            <Border Background="#d4edda" BorderBrush="#28a745" BorderThickness="1" 
+                                    CornerRadius="8" Padding="20" Margin="0,0,0,20">
+                                                <Grid>
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="*"/>
+                                                        <ColumnDefinition Width="*"/>
+                                                        <ColumnDefinition Width="*"/>
+                                                        <ColumnDefinition Width="*"/>
+                                                    </Grid.ColumnDefinitions>
+
+                                                    <StackPanel Grid.Column="0" HorizontalAlignment="Center">
+                                                        <TextBlock Text="⚖️ Balance Status" FontWeight="SemiBold" HorizontalAlignment="Center" FontSize="12"/>
+                                                        <TextBlock x:Name="BalanceStatusText" Text="✅ Balanced" FontSize="16" FontWeight="Bold" 
+                                                   HorizontalAlignment="Center" Foreground="#155724"/>
+                                                    </StackPanel>
+
+                                                    <StackPanel Grid.Column="1" HorizontalAlignment="Center">
+                                                        <TextBlock Text="📊 Data Integrity" FontWeight="SemiBold" HorizontalAlignment="Center" FontSize="12"/>
+                                                        <TextBlock x:Name="DataIntegrityScoreText" Text="100%" FontSize="16" FontWeight="Bold" 
+                                                   HorizontalAlignment="Center" Foreground="#155724"/>
+                                                    </StackPanel>
+
+                                                    <StackPanel Grid.Column="2" HorizontalAlignment="Center">
+                                                        <TextBlock Text="⚠️ Inconsistencies" FontWeight="SemiBold" HorizontalAlignment="Center" FontSize="12"/>
+                                                        <TextBlock x:Name="InconsistenciesText" Text="0" FontSize="16" FontWeight="Bold" 
+                                                                    HorizontalAlignment="Center" Foreground="#155724"/>
+                                                    </StackPanel>
+
+                                                    <StackPanel Grid.Column="3" HorizontalAlignment="Center">
+                                                        <TextBlock Text="🎯 Grade" FontWeight="SemiBold" HorizontalAlignment="Center" FontSize="12"/>
+                                                        <TextBlock x:Name="DataGradeText" Text="Excellent" FontSize="16" FontWeight="Bold" 
+                                                                    HorizontalAlignment="Center" Foreground="#155724"/>
+                                                    </StackPanel>
+                                                </Grid>
+                                            </Border>
+
+                                            <!-- Balance Details -->
+                                            <Border Background="#f8f9fa" BorderBrush="#dee2e6" BorderThickness="1" 
+                                                    CornerRadius="8" Padding="20" Margin="0,0,0,20">
+                                                <Grid>
+                                                    <Grid.RowDefinitions>
+                                                        <RowDefinition Height="Auto"/>
+                                                        <RowDefinition Height="Auto"/>
+                                                        <RowDefinition Height="Auto"/>
+                                                    </Grid.RowDefinitions>
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="*"/>
+                                                        <ColumnDefinition Width="*"/>
+                                                        <ColumnDefinition Width="*"/>
+                                                        <ColumnDefinition Width="*"/>
+                                                    </Grid.ColumnDefinitions>
+
+                                                    <!-- Headers -->
+                                                    <TextBlock Grid.Row="0" Grid.Column="0" Text="Metric" FontWeight="Bold" HorizontalAlignment="Center" Margin="5"/>
+                                                    <TextBlock Grid.Row="0" Grid.Column="1" Text="Purchases" FontWeight="Bold" HorizontalAlignment="Center" Margin="5"/>
+                                                    <TextBlock Grid.Row="0" Grid.Column="2" Text="Consumption" FontWeight="Bold" HorizontalAlignment="Center" Margin="5"/>
+                                                    <TextBlock Grid.Row="0" Grid.Column="3" Text="Variance" FontWeight="Bold" HorizontalAlignment="Center" Margin="5"/>
+
+                                                    <!-- Quantity Row -->
+                                                    <TextBlock Grid.Row="1" Grid.Column="0" Text="Quantity (L)" FontWeight="SemiBold" HorizontalAlignment="Center" Margin="5"/>
+                                                    <TextBlock Grid.Row="1" Grid.Column="1" x:Name="FIFOTotalPurchaseQuantityText" Text="0.000" HorizontalAlignment="Center" Margin="5"/>
+                                                    <TextBlock Grid.Row="1" Grid.Column="2" x:Name="FIFOTotalConsumptionQuantityText" Text="0.000" HorizontalAlignment="Center" Margin="5"/>
+                                                    <TextBlock Grid.Row="1" Grid.Column="3" x:Name="QuantityVarianceText" Text="0.000" HorizontalAlignment="Center" Margin="5"/>
+
+                                                    <!-- Value Row -->
+                                                    <TextBlock Grid.Row="2" Grid.Column="0" Text="Value (USD)" FontWeight="SemiBold" HorizontalAlignment="Center" Margin="5"/>
+                                                    <TextBlock Grid.Row="2" Grid.Column="1" x:Name="FIFOTotalPurchaseValueText" Text="$0.00" HorizontalAlignment="Center" Margin="5"/>
+                                                    <TextBlock Grid.Row="2" Grid.Column="2" x:Name="FIFOTotalConsumptionValueText" Text="$0.00" HorizontalAlignment="Center" Margin="5"/>
+                                                    <TextBlock Grid.Row="2" Grid.Column="3" x:Name="ValueVarianceText" Text="$0.00" HorizontalAlignment="Center" Margin="5"/>
+                                                </Grid>
+                                            </Border>
+
+                                            <!-- Balance Issues -->
+                                            <TextBlock Text="Balance Issues (if any):" FontWeight="SemiBold" Margin="0,0,0,10"/>
+                                            <ListBox x:Name="BalanceIssuesList" Background="White" BorderBrush="#dee2e6" 
+                                                        BorderThickness="1" MaxHeight="150" Margin="0,0,0,20"/>
+                                        </StackPanel>
+                                    </ScrollViewer>
+                                </TabItem>
+
+                                <!-- Period Analysis Tab -->
+                                <TabItem Header="📅 Period Analysis">
+                                    <StackPanel Margin="20">
+                                        <TextBlock Text="Period-over-Period Allocation Analysis" FontSize="16" FontWeight="SemiBold" 
+                                                    Margin="0,0,0,15" Foreground="#2c3e50"/>
+
+                                        <DataGrid x:Name="PeriodAnalysisGrid" 
+                                                  AutoGenerateColumns="False" 
+                                                  CanUserAddRows="False"
+                                                  CanUserDeleteRows="False"
+                                                  GridLinesVisibility="Horizontal"
+                                                  HeadersVisibility="Column"
+                                                  Background="White"
+                                                  BorderThickness="1"
+                                                  BorderBrush="#dee2e6"
+                                                  MaxHeight="600">
+
+                                            <DataGrid.Columns>
+                                                <DataGridTextColumn Header="Period" Binding="{Binding Period}" Width="100"/>
+                                                <DataGridTextColumn Header="Purchases (L)" Binding="{Binding PeriodPurchasesL, StringFormat=N3}" Width="120"/>
+                                                <DataGridTextColumn Header="Consumption (L)" Binding="{Binding PeriodConsumptionL, StringFormat=N3}" Width="120"/>
+                                                <DataGridTextColumn Header="Allocations (L)" Binding="{Binding PeriodAllocationsL, StringFormat=N3}" Width="120"/>
+                                                <DataGridTextColumn Header="Allocation Value" Binding="{Binding FormattedPeriodAllocationsValue}" Width="120"/>
+                                                <DataGridTextColumn Header="Transactions" Binding="{Binding AllocationTransactions}" Width="100"/>
+                                                <DataGridTextColumn Header="Purchase Lots" Binding="{Binding PurchaseLotsInvolved}" Width="100"/>
+                                                <DataGridTextColumn Header="FIFO Velocity" Binding="{Binding FIFOVelocity, StringFormat=N2}" Width="100"/>
+                                                <DataGridTextColumn Header="Cross Vessel %" Binding="{Binding CrossVesselAllocationsPercent, StringFormat=N1}" Width="120"/>
+                                                <DataGridTextColumn Header="Volume Change" Binding="{Binding FormattedVolumeChange}" Width="120"/>
+                                                <DataGridTextColumn Header="Value Change" Binding="{Binding FormattedValueChange}" Width="120"/>
+                                                <DataGridTextColumn Header="Velocity Change" Binding="{Binding FormattedVelocityChange}" Width="120"/>
+                                            </DataGrid.Columns>
+                                        </DataGrid>
+                                    </StackPanel>
+                                </TabItem>
+
+                                <!-- Exception Report Tab -->
+                                <TabItem Header="🚨 Exception Report">
+                                    <StackPanel Margin="20">
+                                        <TextBlock Text="FIFO Allocation Exceptions and Issues" FontSize="16" FontWeight="SemiBold" 
+                                                    Margin="0,0,0,15" Foreground="#2c3e50"/>
+
+                                        <DataGrid x:Name="ExceptionReportGrid" 
+                                                  AutoGenerateColumns="False" 
+                                                  CanUserAddRows="False"
+                                                  CanUserDeleteRows="False"
+                                                  GridLinesVisibility="Horizontal"
+                                                  HeadersVisibility="Column"
+                                                  Background="White"
+                                                  BorderThickness="1"
+                                                  BorderBrush="#dee2e6"
+                                                  MaxHeight="600">
+
+                                            <DataGrid.Columns>
+                                                <DataGridTextColumn Header="Level" Binding="{Binding ExceptionIcon}" Width="60"/>
+                                                <DataGridTextColumn Header="Type" Binding="{Binding ExceptionType}" Width="150"/>
+                                                <DataGridTextColumn Header="Description" Binding="{Binding Description}" Width="250"/>
+                                                <DataGridTextColumn Header="Invoice Ref" Binding="{Binding InvoiceReference}" Width="100"/>
+                                                <DataGridTextColumn Header="Vessel" Binding="{Binding VesselName}" Width="100"/>
+                                                <DataGridTextColumn Header="Date" Binding="{Binding FormattedTransactionDate}" Width="100"/>
+                                                <DataGridTextColumn Header="Qty Affected" Binding="{Binding FormattedQuantityAffected}" Width="100"/>
+                                                <DataGridTextColumn Header="Value Affected" Binding="{Binding FormattedValueAffected}" Width="120"/>
+                                                <DataGridTextColumn Header="Recommended Action" Binding="{Binding RecommendedAction}" Width="200"/>
+                                                <DataGridTextColumn Header="Status" Binding="{Binding ResolutionStatus}" Width="100"/>
                                             </DataGrid.Columns>
                                         </DataGrid>
                                     </StackPanel>

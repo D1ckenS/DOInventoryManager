@@ -16,6 +16,7 @@ namespace DOInventoryManager.Views
         private readonly AlertService _alertService;
         private readonly InventoryValuationService _inventoryService;
         private readonly FleetEfficiencyService _fleetEfficiencyService;
+        private readonly FIFOAllocationDetailService _fifoDetailService;
         private SummaryService.MonthlySummaryResult? _currentSummary;
 
         public ReportsView()
@@ -26,8 +27,11 @@ namespace DOInventoryManager.Views
             _alertService = new AlertService();
             _inventoryService = new InventoryValuationService();
             _fleetEfficiencyService = new FleetEfficiencyService();
+            _fifoDetailService = new FIFOAllocationDetailService();
             FleetFromDatePicker.SelectedDate = DateTime.Today.AddMonths(-12);
             FleetToDatePicker.SelectedDate = DateTime.Today;
+            FIFOFromDatePicker.SelectedDate = DateTime.Today.AddMonths(-6);
+            FIFOToDatePicker.SelectedDate = DateTime.Today;
             _ = LoadDataAsync();
         }
 
@@ -570,6 +574,150 @@ namespace DOInventoryManager.Views
         private void ExportFleetEfficiency_Click(object sender, RoutedEventArgs e)
         {
             MessageBox.Show("Fleet efficiency export feature coming soon!", "Export",
+                          MessageBoxButton.OK, MessageBoxImage.Information);
+        }
+
+        #endregion
+
+        #region FIFO Allocation Detail Report
+
+        private async Task GenerateFIFOAllocationDetailAsync()
+        {
+            try
+            {
+                var fromDate = FIFOFromDatePicker.SelectedDate;
+                var toDate = FIFOToDatePicker.SelectedDate;
+
+                if (!fromDate.HasValue || !toDate.HasValue)
+                {
+                    MessageBox.Show("Please select both from and to dates.", "Validation Error",
+                                  MessageBoxButton.OK, MessageBoxImage.Warning);
+                    return;
+                }
+
+                if (fromDate.Value > toDate.Value)
+                {
+                    MessageBox.Show("From date cannot be later than to date.", "Validation Error",
+                                  MessageBoxButton.OK, MessageBoxImage.Warning);
+                    return;
+                }
+
+                var fifoDetailReport = await _fifoDetailService.GenerateFIFOAllocationDetailAsync(fromDate.Value, toDate.Value);
+
+                // Update Flow Summary
+                UpdateFlowSummaryUI(fifoDetailReport.FlowSummary);
+
+                // Update all grids
+                AllocationRecordsGrid.ItemsSource = fifoDetailReport.AllocationRecords;
+                PurchaseLotTrackingGrid.ItemsSource = fifoDetailReport.PurchaseLotTracking;
+                PeriodAnalysisGrid.ItemsSource = fifoDetailReport.PeriodAnalysis;
+                ExceptionReportGrid.ItemsSource = fifoDetailReport.Exceptions;
+
+                // Update Balance Verification
+                UpdateBalanceVerificationUI(fifoDetailReport.BalanceVerification);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error generating FIFO allocation detail report: {ex.Message}", "Error",
+                              MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        private void UpdateFlowSummaryUI(FIFOAllocationDetailService.AllocationFlowSummary summary)
+        {
+            // Flow Summary Cards
+            FIFOTotalPurchasesText.Text = $"{summary.TotalPurchasesL:N3} L";
+            FIFOTotalConsumptionText.Text = $"{summary.TotalConsumptionL:N3} L";
+            FIFOTotalAllocatedText.Text = $"{summary.TotalAllocatedL:N3} L";
+            FIFOTotalValueText.Text = summary.FormattedTotalFIFOValue;
+            FIFOAccuracyText.Text = $"{summary.AllocationAccuracyPercentage:N1}%";
+
+            // Activity Summary Cards
+            FIFOTransactionsText.Text = summary.TotalAllocationTransactions.ToString();
+            FIFOPurchaseLotsText.Text = summary.UniquePurchaseLots.ToString();
+            FIFOVesselsText.Text = summary.VesselsInvolved.ToString();
+            FIFOSuppliersText.Text = summary.SuppliersInvolved.ToString();
+
+            if (summary.TotalAllocationTransactions > 0)
+            {
+                FIFODateRangeText.Text = $"{summary.FormattedOldestPurchase} → {summary.FormattedLatestConsumption}";
+            }
+            else
+            {
+                FIFODateRangeText.Text = "No Data";
+            }
+        }
+
+        private void UpdateBalanceVerificationUI(FIFOAllocationDetailService.BalanceVerificationResult verification)
+        {
+            // Balance Status
+            BalanceStatusText.Text = verification.BalanceStatus;
+            BalanceStatusText.Foreground = verification.IsBalanced
+                ? System.Windows.Media.Brushes.Green
+                : System.Windows.Media.Brushes.Red;
+
+            DataIntegrityScoreText.Text = $"{verification.DataIntegrityScore:N1}%";
+            DataIntegrityScoreText.Foreground = verification.DataIntegrityScore >= 95
+                ? System.Windows.Media.Brushes.Green
+                : verification.DataIntegrityScore >= 90
+                    ? System.Windows.Media.Brushes.Orange
+                    : System.Windows.Media.Brushes.Red;
+
+            InconsistenciesText.Text = verification.InconsistentAllocations.ToString();
+            InconsistenciesText.Foreground = verification.InconsistentAllocations == 0
+                ? System.Windows.Media.Brushes.Green
+                : System.Windows.Media.Brushes.Red;
+
+            DataGradeText.Text = verification.DataIntegrityGrade;
+            DataGradeText.Foreground = verification.DataIntegrityGrade == "Excellent"
+                ? System.Windows.Media.Brushes.Green
+                : verification.DataIntegrityGrade == "Good"
+                    ? System.Windows.Media.Brushes.DarkGreen
+                    : verification.DataIntegrityGrade == "Fair"
+                        ? System.Windows.Media.Brushes.Orange
+                        : System.Windows.Media.Brushes.Red;
+
+            // Balance Details
+            FIFOTotalPurchaseQuantityText.Text = $"{verification.TotalPurchaseQuantity:N3}";
+            FIFOTotalConsumptionQuantityText.Text = $"{verification.TotalConsumptionQuantity:N3}";
+            QuantityVarianceText.Text = verification.FormattedQuantityVariance;
+            QuantityVarianceText.Foreground = Math.Abs(verification.QuantityVariance) < 0.001m
+                ? System.Windows.Media.Brushes.Green
+                : System.Windows.Media.Brushes.Red;
+
+            FIFOTotalPurchaseValueText.Text = verification.TotalPurchaseValue.ToString("C2");
+            FIFOTotalConsumptionValueText.Text = verification.TotalConsumptionValue.ToString("C2");
+            ValueVarianceText.Text = verification.FormattedValueVariance;
+            ValueVarianceText.Foreground = Math.Abs(verification.ValueVariance) < 0.01m
+                ? System.Windows.Media.Brushes.Green
+                : System.Windows.Media.Brushes.Red;
+
+            // Balance Issues - FIXED VERSION
+            var issuesDisplay = new List<string>();
+
+            if (verification.BalanceIssues.Any())
+            {
+                issuesDisplay.AddRange(verification.BalanceIssues);
+            }
+            else
+            {
+                issuesDisplay.Add("✅ No balance issues detected");
+            }
+
+            BalanceIssuesList.ItemsSource = issuesDisplay;
+        }
+
+        private async void GenerateFIFODetail_Click(object sender, RoutedEventArgs e)
+        {
+            await GenerateFIFOAllocationDetailAsync();
+            await CreateAutoBackupAsync("FIFODetailGenerated");
+            MessageBox.Show("FIFO allocation detail report generated successfully!", "Success",
+                          MessageBoxButton.OK, MessageBoxImage.Information);
+        }
+
+        private void ExportFIFODetail_Click(object sender, RoutedEventArgs e)
+        {
+            MessageBox.Show("FIFO allocation detail export feature coming soon!", "Export",
                           MessageBoxButton.OK, MessageBoxImage.Information);
         }
 
