@@ -11,9 +11,9 @@ namespace DOInventoryManager.Services
         public class MonthlySummaryResult
         {
             public string Month { get; set; } = string.Empty;
-            public List<VesselConsumptionSummary> ConsumptionSummary { get; set; } = new();
-            public List<SupplierPurchaseSummary> PurchaseSummary { get; set; } = new();
-            public List<AllocationSummary> AllocationSummary { get; set; } = new();
+            public List<VesselConsumptionSummary> ConsumptionSummary { get; set; } = [];
+            public List<SupplierPurchaseSummary> PurchaseSummary { get; set; } = [];
+            public List<AllocationSummary> AllocationSummary { get; set; } = [];
             public FinancialSummary FinancialSummary { get; set; } = new();
             public ExecutiveSummary ExecutiveSummary { get; set; } = new();
         }
@@ -66,8 +66,8 @@ namespace DOInventoryManager.Services
             public decimal TotalPurchaseValueUSD { get; set; }
             public decimal TotalConsumptionValueUSD { get; set; }
             public decimal RemainingInventoryValueUSD { get; set; }
-            public List<CurrencyBreakdown> CurrencyBreakdowns { get; set; } = new();
-            public List<PaymentStatus> PaymentStatuses { get; set; } = new();
+            public List<CurrencyBreakdown> CurrencyBreakdowns { get; set; } = [];
+            public List<PaymentStatus> PaymentStatuses { get; set; } = [];
             public decimal AvgCostPerLiterUSD { get; set; }
             public decimal AvgCostPerTonUSD { get; set; }
         }
@@ -178,9 +178,14 @@ namespace DOInventoryManager.Services
 
         private async Task<List<SupplierPurchaseSummary>> GeneratePurchaseSummaryAsync(InventoryContext context, string month)
         {
+            // Parse the month to get year and month numbers
+            var monthParts = month.Split('-');
+            var year = int.Parse(monthParts[0]);
+            var monthNum = int.Parse(monthParts[1]);
+
             var purchases = await context.Purchases
                 .Include(p => p.Supplier)
-                .Where(p => p.PurchaseDate.ToString("yyyy-MM") == month)
+                .Where(p => p.PurchaseDate.Year == year && p.PurchaseDate.Month == monthNum)
                 .ToListAsync();
 
             var summary = purchases
@@ -227,11 +232,11 @@ namespace DOInventoryManager.Services
                 .ToListAsync();
 
             var summary = allocations
-                .GroupBy(a => new { a.Purchase.Vessel.Name, a.Purchase.Supplier.Name })
+                .GroupBy(a => new { VesselName = a.Purchase.Vessel.Name, SupplierName = a.Purchase.Supplier.Name })
                 .Select(g => new AllocationSummary
                 {
-                    VesselName = g.Key.Name,
-                    SupplierName = g.Key.Name1,
+                    VesselName = g.Key.VesselName,
+                    SupplierName = g.Key.SupplierName,
                     AllocatedQuantityL = g.Sum(a => a.AllocatedQuantity),
                     AllocatedQuantityT = g.Sum(a => a.AllocatedQuantityTons),
                     AllocatedValueUSD = g.Sum(a => a.AllocatedValueUSD),
@@ -247,9 +252,14 @@ namespace DOInventoryManager.Services
 
         private async Task<FinancialSummary> GenerateFinancialSummaryAsync(InventoryContext context, string month)
         {
+            // Parse the month to get year and month numbers
+            var monthParts = month.Split('-');
+            var year = int.Parse(monthParts[0]);
+            var monthNum = int.Parse(monthParts[1]);
+
             var purchases = await context.Purchases
                 .Include(p => p.Supplier)
-                .Where(p => p.PurchaseDate.ToString("yyyy-MM") == month)
+                .Where(p => p.PurchaseDate.Year == year && p.PurchaseDate.Month == monthNum)
                 .ToListAsync();
 
             var allocations = await context.Allocations
@@ -312,9 +322,14 @@ namespace DOInventoryManager.Services
                 .Where(c => c.Month == month)
                 .ToListAsync();
 
+            // Parse the month to get year and month numbers
+            var monthParts = month.Split('-');
+            var year = int.Parse(monthParts[0]);
+            var monthNum = int.Parse(monthParts[1]);
+
             var purchases = await context.Purchases
                 .Include(p => p.Supplier)
-                .Where(p => p.PurchaseDate.ToString("yyyy-MM") == month)
+                .Where(p => p.PurchaseDate.Year == year && p.PurchaseDate.Month == monthNum)
                 .ToListAsync();
 
             var summary = new ExecutiveSummary
@@ -367,18 +382,21 @@ namespace DOInventoryManager.Services
         {
             using var context = new InventoryContext();
 
-            var purchaseMonths = await context.Purchases
-                .Select(p => p.PurchaseDate.ToString("yyyy-MM"))
-                .Distinct()
+            // Get all purchases and consumptions, then format dates in memory
+            var purchases = await context.Purchases
+                .Select(p => p.PurchaseDate)
                 .ToListAsync();
 
-            var consumptionMonths = await context.Consumptions
+            var consumptions = await context.Consumptions
                 .Select(c => c.Month)
-                .Distinct()
                 .ToListAsync();
+
+            var purchaseMonths = purchases
+                .Select(p => p.ToString("yyyy-MM"))
+                .Distinct();
 
             return purchaseMonths
-                .Union(consumptionMonths)
+                .Union(consumptions)
                 .OrderByDescending(m => m)
                 .ToList();
         }

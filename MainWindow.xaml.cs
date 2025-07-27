@@ -182,8 +182,16 @@ namespace DOInventoryManager
 
         private void LoadSummary()
         {
-            // TODO: Create SummaryView
-            StatusText.Text = "Monthly summary - Coming soon";
+            try
+            {
+                ContentFrame.Content = new ReportsView();
+                SetActiveButton(SummaryBtn);
+                StatusText.Text = "Reports section loaded";
+            }
+            catch (Exception ex)
+            {
+                StatusText.Text = $"Error loading reports: {ex.Message}";
+            }
         }
 
         private void SetActiveButton(Button activeButton)

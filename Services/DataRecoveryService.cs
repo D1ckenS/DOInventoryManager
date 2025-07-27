@@ -12,7 +12,7 @@ namespace DOInventoryManager.Services
             public string Message { get; set; } = string.Empty;
             public int FixedPurchases { get; set; }
             public int RemovedAllocations { get; set; }
-            public List<string> Details { get; set; } = new List<string>();
+            public List<string> Details { get; set; } = [];
         }
 
         public async Task<RecoveryResult> RerunFIFOAllocationAsync()

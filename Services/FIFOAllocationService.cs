@@ -14,7 +14,7 @@ namespace DOInventoryManager.Services
             public int AllocationsCreated { get; set; }
             public decimal TotalAllocatedQuantity { get; set; }
             public decimal TotalAllocatedValue { get; set; }
-            public List<string> Details { get; set; } = new List<string>();
+            public List<string> Details { get; set; } = [];
         }
 
         public async Task<AllocationResult> RunFIFOAllocationAsync()

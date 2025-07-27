@@ -13,7 +13,7 @@ namespace DOInventoryManager.Views
         private Supplier? _selectedSupplier = null;
         private Purchase? _editingPurchase = null;
         private bool _isEditMode = false;
-        private List<AlertService.DueDateAlert> _currentAlerts = new List<AlertService.DueDateAlert>();
+        private List<AlertService.DueDateAlert> _currentAlerts = [];
 
         public PurchasesView()
         {

@@ -20,7 +20,7 @@ namespace DOInventoryManager.Models
         public DateTime CreatedDate { get; set; } = DateTime.Now;
         
         // Navigation properties
-        public virtual ICollection<Purchase> Purchases { get; set; } = new List<Purchase>();
-        public virtual ICollection<Consumption> Consumptions { get; set; } = new List<Consumption>();
+        public virtual ICollection<Purchase> Purchases { get; set; } = [];
+        public virtual ICollection<Consumption> Consumptions { get; set; } = [];
     }
 }

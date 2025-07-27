@@ -68,6 +68,6 @@ namespace DOInventoryManager.Models
         public DateTime CreatedDate { get; set; } = DateTime.Now;
         
         // Navigation properties
-        public virtual ICollection<Allocation> Allocations { get; set; } = new List<Allocation>();
+        public virtual ICollection<Allocation> Allocations { get; set; } = [];
     }
 }

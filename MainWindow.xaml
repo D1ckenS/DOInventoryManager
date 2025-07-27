@@ -108,7 +108,7 @@
                     <Button x:Name="ConsumptionBtn" Content="⛽ Consumption Entry" Style="{StaticResource NavButtonStyle}" Click="Consumption_Click"/>
                     <Button x:Name="TripsBtn" Content="🗺️ Trip Management" Style="{StaticResource NavButtonStyle}" Click="Trips_Click"/>
                     <Button x:Name="AllocationBtn" Content="📋 Monthly Allocation" Style="{StaticResource NavButtonStyle}" Click="Allocation_Click"/>
-                    <Button x:Name="SummaryBtn" Content="📈 Monthly Summary" Style="{StaticResource NavButtonStyle}" Click="Summary_Click"/>
+                    <Button x:Name="SummaryBtn" Content="📈 Reports" Style="{StaticResource NavButtonStyle}" Click="Summary_Click"/>
 
                     <!-- Spacer -->
                     <Rectangle Height="30" Fill="Transparent"/>

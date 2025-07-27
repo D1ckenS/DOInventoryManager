@@ -29,10 +29,15 @@ namespace DOInventoryManager.Views
                 {
                     MonthComboBox.SelectedItem = months.First(); // Select latest month
                 }
+                else
+                {
+                    MessageBox.Show("No data available for monthly summaries.", "No Data",
+                                  MessageBoxButton.OK, MessageBoxImage.Information);
+                }
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error loading months: {ex.Message}", "Error",
+                MessageBox.Show($"Error loading months: {ex.Message}\n\nStack trace: {ex.StackTrace}", "Error",
                               MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
@@ -64,6 +69,8 @@ namespace DOInventoryManager.Views
 
         private void UpdateExecutiveSummary()
         {
+            if (_currentSummary?.ExecutiveSummary == null) return;
+
             var executive = _currentSummary.ExecutiveSummary;
 
             TotalConsumptionText.Text = $"{executive.TotalFleetConsumptionL:N0} L";
@@ -81,21 +88,23 @@ namespace DOInventoryManager.Views
 
         private void UpdateConsumptionSummary()
         {
-            ConsumptionSummaryGrid.ItemsSource = _currentSummary.ConsumptionSummary;
+            ConsumptionSummaryGrid.ItemsSource = _currentSummary?.ConsumptionSummary ?? [];
         }
 
         private void UpdatePurchaseSummary()
         {
-            PurchaseSummaryGrid.ItemsSource = _currentSummary.PurchaseSummary;
+            PurchaseSummaryGrid.ItemsSource = _currentSummary?.PurchaseSummary ?? [];
         }
 
         private void UpdateAllocationSummary()
         {
-            AllocationSummaryGrid.ItemsSource = _currentSummary.AllocationSummary;
+            AllocationSummaryGrid.ItemsSource = _currentSummary?.AllocationSummary ?? [];
         }
 
         private void UpdateFinancialSummary()
         {
+            if (_currentSummary?.FinancialSummary == null) return;
+
             var financial = _currentSummary.FinancialSummary;
 
             TotalPurchaseValueText.Text = $"Total Purchases: {financial.TotalPurchaseValueUSD:C2}";
@@ -104,8 +113,8 @@ namespace DOInventoryManager.Views
             AvgCostPerLiterText.Text = $"Avg Cost/L: {financial.AvgCostPerLiterUSD:C6}";
             AvgCostPerTonText.Text = $"Avg Cost/T: {financial.AvgCostPerTonUSD:C2}";
 
-            CurrencyBreakdownGrid.ItemsSource = financial.CurrencyBreakdowns;
-            PaymentStatusGrid.ItemsSource = financial.PaymentStatuses;
+            CurrencyBreakdownGrid.ItemsSource = financial.CurrencyBreakdowns ?? [];
+            PaymentStatusGrid.ItemsSource = financial.PaymentStatuses ?? [];
         }
 
         #endregion
@@ -131,24 +140,27 @@ namespace DOInventoryManager.Views
 
         private async void MonthComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (MonthComboBox.SelectedItem != null)
+            if (MonthComboBox.SelectedItem?.ToString() is string selectedMonth)
             {
-                var selectedMonth = MonthComboBox.SelectedItem.ToString();
                 await GenerateSummaryAsync(selectedMonth);
             }
         }
 
         private async void Generate_Click(object sender, RoutedEventArgs e)
         {
-            if (MonthComboBox.SelectedItem != null)
+            if (MonthComboBox.SelectedItem?.ToString() is string selectedMonth)
             {
-                var selectedMonth = MonthComboBox.SelectedItem.ToString();
                 await GenerateSummaryAsync(selectedMonth);
 
                 await CreateAutoBackupAsync("SummaryGenerated");
 
                 MessageBox.Show("Monthly summary report generated successfully!", "Success",
                               MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+            else
+            {
+                MessageBox.Show("Please select a month first.", "No Month Selected",
+                              MessageBoxButton.OK, MessageBoxImage.Warning);
             }
         }
 

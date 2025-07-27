@@ -144,7 +144,7 @@ namespace DOInventoryManager.Services
             }
             catch
             {
-                return new List<BackupInfo>();
+                return [];
             }
         }
 

@@ -19,6 +19,6 @@ namespace DOInventoryManager.Models
         public DateTime CreatedDate { get; set; } = DateTime.Now;
         
         // Navigation property
-        public virtual ICollection<Purchase> Purchases { get; set; } = new List<Purchase>();
+        public virtual ICollection<Purchase> Purchases { get; set; } = [];
     }
 }

@@ -92,7 +92,7 @@ namespace DOInventoryManager.Services
             catch (Exception ex)
             {
                 System.Diagnostics.Debug.WriteLine($"Error getting due date alerts: {ex.Message}");
-                return new List<DueDateAlert>();
+                return [];
             }
         }
 
