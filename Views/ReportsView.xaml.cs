@@ -1,4 +1,5 @@
 ﻿using System.Windows;
+using System.Windows.Media;
 using System.Windows.Controls;
 using DOInventoryManager.Data;
 using DOInventoryManager.Models;
@@ -310,6 +311,66 @@ namespace DOInventoryManager.Views
 
         #region Payment Due Report Tab
 
+        private async void PayInvoice_Click(object sender, RoutedEventArgs e)
+        {
+            if (sender is Button button && button.Tag is int purchaseId)
+            {
+                try
+                {
+                    using var context = new InventoryContext();
+                    var purchase = await context.Purchases
+                        .Include(p => p.Supplier)
+                        .Include(p => p.Vessel)
+                        .FirstOrDefaultAsync(p => p.Id == purchaseId);
+
+                    if (purchase == null)
+                    {
+                        MessageBox.Show("Invoice not found.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                        return;
+                    }
+
+                    // Show payment confirmation dialog
+                    var paymentMessage = $"💳 PAYMENT CONFIRMATION\n\n" +
+                                       $"Invoice: {purchase.InvoiceReference}\n" +
+                                       $"Supplier: {purchase.Supplier.Name}\n" +
+                                       $"Vessel: {purchase.Vessel.Name}\n" +
+                                       $"Due Date: {purchase.DueDate:dd/MM/yyyy}\n\n" +
+                                       $"Amount to Pay: {purchase.TotalValue:N3} {purchase.Supplier.Currency}\n" +
+                                       $"USD Equivalent: {purchase.TotalValueUSD:C2}\n\n" +
+                                       $"Mark this invoice as PAID today?";
+
+                    var result = MessageBox.Show(paymentMessage, "Confirm Payment",
+                                               MessageBoxButton.YesNo, MessageBoxImage.Question);
+
+                    if (result == MessageBoxResult.Yes)
+                    {
+                        // Mark as paid
+                        purchase.PaymentDate = DateTime.Now;
+                        purchase.PaymentAmount = purchase.TotalValue;
+                        purchase.PaymentAmountUSD = purchase.TotalValueUSD;
+
+                        await context.SaveChangesAsync();
+
+                        // Create backup
+                        await CreateAutoBackupAsync("InvoicePayment");
+
+                        MessageBox.Show($"✅ Invoice {purchase.InvoiceReference} marked as PAID!\n\n" +
+                                      $"Payment Date: {DateTime.Now:dd/MM/yyyy}\n" +
+                                      $"Amount: {purchase.TotalValue:N3} {purchase.Supplier.Currency}",
+                                      "Payment Recorded", MessageBoxButton.OK, MessageBoxImage.Information);
+
+                        // Refresh the payment report
+                        await GeneratePaymentReportAsync();
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Error processing payment: {ex.Message}", "Error",
+                                  MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+            }
+        }
+
         private async Task GeneratePaymentReportAsync()
         {
             try
@@ -317,26 +378,28 @@ namespace DOInventoryManager.Views
                 var summary = await _alertService.GetPaymentSummaryAsync();
                 var agingItems = await _alertService.GetPaymentAgingAnalysisAsync();
                 var supplierSummaries = await _alertService.GetSupplierPaymentSummaryAsync();
+                var paidInvoices = await _alertService.GetPaidInvoicesAsync();
 
                 // Update summary cards
                 OverdueAmountText.Text = summary.TotalOverdueAmount.ToString("C2");
                 OverdueCountText.Text = $"{summary.OverdueCount} invoices";
-                
+
                 DueTodayAmountText.Text = summary.DueTodayAmount.ToString("C2");
                 DueTodayCountText.Text = $"{summary.DueTodayCount} invoices";
-                
+
                 DueThisWeekAmountText.Text = summary.DueThisWeekAmount.ToString("C2");
                 DueThisWeekCountText.Text = $"{summary.DueThisWeekCount} invoices";
-                
+
                 DueNextWeekAmountText.Text = summary.DueNextWeekAmount.ToString("C2");
                 DueNextWeekCountText.Text = $"{summary.DueNextWeekCount} invoices";
-                
+
                 TotalOutstandingAmountText.Text = summary.TotalOutstandingAmount.ToString("C2");
                 TotalOutstandingCountText.Text = $"{summary.TotalOutstandingCount} invoices";
 
                 // Update grids
                 PaymentScheduleGrid.ItemsSource = agingItems;
                 AgingAnalysisGrid.ItemsSource = supplierSummaries;
+                PaidInvoicesGrid.ItemsSource = paidInvoices; // NEW
 
                 // Apply row styling to payment schedule
                 ApplyPaymentRowStyling();
@@ -344,7 +407,7 @@ namespace DOInventoryManager.Views
             catch (Exception ex)
             {
                 MessageBox.Show($"Error generating payment report: {ex.Message}", "Error",
-                            MessageBoxButton.OK, MessageBoxImage.Error);
+                              MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 

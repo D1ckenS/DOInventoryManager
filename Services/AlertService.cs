@@ -77,6 +77,28 @@ namespace DOInventoryManager.Services
             };
         }
 
+        public class PaidInvoiceItem
+        {
+            public int PurchaseId { get; set; }
+            public string InvoiceReference { get; set; } = string.Empty;
+            public string SupplierName { get; set; } = string.Empty;
+            public string VesselName { get; set; } = string.Empty;
+            public DateTime PaymentDate { get; set; }
+            public DateTime InvoiceReceiptDate { get; set; }
+            public DateTime DueDate { get; set; }
+            public decimal TotalValueUSD { get; set; }
+            public string Currency { get; set; } = string.Empty;
+            public decimal TotalValue { get; set; }
+            public decimal PaymentAmount { get; set; }
+            public decimal PaymentAmountUSD { get; set; }
+
+            public string FormattedPaymentDate => PaymentDate.ToString("dd/MM/yyyy");
+            public string FormattedDueDate => DueDate.ToString("dd/MM/yyyy");
+            public string FormattedReceiptDate => InvoiceReceiptDate.ToString("dd/MM/yyyy");
+            public string FormattedValue => Currency == "USD" ? TotalValueUSD.ToString("C2") : $"{TotalValue:N3} {Currency}";
+            public string FormattedPaymentAmount => Currency == "USD" ? PaymentAmountUSD.ToString("C2") : $"{PaymentAmount:N3} {Currency}";
+        }
+
         public enum PaymentStatus
         {
             Current,
@@ -114,7 +136,7 @@ namespace DOInventoryManager.Services
                 var purchasesWithDueDates = await context.Purchases
                     .Include(p => p.Supplier)
                     .Include(p => p.Vessel)
-                    .Where(p => p.DueDate.HasValue && p.InvoiceReceiptDate.HasValue)
+                    .Where(p => p.DueDate.HasValue && p.InvoiceReceiptDate.HasValue && !p.PaymentDate.HasValue)
                     .ToListAsync();
 
                 var summary = new PaymentSummary();
@@ -168,7 +190,7 @@ namespace DOInventoryManager.Services
                 var purchasesWithDueDates = await context.Purchases
                     .Include(p => p.Supplier)
                     .Include(p => p.Vessel)
-                    .Where(p => p.DueDate.HasValue && p.InvoiceReceiptDate.HasValue)
+                    .Where(p => p.DueDate.HasValue && p.InvoiceReceiptDate.HasValue && !p.PaymentDate.HasValue)
                     .ToListAsync();
 
                 var agingItems = new List<PaymentAgingItem>();
@@ -233,7 +255,7 @@ namespace DOInventoryManager.Services
 
                 var purchasesWithDueDates = await context.Purchases
                     .Include(p => p.Supplier)
-                    .Where(p => p.DueDate.HasValue && p.InvoiceReceiptDate.HasValue)
+                    .Where(p => p.DueDate.HasValue && p.InvoiceReceiptDate.HasValue && !p.PaymentDate.HasValue)
                     .ToListAsync();
 
                 var supplierSummaries = purchasesWithDueDates
@@ -241,9 +263,9 @@ namespace DOInventoryManager.Services
                     .Select(g =>
                     {
                         var overduePurchases = g.Where(p => p.DueDate!.Value.Date < today).ToList();
-                        var avgDaysOverdue = overduePurchases.Any() 
-                            ? overduePurchases.Average(p => (today - p.DueDate!.Value.Date).Days)
-                            : 0;
+                        var avgDaysOverdue = overduePurchases.Any()
+                            ? (decimal)overduePurchases.Average(p => (today - p.DueDate!.Value.Date).Days)
+                            : 0m;
 
                         return new SupplierPaymentSummary
                         {
@@ -290,7 +312,7 @@ namespace DOInventoryManager.Services
                 var purchasesWithDueDates = await context.Purchases
                     .Include(p => p.Supplier)
                     .Include(p => p.Vessel)
-                    .Where(p => p.DueDate.HasValue && p.InvoiceReceiptDate.HasValue)
+                    .Where(p => p.DueDate.HasValue && p.InvoiceReceiptDate.HasValue && !p.PaymentDate.HasValue)
                     .ToListAsync();
 
                 var alerts = new List<DueDateAlert>();
@@ -420,6 +442,49 @@ namespace DOInventoryManager.Services
                 parts.Add($"{alertDay} due soon");
 
             return string.Join(", ", parts);
+        }
+
+        public async Task<List<PaidInvoiceItem>> GetPaidInvoicesAsync()
+        {
+            try
+            {
+                using var context = new InventoryContext();
+
+                var paidPurchases = await context.Purchases
+                    .Include(p => p.Supplier)
+                    .Include(p => p.Vessel)
+                    .Where(p => p.PaymentDate.HasValue)
+                    .OrderByDescending(p => p.PaymentDate)
+                    .ToListAsync();
+
+                var paidItems = new List<PaidInvoiceItem>();
+
+                foreach (var purchase in paidPurchases)
+                {
+                    paidItems.Add(new PaidInvoiceItem
+                    {
+                        PurchaseId = purchase.Id,
+                        InvoiceReference = purchase.InvoiceReference,
+                        SupplierName = purchase.Supplier.Name,
+                        VesselName = purchase.Vessel.Name,
+                        PaymentDate = purchase.PaymentDate!.Value,
+                        InvoiceReceiptDate = purchase.InvoiceReceiptDate ?? DateTime.MinValue,
+                        DueDate = purchase.DueDate ?? DateTime.MinValue,
+                        TotalValueUSD = purchase.TotalValueUSD,
+                        Currency = purchase.Supplier.Currency,
+                        TotalValue = purchase.TotalValue,
+                        PaymentAmount = purchase.PaymentAmount ?? purchase.TotalValue,
+                        PaymentAmountUSD = purchase.PaymentAmountUSD ?? purchase.TotalValueUSD
+                    });
+                }
+
+                return paidItems;
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Error getting paid invoices: {ex.Message}");
+                return [];
+            }
         }
     }
 }

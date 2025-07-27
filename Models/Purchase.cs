@@ -66,7 +66,27 @@ namespace DOInventoryManager.Models
         public decimal RemainingQuantity { get; set; } // For FIFO allocation
         
         public DateTime CreatedDate { get; set; } = DateTime.Now;
-        
+
+        // Payment tracking
+        public DateTime? PaymentDate { get; set; }
+        public decimal? PaymentAmount { get; set; } // Amount actually paid in original currency
+        public decimal? PaymentAmountUSD { get; set; } // Amount paid converted to USD
+
+        // Computed properties
+        [NotMapped]
+        public bool IsPaid => PaymentDate.HasValue;
+
+        [NotMapped]
+        public string PaymentStatus => IsPaid ? "Paid" : "Outstanding";
+
+        [NotMapped]
+        public string FormattedPaymentDate => PaymentDate?.ToString("dd/MM/yyyy") ?? "Not Paid";
+
+        [NotMapped]
+        public string FormattedPaymentAmount => IsPaid
+            ? (Supplier?.Currency == "USD" ? PaymentAmountUSD?.ToString("C2") ?? "$0.00" : $"{PaymentAmount:N3} {Supplier?.Currency}")
+            : "Outstanding";
+
         // Navigation properties
         public virtual ICollection<Allocation> Allocations { get; set; } = [];
     }

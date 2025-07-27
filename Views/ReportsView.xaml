@@ -723,7 +723,7 @@
 
                         <!-- Payment Summary Cards -->
                         <Border Grid.Row="1" Background="#fff" BorderBrush="#dee2e6" BorderThickness="1" 
-                            CornerRadius="8" Padding="20" Margin="0,0,0,20">
+                                CornerRadius="8" Padding="20" Margin="0,0,0,20">
                             <Grid>
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="*"/>
@@ -734,7 +734,7 @@
                                 </Grid.ColumnDefinitions>
 
                                 <StackPanel Grid.Column="0" HorizontalAlignment="Center">
-                                    <TextBlock Text="🔴 Overdue" FontWeight="SemiBold" HorizontalAlignment="Center" FontSize="12"/>
+                                    <TextBlock Text="▲ Overdue" FontWeight="SemiBold" HorizontalAlignment="Center" FontSize="12" Foreground="#dc3545"/>
                                     <TextBlock x:Name="OverdueAmountText" Text="$0.00" FontSize="16" FontWeight="Bold" 
                                             HorizontalAlignment="Center" Foreground="#dc3545"/>
                                     <TextBlock x:Name="OverdueCountText" Text="0 invoices" FontSize="10" 
@@ -742,7 +742,7 @@
                                 </StackPanel>
 
                                 <StackPanel Grid.Column="1" HorizontalAlignment="Center">
-                                    <TextBlock Text="🟠 Due Today" FontWeight="SemiBold" HorizontalAlignment="Center" FontSize="12"/>
+                                    <TextBlock Text="⚠ Due Today" FontWeight="SemiBold" HorizontalAlignment="Center" FontSize="12" Foreground="#fd7e14"/>
                                     <TextBlock x:Name="DueTodayAmountText" Text="$0.00" FontSize="16" FontWeight="Bold" 
                                             HorizontalAlignment="Center" Foreground="#fd7e14"/>
                                     <TextBlock x:Name="DueTodayCountText" Text="0 invoices" FontSize="10" 
@@ -750,7 +750,7 @@
                                 </StackPanel>
 
                                 <StackPanel Grid.Column="2" HorizontalAlignment="Center">
-                                    <TextBlock Text="🟡 This Week" FontWeight="SemiBold" HorizontalAlignment="Center" FontSize="12"/>
+                                    <TextBlock Text="⏰ This Week" FontWeight="SemiBold" HorizontalAlignment="Center" FontSize="12" Foreground="#ffc107"/>
                                     <TextBlock x:Name="DueThisWeekAmountText" Text="$0.00" FontSize="16" FontWeight="Bold" 
                                             HorizontalAlignment="Center" Foreground="#ffc107"/>
                                     <TextBlock x:Name="DueThisWeekCountText" Text="0 invoices" FontSize="10" 
@@ -758,7 +758,7 @@
                                 </StackPanel>
 
                                 <StackPanel Grid.Column="3" HorizontalAlignment="Center">
-                                    <TextBlock Text="🟢 Next Week" FontWeight="SemiBold" HorizontalAlignment="Center" FontSize="12"/>
+                                    <TextBlock Text="→ Next Week" FontWeight="SemiBold" HorizontalAlignment="Center" FontSize="12" Foreground="#28a745"/>
                                     <TextBlock x:Name="DueNextWeekAmountText" Text="$0.00" FontSize="16" FontWeight="Bold" 
                                             HorizontalAlignment="Center" Foreground="#28a745"/>
                                     <TextBlock x:Name="DueNextWeekCountText" Text="0 invoices" FontSize="10" 
@@ -766,7 +766,7 @@
                                 </StackPanel>
 
                                 <StackPanel Grid.Column="4" HorizontalAlignment="Center">
-                                    <TextBlock Text="📊 Total Outstanding" FontWeight="SemiBold" HorizontalAlignment="Center" FontSize="12"/>
+                                    <TextBlock Text="📊 Total Outstanding" FontWeight="SemiBold" HorizontalAlignment="Center" FontSize="12" Foreground="#6c757d"/>
                                     <TextBlock x:Name="TotalOutstandingAmountText" Text="$0.00" FontSize="16" FontWeight="Bold" 
                                             HorizontalAlignment="Center" Foreground="#6c757d"/>
                                     <TextBlock x:Name="TotalOutstandingCountText" Text="0 invoices" FontSize="10" 
@@ -777,7 +777,7 @@
 
                         <!-- Payment Report Tabs -->
                         <TabControl Grid.Row="2" x:Name="PaymentTabControl">
-                            
+
                             <!-- Payment Schedule Tab -->
                             <TabItem Header="📅 Payment Schedule">
                                 <StackPanel Margin="20">
@@ -805,6 +805,21 @@
                                             <DataGridTextColumn Header="Status" Binding="{Binding StatusText}" Width="120"/>
                                             <DataGridTextColumn Header="Receipt Date" Binding="{Binding FormattedReceiptDate}" Width="100"/>
                                             <DataGridTextColumn Header="Aging" Binding="{Binding AgingCategory}" Width="100"/>
+                                            <DataGridTemplateColumn Header="Action" Width="120">
+                                                <DataGridTemplateColumn.CellTemplate>
+                                                    <DataTemplate>
+                                                        <Button Content="💳 Pay Invoice" 
+                                                               Background="#28a745" 
+                                                               Foreground="White" 
+                                                               BorderThickness="0" 
+                                                               Padding="8,4" 
+                                                               FontSize="11"
+                                                               FontWeight="SemiBold"
+                                                               Click="PayInvoice_Click"
+                                                               Tag="{Binding PurchaseId}"/>
+                                                    </DataTemplate>
+                                                </DataGridTemplateColumn.CellTemplate>
+                                            </DataGridTemplateColumn>
                                         </DataGrid.Columns>
                                     </DataGrid>
                                 </StackPanel>
@@ -835,6 +850,42 @@
                                             <DataGridTextColumn Header="Total Invoices" Binding="{Binding TotalInvoices}" Width="100"/>
                                             <DataGridTextColumn Header="Overdue Invoices" Binding="{Binding OverdueInvoices}" Width="120"/>
                                             <DataGridTextColumn Header="Avg Days Overdue" Binding="{Binding AvgDaysOverdue, StringFormat=N1}" Width="130"/>
+                                        </DataGrid.Columns>
+                                    </DataGrid>
+                                </StackPanel>
+                            </TabItem>
+
+                            <!-- NEW: Paid Invoices Tab -->
+                            <TabItem Header="✅ Paid Invoices">
+                                <StackPanel Margin="20">
+                                    <TextBlock Text="All Paid Invoices (Most Recent First)" FontSize="16" FontWeight="SemiBold" 
+                                            Margin="0,0,0,15" Foreground="#2c3e50"/>
+
+                                    <DataGrid x:Name="PaidInvoicesGrid" 
+                                            AutoGenerateColumns="False" 
+                                            CanUserAddRows="False"
+                                            CanUserDeleteRows="False"
+                                            GridLinesVisibility="Horizontal"
+                                            HeadersVisibility="Column"
+                                            Background="White"
+                                            BorderThickness="1"
+                                            BorderBrush="#dee2e6"
+                                            MaxHeight="500">
+
+                                        <DataGrid.Columns>
+                                            <DataGridTextColumn Header="Payment Date" Binding="{Binding FormattedPaymentDate}" Width="110"/>
+                                            <DataGridTextColumn Header="Invoice Ref" Binding="{Binding InvoiceReference}" Width="100"/>
+                                            <DataGridTextColumn Header="Supplier" Binding="{Binding SupplierName}" Width="120"/>
+                                            <DataGridTextColumn Header="Vessel" Binding="{Binding VesselName}" Width="120"/>
+                                            <DataGridTextColumn Header="Original Amount" Binding="{Binding FormattedValue}" Width="120"/>
+                                            <DataGridTextColumn Header="USD Amount" Binding="{Binding TotalValueUSD, StringFormat=C2}" Width="100"/>
+                                            <DataGridTextColumn Header="Due Date" Binding="{Binding FormattedDueDate}" Width="100"/>
+                                            <DataGridTextColumn Header="Receipt Date" Binding="{Binding FormattedReceiptDate}" Width="100"/>
+                                            <DataGridTextColumn Header="Status" Width="80">
+                                                <DataGridTextColumn.Binding>
+                                                    <Binding Source="PAID"/>
+                                                </DataGridTextColumn.Binding>
+                                            </DataGridTextColumn>
                                         </DataGrid.Columns>
                                     </DataGrid>
                                 </StackPanel>
