@@ -1843,6 +1843,465 @@
                     </ScrollViewer>
                 </TabItem>
 
+                <!-- Cost Analysis Report Tab -->
+                <TabItem Header="📊 Cost Analysis">
+                    <ScrollViewer VerticalScrollBarVisibility="Auto">
+                        <Grid Margin="20">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <!-- Controls -->
+                                <RowDefinition Height="*"/>
+                                <!-- Content -->
+                            </Grid.RowDefinitions>
+
+                            <!-- Controls -->
+                            <Border Grid.Row="0" Background="#f8f9fa" BorderBrush="#dee2e6" BorderThickness="1" 
+                                    CornerRadius="8" Padding="20" Margin="0,0,0,20">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <TextBlock Grid.Column="0" Text="From Date:" VerticalAlignment="Center" Margin="0,0,10,0"/>
+                                    <DatePicker Grid.Column="1" x:Name="CostFromDatePicker" Width="120" Margin="0,0,20,0"/>
+
+                                    <TextBlock Grid.Column="2" Text="To Date:" VerticalAlignment="Center" Margin="0,0,10,0"/>
+                                    <DatePicker Grid.Column="3" x:Name="CostToDatePicker" Width="120" Margin="0,0,20,0"/>
+
+                                    <Button Grid.Column="5" x:Name="GenerateCostAnalysis" Content="🔄 Generate Analysis" 
+                                            Click="GenerateCostAnalysis_Click" 
+                                            Background="#3498db" Foreground="White" Padding="15,8" Margin="0,0,10,0"/>
+
+                                    <Button Grid.Column="6" x:Name="ExportCostAnalysis" Content="📤 Export" 
+                                            Click="ExportCostAnalysis_Click" 
+                                            Background="#27ae60" Foreground="White" Padding="15,8"/>
+                                </Grid>
+                            </Border>
+
+                            <!-- Content -->
+                            <TabControl Grid.Row="1" Background="White" BorderBrush="#dee2e6" BorderThickness="1">
+
+                                <!-- Overview Tab -->
+                                <TabItem Header="📋 Overview">
+                                    <ScrollViewer VerticalScrollBarVisibility="Auto">
+                                        <StackPanel Margin="20">
+                                            <!-- Summary Cards -->
+                                            <Grid Margin="0,0,0,30">
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="*"/>
+                                                    <ColumnDefinition Width="*"/>
+                                                    <ColumnDefinition Width="*"/>
+                                                    <ColumnDefinition Width="*"/>
+                                                    <ColumnDefinition Width="*"/>
+                                                </Grid.ColumnDefinitions>
+
+                                                <!-- Total Procurement Value -->
+                                                <Border Grid.Column="0" Background="#3498db" CornerRadius="8" Padding="20" Margin="0,0,10,0">
+                                                    <StackPanel>
+                                                        <TextBlock Text="💰" FontSize="24" HorizontalAlignment="Center" Foreground="White"/>
+                                                        <TextBlock Text="Total Procurement" FontSize="12" HorizontalAlignment="Center" Foreground="White" Margin="0,5,0,0"/>
+                                                        <TextBlock x:Name="CostTotalProcurementText" Text="$0.00" FontSize="16" FontWeight="Bold" 
+                                                                 HorizontalAlignment="Center" Foreground="White" Margin="0,5,0,0"/>
+                                                    </StackPanel>
+                                                </Border>
+
+                                                <!-- Average Cost Per Liter -->
+                                                <Border Grid.Column="1" Background="#e74c3c" CornerRadius="8" Padding="20" Margin="0,0,10,0">
+                                                    <StackPanel>
+                                                        <TextBlock Text="⛽" FontSize="24" HorizontalAlignment="Center" Foreground="White"/>
+                                                        <TextBlock Text="Avg Cost/Liter" FontSize="12" HorizontalAlignment="Center" Foreground="White" Margin="0,5,0,0"/>
+                                                        <TextBlock x:Name="CostAvgPerLiterText" Text="$0.000000" FontSize="16" FontWeight="Bold" 
+                                                                 HorizontalAlignment="Center" Foreground="White" Margin="0,5,0,0"/>
+                                                    </StackPanel>
+                                                </Border>
+
+                                                <!-- Average Cost Per Ton -->
+                                                <Border Grid.Column="2" Background="#9b59b6" CornerRadius="8" Padding="20" Margin="0,0,10,0">
+                                                    <StackPanel>
+                                                        <TextBlock Text="🏗️" FontSize="24" HorizontalAlignment="Center" Foreground="White"/>
+                                                        <TextBlock Text="Avg Cost/Ton" FontSize="12" HorizontalAlignment="Center" Foreground="White" Margin="0,5,0,0"/>
+                                                        <TextBlock x:Name="CostAvgPerTonText" Text="$0.00" FontSize="16" FontWeight="Bold" 
+                                                                 HorizontalAlignment="Center" Foreground="White" Margin="0,5,0,0"/>
+                                                    </StackPanel>
+                                                </Border>
+
+                                                <!-- Price Volatility Index -->
+                                                <Border Grid.Column="3" Background="#f39c12" CornerRadius="8" Padding="20" Margin="0,0,10,0">
+                                                    <StackPanel>
+                                                        <TextBlock Text="📈" FontSize="24" HorizontalAlignment="Center" Foreground="White"/>
+                                                        <TextBlock Text="Price Volatility" FontSize="12" HorizontalAlignment="Center" Foreground="White" Margin="0,5,0,0"/>
+                                                        <TextBlock x:Name="CostVolatilityText" Text="0.0%" FontSize="16" FontWeight="Bold" 
+                                                                 HorizontalAlignment="Center" Foreground="White" Margin="0,5,0,0"/>
+                                                    </StackPanel>
+                                                </Border>
+
+                                                <!-- Procurement Efficiency Score -->
+                                                <Border Grid.Column="4" Background="#27ae60" CornerRadius="8" Padding="20">
+                                                    <StackPanel>
+                                                        <TextBlock Text="🎯" FontSize="24" HorizontalAlignment="Center" Foreground="White"/>
+                                                        <TextBlock Text="Efficiency Score" FontSize="12" HorizontalAlignment="Center" Foreground="White" Margin="0,5,0,0"/>
+                                                        <TextBlock x:Name="CostEfficiencyScoreText" Text="0%" FontSize="16" FontWeight="Bold" 
+                                                                 HorizontalAlignment="Center" Foreground="White" Margin="0,5,0,0"/>
+                                                    </StackPanel>
+                                                </Border>
+                                            </Grid>
+
+                                            <!-- Key Metrics Section -->
+                                            <Border Background="White" BorderBrush="#dee2e6" BorderThickness="1" 
+                                                  CornerRadius="6" Padding="20" Margin="0,0,0,20">
+                                                <StackPanel>
+                                                    <TextBlock Text="🔍 Key Performance Indicators" FontSize="16" FontWeight="SemiBold" 
+                                                             Margin="0,0,0,15" Foreground="#2c3e50"/>
+
+                                                    <Grid>
+                                                        <Grid.ColumnDefinitions>
+                                                            <ColumnDefinition Width="*"/>
+                                                            <ColumnDefinition Width="*"/>
+                                                        </Grid.ColumnDefinitions>
+
+                                                        <StackPanel Grid.Column="0">
+                                                            <TextBlock x:Name="CostBestSupplierText" Text="Best Supplier: N/A" FontSize="14" Margin="0,5"/>
+                                                            <TextBlock x:Name="CostWorstSupplierText" Text="Worst Supplier: N/A" FontSize="14" Margin="0,5"/>
+                                                            <TextBlock x:Name="CostSavingsOpportunityText" Text="Savings Opportunity: $0.00" FontSize="14" Margin="0,5"/>
+                                                            <TextBlock x:Name="CostUniqueSuppliersText" Text="Unique Suppliers: 0" FontSize="14" Margin="0,5"/>
+                                                        </StackPanel>
+
+                                                        <StackPanel Grid.Column="1">
+                                                            <TextBlock x:Name="CostLowestPriceText" Text="Lowest Price: $0.000000" FontSize="14" Margin="0,5"/>
+                                                            <TextBlock x:Name="CostHighestPriceText" Text="Highest Price: $0.000000" FontSize="14" Margin="0,5"/>
+                                                            <TextBlock x:Name="CostMostEfficientMonthText" Text="Most Efficient Month: N/A" FontSize="14" Margin="0,5"/>
+                                                            <TextBlock x:Name="CostTotalTransactionsText" Text="Total Transactions: 0" FontSize="14" Margin="0,5"/>
+                                                        </StackPanel>
+                                                    </Grid>
+                                                </StackPanel>
+                                            </Border>
+                                        </StackPanel>
+                                    </ScrollViewer>
+                                </TabItem>
+
+                                <!-- Price Trends Tab -->
+                                <TabItem Header="📈 Price Trends">
+                                    <StackPanel Margin="20">
+                                        <TextBlock Text="Price Trend Analysis Over Time" FontSize="16" FontWeight="SemiBold" 
+                                                 Margin="0,0,0,15" Foreground="#2c3e50"/>
+
+                                        <DataGrid x:Name="PriceTrendsGrid" 
+                                                AutoGenerateColumns="False" 
+                                                CanUserAddRows="False"
+                                                CanUserDeleteRows="False"
+                                                GridLinesVisibility="Horizontal"
+                                                HeadersVisibility="Column"
+                                                Background="White"
+                                                BorderThickness="1"
+                                                BorderBrush="#dee2e6"
+                                                MaxHeight="700">
+
+                                            <DataGrid.Columns>
+                                                <DataGridTextColumn Header="Month" Binding="{Binding FormattedMonth}" Width="100"/>
+                                                <DataGridTextColumn Header="Trend" Binding="{Binding TrendIcon}" Width="60"/>
+                                                <DataGridTextColumn Header="Avg Cost/L" Binding="{Binding AvgCostPerLiterUSD, StringFormat=C6}" Width="120"/>
+                                                <DataGridTextColumn Header="Avg Cost/T" Binding="{Binding AvgCostPerTonUSD, StringFormat=C2}" Width="120"/>
+                                                <DataGridTextColumn Header="Volume (L)" Binding="{Binding TotalVolumeL, StringFormat=N3}" Width="120"/>
+                                                <DataGridTextColumn Header="Total Value" Binding="{Binding FormattedTotalValue}" Width="120"/>
+                                                <DataGridTextColumn Header="Transactions" Binding="{Binding TransactionCount}" Width="100"/>
+                                                <DataGridTextColumn Header="Price Change" Binding="{Binding FormattedPriceVariance}" Width="120"/>
+                                                <DataGridTextColumn Header="Volume Change" Binding="{Binding FormattedVolumeVariance}" Width="120"/>
+                                                <DataGridTextColumn Header="Volatility" Binding="{Binding MarketVolatility, StringFormat=N2}" Width="100"/>
+                                                <DataGridTextColumn Header="Best Supplier" Binding="{Binding BestSupplierThisMonth}" Width="120"/>
+                                                <DataGridTextColumn Header="Best Price" Binding="{Binding BestPriceThisMonth, StringFormat=C6}" Width="120"/>
+                                            </DataGrid.Columns>
+                                        </DataGrid>
+                                    </StackPanel>
+                                </TabItem>
+
+                                <!-- Supplier Comparison Tab -->
+                                <TabItem Header="🏢 Supplier Comparison">
+                                    <StackPanel Margin="20">
+                                        <TextBlock Text="Supplier Cost Performance Comparison" FontSize="16" FontWeight="SemiBold" 
+                                                 Margin="0,0,0,15" Foreground="#2c3e50"/>
+
+                                        <DataGrid x:Name="SupplierComparisonGrid" 
+                                                AutoGenerateColumns="False" 
+                                                CanUserAddRows="False"
+                                                CanUserDeleteRows="False"
+                                                GridLinesVisibility="Horizontal"
+                                                HeadersVisibility="Column"
+                                                Background="White"
+                                                BorderThickness="1"
+                                                BorderBrush="#dee2e6"
+                                                MaxHeight="700">
+
+                                            <DataGrid.Columns>
+                                                <DataGridTextColumn Header="Rank" Binding="{Binding CostCompetitivenessRank}" Width="60"/>
+                                                <DataGridTextColumn Header="Supplier" Binding="{Binding SupplierName}" Width="120"/>
+                                                <DataGridTextColumn Header="Currency" Binding="{Binding Currency}" Width="80"/>
+                                                <DataGridTextColumn Header="Avg Cost/L (USD)" Binding="{Binding AvgCostPerLiterUSD, StringFormat=C6}" Width="140"/>
+                                                <DataGridTextColumn Header="Avg Cost/T (USD)" Binding="{Binding AvgCostPerTonUSD, StringFormat=C2}" Width="140"/>
+                                                <DataGridTextColumn Header="Avg Cost/L (Orig)" Binding="{Binding FormattedAvgCostOriginal}" Width="140"/>
+                                                <DataGridTextColumn Header="Total Volume (L)" Binding="{Binding TotalVolumeL, StringFormat=N3}" Width="140"/>
+                                                <DataGridTextColumn Header="Total Value" Binding="{Binding FormattedTotalValue}" Width="120"/>
+                                                <DataGridTextColumn Header="Market Share" Binding="{Binding FormattedMarketShare}" Width="120"/>
+                                                <DataGridTextColumn Header="Transactions" Binding="{Binding TransactionCount}" Width="100"/>
+                                                <DataGridTextColumn Header="Price Consistency" Binding="{Binding FormattedPriceConsistency}" Width="140"/>
+                                                <DataGridTextColumn Header="vs Market" Binding="{Binding FormattedCostAdvantage}" Width="120"/>
+                                                <DataGridTextColumn Header="Performance" Binding="{Binding PerformanceCategory}" Width="140"/>
+                                                <DataGridTextColumn Header="Payment Score" Binding="{Binding PaymentReliabilityScore, StringFormat=N1}" Width="120"/>
+                                            </DataGrid.Columns>
+                                        </DataGrid>
+                                    </StackPanel>
+                                </TabItem>
+
+                                <!-- Cost Variance Tab -->
+                                <TabItem Header="📊 Cost Variance">
+                                    <StackPanel Margin="20">
+                                        <TextBlock Text="Actual vs Budgeted Cost Analysis" FontSize="16" FontWeight="SemiBold" 
+                                                 Margin="0,0,0,15" Foreground="#2c3e50"/>
+
+                                        <DataGrid x:Name="CostVarianceGrid" 
+                                                AutoGenerateColumns="False" 
+                                                CanUserAddRows="False"
+                                                CanUserDeleteRows="False"
+                                                GridLinesVisibility="Horizontal"
+                                                HeadersVisibility="Column"
+                                                Background="White"
+                                                BorderThickness="1"
+                                                BorderBrush="#dee2e6"
+                                                MaxHeight="700">
+
+                                            <DataGrid.Columns>
+                                                <DataGridTextColumn Header="Month" Binding="{Binding FormattedMonth}" Width="100"/>
+                                                <DataGridTextColumn Header="Status" Binding="{Binding VarianceIcon}" Width="60"/>
+                                                <DataGridTextColumn Header="Budgeted Cost/L" Binding="{Binding BudgetedCostPerLiterUSD, StringFormat=C6}" Width="140"/>
+                                                <DataGridTextColumn Header="Actual Cost/L" Binding="{Binding ActualCostPerLiterUSD, StringFormat=C6}" Width="140"/>
+                                                <DataGridTextColumn Header="Variance Amount" Binding="{Binding FormattedVarianceAmount}" Width="140"/>
+                                                <DataGridTextColumn Header="Variance %" Binding="{Binding FormattedVariancePercentage}" Width="120"/>
+                                                <DataGridTextColumn Header="Budgeted Volume" Binding="{Binding BudgetedVolumeL, StringFormat=N3}" Width="140"/>
+                                                <DataGridTextColumn Header="Actual Volume" Binding="{Binding ActualVolumeL, StringFormat=N3}" Width="140"/>
+                                                <DataGridTextColumn Header="Volume Variance" Binding="{Binding FormattedVolumeVariance}" Width="140"/>
+                                                <DataGridTextColumn Header="Total Budget" Binding="{Binding TotalBudgetUSD, StringFormat=C2}" Width="120"/>
+                                                <DataGridTextColumn Header="Total Actual" Binding="{Binding TotalActualUSD, StringFormat=C2}" Width="120"/>
+                                                <DataGridTextColumn Header="Total Variance" Binding="{Binding FormattedTotalVariance}" Width="140"/>
+                                                <DataGridTextColumn Header="Category" Binding="{Binding VarianceCategory}" Width="120"/>
+                                                <DataGridTextColumn Header="Primary Driver" Binding="{Binding PrimaryVarianceDriver}" Width="140"/>
+                                            </DataGrid.Columns>
+                                        </DataGrid>
+                                    </StackPanel>
+                                </TabItem>
+
+                                <!-- Procurement Efficiency Tab -->
+                                <TabItem Header="🎯 Procurement Efficiency">
+                                    <StackPanel Margin="20">
+                                        <TextBlock Text="Supplier Procurement Efficiency Metrics" FontSize="16" FontWeight="SemiBold" 
+                                                 Margin="0,0,0,15" Foreground="#2c3e50"/>
+
+                                        <DataGrid x:Name="ProcurementEfficiencyGrid" 
+                                                AutoGenerateColumns="False" 
+                                                CanUserAddRows="False"
+                                                CanUserDeleteRows="False"
+                                                GridLinesVisibility="Horizontal"
+                                                HeadersVisibility="Column"
+                                                Background="White"
+                                                BorderThickness="1"
+                                                BorderBrush="#dee2e6"
+                                                MaxHeight="700">
+
+                                            <DataGrid.Columns>
+                                                <DataGridTextColumn Header="Grade" Binding="{Binding EfficiencyIcon}" Width="60"/>
+                                                <DataGridTextColumn Header="Supplier" Binding="{Binding SupplierName}" Width="120"/>
+                                                <DataGridTextColumn Header="Efficiency Score" Binding="{Binding FormattedEfficiencyScore}" Width="120"/>
+                                                <DataGridTextColumn Header="Cost Optimization" Binding="{Binding CostOptimizationRating, StringFormat=N1}" Width="140"/>
+                                                <DataGridTextColumn Header="Price Negotiation" Binding="{Binding PriceNegotiationScore, StringFormat=N1}" Width="140"/>
+                                                <DataGridTextColumn Header="Volume Efficiency" Binding="{Binding VolumeEfficiencyScore, StringFormat=N1}" Width="140"/>
+                                                <DataGridTextColumn Header="Timing Efficiency" Binding="{Binding TimingEfficiencyScore, StringFormat=N1}" Width="140"/>
+                                                <DataGridTextColumn Header="Quality Score" Binding="{Binding QualityConsistencyScore, StringFormat=N1}" Width="120"/>
+                                                <DataGridTextColumn Header="Payment Terms" Binding="{Binding PaymentTermsScore, StringFormat=N1}" Width="120"/>
+                                                <DataGridTextColumn Header="Risk Score" Binding="{Binding RiskAssessmentScore, StringFormat=N1}" Width="120"/>
+                                                <DataGridTextColumn Header="Optimal Purchases" Binding="{Binding OptimalPurchaseCount}" Width="140"/>
+                                                <DataGridTextColumn Header="Sub-Optimal" Binding="{Binding SubOptimalPurchaseCount}" Width="120"/>
+                                                <DataGridTextColumn Header="Potential Savings" Binding="{Binding FormattedPotentialSavings}" Width="140"/>
+                                                <DataGridTextColumn Header="Grade" Binding="{Binding EfficiencyGrade}" Width="80"/>
+                                                <DataGridTextColumn Header="Recommended Action" Binding="{Binding RecommendedAction}" Width="200"/>
+                                            </DataGrid.Columns>
+                                        </DataGrid>
+                                    </StackPanel>
+                                </TabItem>
+
+                                <!-- Market Benchmarking Tab -->
+                                <TabItem Header="📊 Market Benchmarking">
+                                    <StackPanel Margin="20">
+                                        <TextBlock Text="Market Position and Competitive Analysis" FontSize="16" FontWeight="SemiBold" 
+                                                 Margin="0,0,0,15" Foreground="#2c3e50"/>
+
+                                        <DataGrid x:Name="MarketBenchmarkingGrid" 
+                                                AutoGenerateColumns="False" 
+                                                CanUserAddRows="False"
+                                                CanUserDeleteRows="False"
+                                                GridLinesVisibility="Horizontal"
+                                                HeadersVisibility="Column"
+                                                Background="White"
+                                                BorderThickness="1"
+                                                BorderBrush="#dee2e6"
+                                                MaxHeight="700">
+
+                                            <DataGrid.Columns>
+                                                <DataGridTextColumn Header="Period" Binding="{Binding FormattedPeriod}" Width="100"/>
+                                                <DataGridTextColumn Header="Status" Binding="{Binding BenchmarkIcon}" Width="60"/>
+                                                <DataGridTextColumn Header="Market Avg Cost" Binding="{Binding MarketAverageCostUSD, StringFormat=C6}" Width="140"/>
+                                                <DataGridTextColumn Header="Company Avg Cost" Binding="{Binding CompanyAverageCostUSD, StringFormat=C6}" Width="140"/>
+                                                <DataGridTextColumn Header="Market Position" Binding="{Binding FormattedMarketPosition}" Width="120"/>
+                                                <DataGridTextColumn Header="Cost Advantage" Binding="{Binding FormattedCostAdvantage}" Width="140"/>
+                                                <DataGridTextColumn Header="Competitive Index" Binding="{Binding CompetitiveIndexScore, StringFormat=N1}" Width="140"/>
+                                                <DataGridTextColumn Header="Performance Category" Binding="{Binding MarketPerformanceCategory}" Width="160"/>
+                                                <DataGridTextColumn Header="Benchmark Status" Binding="{Binding BenchmarkStatus}" Width="140"/>
+                                                <DataGridTextColumn Header="Optimization Opportunity" Binding="{Binding FormattedOptimizationOpportunity}" Width="180"/>
+                                                <DataGridTextColumn Header="Risk Level" Binding="{Binding RiskLevel}" Width="100"/>
+                                                <DataGridTextColumn Header="Strategic Recommendation" Binding="{Binding StrategicRecommendation}" Width="300"/>
+                                            </DataGrid.Columns>
+                                        </DataGrid>
+                                    </StackPanel>
+                                </TabItem>
+
+                                <!-- Help Tab -->
+                                <TabItem Header="❓ Help">
+                                    <ScrollViewer VerticalScrollBarVisibility="Auto">
+                                        <StackPanel Margin="20">
+                                            <TextBlock Text="Cost Analysis Calculations and Definitions" FontSize="18" FontWeight="Bold" 
+                                                     Margin="0,0,0,20" Foreground="#2c3e50"/>
+
+                                            <!-- Overview Calculations -->
+                                            <Border Background="#f8f9fa" BorderBrush="#dee2e6" BorderThickness="1" 
+                                                  CornerRadius="6" Padding="15" Margin="0,0,0,20">
+                                                <StackPanel>
+                                                    <TextBlock Text="📋 Overview" FontSize="16" FontWeight="SemiBold" 
+                                                             Margin="0,0,0,10" Foreground="#2c3e50"/>
+                                                    <TextBlock Text="• Total Procurement: Sum of all purchase values in USD within date range" FontSize="12" Margin="5,2"/>
+                                                    <TextBlock Text="• Avg Cost/Liter: Total procurement value ÷ Total volume in liters" FontSize="12" Margin="5,2"/>
+                                                    <TextBlock Text="• Avg Cost/Ton: Total procurement value ÷ Total volume in tons" FontSize="12" Margin="5,2"/>
+                                                    <TextBlock Text="• Price Volatility: Coefficient of variation (Standard Deviation ÷ Mean × 100) of monthly average costs" FontSize="12" Margin="5,2"/>
+                                                    <TextBlock Text="• Efficiency Score: Weighted average of consistency (100-volatility) and volume efficiency scores" FontSize="12" Margin="5,2"/>
+                                                    <TextBlock Text="• Best/Worst Supplier: Suppliers with lowest/highest average cost per liter" FontSize="12" Margin="5,2"/>
+                                                    <TextBlock Text="• Savings Opportunity: (Worst supplier avg cost - Best supplier avg cost) × Total volume" FontSize="12" Margin="5,2"/>
+                                                </StackPanel>
+                                            </Border>
+
+                                            <!-- Price Trends Calculations -->
+                                            <Border Background="#f8f9fa" BorderBrush="#dee2e6" BorderThickness="1" 
+                                                  CornerRadius="6" Padding="15" Margin="0,0,0,20">
+                                                <StackPanel>
+                                                    <TextBlock Text="📈 Price Trends" FontSize="16" FontWeight="SemiBold" 
+                                                             Margin="0,0,0,10" Foreground="#2c3e50"/>
+                                                    <TextBlock Text="• Avg Cost/L: Monthly total value ÷ Monthly total volume in liters" FontSize="12" Margin="5,2"/>
+                                                    <TextBlock Text="• Avg Cost/T: Monthly total value ÷ Monthly total volume in tons" FontSize="12" Margin="5,2"/>
+                                                    <TextBlock Text="• Price Change: ((Current month cost - Previous month cost) ÷ Previous month cost) × 100" FontSize="12" Margin="5,2"/>
+                                                    <TextBlock Text="• Volume Change: ((Current month volume - Previous month volume) ÷ Previous month volume) × 100" FontSize="12" Margin="5,2"/>
+                                                    <TextBlock Text="• Trend Direction: Increasing (above +2%), Decreasing (below -2%), or Stable (within ±2%)" FontSize="12" Margin="5,2"/>
+                                                    <TextBlock Text="• Volatility: Coefficient of variation of all supplier prices within the month" FontSize="12" Margin="5,2"/>
+                                                    <TextBlock Text="• Best/Worst Price: Lowest/highest average cost per liter among suppliers in that month" FontSize="12" Margin="5,2"/>
+                                                </StackPanel>
+                                            </Border>
+
+                                            <!-- Supplier Comparison Calculations -->
+                                            <Border Background="#f8f9fa" BorderBrush="#dee2e6" BorderThickness="1" 
+                                                  CornerRadius="6" Padding="15" Margin="0,0,0,20">
+                                                <StackPanel>
+                                                    <TextBlock Text="🏢 Supplier Comparison" FontSize="16" FontWeight="SemiBold" 
+                                                             Margin="0,0,0,10" Foreground="#2c3e50"/>
+                                                    <TextBlock Text="• Rank: Suppliers ordered by average cost per liter (lowest = rank 1)" FontSize="12" Margin="5,2"/>
+                                                    <TextBlock Text="• Avg Cost/L (USD): Total value in USD ÷ Total volume in liters for this supplier" FontSize="12" Margin="5,2"/>
+                                                    <TextBlock Text="• Avg Cost/T (USD): Total value in USD ÷ Total volume in tons for this supplier" FontSize="12" Margin="5,2"/>
+                                                    <TextBlock Text="• Avg Cost/L (Orig): Total value in original currency ÷ Total volume in liters" FontSize="12" Margin="5,2"/>
+                                                    <TextBlock Text="• Market Share: (Supplier's total value ÷ Total market value) × 100" FontSize="12" Margin="5,2"/>
+                                                    <TextBlock Text="• Price Consistency: 100 - Coefficient of variation of this supplier's transaction prices" FontSize="12" Margin="5,2"/>
+                                                    <TextBlock Text="• vs Market: ((Market average cost - Supplier cost) ÷ Market average cost) × 100" FontSize="12" Margin="5,2"/>
+                                                    <TextBlock Text="• Performance: Best in Class (rank 1), Highly Competitive (2-3), Competitive (4-5), Average (6-8), Below Average (9+)" FontSize="12" Margin="5,2"/>
+                                                    <TextBlock Text="• Payment Score: Percentage of invoices paid on or before due date" FontSize="12" Margin="5,2"/>
+                                                </StackPanel>
+                                            </Border>
+
+                                            <!-- Cost Variance Calculations -->
+                                            <Border Background="#f8f9fa" BorderBrush="#dee2e6" BorderThickness="1" 
+                                                  CornerRadius="6" Padding="15" Margin="0,0,0,20">
+                                                <StackPanel>
+                                                    <TextBlock Text="📊 Cost Variance" FontSize="16" FontWeight="SemiBold" 
+                                                             Margin="0,0,0,10" Foreground="#2c3e50"/>
+                                                    <TextBlock Text="• Budgeted Cost/L: Overall average cost per liter (rolling baseline)" FontSize="12" Margin="5,2"/>
+                                                    <TextBlock Text="• Variance Amount: Actual cost per liter - Budgeted cost per liter" FontSize="12" Margin="5,2"/>
+                                                    <TextBlock Text="• Variance %: (Variance amount ÷ Budgeted cost) × 100" FontSize="12" Margin="5,2"/>
+                                                    <TextBlock Text="• Volume Variance: Actual volume - Budgeted volume (average volume)" FontSize="12" Margin="5,2"/>
+                                                    <TextBlock Text="• Total Variance: Actual total value - Budgeted total value" FontSize="12" Margin="5,2"/>
+                                                    <TextBlock Text="• Category: Favorable (below 0%), Within Range (±5%), Unfavorable (above 0%)" FontSize="12" Margin="5,2"/>
+                                                    <TextBlock Text="• Primary Driver: Price Variance if |price variance| > |volume variance|, otherwise Volume Variance" FontSize="12" Margin="5,2"/>
+                                                </StackPanel>
+                                            </Border>
+
+                                            <!-- Procurement Efficiency Calculations -->
+                                            <Border Background="#f8f9fa" BorderBrush="#dee2e6" BorderThickness="1" 
+                                                  CornerRadius="6" Padding="15" Margin="0,0,0,20">
+                                                <StackPanel>
+                                                    <TextBlock Text="🎯 Procurement Efficiency" FontSize="16" FontWeight="SemiBold" 
+                                                             Margin="0,0,0,10" Foreground="#2c3e50"/>
+                                                    <TextBlock Text="• Efficiency Score: Weighted average (30% cost + 20% negotiation + 15% volume + 15% timing + 10% quality + 5% payment + 5% risk)" FontSize="12" Margin="5,2"/>
+                                                    <TextBlock Text="• Cost Optimization: Based on cost trend improvement over time (base 75 + improvement %)" FontSize="12" Margin="5,2"/>
+                                                    <TextBlock Text="• Price Negotiation: 100 - Price volatility (lower volatility = better negotiation)" FontSize="12" Margin="5,2"/>
+                                                    <TextBlock Text="• Volume Efficiency: (Average volume per transaction ÷ 5000) × 100, capped at 100" FontSize="12" Margin="5,2"/>
+                                                    <TextBlock Text="• Timing Efficiency: 85 if average days between purchases is 15-60, otherwise 60" FontSize="12" Margin="5,2"/>
+                                                    <TextBlock Text="• Quality Score: 100 - (Density volatility × 10), minimum 60" FontSize="12" Margin="5,2"/>
+                                                    <TextBlock Text="• Payment Terms: Score based on average payment terms (30+ days = 95, 15-30 = 85, 7-15 = 70, below 7 = 50)" FontSize="12" Margin="5,2"/>
+                                                    <TextBlock Text="• Risk Score: Supplier diversification score (supplier count × 20), minimum 40" FontSize="12" Margin="5,2"/>
+                                                    <TextBlock Text="• Optimal Purchases: Count of purchases at or below market average cost" FontSize="12" Margin="5,2"/>
+                                                    <TextBlock Text="• Potential Savings: Sum of excess costs above market average for sub-optimal purchases" FontSize="12" Margin="5,2"/>
+                                                    <TextBlock Text="• Grade: A (90 or above), B (80-89), C (70-79), D (60-69), F (below 60)" FontSize="12" Margin="5,2"/>
+                                                </StackPanel>
+                                            </Border>
+
+                                            <!-- Market Benchmarking Calculations -->
+                                            <Border Background="#f8f9fa" BorderBrush="#dee2e6" BorderThickness="1" 
+                                                  CornerRadius="6" Padding="15" Margin="0,0,0,20">
+                                                <StackPanel>
+                                                    <TextBlock Text="📊 Market Benchmarking" FontSize="16" FontWeight="SemiBold" 
+                                                             Margin="0,0,0,10" Foreground="#2c3e50"/>
+                                                    <TextBlock Text="• Market Avg Cost: Simulated market average (company cost ± 5% random variation)" FontSize="12" Margin="5,2"/>
+                                                    <TextBlock Text="• Market Position: ((Market avg - Company avg) ÷ Market avg) × 100 + 50, constrained to 5-95%" FontSize="12" Margin="5,2"/>
+                                                    <TextBlock Text="• Cost Advantage: Company average cost - Market average cost" FontSize="12" Margin="5,2"/>
+                                                    <TextBlock Text="• Competitive Index: (Market position - 50) × 2, scale -100 to +100" FontSize="12" Margin="5,2"/>
+                                                    <TextBlock Text="• Performance Category: Leading (80% or above), Competitive (60-79%), Below Average (40-59%), Underperforming (below 40%)" FontSize="12" Margin="5,2"/>
+                                                    <TextBlock Text="• Optimization Opportunity: Cost advantage × Total volume (if positive advantage)" FontSize="12" Margin="5,2"/>
+                                                    <TextBlock Text="• Risk Level: Low (Leading), Medium (Competitive), High (Below Average), Critical (Underperforming)" FontSize="12" Margin="5,2"/>
+                                                    <TextBlock Text="• Strategic Recommendation: Action plan based on performance category and market position" FontSize="12" Margin="5,2"/>
+                                                </StackPanel>
+                                            </Border>
+
+                                            <!-- General Notes -->
+                                            <Border Background="#e8f4fd" BorderBrush="#3498db" BorderThickness="1" 
+                                                  CornerRadius="6" Padding="15">
+                                                <StackPanel>
+                                                    <TextBlock Text="📝 General Notes" FontSize="16" FontWeight="SemiBold" 
+                                                             Margin="0,0,0,10" Foreground="#2c3e50"/>
+                                                    <TextBlock Text="• All calculations use FIFO (First-In, First-Out) allocation principles" FontSize="12" Margin="5,2"/>
+                                                    <TextBlock Text="• Currency conversions are applied using supplier-specific exchange rates" FontSize="12" Margin="5,2"/>
+                                                    <TextBlock Text="• Negative values are displayed in brackets () following accounting standards" FontSize="12" Margin="5,2"/>
+                                                    <TextBlock Text="• Quantities are shown with 3 decimal places (N3 format)" FontSize="12" Margin="5,2"/>
+                                                    <TextBlock Text="• Prices per liter use 6 decimal places (C6 format) for precision" FontSize="12" Margin="5,2"/>
+                                                    <TextBlock Text="• USD amounts use 2 decimal places (C2 format)" FontSize="12" Margin="5,2"/>
+                                                    <TextBlock Text="• Percentages are calculated to 1-2 decimal places based on context" FontSize="12" Margin="5,2"/>
+                                                    <TextBlock Text="• Market benchmarking uses simulated data in absence of external market data" FontSize="12" Margin="5,2"/>
+                                                </StackPanel>
+                                            </Border>
+                                        </StackPanel>
+                                    </ScrollViewer>
+                                </TabItem>
+
+                            </TabControl>
+                        </Grid>
+                    </ScrollViewer>
+                </TabItem>
+
                 <!-- More tabs will be added here -->
             </TabControl>
         </Grid>

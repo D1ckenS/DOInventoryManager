@@ -17,6 +17,7 @@ namespace DOInventoryManager.Views
         private readonly InventoryValuationService _inventoryService;
         private readonly FleetEfficiencyService _fleetEfficiencyService;
         private readonly FIFOAllocationDetailService _fifoDetailService;
+        private readonly CostAnalysisService _costAnalysisService;
         private SummaryService.MonthlySummaryResult? _currentSummary;
 
         public ReportsView()
@@ -28,10 +29,13 @@ namespace DOInventoryManager.Views
             _inventoryService = new InventoryValuationService();
             _fleetEfficiencyService = new FleetEfficiencyService();
             _fifoDetailService = new FIFOAllocationDetailService();
+            _costAnalysisService = new CostAnalysisService();
             FleetFromDatePicker.SelectedDate = DateTime.Today.AddMonths(-12);
             FleetToDatePicker.SelectedDate = DateTime.Today;
             FIFOFromDatePicker.SelectedDate = DateTime.Today.AddMonths(-6);
             FIFOToDatePicker.SelectedDate = DateTime.Today;
+            CostFromDatePicker.SelectedDate = DateTime.Today.AddMonths(-12);
+            CostToDatePicker.SelectedDate = DateTime.Today;
             _ = LoadDataAsync();
         }
 
@@ -718,6 +722,85 @@ namespace DOInventoryManager.Views
         private void ExportFIFODetail_Click(object sender, RoutedEventArgs e)
         {
             MessageBox.Show("FIFO allocation detail export feature coming soon!", "Export",
+                          MessageBoxButton.OK, MessageBoxImage.Information);
+        }
+
+        #endregion
+
+        #region Cost Analysis Report
+
+        private async Task GenerateCostAnalysisAsync()
+        {
+            try
+            {
+                var fromDate = CostFromDatePicker.SelectedDate;
+                var toDate = CostToDatePicker.SelectedDate;
+
+                if (!fromDate.HasValue || !toDate.HasValue)
+                {
+                    MessageBox.Show("Please select both from and to dates for cost analysis.", "Date Required",
+                                  MessageBoxButton.OK, MessageBoxImage.Warning);
+                    return;
+                }
+
+                if (fromDate > toDate)
+                {
+                    MessageBox.Show("From date cannot be later than to date.", "Invalid Date Range",
+                                  MessageBoxButton.OK, MessageBoxImage.Warning);
+                    return;
+                }
+
+                var costAnalysis = await _costAnalysisService.GenerateCostAnalysisAsync(fromDate, toDate);
+
+                // Update Overview
+                UpdateCostAnalysisOverview(costAnalysis.Overview);
+
+                // Update all grids
+                PriceTrendsGrid.ItemsSource = costAnalysis.PriceTrends;
+                SupplierComparisonGrid.ItemsSource = costAnalysis.SupplierComparison;
+                CostVarianceGrid.ItemsSource = costAnalysis.CostVariance;
+                ProcurementEfficiencyGrid.ItemsSource = costAnalysis.ProcurementEfficiency;
+                MarketBenchmarkingGrid.ItemsSource = costAnalysis.MarketBenchmarking;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error generating cost analysis: {ex.Message}", "Error",
+                              MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        private void UpdateCostAnalysisOverview(CostAnalysisService.CostAnalysisOverview overview)
+        {
+            // Update summary cards
+            CostTotalProcurementText.Text = overview.FormattedTotalProcurement;
+            CostAvgPerLiterText.Text = overview.AvgCostPerLiterUSD.ToString("C6");
+            CostAvgPerTonText.Text = overview.AvgCostPerTonUSD.ToString("C2");
+            CostVolatilityText.Text = $"{overview.PriceVolatilityIndex:N1}%";
+            CostEfficiencyScoreText.Text = overview.FormattedProcurementScore;
+
+            // Update key metrics
+            CostBestSupplierText.Text = $"Best Supplier: {overview.BestPerformingSupplier}";
+            CostWorstSupplierText.Text = $"Worst Supplier: {overview.WorstPerformingSupplier}";
+            CostSavingsOpportunityText.Text = $"Savings Opportunity: {overview.FormattedCostSavings}";
+            CostUniqueSuppliersText.Text = $"Unique Suppliers: {overview.UniqueSuppliersUsed}";
+
+            CostLowestPriceText.Text = $"Lowest Price: {overview.LowestCostPerLiterUSD:C6}";
+            CostHighestPriceText.Text = $"Highest Price: {overview.HighestCostPerLiterUSD:C6}";
+            CostMostEfficientMonthText.Text = $"Most Efficient Month: {overview.MostCostEfficientMonth}";
+            CostTotalTransactionsText.Text = $"Total Transactions: {overview.TotalPurchaseTransactions}";
+        }
+
+        private async void GenerateCostAnalysis_Click(object sender, RoutedEventArgs e)
+        {
+            await GenerateCostAnalysisAsync();
+            await CreateAutoBackupAsync("CostAnalysisGenerated");
+            MessageBox.Show("Cost analysis report generated successfully!", "Success",
+                          MessageBoxButton.OK, MessageBoxImage.Information);
+        }
+
+        private void ExportCostAnalysis_Click(object sender, RoutedEventArgs e)
+        {
+            MessageBox.Show("Cost analysis export feature coming soon!", "Export",
                           MessageBoxButton.OK, MessageBoxImage.Information);
         }
 
