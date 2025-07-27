@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
 using System.Windows.Media;
 using System.Windows.Controls;
 using DOInventoryManager.Data;
@@ -14,6 +15,7 @@ namespace DOInventoryManager.Views
         private readonly ReportService _reportService;
         private readonly AlertService _alertService;
         private readonly InventoryValuationService _inventoryService;
+        private readonly FleetEfficiencyService _fleetEfficiencyService;
         private SummaryService.MonthlySummaryResult? _currentSummary;
 
         public ReportsView()
@@ -22,7 +24,10 @@ namespace DOInventoryManager.Views
             _summaryService = new SummaryService();
             _reportService = new ReportService();
             _alertService = new AlertService();
-            _inventoryService = new InventoryValuationService(); // Add this line
+            _inventoryService = new InventoryValuationService();
+            _fleetEfficiencyService = new FleetEfficiencyService();
+            FleetFromDatePicker.SelectedDate = DateTime.Today.AddMonths(-12);
+            FleetToDatePicker.SelectedDate = DateTime.Today;
             _ = LoadDataAsync();
         }
 
@@ -422,17 +427,17 @@ namespace DOInventoryManager.Views
                     switch (payment.PaymentStatus)
                     {
                         case AlertService.PaymentStatus.Overdue:
-                            e.Row.Background = new SolidColorBrush(Color.FromRgb(255, 235, 238)); // Light red
-                            e.Row.Foreground = new SolidColorBrush(Color.FromRgb(220, 53, 69)); // Red text
+                            e.Row.Background = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromRgb(255, 235, 238)); // Light red
+                            e.Row.Foreground = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromRgb(220, 53, 69)); // Red text
                             break;
                         case AlertService.PaymentStatus.DueToday:
-                            e.Row.Background = new SolidColorBrush(Color.FromRgb(255, 243, 224)); // Light orange
-                            e.Row.Foreground = new SolidColorBrush(Color.FromRgb(253, 126, 20)); // Orange text
+                            e.Row.Background = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromRgb(255, 243, 224)); // Light orange
+                            e.Row.Foreground = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromRgb(253, 126, 20)); // Orange text
                             break;
                         case AlertService.PaymentStatus.DueTomorrow:
                         case AlertService.PaymentStatus.DueThisWeek:
-                            e.Row.Background = new SolidColorBrush(Color.FromRgb(255, 252, 230)); // Light yellow
-                            e.Row.Foreground = new SolidColorBrush(Color.FromRgb(255, 193, 7)); // Yellow text
+                            e.Row.Background = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromRgb(255, 252, 230)); // Light yellow
+                            e.Row.Foreground = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromRgb(255, 193, 7)); // Yellow text
                             break;
                     }
                 }
@@ -493,6 +498,78 @@ namespace DOInventoryManager.Views
         private void ExportInventory_Click(object sender, RoutedEventArgs e)
         {
             MessageBox.Show("Inventory valuation export feature coming soon!", "Export",
+                          MessageBoxButton.OK, MessageBoxImage.Information);
+        }
+
+        #endregion
+
+        #region Fleet Efficiency Report
+
+        private async Task GenerateFleetEfficiencyAsync()
+        {
+            try
+            {
+                var fromDate = FleetFromDatePicker.SelectedDate;
+                var toDate = FleetToDatePicker.SelectedDate;
+
+                if (!fromDate.HasValue || !toDate.HasValue)
+                {
+                    MessageBox.Show("Please select both from and to dates.", "Validation Error",
+                                  MessageBoxButton.OK, MessageBoxImage.Warning);
+                    return;
+                }
+
+                if (fromDate.Value > toDate.Value)
+                {
+                    MessageBox.Show("From date cannot be later than to date.", "Validation Error",
+                                  MessageBoxButton.OK, MessageBoxImage.Warning);
+                    return;
+                }
+
+                var fleetReport = await _fleetEfficiencyService.GenerateFleetEfficiencyAnalysisAsync(fromDate.Value, toDate.Value);
+
+                // Update Fleet Overview summary cards
+                FleetActiveVesselsText.Text = fleetReport.Overview.TotalActiveVessels.ToString();
+                FleetTotalLegsText.Text = fleetReport.Overview.TotalLegsCompleted.ToString();
+                FleetAvgEfficiencyLText.Text = $"{fleetReport.Overview.AvgFleetEfficiencyLPerLeg:N3}";
+                FleetAvgCostPerLegText.Text = fleetReport.Overview.AvgCostPerLegUSD < 0
+                    ? $"({Math.Abs(fleetReport.Overview.AvgCostPerLegUSD):C2})"
+                    : fleetReport.Overview.AvgCostPerLegUSD.ToString("C2");
+                FleetTotalCostText.Text = fleetReport.Overview.TotalFleetCostUSD < 0
+                    ? $"({Math.Abs(fleetReport.Overview.TotalFleetCostUSD):C2})"
+                    : fleetReport.Overview.TotalFleetCostUSD.ToString("C2");
+
+                // Update Best Performers cards
+                FleetBestVesselText.Text = fleetReport.Overview.MostEfficientVessel;
+                FleetBestRouteText.Text = fleetReport.Overview.BestRoute;
+                FleetBestRouteEfficiencyText.Text = $"{fleetReport.Overview.BestRouteEfficiency:N3} L/Leg";
+
+                // Update all grids
+                VesselPerformanceGrid.ItemsSource = fleetReport.VesselEfficiency;
+                RouteComparisonGrid.ItemsSource = fleetReport.RouteComparison;
+                MonthlyTrendsGrid.ItemsSource = fleetReport.MonthlyTrends;
+                EfficiencyRankingsGrid.ItemsSource = fleetReport.EfficiencyRankings;
+                CostEfficiencyGrid.ItemsSource = fleetReport.CostEfficiency;
+                SeasonalPatternsGrid.ItemsSource = fleetReport.SeasonalPatterns;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error generating fleet efficiency analysis: {ex.Message}", "Error",
+                              MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        private async void GenerateFleetEfficiency_Click(object sender, RoutedEventArgs e)
+        {
+            await GenerateFleetEfficiencyAsync();
+            await CreateAutoBackupAsync("FleetEfficiencyGenerated");
+            MessageBox.Show("Fleet efficiency analysis generated successfully!", "Success",
+                          MessageBoxButton.OK, MessageBoxImage.Information);
+        }
+
+        private void ExportFleetEfficiency_Click(object sender, RoutedEventArgs e)
+        {
+            MessageBox.Show("Fleet efficiency export feature coming soon!", "Export",
                           MessageBoxButton.OK, MessageBoxImage.Information);
         }
 

@@ -1,6 +1,7 @@
 ﻿<UserControl x:Class="DOInventoryManager.Views.ReportsView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:sys="clr-namespace:System;assembly=mscorlib">
 
     <ScrollViewer VerticalScrollBarVisibility="Auto">
         <Grid Margin="20">
@@ -1085,6 +1086,352 @@
                             </TabItem>
                         </TabControl>
                     </Grid>
+                </TabItem>
+
+                <!-- Fleet Efficiency Analysis Tab -->
+                <TabItem Header="🚢 Fleet Efficiency">
+                    <ScrollViewer VerticalScrollBarVisibility="Auto">
+                        <Grid Margin="20">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <!-- Controls -->
+                                <RowDefinition Height="*"/>
+                                <!-- Content -->
+                            </Grid.RowDefinitions>
+
+                            <!-- Controls -->
+                            <Border Grid.Row="0" Background="#f8f9fa" BorderBrush="#dee2e6" BorderThickness="1" 
+                                    CornerRadius="8" Padding="20" Margin="0,0,0,20">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <StackPanel Grid.Column="0" Orientation="Horizontal">
+                                        <Button x:Name="GenerateFleetEfficiencyBtn" Content="🚢 Generate Fleet Analysis" 
+                                                  Background="#007bff" Foreground="White" BorderThickness="0" 
+                                                  Padding="15,10" FontWeight="SemiBold"
+                                                  Click="GenerateFleetEfficiency_Click"/>
+
+                                        <TextBlock Text="Comprehensive fleet performance analysis" 
+                                                    VerticalAlignment="Center" Margin="20,0,0,0" 
+                                                    FontStyle="Italic" Foreground="Gray"/>
+
+                                        <Border Margin="20,0,0,0" Background="#e3f2fd" BorderBrush="#1976d2" BorderThickness="1" 
+                                                CornerRadius="4" Padding="10,5">
+                                            <StackPanel Orientation="Horizontal">
+                                                <TextBlock Text="📅 Period:" FontWeight="SemiBold" VerticalAlignment="Center" Margin="0,0,10,0"/>
+                                                <DatePicker x:Name="FleetFromDatePicker" SelectedDate="{x:Static sys:DateTime.Today}" 
+                                                            Margin="0,0,10,0" FirstDayOfWeek="Sunday"/>
+                                                <TextBlock Text="to" VerticalAlignment="Center" Margin="0,0,10,0"/>
+                                                <DatePicker x:Name="FleetToDatePicker" SelectedDate="{x:Static sys:DateTime.Today}" 
+                                                            FirstDayOfWeek="Sunday"/>
+                                            </StackPanel>
+                                        </Border>
+                                    </StackPanel>
+
+                                    <StackPanel Grid.Column="1" Orientation="Horizontal">
+                                        <Button x:Name="ExportFleetEfficiencyBtn" Content="📤 Export" 
+                                                  Background="#28a745" Foreground="White" BorderThickness="0" 
+                                                  Padding="15,10" FontWeight="SemiBold"
+                                                  Click="ExportFleetEfficiency_Click"/>
+                                    </StackPanel>
+                                </Grid>
+                            </Border>
+
+                            <!-- Fleet Efficiency Tabs -->
+                            <TabControl Grid.Row="1" x:Name="FleetEfficiencyTabControl">
+
+                                <!-- Fleet Overview Tab -->
+                                <TabItem Header="📊 Fleet Overview">
+                                    <ScrollViewer VerticalScrollBarVisibility="Auto">
+                                        <StackPanel Margin="20">
+                                            <TextBlock Text="Fleet Performance Overview" FontSize="16" FontWeight="SemiBold" 
+                                                        Margin="0,0,0,15" Foreground="#2c3e50"/>
+
+                                            <!-- Summary Cards -->
+                                            <Border Background="#e8f5e8" BorderBrush="#4caf50" BorderThickness="1" 
+                                                    CornerRadius="8" Padding="20" Margin="0,0,0,20">
+                                                <Grid>
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="*"/>
+                                                        <ColumnDefinition Width="*"/>
+                                                        <ColumnDefinition Width="*"/>
+                                                        <ColumnDefinition Width="*"/>
+                                                        <ColumnDefinition Width="*"/>
+                                                    </Grid.ColumnDefinitions>
+
+                                                    <StackPanel Grid.Column="0" HorizontalAlignment="Center">
+                                                        <TextBlock Text="🚢 Active Vessels" FontWeight="SemiBold" HorizontalAlignment="Center" FontSize="12"/>
+                                                        <TextBlock x:Name="FleetActiveVesselsText" Text="0" FontSize="16" FontWeight="Bold" 
+                                                                    HorizontalAlignment="Center" Foreground="#2e7d32"/>
+                                                    </StackPanel>
+
+                                                    <StackPanel Grid.Column="1" HorizontalAlignment="Center">
+                                                        <TextBlock Text="📍 Total Legs" FontWeight="SemiBold" HorizontalAlignment="Center" FontSize="12"/>
+                                                        <TextBlock x:Name="FleetTotalLegsText" Text="0" FontSize="16" FontWeight="Bold" 
+                                                                    HorizontalAlignment="Center" Foreground="#2e7d32"/>
+                                                    </StackPanel>
+
+                                                    <StackPanel Grid.Column="2" HorizontalAlignment="Center">
+                                                        <TextBlock Text="⛽ Avg L/Leg" FontWeight="SemiBold" HorizontalAlignment="Center" FontSize="12"/>
+                                                        <TextBlock x:Name="FleetAvgEfficiencyLText" Text="0.000" FontSize="16" FontWeight="Bold" 
+                                                                    HorizontalAlignment="Center" Foreground="#2e7d32"/>
+                                                    </StackPanel>
+
+                                                    <StackPanel Grid.Column="3" HorizontalAlignment="Center">
+                                                        <TextBlock Text="💰 Avg Cost/Leg" FontWeight="SemiBold" HorizontalAlignment="Center" FontSize="12"/>
+                                                        <TextBlock x:Name="FleetAvgCostPerLegText" Text="$0.00" FontSize="16" FontWeight="Bold" 
+                                                                    HorizontalAlignment="Center" Foreground="#2e7d32"/>
+                                                    </StackPanel>
+
+                                                    <StackPanel Grid.Column="4" HorizontalAlignment="Center">
+                                                        <TextBlock Text="💲 Total Fleet Cost" FontWeight="SemiBold" HorizontalAlignment="Center" FontSize="12"/>
+                                                        <TextBlock x:Name="FleetTotalCostText" Text="$0.00" FontSize="16" FontWeight="Bold" 
+                                                                    HorizontalAlignment="Center" Foreground="#2e7d32"/>
+                                                    </StackPanel>
+                                                </Grid>
+                                            </Border>
+
+                                            <!-- Best Performers Cards -->
+                                            <Border Background="#fff3cd" BorderBrush="#ffc107" BorderThickness="1" 
+                                                    CornerRadius="8" Padding="20" Margin="0,0,0,20">
+                                                <Grid>
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="*"/>
+                                                        <ColumnDefinition Width="*"/>
+                                                        <ColumnDefinition Width="*"/>
+                                                    </Grid.ColumnDefinitions>
+
+                                                    <StackPanel Grid.Column="0" HorizontalAlignment="Center">
+                                                        <TextBlock Text="🏆 Most Efficient Vessel" FontWeight="SemiBold" HorizontalAlignment="Center" FontSize="12"/>
+                                                        <TextBlock x:Name="FleetBestVesselText" Text="N/A" FontSize="14" FontWeight="Bold" 
+                                                                    HorizontalAlignment="Center" Foreground="#f57c00"/>
+                                                    </StackPanel>
+
+                                                    <StackPanel Grid.Column="1" HorizontalAlignment="Center">
+                                                        <TextBlock Text="🎯 Best Route" FontWeight="SemiBold" HorizontalAlignment="Center" FontSize="12"/>
+                                                        <TextBlock x:Name="FleetBestRouteText" Text="N/A" FontSize="14" FontWeight="Bold" 
+                                                                    HorizontalAlignment="Center" Foreground="#f57c00"/>
+                                                    </StackPanel>
+
+                                                    <StackPanel Grid.Column="2" HorizontalAlignment="Center">
+                                                        <TextBlock Text="📉 Best Route Efficiency" FontWeight="SemiBold" HorizontalAlignment="Center" FontSize="12"/>
+                                                        <TextBlock x:Name="FleetBestRouteEfficiencyText" Text="0.000 L/Leg" FontSize="14" FontWeight="Bold" 
+                                                                    HorizontalAlignment="Center" Foreground="#f57c00"/>
+                                                    </StackPanel>
+                                                </Grid>
+                                            </Border>
+                                        </StackPanel>
+                                    </ScrollViewer>
+                                </TabItem>
+
+                                <!-- Vessel Performance Tab -->
+                                <TabItem Header="🚢 Vessel Performance">
+                                    <StackPanel Margin="20">
+                                        <TextBlock Text="Individual Vessel Performance Analysis" FontSize="16" FontWeight="SemiBold" 
+                                                    Margin="0,0,0,15" Foreground="#2c3e50"/>
+
+                                        <DataGrid x:Name="VesselPerformanceGrid" 
+                                                  AutoGenerateColumns="False" 
+                                                  CanUserAddRows="False"
+                                                  CanUserDeleteRows="False"
+                                                  GridLinesVisibility="Horizontal"
+                                                  HeadersVisibility="Column"
+                                                  Background="White"
+                                                  BorderThickness="1"
+                                                  BorderBrush="#dee2e6"
+                                                  MaxHeight="600">
+
+                                            <DataGrid.Columns>
+                                                <DataGridTextColumn Header="Vessel" Binding="{Binding VesselName}" Width="120"/>
+                                                <DataGridTextColumn Header="Type" Binding="{Binding VesselType}" Width="80"/>
+                                                <DataGridTextColumn Header="Route" Binding="{Binding Route}" Width="180"/>
+                                                <DataGridTextColumn Header="Efficiency L/Leg" Binding="{Binding EfficiencyLPerLeg, StringFormat=N3}" Width="120"/>
+                                                <DataGridTextColumn Header="Efficiency T/Leg" Binding="{Binding EfficiencyTPerLeg, StringFormat=N3}" Width="120"/>
+                                                <DataGridTextColumn Header="Cost/Leg" Binding="{Binding FormattedCostPerLeg}" Width="120"/>
+                                                <DataGridTextColumn Header="Cost/Liter" Binding="{Binding CostPerLiterUSD, StringFormat=C6}" Width="120"/>
+                                                <DataGridTextColumn Header="Total Legs" Binding="{Binding TotalLegs}" Width="100"/>
+                                                <DataGridTextColumn Header="Total Cost" Binding="{Binding FormattedTotalCost}" Width="120"/>
+                                                <DataGridTextColumn Header="Rank" Binding="{Binding EfficiencyRank}" Width="80"/>
+                                                <DataGridTextColumn Header="Grade" Binding="{Binding EfficiencyGrade}" Width="100"/>
+                                                <DataGridTextColumn Header="Months Active" Binding="{Binding MonthsActive}" Width="120"/>
+                                            </DataGrid.Columns>
+                                        </DataGrid>
+                                    </StackPanel>
+                                </TabItem>
+
+                                <!-- Route Analysis Tab -->
+                                <TabItem Header="🛣️ Route Analysis">
+                                    <StackPanel Margin="20">
+                                        <TextBlock Text="Route Performance Comparison" FontSize="16" FontWeight="SemiBold" 
+                                                    Margin="0,0,0,15" Foreground="#2c3e50"/>
+
+                                        <DataGrid x:Name="RouteComparisonGrid" 
+                                                  AutoGenerateColumns="False" 
+                                                  CanUserAddRows="False"
+                                                  CanUserDeleteRows="False"
+                                                  GridLinesVisibility="Horizontal"
+                                                  HeadersVisibility="Column"
+                                                  Background="White"
+                                                  BorderThickness="1"
+                                                  BorderBrush="#dee2e6"
+                                                  MaxHeight="600">
+
+                                            <DataGrid.Columns>
+                                                <DataGridTextColumn Header="Route Type" Binding="{Binding RouteType}" Width="120"/>
+                                                <DataGridTextColumn Header="Route Name" Binding="{Binding RouteName}" Width="180"/>
+                                                <DataGridTextColumn Header="Vessels" Binding="{Binding VesselCount}" Width="80"/>
+                                                <DataGridTextColumn Header="Avg L/Leg" Binding="{Binding AvgEfficiencyLPerLeg, StringFormat=N3}" Width="120"/>
+                                                <DataGridTextColumn Header="Avg T/Leg" Binding="{Binding AvgEfficiencyTPerLeg, StringFormat=N3}" Width="120"/>
+                                                <DataGridTextColumn Header="Avg Cost/Leg" Binding="{Binding FormattedAvgCostPerLeg}" Width="120"/>
+                                                <DataGridTextColumn Header="Total Legs" Binding="{Binding TotalLegs}" Width="100"/>
+                                                <DataGridTextColumn Header="Total Cost" Binding="{Binding FormattedTotalCost}" Width="120"/>
+                                                <DataGridTextColumn Header="Best Vessel" Binding="{Binding BestVesselName}" Width="120"/>
+                                                <DataGridTextColumn Header="Best Efficiency" Binding="{Binding BestVesselEfficiencyL, StringFormat=N3}" Width="120"/>
+                                                <DataGridTextColumn Header="Efficiency Range" Binding="{Binding EfficiencyVariance, StringFormat=N3}" Width="120"/>
+                                            </DataGrid.Columns>
+                                        </DataGrid>
+                                    </StackPanel>
+                                </TabItem>
+
+                                <!-- Performance Trends Tab -->
+                                <TabItem Header="📈 Performance Trends">
+                                    <StackPanel Margin="20">
+                                        <TextBlock Text="Monthly Fleet Performance Trends" FontSize="16" FontWeight="SemiBold" 
+                                                    Margin="0,0,0,15" Foreground="#2c3e50"/>
+
+                                        <DataGrid x:Name="MonthlyTrendsGrid" 
+                                                  AutoGenerateColumns="False" 
+                                                  CanUserAddRows="False"
+                                                  CanUserDeleteRows="False"
+                                                  GridLinesVisibility="Horizontal"
+                                                  HeadersVisibility="Column"
+                                                  Background="White"
+                                                  BorderThickness="1"
+                                                  BorderBrush="#dee2e6"
+                                                  MaxHeight="600">
+
+                                            <DataGrid.Columns>
+                                                <DataGridTextColumn Header="Month" Binding="{Binding Month}" Width="100"/>
+                                                <DataGridTextColumn Header="Fleet L/Leg" Binding="{Binding FleetAvgEfficiencyL, StringFormat=N3}" Width="120"/>
+                                                <DataGridTextColumn Header="Fleet T/Leg" Binding="{Binding FleetAvgEfficiencyT, StringFormat=N3}" Width="120"/>
+                                                <DataGridTextColumn Header="Avg Cost/Leg" Binding="{Binding FormattedFleetCostPerLeg}" Width="120"/>
+                                                <DataGridTextColumn Header="Total Legs" Binding="{Binding TotalLegs}" Width="100"/>
+                                                <DataGridTextColumn Header="Active Vessels" Binding="{Binding ActiveVessels}" Width="120"/>
+                                                <DataGridTextColumn Header="Total Cost" Binding="{Binding FormattedTotalCost}" Width="120"/>
+                                                <DataGridTextColumn Header="L/Leg Change" Binding="{Binding FormattedMoMChangeL}" Width="120"/>
+                                                <DataGridTextColumn Header="T/Leg Change" Binding="{Binding FormattedMoMChangeT}" Width="120"/>
+                                                <DataGridTextColumn Header="Cost Change" Binding="{Binding FormattedCostChange}" Width="120"/>
+                                            </DataGrid.Columns>
+                                        </DataGrid>
+                                    </StackPanel>
+                                </TabItem>
+
+                                <!-- Efficiency Rankings Tab -->
+                                <TabItem Header="🏆 Rankings">
+                                    <StackPanel Margin="20">
+                                        <TextBlock Text="Fleet Efficiency Rankings" FontSize="16" FontWeight="SemiBold" 
+                                                    Margin="0,0,0,15" Foreground="#2c3e50"/>
+
+                                        <DataGrid x:Name="EfficiencyRankingsGrid" 
+                                                  AutoGenerateColumns="False" 
+                                                  CanUserAddRows="False"
+                                                  CanUserDeleteRows="False"
+                                                  GridLinesVisibility="Horizontal"
+                                                  HeadersVisibility="Column"
+                                                  Background="White"
+                                                  BorderThickness="1"
+                                                  BorderBrush="#dee2e6"
+                                                  MaxHeight="600">
+
+                                            <DataGrid.Columns>
+                                                <DataGridTextColumn Header="Rank" Binding="{Binding Rank}" Width="60"/>
+                                                <DataGridTextColumn Header="Vessel" Binding="{Binding VesselName}" Width="120"/>
+                                                <DataGridTextColumn Header="Type" Binding="{Binding VesselType}" Width="80"/>
+                                                <DataGridTextColumn Header="Route" Binding="{Binding Route}" Width="160"/>
+                                                <DataGridTextColumn Header="L/Leg" Binding="{Binding EfficiencyLPerLeg, StringFormat=N3}" Width="100"/>
+                                                <DataGridTextColumn Header="T/Leg" Binding="{Binding EfficiencyTPerLeg, StringFormat=N3}" Width="100"/>
+                                                <DataGridTextColumn Header="Cost/Leg" Binding="{Binding FormattedCostPerLeg}" Width="120"/>
+                                                <DataGridTextColumn Header="Performance" Binding="{Binding PerformanceCategory}" Width="120"/>
+                                                <DataGridTextColumn Header="vs Fleet Avg" Binding="{Binding FormattedBenchmarkDiff}" Width="120"/>
+                                                <DataGridTextColumn Header="Trend" Binding="{Binding TrendDirection}" Width="100"/>
+                                                <DataGridTextColumn Header="Score" Binding="{Binding OverallEfficiencyScore, StringFormat=N1}" Width="80"/>
+                                            </DataGrid.Columns>
+                                        </DataGrid>
+                                    </StackPanel>
+                                </TabItem>
+
+                                <!-- Cost Analysis Tab -->
+                                <TabItem Header="💰 Cost Analysis">
+                                    <StackPanel Margin="20">
+                                        <TextBlock Text="FIFO Cost Efficiency Analysis" FontSize="16" FontWeight="SemiBold" 
+                                                    Margin="0,0,0,15" Foreground="#2c3e50"/>
+
+                                        <DataGrid x:Name="CostEfficiencyGrid" 
+                                                  AutoGenerateColumns="False" 
+                                                  CanUserAddRows="False"
+                                                  CanUserDeleteRows="False"
+                                                  GridLinesVisibility="Horizontal"
+                                                  HeadersVisibility="Column"
+                                                  Background="White"
+                                                  BorderThickness="1"
+                                                  BorderBrush="#dee2e6"
+                                                  MaxHeight="600">
+
+                                            <DataGrid.Columns>
+                                                <DataGridTextColumn Header="Vessel" Binding="{Binding VesselName}" Width="120"/>
+                                                <DataGridTextColumn Header="Type" Binding="{Binding VesselType}" Width="80"/>
+                                                <DataGridTextColumn Header="Total FIFO Cost" Binding="{Binding FormattedTotalFIFOCost}" Width="140"/>
+                                                <DataGridTextColumn Header="Cost/Liter" Binding="{Binding CostPerLiterFIFO, StringFormat=C6}" Width="120"/>
+                                                <DataGridTextColumn Header="Cost/Ton" Binding="{Binding CostPerTonFIFO, StringFormat=C2}" Width="120"/>
+                                                <DataGridTextColumn Header="Cost/Leg" Binding="{Binding FormattedCostPerLeg}" Width="120"/>
+                                                <DataGridTextColumn Header="Avg Fuel Price" Binding="{Binding FormattedAvgFuelPrice}" Width="120"/>
+                                                <DataGridTextColumn Header="Suppliers" Binding="{Binding NumberOfSuppliers}" Width="100"/>
+                                                <DataGridTextColumn Header="Procurement Eff" Binding="{Binding FormattedProcurementEff}" Width="140"/>
+                                                <DataGridTextColumn Header="Cost Rank" Binding="{Binding CostEfficiencyRank}" Width="100"/>
+                                            </DataGrid.Columns>
+                                        </DataGrid>
+                                    </StackPanel>
+                                </TabItem>
+
+                                <!-- Seasonal Patterns Tab -->
+                                <TabItem Header="🌍 Seasonal Patterns">
+                                    <StackPanel Margin="20">
+                                        <TextBlock Text="Seasonal Efficiency Patterns" FontSize="16" FontWeight="SemiBold" 
+                                                    Margin="0,0,0,15" Foreground="#2c3e50"/>
+
+                                        <DataGrid x:Name="SeasonalPatternsGrid" 
+                                                  AutoGenerateColumns="False" 
+                                                  CanUserAddRows="False"
+                                                  CanUserDeleteRows="False"
+                                                  GridLinesVisibility="Horizontal"
+                                                  HeadersVisibility="Column"
+                                                  Background="White"
+                                                  BorderThickness="1"
+                                                  BorderBrush="#dee2e6"
+                                                  MaxHeight="600">
+
+                                            <DataGrid.Columns>
+                                                <DataGridTextColumn Header="Season" Binding="{Binding SeasonName}" Width="100"/>
+                                                <DataGridTextColumn Header="Quarter" Binding="{Binding Season}" Width="80"/>
+                                                <DataGridTextColumn Header="Avg L/Leg" Binding="{Binding AvgEfficiencyL, StringFormat=N3}" Width="120"/>
+                                                <DataGridTextColumn Header="Avg T/Leg" Binding="{Binding AvgEfficiencyT, StringFormat=N3}" Width="120"/>
+                                                <DataGridTextColumn Header="Avg Cost/Leg" Binding="{Binding FormattedAvgCostPerLeg}" Width="120"/>
+                                                <DataGridTextColumn Header="Seasonal Variance" Binding="{Binding SeasonalVariance, StringFormat=N3}" Width="140"/>
+                                                <DataGridTextColumn Header="Data Points" Binding="{Binding DataPoints}" Width="120"/>
+                                                <DataGridTextColumn Header="YoY Change" Binding="{Binding FormattedYoYChange}" Width="120"/>
+                                                <DataGridTextColumn Header="Weather Impact" Binding="{Binding WeatherImpact}" Width="140"/>
+                                                <DataGridTextColumn Header="Capacity Util" Binding="{Binding CapacityUtilization, StringFormat=N1}" Width="120"/>
+                                            </DataGrid.Columns>
+                                        </DataGrid>
+                                    </StackPanel>
+                                </TabItem>
+
+                            </TabControl>
+                        </Grid>
+                    </ScrollViewer>
                 </TabItem>
 
                 <!-- More tabs will be added here -->

@@ -264,7 +264,7 @@ namespace DOInventoryManager.Services
                     {
                         var overduePurchases = g.Where(p => p.DueDate!.Value.Date < today).ToList();
                         var avgDaysOverdue = overduePurchases.Any()
-                            ? (decimal)overduePurchases.Average(p => (today - p.DueDate!.Value.Date).Days)
+                            ? (decimal)overduePurchases.Average(p => (double)(today - p.DueDate!.Value.Date).Days)
                             : 0m;
 
                         return new SupplierPaymentSummary
