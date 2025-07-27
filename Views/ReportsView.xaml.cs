@@ -18,6 +18,7 @@ namespace DOInventoryManager.Views
         private readonly FleetEfficiencyService _fleetEfficiencyService;
         private readonly FIFOAllocationDetailService _fifoDetailService;
         private readonly CostAnalysisService _costAnalysisService;
+        private readonly RoutePerformanceService _routePerformanceService;
         private SummaryService.MonthlySummaryResult? _currentSummary;
 
         public ReportsView()
@@ -30,12 +31,15 @@ namespace DOInventoryManager.Views
             _fleetEfficiencyService = new FleetEfficiencyService();
             _fifoDetailService = new FIFOAllocationDetailService();
             _costAnalysisService = new CostAnalysisService();
+            _routePerformanceService = new RoutePerformanceService();
             FleetFromDatePicker.SelectedDate = DateTime.Today.AddMonths(-12);
             FleetToDatePicker.SelectedDate = DateTime.Today;
             FIFOFromDatePicker.SelectedDate = DateTime.Today.AddMonths(-6);
             FIFOToDatePicker.SelectedDate = DateTime.Today;
             CostFromDatePicker.SelectedDate = DateTime.Today.AddMonths(-12);
             CostToDatePicker.SelectedDate = DateTime.Today;
+            RouteFromDatePicker.SelectedDate = DateTime.Today.AddMonths(-12);
+            RouteToDatePicker.SelectedDate = DateTime.Today;
             _ = LoadDataAsync();
         }
 
@@ -801,6 +805,85 @@ namespace DOInventoryManager.Views
         private void ExportCostAnalysis_Click(object sender, RoutedEventArgs e)
         {
             MessageBox.Show("Cost analysis export feature coming soon!", "Export",
+                          MessageBoxButton.OK, MessageBoxImage.Information);
+        }
+
+        #endregion
+
+        #region Route Performance Report
+
+        private async Task GenerateRoutePerformanceAsync()
+        {
+            try
+            {
+                var fromDate = RouteFromDatePicker.SelectedDate;
+                var toDate = RouteToDatePicker.SelectedDate;
+
+                if (!fromDate.HasValue || !toDate.HasValue)
+                {
+                    MessageBox.Show("Please select both from and to dates for route performance analysis.", "Date Required",
+                                  MessageBoxButton.OK, MessageBoxImage.Warning);
+                    return;
+                }
+
+                if (fromDate > toDate)
+                {
+                    MessageBox.Show("From date cannot be later than to date.", "Invalid Date Range",
+                                  MessageBoxButton.OK, MessageBoxImage.Warning);
+                    return;
+                }
+
+                var routePerformance = await _routePerformanceService.GenerateRoutePerformanceAsync(fromDate, toDate);
+
+                // Update Overview
+                UpdateRoutePerformanceOverview(routePerformance.Overview);
+
+                // Update all grids
+                RoutePerformanceComparisonGrid.ItemsSource = routePerformance.RouteComparisons;
+                RoutePerformanceVesselGrid.ItemsSource = routePerformance.VesselPerformance;
+                RoutePerformanceTrendsGrid.ItemsSource = routePerformance.EfficiencyTrends;
+                RoutePerformanceCostGrid.ItemsSource = routePerformance.CostAnalysis;
+                RoutePerformanceOptimizationGrid.ItemsSource = routePerformance.OptimizationRecommendations;
+                RoutePerformanceProfitabilityGrid.ItemsSource = routePerformance.ProfitabilityAnalysis;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error generating route performance analysis: {ex.Message}", "Error",
+                              MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        private void UpdateRoutePerformanceOverview(RoutePerformanceService.RoutePerformanceOverview overview)
+        {
+            // Update summary cards
+            RouteTotalActiveRoutesText.Text = overview.TotalActiveRoutes.ToString();
+            RouteTotalLegsText.Text = overview.TotalLegsCompleted.ToString("N0");
+            RouteTotalDistanceText.Text = $"{overview.TotalRouteDistanceKm:N0} km";
+            RouteTotalCostText.Text = overview.FormattedTotalCost;
+
+            // Update performance metrics
+            RouteMostEfficientText.Text = $"Most Efficient: {overview.MostEfficientRoute}";
+            RouteLeastEfficientText.Text = $"Least Efficient: {overview.LeastEfficientRoute}";
+            RouteEfficiencyGapText.Text = $"Efficiency Gap: {overview.FormattedRouteGap}";
+            RouteAvgCostPerKmText.Text = $"Avg Cost/km: {overview.AvgCostPerKm:C6}";
+
+            RouteMostProfitableText.Text = $"Most Profitable: {overview.MostProfitableRoute}";
+            RouteLeastProfitableText.Text = $"Least Profitable: {overview.LeastProfitableRoute}";
+            RouteAvgFuelPerKmText.Text = $"Avg Fuel/km: {overview.AvgFuelPerKm:N3} L";
+            RouteBestEfficiencyText.Text = $"Best Efficiency: {overview.BestRouteEfficiencyLPerLeg:N3} L/leg";
+        }
+
+        private async void GenerateRoutePerformance_Click(object sender, RoutedEventArgs e)
+        {
+            await GenerateRoutePerformanceAsync();
+            await CreateAutoBackupAsync("RoutePerformanceGenerated");
+            MessageBox.Show("Route performance report generated successfully!", "Success",
+                          MessageBoxButton.OK, MessageBoxImage.Information);
+        }
+
+        private void ExportRoutePerformance_Click(object sender, RoutedEventArgs e)
+        {
+            MessageBox.Show("Route performance export feature coming soon!", "Export",
                           MessageBoxButton.OK, MessageBoxImage.Information);
         }
 
