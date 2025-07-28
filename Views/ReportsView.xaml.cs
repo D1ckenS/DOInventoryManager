@@ -316,12 +316,6 @@ namespace DOInventoryManager.Views
             await GenerateSupplierAccountAsync();
         }
 
-        private void ExportSupplier_Click(object sender, RoutedEventArgs e)
-        {
-            MessageBox.Show("Supplier account export feature coming soon!", "Export",
-                          MessageBoxButton.OK, MessageBoxImage.Information);
-        }
-
         #endregion
 
         #region Payment Due Report Tab
@@ -460,12 +454,6 @@ namespace DOInventoryManager.Views
                         MessageBoxButton.OK, MessageBoxImage.Information);
         }
 
-        private void ExportPayment_Click(object sender, RoutedEventArgs e)
-        {
-            MessageBox.Show("Payment report export feature coming soon!", "Export",
-                        MessageBoxButton.OK, MessageBoxImage.Information);
-        }
-
         #endregion
 
         #region Inventory Valuation Report
@@ -500,12 +488,6 @@ namespace DOInventoryManager.Views
             await GenerateInventoryValuationAsync();
             await CreateAutoBackupAsync("InventoryValuationGenerated");
             MessageBox.Show("Inventory valuation report generated successfully!", "Success",
-                          MessageBoxButton.OK, MessageBoxImage.Information);
-        }
-
-        private void ExportInventory_Click(object sender, RoutedEventArgs e)
-        {
-            MessageBox.Show("Inventory valuation export feature coming soon!", "Export",
                           MessageBoxButton.OK, MessageBoxImage.Information);
         }
 
@@ -572,12 +554,6 @@ namespace DOInventoryManager.Views
             await GenerateFleetEfficiencyAsync();
             await CreateAutoBackupAsync("FleetEfficiencyGenerated");
             MessageBox.Show("Fleet efficiency analysis generated successfully!", "Success",
-                          MessageBoxButton.OK, MessageBoxImage.Information);
-        }
-
-        private void ExportFleetEfficiency_Click(object sender, RoutedEventArgs e)
-        {
-            MessageBox.Show("Fleet efficiency export feature coming soon!", "Export",
                           MessageBoxButton.OK, MessageBoxImage.Information);
         }
 
@@ -719,12 +695,6 @@ namespace DOInventoryManager.Views
                           MessageBoxButton.OK, MessageBoxImage.Information);
         }
 
-        private void ExportFIFODetail_Click(object sender, RoutedEventArgs e)
-        {
-            MessageBox.Show("FIFO allocation detail export feature coming soon!", "Export",
-                          MessageBoxButton.OK, MessageBoxImage.Information);
-        }
-
         #endregion
 
         #region Cost Analysis Report
@@ -798,12 +768,6 @@ namespace DOInventoryManager.Views
                           MessageBoxButton.OK, MessageBoxImage.Information);
         }
 
-        private void ExportCostAnalysis_Click(object sender, RoutedEventArgs e)
-        {
-            MessageBox.Show("Cost analysis export feature coming soon!", "Export",
-                          MessageBoxButton.OK, MessageBoxImage.Information);
-        }
-
         #endregion
 
         #region Route Performance Report
@@ -874,12 +838,6 @@ namespace DOInventoryManager.Views
             await GenerateRoutePerformanceAsync();
             await CreateAutoBackupAsync("RoutePerformanceGenerated");
             MessageBox.Show("Route performance report generated successfully!", "Success",
-                          MessageBoxButton.OK, MessageBoxImage.Information);
-        }
-
-        private void ExportRoutePerformance_Click(object sender, RoutedEventArgs e)
-        {
-            MessageBox.Show("Route performance export feature coming soon!", "Export",
                           MessageBoxButton.OK, MessageBoxImage.Information);
         }
 
@@ -1046,14 +1004,14 @@ namespace DOInventoryManager.Views
         }
 
         // Fleet Efficiency Export - replace existing ExportFleet_Click method
-        private async void ExportFleet_Click(object sender, RoutedEventArgs e)
+        private async void ExportFleetEfficiency_Click(object sender, RoutedEventArgs e)
         {
             try
             {
                 var fromDate = FleetFromDatePicker.SelectedDate ?? DateTime.Today.AddMonths(-12);
                 var toDate = FleetToDatePicker.SelectedDate ?? DateTime.Today;
 
-                var fleetEfficiency = await _fleetEfficiencyService.GenerateFleetEfficiencyReportAsync(fromDate, toDate);
+                var fleetEfficiency = await _fleetEfficiencyService.GenerateFleetEfficiencyAnalysisAsync(fromDate, toDate);
 
                 var filePath = await _excelExportService.ExportFleetEfficiencyToExcelAsync(fleetEfficiency, fromDate, toDate);
 
@@ -1076,7 +1034,7 @@ namespace DOInventoryManager.Views
         }
 
         // FIFO Allocation Export - replace existing ExportFIFO_Click method
-        private async void ExportFIFO_Click(object sender, RoutedEventArgs e)
+        private async void ExportFIFODetail_Click(object sender, RoutedEventArgs e)
         {
             try
             {

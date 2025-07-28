@@ -294,10 +294,10 @@ namespace DOInventoryManager.Services
         public enum DueDateAlertLevel
         {
             None,
-            AlertDay,      // 1 business day before (accounting for weekends)
-            DueTomorrow,   // Due tomorrow (actual tomorrow)
-            DueToday,      // Due today
-            Overdue        // Past due date
+            AlertDay,
+            DueTomorrow,
+            DueToday,
+            Overdue
         }
 
         public async Task<List<DueDateAlert>> GetDueDateAlertsAsync()
