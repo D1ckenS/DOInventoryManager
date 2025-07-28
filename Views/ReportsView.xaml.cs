@@ -19,7 +19,11 @@ namespace DOInventoryManager.Views
         private readonly FIFOAllocationDetailService _fifoDetailService;
         private readonly CostAnalysisService _costAnalysisService;
         private readonly RoutePerformanceService _routePerformanceService;
+        private readonly ExcelExportService _excelExportService;
         private SummaryService.MonthlySummaryResult? _currentSummary;
+        private ReportService.VesselAccountStatementResult? _currentVesselAccount;
+        private ReportService.SupplierAccountReportResult? _currentSupplierAccount;
+
 
         public ReportsView()
         {
@@ -32,6 +36,7 @@ namespace DOInventoryManager.Views
             _fifoDetailService = new FIFOAllocationDetailService();
             _costAnalysisService = new CostAnalysisService();
             _routePerformanceService = new RoutePerformanceService();
+            _excelExportService = new ExcelExportService(); // Add this line
             FleetFromDatePicker.SelectedDate = DateTime.Today.AddMonths(-12);
             FleetToDatePicker.SelectedDate = DateTime.Today;
             FIFOFromDatePicker.SelectedDate = DateTime.Today.AddMonths(-6);
@@ -183,6 +188,7 @@ namespace DOInventoryManager.Views
                 VesselTotalCreditsText.Text = report.FormattedTotalCredits;
                 VesselNetBalanceText.Text = report.FormattedNetBalance;
                 VesselAccountTotalValueText.Text = report.FormattedTotalValue;
+                _currentVesselAccount = report;
             }
             catch (Exception ex)
             {
@@ -236,6 +242,8 @@ namespace DOInventoryManager.Views
                 SupplierNetBalanceText.Text = report.FormattedNetBalance;
                 SupplierAccountTotalValueText.Text = report.FormattedTotalValue;
                 SupplierAccountTotalUSDText.Text = report.FormattedTotalValueUSD;
+
+                _currentSupplierAccount = report;
             }
             catch (Exception ex)
             {
@@ -290,12 +298,6 @@ namespace DOInventoryManager.Views
             }
         }
 
-        private void Export_Click(object sender, RoutedEventArgs e)
-        {
-            MessageBox.Show("Excel export feature coming soon!", "Export",
-                          MessageBoxButton.OK, MessageBoxImage.Information);
-        }
-
         private void Print_Click(object sender, RoutedEventArgs e)
         {
             MessageBox.Show("Print feature coming soon!", "Print",
@@ -306,12 +308,6 @@ namespace DOInventoryManager.Views
         private async void GenerateVesselAccount_Click(object sender, RoutedEventArgs e)
         {
             await GenerateVesselAccountAsync();
-        }
-
-        private void ExportVessel_Click(object sender, RoutedEventArgs e)
-        {
-            MessageBox.Show("Vessel account export feature coming soon!", "Export",
-                          MessageBoxButton.OK, MessageBoxImage.Information);
         }
 
         // Supplier Account Events
@@ -885,6 +881,288 @@ namespace DOInventoryManager.Views
         {
             MessageBox.Show("Route performance export feature coming soon!", "Export",
                           MessageBoxButton.OK, MessageBoxImage.Information);
+        }
+
+        #endregion
+
+        // Replace the existing export button handlers with these corrected versions:
+
+        #region Excel Export Handlers
+
+        // Monthly Summary Export - replace existing Export_Click method
+        private async void Export_Click(object sender, RoutedEventArgs e)
+        {
+            if (_currentSummary == null)
+            {
+                MessageBox.Show("Please generate a report first.", "No Data",
+                              MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
+            try
+            {
+                var filePath = await _excelExportService.ExportMonthlySummaryToExcelAsync(_currentSummary, _currentSummary.Month);
+
+                if (!string.IsNullOrEmpty(filePath))
+                {
+                    var result = MessageBox.Show($"Monthly summary exported successfully!\n\nFile saved to: {filePath}\n\nWould you like to open the file?",
+                                               "Export Complete", MessageBoxButton.YesNo, MessageBoxImage.Information);
+
+                    if (result == MessageBoxResult.Yes)
+                    {
+                        System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo(filePath) { UseShellExecute = true });
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Export failed: {ex.Message}", "Export Error",
+                              MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        // Vessel Account Export - replace existing ExportVessel_Click method
+        private async void ExportVessel_Click(object sender, RoutedEventArgs e)
+        {
+            if (VesselAccountComboBox.SelectedItem is not Vessel selectedVessel || _currentVesselAccount == null)
+            {
+                MessageBox.Show("Please generate a vessel account report first.", "No Data",
+                              MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
+            try
+            {
+                var fromDate = VesselFromDatePicker.SelectedDate ?? DateTime.Today.AddMonths(-12);
+                var toDate = VesselToDatePicker.SelectedDate ?? DateTime.Today;
+
+                var filePath = await _excelExportService.ExportVesselAccountToExcelAsync(_currentVesselAccount, selectedVessel.Name, fromDate, toDate);
+
+                if (!string.IsNullOrEmpty(filePath))
+                {
+                    var result = MessageBox.Show($"Vessel account exported successfully!\n\nFile saved to: {filePath}\n\nWould you like to open the file?",
+                                               "Export Complete", MessageBoxButton.YesNo, MessageBoxImage.Information);
+
+                    if (result == MessageBoxResult.Yes)
+                    {
+                        System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo(filePath) { UseShellExecute = true });
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Export failed: {ex.Message}", "Export Error",
+                              MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        // Supplier Account Export - replace existing ExportSupplier_Click method
+        private async void ExportSupplier_Click(object sender, RoutedEventArgs e)
+        {
+            if (SupplierAccountComboBox.SelectedItem is not Supplier selectedSupplier || _currentSupplierAccount == null)
+            {
+                MessageBox.Show("Please generate a supplier account report first.", "No Data",
+                              MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
+            try
+            {
+                var fromDate = SupplierFromDatePicker.SelectedDate ?? DateTime.Today.AddMonths(-12);
+                var toDate = SupplierToDatePicker.SelectedDate ?? DateTime.Today;
+
+                var filePath = await _excelExportService.ExportSupplierAccountToExcelAsync(_currentSupplierAccount, selectedSupplier.Name, fromDate, toDate);
+
+                if (!string.IsNullOrEmpty(filePath))
+                {
+                    var result = MessageBox.Show($"Supplier account exported successfully!\n\nFile saved to: {filePath}\n\nWould you like to open the file?",
+                                               "Export Complete", MessageBoxButton.YesNo, MessageBoxImage.Information);
+
+                    if (result == MessageBoxResult.Yes)
+                    {
+                        System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo(filePath) { UseShellExecute = true });
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Export failed: {ex.Message}", "Export Error",
+                              MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        // Payment Due Export - replace existing ExportPayment_Click method
+        private async void ExportPayment_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                var alerts = await _alertService.GetDueDateAlertsAsync();
+
+                var filePath = await _excelExportService.ExportPaymentDueToExcelAsync(alerts);
+
+                if (!string.IsNullOrEmpty(filePath))
+                {
+                    var result = MessageBox.Show($"Payment due report exported successfully!\n\nFile saved to: {filePath}\n\nWould you like to open the file?",
+                                               "Export Complete", MessageBoxButton.YesNo, MessageBoxImage.Information);
+
+                    if (result == MessageBoxResult.Yes)
+                    {
+                        System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo(filePath) { UseShellExecute = true });
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Export failed: {ex.Message}", "Export Error",
+                              MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        // Inventory Valuation Export - replace existing ExportInventory_Click method
+        private async void ExportInventory_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                var inventoryReport = await _inventoryService.GenerateInventoryValuationAsync();
+
+                var filePath = await _excelExportService.ExportInventoryValuationToExcelAsync(inventoryReport);
+
+                if (!string.IsNullOrEmpty(filePath))
+                {
+                    var result = MessageBox.Show($"Inventory valuation exported successfully!\n\nFile saved to: {filePath}\n\nWould you like to open the file?",
+                                               "Export Complete", MessageBoxButton.YesNo, MessageBoxImage.Information);
+
+                    if (result == MessageBoxResult.Yes)
+                    {
+                        System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo(filePath) { UseShellExecute = true });
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Export failed: {ex.Message}", "Export Error",
+                              MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        // Fleet Efficiency Export - replace existing ExportFleet_Click method
+        private async void ExportFleet_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                var fromDate = FleetFromDatePicker.SelectedDate ?? DateTime.Today.AddMonths(-12);
+                var toDate = FleetToDatePicker.SelectedDate ?? DateTime.Today;
+
+                var fleetEfficiency = await _fleetEfficiencyService.GenerateFleetEfficiencyReportAsync(fromDate, toDate);
+
+                var filePath = await _excelExportService.ExportFleetEfficiencyToExcelAsync(fleetEfficiency, fromDate, toDate);
+
+                if (!string.IsNullOrEmpty(filePath))
+                {
+                    var result = MessageBox.Show($"Fleet efficiency exported successfully!\n\nFile saved to: {filePath}\n\nWould you like to open the file?",
+                                               "Export Complete", MessageBoxButton.YesNo, MessageBoxImage.Information);
+
+                    if (result == MessageBoxResult.Yes)
+                    {
+                        System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo(filePath) { UseShellExecute = true });
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Export failed: {ex.Message}", "Export Error",
+                              MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        // FIFO Allocation Export - replace existing ExportFIFO_Click method
+        private async void ExportFIFO_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                var fromDate = FIFOFromDatePicker.SelectedDate ?? DateTime.Today.AddMonths(-6);
+                var toDate = FIFOToDatePicker.SelectedDate ?? DateTime.Today;
+
+                var fifoDetail = await _fifoDetailService.GenerateFIFOAllocationDetailAsync(fromDate, toDate);
+
+                var filePath = await _excelExportService.ExportFIFOAllocationDetailToExcelAsync(fifoDetail, fromDate, toDate);
+
+                if (!string.IsNullOrEmpty(filePath))
+                {
+                    var result = MessageBox.Show($"FIFO allocation detail exported successfully!\n\nFile saved to: {filePath}\n\nWould you like to open the file?",
+                                               "Export Complete", MessageBoxButton.YesNo, MessageBoxImage.Information);
+
+                    if (result == MessageBoxResult.Yes)
+                    {
+                        System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo(filePath) { UseShellExecute = true });
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Export failed: {ex.Message}", "Export Error",
+                              MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        // Cost Analysis Export - replace existing ExportCostAnalysis_Click method
+        private async void ExportCostAnalysis_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                var fromDate = CostFromDatePicker.SelectedDate ?? DateTime.Today.AddMonths(-12);
+                var toDate = CostToDatePicker.SelectedDate ?? DateTime.Today;
+
+                var costAnalysis = await _costAnalysisService.GenerateCostAnalysisAsync(fromDate, toDate);
+
+                var filePath = await _excelExportService.ExportCostAnalysisToExcelAsync(costAnalysis, fromDate, toDate);
+
+                if (!string.IsNullOrEmpty(filePath))
+                {
+                    var result = MessageBox.Show($"Cost analysis exported successfully!\n\nFile saved to: {filePath}\n\nWould you like to open the file?",
+                                               "Export Complete", MessageBoxButton.YesNo, MessageBoxImage.Information);
+
+                    if (result == MessageBoxResult.Yes)
+                    {
+                        System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo(filePath) { UseShellExecute = true });
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Export failed: {ex.Message}", "Export Error",
+                              MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        // Route Performance Export - replace existing ExportRoutePerformance_Click method
+        private async void ExportRoutePerformance_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                var fromDate = RouteFromDatePicker.SelectedDate ?? DateTime.Today.AddMonths(-12);
+                var toDate = RouteToDatePicker.SelectedDate ?? DateTime.Today;
+
+                var routePerformance = await _routePerformanceService.GenerateRoutePerformanceAsync(fromDate, toDate);
+
+                var filePath = await _excelExportService.ExportRoutePerformanceToExcelAsync(routePerformance, fromDate, toDate);
+
+                if (!string.IsNullOrEmpty(filePath))
+                {
+                    var result = MessageBox.Show($"Route performance exported successfully!\n\nFile saved to: {filePath}\n\nWould you like to open the file?",
+                                               "Export Complete", MessageBoxButton.YesNo, MessageBoxImage.Information);
+
+                    if (result == MessageBoxResult.Yes)
+                    {
+                        System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo(filePath) { UseShellExecute = true });
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Export failed: {ex.Message}", "Export Error",
+                              MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
 
         #endregion
