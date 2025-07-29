@@ -1,0 +1,166 @@
+﻿<UserControl x:Class="DOInventoryManager.Views.Print.MonthlySummaryPrint"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             Background="White">
+
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <!-- Title -->
+            <RowDefinition Height="Auto"/>
+            <!-- KPI Cards -->
+            <RowDefinition Height="*"/>
+            <!-- Main Content -->
+        </Grid.RowDefinitions>
+
+        <!-- Report Title -->
+        <TextBlock Grid.Row="0" x:Name="ReportTitleText" Text="Monthly Summary Report" 
+                  FontSize="14" FontWeight="Bold" HorizontalAlignment="Center" 
+                  Margin="0,0,0,10" Foreground="Black"/>
+
+        <!-- KPI Summary Cards -->
+        <Border Grid.Row="1" BorderBrush="Black" BorderThickness="1" Margin="0,0,0,10">
+            <Grid Margin="8">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <StackPanel Grid.Column="0" HorizontalAlignment="Center">
+                    <TextBlock Text="Total Consumption" FontWeight="SemiBold" FontSize="9" HorizontalAlignment="Center"/>
+                    <TextBlock x:Name="TotalConsumptionText" Text="0 L" FontSize="11" FontWeight="Bold" 
+                             HorizontalAlignment="Center" Margin="0,2,0,0"/>
+                </StackPanel>
+
+                <StackPanel Grid.Column="1" HorizontalAlignment="Center">
+                    <TextBlock Text="Legs Completed" FontWeight="SemiBold" FontSize="9" HorizontalAlignment="Center"/>
+                    <TextBlock x:Name="TotalLegsText" Text="0" FontSize="11" FontWeight="Bold" 
+                             HorizontalAlignment="Center" Margin="0,2,0,0"/>
+                </StackPanel>
+
+                <StackPanel Grid.Column="2" HorizontalAlignment="Center">
+                    <TextBlock Text="Total Purchases" FontWeight="SemiBold" FontSize="9" HorizontalAlignment="Center"/>
+                    <TextBlock x:Name="TotalPurchasesText" Text="$0.00" FontSize="11" FontWeight="Bold" 
+                             HorizontalAlignment="Center" Margin="0,2,0,0"/>
+                </StackPanel>
+
+                <StackPanel Grid.Column="3" HorizontalAlignment="Center">
+                    <TextBlock Text="Efficiency" FontWeight="SemiBold" FontSize="9" HorizontalAlignment="Center"/>
+                    <TextBlock x:Name="EfficiencyText" Text="0 L/leg" FontSize="11" FontWeight="Bold" 
+                             HorizontalAlignment="Center" Margin="0,2,0,0"/>
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <!-- Main Content - Optimized for Landscape -->
+        <Grid Grid.Row="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="0.45*"/>
+                <!-- Tables Column -->
+                <ColumnDefinition Width="0.1*"/>
+                <!-- Spacer -->
+                <ColumnDefinition Width="0.45*"/>
+                <!-- Summary Column -->
+            </Grid.ColumnDefinitions>
+
+            <!-- Left Column: Data Tables -->
+            <StackPanel Grid.Column="0">
+                <!-- Consumption Summary -->
+                <TextBlock Text="Consumption Summary by Vessel" 
+                          FontSize="10" FontWeight="SemiBold" Margin="0,0,0,3" Foreground="Black"/>
+                <Border BorderBrush="Black" BorderThickness="1" Margin="0,0,0,8">
+                    <DataGrid x:Name="ConsumptionDataGrid" AutoGenerateColumns="False" 
+                             IsReadOnly="True" HeadersVisibility="Column"
+                             GridLinesVisibility="All" BorderThickness="0"
+                             Background="White" Foreground="Black"
+                             FontSize="7" MaxHeight="120">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Vessel" Binding="{Binding VesselName}" Width="70"/>
+                            <DataGridTextColumn Header="Type" Binding="{Binding VesselType}" Width="40"/>
+                            <DataGridTextColumn Header="Consumption (L)" Binding="{Binding TotalConsumptionL, StringFormat=N0}" Width="70"/>
+                            <DataGridTextColumn Header="Legs" Binding="{Binding TotalLegs}" Width="35"/>
+                            <DataGridTextColumn Header="L/Leg" Binding="{Binding AvgConsumptionPerLegL, StringFormat=N1}" Width="40"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </Border>
+
+                <!-- Purchase Summary -->
+                <TextBlock Text="Purchase Summary by Supplier" 
+                          FontSize="10" FontWeight="SemiBold" Margin="0,0,0,3" Foreground="Black"/>
+                <Border BorderBrush="Black" BorderThickness="1">
+                    <DataGrid x:Name="PurchaseDataGrid" AutoGenerateColumns="False" 
+                             IsReadOnly="True" HeadersVisibility="Column"
+                             GridLinesVisibility="All" BorderThickness="0"
+                             Background="White" Foreground="Black"
+                             FontSize="7" MaxHeight="120">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Supplier" Binding="{Binding SupplierName}" Width="70"/>
+                            <DataGridTextColumn Header="Currency" Binding="{Binding Currency}" Width="40"/>
+                            <DataGridTextColumn Header="Quantity (L)" Binding="{Binding TotalPurchasesL, StringFormat=N0}" Width="60"/>
+                            <DataGridTextColumn Header="Value (USD)" Binding="{Binding TotalValueUSD, StringFormat=C0}" Width="65"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </Border>
+            </StackPanel>
+
+            <!-- Right Column: Summary Information -->
+            <StackPanel Grid.Column="2">
+                <!-- FIFO Allocation Summary -->
+                <TextBlock Text="FIFO Allocation Summary" 
+                          FontSize="10" FontWeight="SemiBold" Margin="0,0,0,3" Foreground="Black"/>
+                <Border BorderBrush="Black" BorderThickness="1" Margin="0,0,0,8">
+                    <StackPanel Margin="8">
+                        <StackPanel Orientation="Horizontal" Margin="0,0,0,2">
+                            <TextBlock Text="Total Allocations: " FontWeight="SemiBold" FontSize="8" Width="90"/>
+                            <TextBlock x:Name="TotalAllocationsText" Text="0" FontSize="8"/>
+                        </StackPanel>
+
+                        <StackPanel Orientation="Horizontal" Margin="0,0,0,2">
+                            <TextBlock Text="Allocated Quantity: " FontWeight="SemiBold" FontSize="8" Width="90"/>
+                            <TextBlock x:Name="AllocatedQuantityText" Text="0.000 L" FontSize="8"/>
+                        </StackPanel>
+
+                        <StackPanel Orientation="Horizontal" Margin="0,0,0,2">
+                            <TextBlock Text="Allocated Value: " FontWeight="SemiBold" FontSize="8" Width="90"/>
+                            <TextBlock x:Name="AllocatedValueText" Text="$0.00" FontSize="8"/>
+                        </StackPanel>
+
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="Vessels Processed: " FontWeight="SemiBold" FontSize="8" Width="90"/>
+                            <TextBlock x:Name="VesselsProcessedText" Text="0" FontSize="8"/>
+                        </StackPanel>
+                    </StackPanel>
+                </Border>
+
+                <!-- Financial Summary -->
+                <TextBlock Text="Financial Summary" 
+                          FontSize="10" FontWeight="SemiBold" Margin="0,0,0,3" Foreground="Black"/>
+                <Border BorderBrush="Black" BorderThickness="1">
+                    <StackPanel Margin="8">
+                        <StackPanel Orientation="Horizontal" Margin="0,0,0,2">
+                            <TextBlock Text="Total Purchase Value: " FontWeight="SemiBold" FontSize="8" Width="110"/>
+                            <TextBlock x:Name="TotalPurchaseValueText" Text="$0.00" FontSize="8"/>
+                        </StackPanel>
+
+                        <StackPanel Orientation="Horizontal" Margin="0,0,0,2">
+                            <TextBlock Text="Total Consumption Value: " FontWeight="SemiBold" FontSize="8" Width="110"/>
+                            <TextBlock x:Name="TotalConsumptionValueText" Text="$0.00" FontSize="8"/>
+                        </StackPanel>
+
+                        <StackPanel Orientation="Horizontal" Margin="0,0,0,2">
+                            <TextBlock Text="Remaining Inventory Value: " FontWeight="SemiBold" FontSize="8" Width="110"/>
+                            <TextBlock x:Name="RemainingInventoryValueText" Text="$0.00" FontSize="8"/>
+                        </StackPanel>
+
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="Total Outstanding: " FontWeight="SemiBold" FontSize="8" Width="110"/>
+                            <TextBlock x:Name="TotalOutstandingText" Text="$0.00" FontSize="8"/>
+                        </StackPanel>
+                    </StackPanel>
+                </Border>
+            </StackPanel>
+        </Grid>
+    </Grid>
+</UserControl>

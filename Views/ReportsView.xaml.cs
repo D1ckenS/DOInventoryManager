@@ -6,6 +6,7 @@ using DOInventoryManager.Data;
 using DOInventoryManager.Models;
 using DOInventoryManager.Services;
 using Microsoft.EntityFrameworkCore;
+using DOInventoryManager.Views.Print;
 
 namespace DOInventoryManager.Views
 {
@@ -300,8 +301,127 @@ namespace DOInventoryManager.Views
 
         private void Print_Click(object sender, RoutedEventArgs e)
         {
-            MessageBox.Show("Print feature coming soon!", "Print",
-                          MessageBoxButton.OK, MessageBoxImage.Information);
+            try
+            {
+                var tabControl = this.FindName("ReportsTabControl") as TabControl;
+                if (tabControl?.SelectedItem is TabItem selectedTab)
+                {
+                    string reportTitle = selectedTab.Header.ToString() ?? "Report";
+
+                    // Handle Monthly Summary specifically with actual data
+                    if (reportTitle.Contains("Monthly Summary") && _currentSummary != null)
+                    {
+                        // Create Monthly Summary print layout
+                        var printLayout = new Views.Print.MonthlySummaryPrint();
+                        string selectedMonth = MonthComboBox.SelectedItem?.ToString() ?? "Unknown";
+
+                        // Load actual data instead of extracting from UI
+                        printLayout.LoadSummaryData(_currentSummary, selectedMonth);
+
+                        // Force layout update
+                        printLayout.Measure(new Size(double.PositiveInfinity, double.PositiveInfinity));
+                        printLayout.Arrange(new Rect(printLayout.DesiredSize));
+                        printLayout.UpdateLayout();
+
+                        // Use print service
+                        var printService = new Services.PrintService();
+                        var result = printService.ShowPrintPreview(printLayout, $"Monthly Summary - {selectedMonth}");
+
+                        if (!result.Success && !result.Message.Contains("cancelled"))
+                        {
+                            MessageBox.Show(result.Message, "Print Error",
+                                          MessageBoxButton.OK, MessageBoxImage.Error);
+                        }
+                        return;
+                    }
+
+                    MessageBox.Show("Print functionality for other reports is coming soon!", "Print",
+                                  MessageBoxButton.OK, MessageBoxImage.Information);
+                }
+                else
+                {
+                    MessageBox.Show("Please select a report tab first.", "No Report Selected",
+                                  MessageBoxButton.OK, MessageBoxImage.Warning);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Print error: {ex.Message}", "Error",
+                              MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        private void PopulatePrintLayout(Views.Print.GenericReportPrint printLayout, TabItem selectedTab, string reportTitle)
+        {
+            printLayout.Clear();
+            printLayout.SetReportTitle(reportTitle);
+
+            var content = selectedTab.Content as ScrollViewer;
+            if (content?.Content is StackPanel stackPanel)
+            {
+                foreach (var child in stackPanel.Children)
+                {
+                    if (child is Border border)
+                    {
+                        // Handle summary cards or data grids within borders
+                        if (border.Child is Grid grid)
+                        {
+                            ExtractSummaryCards(grid, printLayout);
+                        }
+                        else if (border.Child is DataGrid dataGrid)
+                        {
+                            printLayout.AddDataGrid(dataGrid);
+                        }
+                    }
+                    else if (child is TextBlock textBlock && !string.IsNullOrEmpty(textBlock.Text))
+                    {
+                        // Add section titles
+                        if (textBlock.FontWeight == FontWeights.SemiBold || textBlock.FontWeight == FontWeights.Bold)
+                        {
+                            printLayout.AddSectionTitle(textBlock.Text);
+                        }
+                        else
+                        {
+                            printLayout.AddTextBlock(textBlock.Text);
+                        }
+                    }
+                    else if (child is DataGrid directDataGrid)
+                    {
+                        printLayout.AddDataGrid(directDataGrid);
+                    }
+                }
+            }
+        }
+
+        private void ExtractSummaryCards(Grid grid, Views.Print.GenericReportPrint printLayout)
+        {
+            foreach (var child in grid.Children)
+            {
+                if (child is StackPanel stackPanel)
+                {
+                    string title = "";
+                    string value = "";
+                    string subtitle = "";
+
+                    foreach (var item in stackPanel.Children)
+                    {
+                        if (item is TextBlock textBlock)
+                        {
+                            if (textBlock.FontSize <= 11 && string.IsNullOrEmpty(title))
+                                title = textBlock.Text;
+                            else if (textBlock.FontWeight == FontWeights.Bold && string.IsNullOrEmpty(value))
+                                value = textBlock.Text;
+                            else if (textBlock.FontSize <= 10)
+                                subtitle = textBlock.Text;
+                        }
+                    }
+
+                    if (!string.IsNullOrEmpty(title) && !string.IsNullOrEmpty(value))
+                    {
+                        printLayout.AddSummaryCard(title, value, subtitle);
+                    }
+                }
+            }
         }
 
         // Vessel Account Events

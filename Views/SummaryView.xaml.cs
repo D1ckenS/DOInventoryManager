@@ -1,6 +1,7 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
 using DOInventoryManager.Services;
+using DOInventoryManager.Views.Print;
 
 namespace DOInventoryManager.Views
 {
@@ -179,15 +180,7 @@ namespace DOInventoryManager.Views
 
         private void Print_Click(object sender, RoutedEventArgs e)
         {
-            if (_currentSummary == null)
-            {
-                MessageBox.Show("Please generate a report first.", "No Data",
-                              MessageBoxButton.OK, MessageBoxImage.Warning);
-                return;
-            }
-
-            MessageBox.Show("Print feature coming soon!", "Print",
-                          MessageBoxButton.OK, MessageBoxImage.Information);
+            MessageBox.Show("Print button clicked!");
         }
 
         #endregion
