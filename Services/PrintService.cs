@@ -21,56 +21,56 @@ namespace DOInventoryManager.Services
         }
 
         /// <summary>
-        /// Shows print preview dialog for any UserControl
-        /// </summary>
-        public PrintResult ShowPrintPreview(UserControl printContent, string documentTitle = "Report")
+/// Shows print preview dialog for any UserControl
+/// </summary>
+public PrintResult ShowPrintPreview(UserControl printContent, string documentTitle = "Report")
+{
+    try
+    {
+        // Create print dialog with landscape default
+        PrintDialog printDialog = new PrintDialog();
+        
+        // Set default to landscape
+        if (printDialog.PrintTicket != null)
         {
-            try
-            {
-                // Create print dialog with landscape default
-                PrintDialog printDialog = new PrintDialog();
-
-                // Set default to landscape
-                if (printDialog.PrintTicket != null)
-                {
-                    printDialog.PrintTicket.PageOrientation = System.Printing.PageOrientation.Landscape;
-                }
-
-                // Create document
-                var document = CreatePrintDocument(printContent, documentTitle);
-
-                // Show preview dialog
-                var previewWindow = new PrintPreviewWindow(document, printDialog, documentTitle);
-                previewWindow.Owner = Application.Current.MainWindow;
-
-                bool? result = previewWindow.ShowDialog();
-
-                if (result == true)
-                {
-                    return new PrintResult
-                    {
-                        Success = true,
-                        Message = "Document printed successfully."
-                    };
-                }
-                else
-                {
-                    return new PrintResult
-                    {
-                        Success = false,
-                        Message = "Print operation cancelled."
-                    };
-                }
-            }
-            catch (Exception ex)
-            {
-                return new PrintResult
-                {
-                    Success = false,
-                    Message = $"Print error: {ex.Message}"
-                };
-            }
+            printDialog.PrintTicket.PageOrientation = System.Printing.PageOrientation.Landscape;
         }
+        
+        // Create document
+        var document = CreatePrintDocument(printContent, documentTitle);
+        
+        // Show preview dialog
+        var previewWindow = new PrintPreviewWindow(document, printDialog, documentTitle);
+        previewWindow.Owner = Application.Current.MainWindow;
+        
+        bool? result = previewWindow.ShowDialog();
+        
+        if (result == true)
+        {
+            return new PrintResult 
+            { 
+                Success = true, 
+                Message = "Document printed successfully." 
+            };
+        }
+        else
+        {
+            return new PrintResult 
+            { 
+                Success = false, 
+                Message = "Print operation cancelled." 
+            };
+        }
+    }
+    catch (Exception ex)
+    {
+        return new PrintResult 
+        { 
+            Success = false, 
+            Message = $"Print error: {ex.Message}" 
+        };
+    }
+}
 
         /// <summary>
         /// Exports report directly to PDF
@@ -146,86 +146,81 @@ namespace DOInventoryManager.Services
         /// </summary>
         private FixedDocument CreatePrintDocument(UserControl content, string title)
         {
-            // Use the original content directly
             var printContent = content;
 
-            // Set print-specific properties for LANDSCAPE orientation
-            printContent.Width = 10.5 * 96; // Landscape width minus margins
-            printContent.Height = 7.5 * 96; // Landscape height minus margins
-            printContent.Margin = new Thickness(10); // Small margins
+            // Set EXACT matching dimensions
+            printContent.Width = 10.5 * 96;
+            printContent.Height = 7.5 * 96;
+            printContent.Margin = new Thickness(0); // No margin - let content handle its own spacing
 
-            // Create page content
             var pageContent = new PageContent();
             var fixedPage = new FixedPage
             {
-                Width = 11 * 96,   // Standard landscape width
-                Height = 8.5 * 96, // Standard landscape height
+                Width = 11 * 96,
+                Height = 8.5 * 96,
                 Background = Brushes.White
             };
 
-            // Add header
+            // Both header and content positioned identically
             var header = CreateHeader(title);
             FixedPage.SetLeft(header, 0.25 * 96);
             FixedPage.SetTop(header, 0.25 * 96);
             fixedPage.Children.Add(header);
 
-            // Add main content
-            FixedPage.SetLeft(printContent, 0.25 * 96);
-            FixedPage.SetTop(printContent, 0.75 * 96); // Below header
+            FixedPage.SetLeft(printContent, 0.25 * 96); // Same positioning
+            FixedPage.SetTop(printContent, 1 * 96);
             fixedPage.Children.Add(printContent);
 
-            // Add footer
             var footer = CreateFooter();
             FixedPage.SetLeft(footer, 0.25 * 96);
-            FixedPage.SetTop(footer, 7.75 * 96); // Near bottom
+            FixedPage.SetTop(footer, 7.75 * 96);
             fixedPage.Children.Add(footer);
 
             ((IAddChild)pageContent).AddChild(fixedPage);
 
-            // Create document
             var document = new FixedDocument();
             document.Pages.Add(pageContent);
-
             return document;
         }
 
         /// <summary>
-        /// Creates print header
+        /// Creates print header with exact content width matching
         /// </summary>
         private UIElement CreateHeader(string title)
         {
+            // Match the EXACT width that the content will use
             var headerPanel = new StackPanel
             {
-                Width = 10 * 96, // Landscape width minus margins
+                Width = 10.5 * 96, // Exactly same as content width in CreatePrintDocument
                 Orientation = Orientation.Vertical
             };
 
-            // Company title
+            // Company title - naturally centered within the matched container
             var companyTitle = new TextBlock
             {
                 Text = "DO INVENTORY MANAGER",
                 FontSize = 16,
                 FontWeight = FontWeights.Bold,
                 HorizontalAlignment = HorizontalAlignment.Center,
-                Margin = new Thickness(0, 0, 0, 5)
+                Margin = new Thickness(0, 0, 0, 5) // Remove the manual offset
             };
 
-            // Report title
+            // Report title - naturally centered within the matched container
             var reportTitle = new TextBlock
             {
                 Text = title,
                 FontSize = 14,
                 FontWeight = FontWeights.SemiBold,
                 HorizontalAlignment = HorizontalAlignment.Center,
-                Margin = new Thickness(0, 0, 0, 10)
+                Margin = new Thickness(0, 0, 0, 10) // Remove the manual offset
             };
 
-            // Separator line
+            // Separator line - naturally centered within the matched container
             var separator = new Border
             {
                 Height = 1,
                 Background = Brushes.Black,
-                Margin = new Thickness(0, 0, 0, 10)
+                Margin = new Thickness(0, 0, 0, 10) // Remove the manual offset
             };
 
             headerPanel.Children.Add(companyTitle);
