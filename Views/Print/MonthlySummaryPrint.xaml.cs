@@ -63,7 +63,7 @@ namespace DOInventoryManager.Views.Print
                 PurchaseDataGrid.UpdateLayout();
 
                 // Load FIFO allocation data (calculated from AllocationSummary)
-                TotalAllocationsText.Text = summaryData.AllocationSummary.Count.ToString("N0");
+                TotalAllocationsText.Text = summaryData.AllocationSummary.Sum(a => a.AllocationCount).ToString("N0");
                 AllocatedQuantityText.Text = summaryData.AllocationSummary.Sum(a => a.AllocatedQuantityL).ToString("N3") + " L";
                 AllocatedValueText.Text = summaryData.AllocationSummary.Sum(a => a.AllocatedValueUSD).ToString("C2");
                 VesselsProcessedText.Text = summaryData.ExecutiveSummary.VesselsOperated.ToString("N0");
