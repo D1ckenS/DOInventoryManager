@@ -351,76 +351,61 @@ namespace DOInventoryManager.Views
             }
         }
 
-        private void PopulatePrintLayout(Views.Print.GenericReportPrint printLayout, TabItem selectedTab, string reportTitle)
+        private async void PrintVesselAccount_Click(object sender, RoutedEventArgs e)
         {
-            printLayout.Clear();
-            printLayout.SetReportTitle(reportTitle);
-
-            var content = selectedTab.Content as ScrollViewer;
-            if (content?.Content is StackPanel stackPanel)
+            try
             {
-                foreach (var child in stackPanel.Children)
+                var tabControl = this.FindName("ReportsTabControl") as TabControl;
+                if (tabControl?.SelectedItem is TabItem selectedTab)
                 {
-                    if (child is Border border)
+                    string reportTitle = selectedTab.Header.ToString() ?? "Report";
+
+                    // Handle Vessel Account Statement
+                    if (reportTitle.Contains("Vessel Account") && _currentVesselAccount != null)
                     {
-                        // Handle summary cards or data grids within borders
-                        if (border.Child is Grid grid)
+                        // Get selected vessel and date range
+                        var selectedVessel = VesselAccountComboBox.SelectedItem as Vessel;
+                        var fromDate = VesselFromDatePicker.SelectedDate ?? DateTime.Today.AddMonths(-12);
+                        var toDate = VesselToDatePicker.SelectedDate ?? DateTime.Today;
+
+                        if (selectedVessel == null)
                         {
-                            ExtractSummaryCards(grid, printLayout);
+                            MessageBox.Show("Please select a vessel first.", "No Vessel Selected",
+                                          MessageBoxButton.OK, MessageBoxImage.Warning);
+                            return;
                         }
-                        else if (border.Child is DataGrid dataGrid)
+
+                        // Create Vessel Account print layout
+                        var printLayout = new Views.Print.VesselAccountPrint();
+
+                        // Load actual data
+                        await printLayout.LoadVesselAccountData(_currentVesselAccount, selectedVessel.Name, fromDate, toDate);
+
+                        // Force layout update
+                        printLayout.Measure(new Size(double.PositiveInfinity, double.PositiveInfinity));
+                        printLayout.Arrange(new Rect(printLayout.DesiredSize));
+                        printLayout.UpdateLayout();
+
+                        // Use print service
+                        var printService = new Services.PrintService();
+                        var result = printService.ShowPrintPreview(printLayout, $"Vessel Account - {selectedVessel.Name}");
+
+                        if (!result.Success && !result.Message.Contains("cancelled"))
                         {
-                            printLayout.AddDataGrid(dataGrid);
+                            MessageBox.Show(result.Message, "Print Error",
+                                          MessageBoxButton.OK, MessageBoxImage.Error);
                         }
+                        return;
                     }
-                    else if (child is TextBlock textBlock && !string.IsNullOrEmpty(textBlock.Text))
-                    {
-                        // Add section titles
-                        if (textBlock.FontWeight == FontWeights.SemiBold || textBlock.FontWeight == FontWeights.Bold)
-                        {
-                            printLayout.AddSectionTitle(textBlock.Text);
-                        }
-                        else
-                        {
-                            printLayout.AddTextBlock(textBlock.Text);
-                        }
-                    }
-                    else if (child is DataGrid directDataGrid)
-                    {
-                        printLayout.AddDataGrid(directDataGrid);
-                    }
+
+                    MessageBox.Show("Print functionality for other reports is coming soon!", "Print",
+                          MessageBoxButton.OK, MessageBoxImage.Information);
                 }
             }
-        }
-
-        private void ExtractSummaryCards(Grid grid, Views.Print.GenericReportPrint printLayout)
-        {
-            foreach (var child in grid.Children)
+            catch (Exception ex)
             {
-                if (child is StackPanel stackPanel)
-                {
-                    string title = "";
-                    string value = "";
-                    string subtitle = "";
-
-                    foreach (var item in stackPanel.Children)
-                    {
-                        if (item is TextBlock textBlock)
-                        {
-                            if (textBlock.FontSize <= 11 && string.IsNullOrEmpty(title))
-                                title = textBlock.Text;
-                            else if (textBlock.FontWeight == FontWeights.Bold && string.IsNullOrEmpty(value))
-                                value = textBlock.Text;
-                            else if (textBlock.FontSize <= 10)
-                                subtitle = textBlock.Text;
-                        }
-                    }
-
-                    if (!string.IsNullOrEmpty(title) && !string.IsNullOrEmpty(value))
-                    {
-                        printLayout.AddSummaryCard(title, value, subtitle);
-                    }
-                }
+                MessageBox.Show($"Print error: {ex.Message}", "Error",
+                              MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 

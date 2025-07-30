@@ -400,6 +400,10 @@
                                           Background="#28a745" Foreground="White" BorderThickness="0" 
                                           Padding="15,10" FontWeight="SemiBold"
                                           Click="ExportVessel_Click"/>
+                                    <Button Content="🖨️ Print Report" 
+                                          Background="#6c757d" Foreground="White" BorderThickness="0" 
+                                          Padding="15,8" Margin="10,0,0,0" FontWeight="SemiBold"
+                                          Click="PrintVesselAccount_Click"/>
                                 </StackPanel>
                             </Grid>
                         </Border>
