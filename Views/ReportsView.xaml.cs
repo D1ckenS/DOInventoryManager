@@ -299,7 +299,7 @@ namespace DOInventoryManager.Views
             }
         }
 
-        private void Print_Click(object sender, RoutedEventArgs e)
+        private async void Print_Click(object sender, RoutedEventArgs e)
         {
             try
             {
@@ -316,7 +316,7 @@ namespace DOInventoryManager.Views
                         string selectedMonth = MonthComboBox.SelectedItem?.ToString() ?? "Unknown";
 
                         // Load actual data instead of extracting from UI
-                        printLayout.LoadSummaryData(_currentSummary, selectedMonth);
+                        await printLayout.LoadSummaryData(_currentSummary, selectedMonth);
 
                         // Force layout update
                         printLayout.Measure(new Size(double.PositiveInfinity, double.PositiveInfinity));
