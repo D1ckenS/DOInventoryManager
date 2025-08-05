@@ -268,7 +268,7 @@ namespace DOInventoryManager.Services
                 .Select(g => new
                 {
                     Route = g.Key,
-                    AvgEfficiency = g.Sum(c => c.LegsCompleted) > 0 ? g.Sum(c => c.ConsumptionLiters) / g.Sum(c => c.LegsCompleted) : 0,
+                    AvgEfficiency = g.Sum(c => c.LegsCompleted ?? 0) > 0 ? g.Sum(c => c.ConsumptionLiters) / g.Sum(c => c.LegsCompleted ?? 0) : 0,
                     TotalCost = g.SelectMany(c => c.Allocations).Sum(a => a.AllocatedValueUSD)
                 })
                 .Where(r => r.AvgEfficiency > 0)
@@ -278,7 +278,7 @@ namespace DOInventoryManager.Services
             var bestRoute = routePerformance.FirstOrDefault();
             var worstRoute = routePerformance.LastOrDefault();
 
-            var totalLegs = consumptions.Sum(c => c.LegsCompleted);
+            var totalLegs = consumptions.Sum(c => c.LegsCompleted ?? 0);
             var totalFuelL = consumptions.Sum(c => c.ConsumptionLiters);
             var totalFuelT = CalculateTotalConsumptionTons(consumptions);
             var totalCost = consumptions.SelectMany(c => c.Allocations).Sum(a => a.AllocatedValueUSD);
@@ -332,7 +332,7 @@ namespace DOInventoryManager.Services
                 {
                     var routeType = g.First().Vessel.Type;
                     var estimatedDistance = routeType == "Vessel" ? vesselRouteDistance : boatRouteDistance;
-                    var totalLegs = g.Sum(c => c.LegsCompleted);
+                    var totalLegs = g.Sum(c => c.LegsCompleted ?? 0);
                     var totalFuelL = g.Sum(c => c.ConsumptionLiters);
                     var totalFuelT = CalculateConsumptionTonsForRoute(g.ToList());
                     var totalCost = g.SelectMany(c => c.Allocations).Sum(a => a.AllocatedValueUSD);
@@ -406,7 +406,7 @@ namespace DOInventoryManager.Services
                 .Select(g =>
                 {
                     var estimatedDistance = g.Key.Type == "Vessel" ? vesselRouteDistance : boatRouteDistance;
-                    var totalLegs = g.Sum(c => c.LegsCompleted);
+                    var totalLegs = g.Sum(c => c.LegsCompleted ?? 0);
                     var totalFuelL = g.Sum(c => c.ConsumptionLiters);
                     var totalFuelT = CalculateConsumptionTonsForVessel(g.ToList());
                     var totalCost = g.SelectMany(c => c.Allocations).Sum(a => a.AllocatedValueUSD);
@@ -506,7 +506,7 @@ namespace DOInventoryManager.Services
                     var month = int.Parse(monthParts[1]);
                     var monthDate = new DateTime(year, month, 1);
 
-                    var totalLegs = g.Sum(c => c.LegsCompleted);
+                    var totalLegs = g.Sum(c => c.LegsCompleted ?? 0);
                     var totalFuelL = g.Sum(c => c.ConsumptionLiters);
                     var totalFuelT = CalculateConsumptionTonsForRoute(g.ToList());
 
@@ -599,7 +599,7 @@ namespace DOInventoryManager.Services
                 .GroupBy(c => c.Vessel.Route)
                 .Select(g =>
                 {
-                    var totalLegs = g.Sum(c => c.LegsCompleted);
+                    var totalLegs = g.Sum(c => c.LegsCompleted ?? 0);
                     var totalFuelL = g.Sum(c => c.ConsumptionLiters);
                     var totalFuelT = CalculateConsumptionTonsForRoute(g.ToList());
                     var totalCost = g.SelectMany(c => c.Allocations).Sum(a => a.AllocatedValueUSD);
@@ -619,7 +619,7 @@ namespace DOInventoryManager.Services
 
                     // Calculate cost variability
                     var monthlyCosts = g.GroupBy(c => c.Month)
-                        .Select(mg => mg.Sum(c => c.LegsCompleted) > 0 ? mg.SelectMany(c => c.Allocations).Sum(a => a.AllocatedValueUSD) / mg.Sum(c => c.LegsCompleted) : 0)
+                        .Select(mg => mg.Sum(c => c.LegsCompleted ?? 0) > 0 ? mg.SelectMany(c => c.Allocations).Sum(a => a.AllocatedValueUSD) / mg.Sum(c => c.LegsCompleted ?? 0) : 0)
                         .Where(cost => cost > 0)
                         .ToList();
 
@@ -668,7 +668,7 @@ namespace DOInventoryManager.Services
 
                 // Calculate optimization potential (difference from best performer)
                 var bestCost = costAnalysis.First().AvgCostPerLeg;
-                var totalLegsForRoute = consumptions.Where(c => c.Vessel.Route == cost.RouteType).Sum(c => c.LegsCompleted);
+                var totalLegsForRoute = consumptions.Where(c => c.Vessel.Route == cost.RouteType).Sum(c => c.LegsCompleted ?? 0);
                 cost.CostOptimizationPotential = totalLegsForRoute > 0 ? (cost.AvgCostPerLeg - bestCost) * totalLegsForRoute : 0;
             }
 
@@ -689,9 +689,9 @@ namespace DOInventoryManager.Services
                 .Select(g => new
                 {
                     Route = g.Key,
-                    AvgEfficiency = g.Sum(c => c.LegsCompleted) > 0 ? g.Sum(c => c.ConsumptionLiters) / g.Sum(c => c.LegsCompleted) : 0,
+                    AvgEfficiency = g.Sum(c => c.LegsCompleted ?? 0) > 0 ? g.Sum(c => c.ConsumptionLiters) / g.Sum(c => c.LegsCompleted ?? 0) : 0,
                     TotalCost = g.SelectMany(c => c.Allocations).Sum(a => a.AllocatedValueUSD),
-                    TotalLegs = g.Sum(c => c.LegsCompleted),
+                    TotalLegs = g.Sum(c => c.LegsCompleted ?? 0),
                     VesselCount = g.Select(c => c.VesselId).Distinct().Count()
                 })
                 .ToList();
@@ -776,7 +776,7 @@ namespace DOInventoryManager.Services
                 .GroupBy(c => c.Vessel.Route)
                 .Select(g =>
                 {
-                    var totalLegs = g.Sum(c => c.LegsCompleted);
+                    var totalLegs = g.Sum(c => c.LegsCompleted ?? 0);
                     var totalCost = g.SelectMany(c => c.Allocations).Sum(a => a.AllocatedValueUSD);
 
                     // Estimate revenue based on route type and legs (simplified calculation)
@@ -869,7 +869,7 @@ namespace DOInventoryManager.Services
             foreach (var consumption in consumptions)
             {
                 var distance = consumption.Vessel.Type == "Vessel" ? vesselDistance : boatDistance;
-                totalDistance += consumption.LegsCompleted * distance;
+                totalDistance += (consumption.LegsCompleted ?? 0) * distance;
             }
             return totalDistance;
         }

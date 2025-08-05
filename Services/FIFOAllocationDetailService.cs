@@ -355,7 +355,7 @@ namespace DOInventoryManager.Services
                     ConsumptionId = consumption.Id,
                     ConsumptionDate = consumption.ConsumptionDate,
                     ConsumptionVessel = consumption.Vessel.Name,
-                    LegsCompleted = consumption.LegsCompleted,
+                    LegsCompleted = consumption.LegsCompleted ?? 0,
                     ConsumptionTotalL = consumption.ConsumptionLiters,
 
                     // Allocation details

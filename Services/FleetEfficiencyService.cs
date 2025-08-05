@@ -289,7 +289,7 @@ namespace DOInventoryManager.Services
 
             var totalConsumptionL = consumptions.Sum(c => c.ConsumptionLiters);
             var totalConsumptionT = CalculateTotalConsumptionTons(consumptions, allocations);
-            var totalLegs = consumptions.Sum(c => c.LegsCompleted);
+            var totalLegs = consumptions.Sum(c => c.LegsCompleted ?? 0);
             var totalCost = allocations.Sum(a => a.AllocatedValueUSD);
 
             var vesselEfficiencies = consumptions
@@ -297,7 +297,7 @@ namespace DOInventoryManager.Services
                 .Select(g => new
                 {
                     VesselName = g.Key.Name,
-                    EfficiencyL = g.Sum(c => c.LegsCompleted) > 0 ? g.Sum(c => c.ConsumptionLiters) / g.Sum(c => c.LegsCompleted) : 0
+                    EfficiencyL = g.Sum(c => c.LegsCompleted ?? 0) > 0 ? g.Sum(c => c.ConsumptionLiters) / g.Sum(c => c.LegsCompleted ?? 0) : 0
                 })
                 .Where(v => v.EfficiencyL > 0)
                 .OrderBy(v => v.EfficiencyL)
@@ -308,7 +308,7 @@ namespace DOInventoryManager.Services
                 .Select(g => new
                 {
                     Route = g.Key,
-                    AvgEfficiency = g.Sum(c => c.LegsCompleted) > 0 ? g.Sum(c => c.ConsumptionLiters) / g.Sum(c => c.LegsCompleted) : 0
+                    AvgEfficiency = g.Sum(c => c.LegsCompleted ?? 0) > 0 ? g.Sum(c => c.ConsumptionLiters) / g.Sum(c => c.LegsCompleted ?? 0) : 0
                 })
                 .Where(r => r.AvgEfficiency > 0)
                 .OrderBy(r => r.AvgEfficiency)
@@ -346,7 +346,7 @@ namespace DOInventoryManager.Services
                 {
                     var totalConsumptionL = g.Sum(c => c.ConsumptionLiters);
                     var totalConsumptionT = CalculateConsumptionTonsForVessel(consumptions, allocations, g.Key.VesselId);
-                    var totalLegs = g.Sum(c => c.LegsCompleted);
+                    var totalLegs = g.Sum(c => c.LegsCompleted ?? 0);
                     var vesselAllocations = allocations.Where(a => a.Consumption.VesselId == g.Key.VesselId).ToList();
                     var totalCost = vesselAllocations.Sum(a => a.AllocatedValueUSD);
                     var monthsActive = g.Select(c => c.Month).Distinct().Count();
@@ -358,7 +358,7 @@ namespace DOInventoryManager.Services
                         Route = g.Key.Route,
                         TotalConsumptionL = totalConsumptionL,
                         TotalConsumptionT = totalConsumptionT,
-                        TotalLegs = totalLegs,
+                        TotalLegs = (int)totalLegs,
                         EfficiencyLPerLeg = totalLegs > 0 ? totalConsumptionL / totalLegs : 0,
                         EfficiencyTPerLeg = totalLegs > 0 ? totalConsumptionT / totalLegs : 0,
                         TotalCostUSD = totalCost,
@@ -412,7 +412,7 @@ namespace DOInventoryManager.Services
                         .Select(vg => new
                         {
                             VesselName = vg.Key.Name,
-                            EfficiencyL = vg.Sum(c => c.LegsCompleted) > 0 ? vg.Sum(c => c.ConsumptionLiters) / vg.Sum(c => c.LegsCompleted) : 0
+                            EfficiencyL = vg.Sum(c => c.LegsCompleted ?? 0) > 0 ? vg.Sum(c => c.ConsumptionLiters) / vg.Sum(c => c.LegsCompleted ?? 0) : 0
                         })
                         .Where(v => v.EfficiencyL > 0)
                         .OrderBy(v => v.EfficiencyL)
@@ -423,13 +423,13 @@ namespace DOInventoryManager.Services
                         RouteType = g.Key.Type == "Vessel" ? "Vessel Route" : "Boat Route",
                         RouteName = g.Key.Route,
                         VesselCount = vesselCount,
-                        AvgEfficiencyLPerLeg = totalLegs > 0 ? totalConsumptionL / totalLegs : 0,
-                        AvgEfficiencyTPerLeg = totalLegs > 0 ? totalConsumptionT / totalLegs : 0,
-                        AvgCostPerLegUSD = totalLegs > 0 ? totalCost / totalLegs : 0,
+                        AvgEfficiencyLPerLeg = totalLegs > 0 ? totalConsumptionL / (decimal)totalLegs : 0,
+                        AvgEfficiencyTPerLeg = totalLegs > 0 ? totalConsumptionT / (decimal)totalLegs : 0,
+                        AvgCostPerLegUSD = totalLegs > 0 ? totalCost / (decimal)totalLegs : 0,
                         AvgCostPerLiterUSD = totalConsumptionL > 0 ? totalCost / totalConsumptionL : 0,
                         TotalConsumptionL = totalConsumptionL,
                         TotalConsumptionT = totalConsumptionT,
-                        TotalLegs = totalLegs,
+                        TotalLegs = (int)totalLegs,
                         TotalCostUSD = totalCost,
                         BestVesselEfficiencyL = vesselEfficiencies.FirstOrDefault()?.EfficiencyL ?? 0,
                         WorstVesselEfficiencyL = vesselEfficiencies.LastOrDefault()?.EfficiencyL ?? 0,
@@ -464,12 +464,12 @@ namespace DOInventoryManager.Services
                     {
                         Month = g.Key,
                         MonthDate = DateTime.ParseExact(g.Key, "yyyy-MM", null),
-                        FleetAvgEfficiencyL = totalLegs > 0 ? totalConsumptionL / totalLegs : 0,
-                        FleetAvgEfficiencyT = totalLegs > 0 ? totalConsumptionT / totalLegs : 0,
-                        FleetAvgCostPerLeg = totalLegs > 0 ? totalCost / totalLegs : 0,
+                        FleetAvgEfficiencyL = totalLegs > 0 ? totalConsumptionL / (decimal)totalLegs : 0,
+                        FleetAvgEfficiencyT = totalLegs > 0 ? totalConsumptionT / (decimal)totalLegs : 0,
+                        FleetAvgCostPerLeg = totalLegs > 0 ? totalCost / (decimal)totalLegs : 0,
                         TotalConsumptionL = totalConsumptionL,
                         TotalConsumptionT = totalConsumptionT,
-                        TotalLegs = totalLegs,
+                        TotalLegs = (int)totalLegs,
                         ActiveVessels = activeVessels,
                         TotalCostUSD = totalCost,
                         MonthOverMonthChangeL = 0, // Will be calculated below
@@ -509,8 +509,8 @@ namespace DOInventoryManager.Services
 
         private List<VesselRanking> GenerateEfficiencyRankings(List<Consumption> consumptions, List<Allocation> allocations)
         {
-            var fleetAvgEfficiency = consumptions.Sum(c => c.LegsCompleted) > 0
-                ? consumptions.Sum(c => c.ConsumptionLiters) / consumptions.Sum(c => c.LegsCompleted)
+            var fleetAvgEfficiency = consumptions.Sum(c => c.LegsCompleted ?? 0) > 0
+                ? consumptions.Sum(c => c.ConsumptionLiters) / consumptions.Sum(c => c.LegsCompleted ?? 0)
                 : 0;
 
             var rankings = consumptions
@@ -519,7 +519,7 @@ namespace DOInventoryManager.Services
                 {
                     var totalConsumptionL = g.Sum(c => c.ConsumptionLiters);
                     var totalConsumptionT = CalculateConsumptionTonsForVessel(consumptions, allocations, g.Key.VesselId);
-                    var totalLegs = g.Sum(c => c.LegsCompleted);
+                    var totalLegs = g.Sum(c => c.LegsCompleted ?? 0);
                     var efficiencyL = totalLegs > 0 ? totalConsumptionL / totalLegs : 0;
                     var vesselAllocations = allocations.Where(a => a.Consumption.VesselId == g.Key.VesselId).ToList();
                     var totalCost = vesselAllocations.Sum(a => a.AllocatedValueUSD);
@@ -570,7 +570,7 @@ namespace DOInventoryManager.Services
                     var totalFIFOCost = vesselAllocations.Sum(a => a.AllocatedValueUSD);
                     var totalConsumptionL = g.Sum(c => c.ConsumptionLiters);
                     var totalConsumptionT = CalculateConsumptionTonsForVessel(consumptions, allocations, g.Key.VesselId); // FIXED THIS LINE
-                    var totalLegs = g.Sum(c => c.LegsCompleted);
+                    var totalLegs = g.Sum(c => c.LegsCompleted ?? 0);
                     var supplierCount = vesselAllocations.Select(a => a.Purchase.SupplierId).Distinct().Count();
 
                     return new CostEfficiencyDetail
@@ -615,9 +615,9 @@ namespace DOInventoryManager.Services
                     {
                         Season = g.Key.Item1,
                         SeasonName = g.Key.Item2,
-                        AvgEfficiencyL = totalLegs > 0 ? totalConsumptionL / totalLegs : 0,
-                        AvgEfficiencyT = totalLegs > 0 ? totalConsumptionT / totalLegs : 0,
-                        AvgCostPerLeg = totalLegs > 0 ? totalCost / totalLegs : 0,
+                        AvgEfficiencyL = totalLegs > 0 ? totalConsumptionL / (decimal)totalLegs : 0,
+                        AvgEfficiencyT = totalLegs > 0 ? totalConsumptionT / (decimal)totalLegs : 0,
+                        AvgCostPerLeg = totalLegs > 0 ? totalCost / (decimal)totalLegs : 0,
                         DataPoints = seasonConsumptions.Select(c => c.Month).Distinct().Count(),
                         SeasonalVariance = 0, // Would need multi-year data
                         YearOverYearChange = 0, // Would need multi-year data

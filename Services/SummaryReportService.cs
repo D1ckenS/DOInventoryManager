@@ -138,7 +138,7 @@ namespace DOInventoryManager.Services
                     VesselType = g.Key.Type,
                     Route = g.Key.Route,
                     TotalConsumptionL = g.Sum(c => c.ConsumptionLiters),
-                    TotalLegs = g.Sum(c => c.LegsCompleted),
+                    TotalLegs = g.Sum(c => c.LegsCompleted ?? 0),
                     ConsumptionEntries = g.Count(),
                     TotalAllocatedValueUSD = g.SelectMany(c => c.Allocations).Sum(a => a.AllocatedValueUSD)
                 })
@@ -335,7 +335,7 @@ namespace DOInventoryManager.Services
             var summary = new ExecutiveSummary
             {
                 TotalFleetConsumptionL = consumptions.Sum(c => c.ConsumptionLiters),
-                TotalLegsCompleted = consumptions.Sum(c => c.LegsCompleted),
+                TotalLegsCompleted = consumptions.Sum(c => c.LegsCompleted ?? 0),
                 TotalOperatingCostUSD = consumptions.SelectMany(c => c.Allocations).Sum(a => a.AllocatedValueUSD),
                 VesselsOperated = consumptions.Select(c => c.VesselId).Distinct().Count(),
                 SuppliersUsed = purchases.Select(p => p.SupplierId).Distinct().Count()

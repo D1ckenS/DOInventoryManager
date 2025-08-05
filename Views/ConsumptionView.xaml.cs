@@ -126,7 +126,7 @@ namespace DOInventoryManager.Views
                     .ToListAsync();
 
                 var totalConsumption = monthData.Sum(c => c.ConsumptionLiters);
-                var totalLegs = monthData.Sum(c => c.LegsCompleted);
+                var totalLegs = monthData.Sum(c => c.LegsCompleted ?? 0);
                 var avgPerLeg = totalLegs > 0 ? totalConsumption / totalLegs : 0;
 
                 CurrentMonthText.Text = _currentFilterMonth;
@@ -268,11 +268,11 @@ namespace DOInventoryManager.Views
             try
             {
                 var consumption = GetDecimalValue(ConsumptionLitersTextBox.Text);
-                var legs = GetIntValue(LegsCompletedTextBox.Text);
+                var legs = GetNullableIntValue(LegsCompletedTextBox.Text);
 
-                if (consumption > 0 && legs > 0)
+                if (consumption > 0 && legs.HasValue && legs > 0)
                 {
-                    var consumptionPerLeg = consumption / legs;
+                    var consumptionPerLeg = consumption / legs.Value;
                     ConsumptionPerLegText.Text = $"{consumptionPerLeg:N2} L/leg";
 
                     // Calculate efficiency rating (basic example)
@@ -287,6 +287,11 @@ namespace DOInventoryManager.Views
                         efficiency = "Needs Review";
 
                     EfficiencyRatingText.Text = efficiency;
+                }
+                else if (consumption > 0 && (!legs.HasValue || legs == 0))
+                {
+                    ConsumptionPerLegText.Text = "Stationary Operation";
+                    EfficiencyRatingText.Text = "No Movement";
                 }
                 else
                 {
@@ -306,6 +311,15 @@ namespace DOInventoryManager.Views
             if (decimal.TryParse(text, NumberStyles.Number, CultureInfo.InvariantCulture, out decimal value))
                 return value;
             return 0;
+        }
+
+        private int? GetNullableIntValue(string text)
+        {
+            if (string.IsNullOrWhiteSpace(text))
+                return null;
+            if (int.TryParse(text, out int value))
+                return value;
+            return null;
         }
 
         private int GetIntValue(string text)
@@ -341,13 +355,8 @@ namespace DOInventoryManager.Views
                 return false;
             }
 
-            if (GetIntValue(LegsCompletedTextBox.Text) <= 0)
-            {
-                MessageBox.Show("Please enter the number of legs completed.", "Validation Error",
-                              MessageBoxButton.OK, MessageBoxImage.Warning);
-                LegsCompletedTextBox.Focus();
-                return false;
-            }
+            // Legs completed can be 0 or null for stationary consumption (engines running without movement)
+            // No validation needed for legs - allow 0, null, or any positive number
 
             // Add inventory validation
             if (!await ValidateInventoryAsync())
@@ -432,7 +441,7 @@ namespace DOInventoryManager.Views
             try
             {
                 var consumption = GetDecimalValue(ConsumptionLitersTextBox.Text);
-                var legs = GetIntValue(LegsCompletedTextBox.Text);
+                var legs = GetNullableIntValue(LegsCompletedTextBox.Text);
                 var vesselId = VesselComboBox.SelectedValue as int?;
 
                 if (consumption > 0 && vesselId.HasValue)
@@ -441,11 +450,15 @@ namespace DOInventoryManager.Views
                     var consumptionTons = (consumption / 1000) * density;
 
                     // Update consumption per leg calculation
-                    if (legs > 0)
+                    if (legs.HasValue && legs > 0)
                     {
-                        var consumptionPerLeg = consumption / legs;
-                        var tonsPerLeg = consumptionTons / legs;
+                        var consumptionPerLeg = consumption / legs.Value;
+                        var tonsPerLeg = consumptionTons / legs.Value;
                         ConsumptionPerLegText.Text = $"{consumptionPerLeg:N3} L/leg | {tonsPerLeg:N3} T/leg";
+                    }
+                    else if (!legs.HasValue || legs == 0)
+                    {
+                        ConsumptionPerLegText.Text = "Stationary Operation | No Movement";
                     }
                     else
                     {
@@ -477,7 +490,7 @@ namespace DOInventoryManager.Views
             VesselComboBox.SelectedValue = consumption.VesselId;
             ConsumptionDatePicker.SelectedDate = consumption.ConsumptionDate;
             ConsumptionLitersTextBox.Text = consumption.ConsumptionLiters.ToString("F3");
-            LegsCompletedTextBox.Text = consumption.LegsCompleted.ToString();
+            LegsCompletedTextBox.Text = consumption.LegsCompleted?.ToString() ?? "";
 
             // Update UI
             SaveConsumptionBtn.Content = "💾 Update Consumption";
@@ -637,7 +650,7 @@ namespace DOInventoryManager.Views
                         consumptionToUpdate.ConsumptionDate = ConsumptionDatePicker.SelectedDate.Value;
                         consumptionToUpdate.ConsumptionLiters = GetDecimalValue(ConsumptionLitersTextBox.Text);
                         consumptionToUpdate.Month = month;
-                        consumptionToUpdate.LegsCompleted = GetIntValue(LegsCompletedTextBox.Text);
+                        consumptionToUpdate.LegsCompleted = GetNullableIntValue(LegsCompletedTextBox.Text);
 
                         await context.SaveChangesAsync();
 
@@ -656,7 +669,7 @@ namespace DOInventoryManager.Views
                         ConsumptionDate = ConsumptionDatePicker.SelectedDate.Value,
                         ConsumptionLiters = GetDecimalValue(ConsumptionLitersTextBox.Text),
                         Month = month,
-                        LegsCompleted = GetIntValue(LegsCompletedTextBox.Text),
+                        LegsCompleted = GetNullableIntValue(LegsCompletedTextBox.Text),
                         CreatedDate = DateTime.Now
                     };
 
@@ -697,7 +710,7 @@ namespace DOInventoryManager.Views
                     ConsumptionDate = ConsumptionDatePicker.SelectedDate.Value,
                     ConsumptionLiters = GetDecimalValue(ConsumptionLitersTextBox.Text),
                     Month = month,
-                    LegsCompleted = GetIntValue(LegsCompletedTextBox.Text),
+                    LegsCompleted = GetNullableIntValue(LegsCompletedTextBox.Text),
                     CreatedDate = DateTime.Now
                 };
 
@@ -792,7 +805,7 @@ namespace DOInventoryManager.Views
                         $"Date: {selectedConsumption.ConsumptionDate:dd/MM/yyyy}\n" +
                         $"Vessel: {selectedConsumption.Vessel?.Name}\n" +
                         $"Quantity: {selectedConsumption.ConsumptionLiters:N3} L\n" +
-                        $"Legs: {selectedConsumption.LegsCompleted}\n\n" +
+                        $"Legs: {selectedConsumption.LegsCompleted?.ToString() ?? "Stationary"}\n\n" +
                         $"Consider re-running FIFO allocation after deletion.\n\n" +
                         $"Are you sure you want to proceed?";
                 }
@@ -803,7 +816,7 @@ namespace DOInventoryManager.Views
                         $"Date: {selectedConsumption.ConsumptionDate:dd/MM/yyyy}\n" +
                         $"Vessel: {selectedConsumption.Vessel?.Name}\n" +
                         $"Quantity: {selectedConsumption.ConsumptionLiters:N3} L\n" +
-                        $"Legs: {selectedConsumption.LegsCompleted}\n\n" +
+                        $"Legs: {selectedConsumption.LegsCompleted?.ToString() ?? "Stationary"}\n\n" +
                         $"This action cannot be undone.";
                 }
 

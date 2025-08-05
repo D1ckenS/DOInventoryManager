@@ -135,9 +135,10 @@
 
                         <!-- Legs Completed -->
                         <StackPanel Grid.Column="2">
-                            <TextBlock Text="Legs Completed *" FontWeight="SemiBold" Margin="0,0,0,5"/>
+                            <TextBlock Text="Legs Completed (Optional)" FontWeight="SemiBold" Margin="0,0,0,5"/>
                             <TextBox x:Name="LegsCompletedTextBox" Padding="10" BorderBrush="#ced4da" 
-                                   BorderThickness="1" TextChanged="ConsumptionTextBox_TextChanged"/>
+                                   BorderThickness="1" TextChanged="ConsumptionTextBox_TextChanged"
+                                   ToolTip="Leave empty or enter 0 for stationary consumption (engines running without movement)"/>
                         </StackPanel>
                     </Grid>
 

@@ -15,7 +15,7 @@ DO Inventory Manager is a WPF (.NET 9.0) application for managing diesel oil inv
 
 ### Key Domain Models
 - **Purchase**: Fuel purchases from suppliers with FIFO tracking via `RemainingQuantity`
-- **Consumption**: Monthly fuel consumption records by vessel
+- **Consumption**: Monthly fuel consumption records by vessel with optional trip tracking (`LegsCompleted` nullable for stationary operations)
 - **Allocation**: FIFO-based linking of purchases to consumptions for cost tracking
 - **Vessel**: Ships that consume fuel
 - **Supplier**: Fuel suppliers with currency support (USD/JOD)
@@ -164,3 +164,20 @@ The application uses a dual date format approach:
 - Always maintain both original currency and USD equivalent
 - Exchange rates stored at supplier level for consistency
 - USD used as base currency for reporting and comparisons
+
+### Consumption Model Handling
+The Consumption model supports flexible fuel consumption tracking for maritime operations:
+
+**LegsCompleted Field:**
+- `LegsCompleted` is nullable (`int?`) to accommodate different operational scenarios
+- **Null/0 Values**: Represent stationary consumption (engines running without vessel movement)
+- **Positive Values**: Represent actual vessel trips with movement
+- **UI Display**: Shows "Stationary Operation" or "No Movement" when legs is null/0
+- **Calculations**: All efficiency calculations safely handle nullable values with fallbacks
+
+**Business Scenarios:**
+- **Moving Operations**: Vessel travels routes → Record liters consumed + legs completed → Calculate efficiency per leg
+- **Stationary Operations**: Vessel at port/anchor but engines running → Record liters consumed + leave legs empty/0 → Track stationary fuel usage
+- **Mixed Operations**: Same vessel can have both stationary and moving consumption records
+
+**Database Migration:** `MakeLegsCompletedNullable` migration updates existing databases to support nullable legs.

@@ -22,12 +22,12 @@ namespace DOInventoryManager.Models
         [StringLength(7)] // Format: YYYY-MM
         public string Month { get; set; } = string.Empty;
         
-        // Trip tracking
-        public int LegsCompleted { get; set; } = 0;
+        // Trip tracking - nullable to allow stationary consumption (engines running without movement)
+        public int? LegsCompleted { get; set; }
         
         // Calculated field
         [Column(TypeName = "decimal(18,4)")]
-        public decimal ConsumptionPerLeg => LegsCompleted > 0 ? ConsumptionLiters / LegsCompleted : 0;
+        public decimal ConsumptionPerLeg => LegsCompleted.HasValue && LegsCompleted > 0 ? ConsumptionLiters / LegsCompleted.Value : 0;
         
         public DateTime CreatedDate { get; set; } = DateTime.Now;
         
@@ -41,7 +41,7 @@ namespace DOInventoryManager.Models
 
         public decimal GetTonsPerLeg(decimal fifoDepth)
         {
-            return LegsCompleted > 0 ? GetConsumptionTons(fifoDepth) / LegsCompleted : 0;
+            return LegsCompleted.HasValue && LegsCompleted > 0 ? GetConsumptionTons(fifoDepth) / LegsCompleted.Value : 0;
         }
     }
 }

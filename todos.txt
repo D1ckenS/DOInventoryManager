@@ -72,7 +72,17 @@
 - [✅] Implement transactional bulk deletion with allocation cleanup
 - [✅] Add detailed operation reporting with success/failure counts
 
-### 1.6 Complete Remaining Export Features
+### 1.6 Consumption Model Enhancement (NEW - COMPLETED)
+- [✅] Make LegsCompleted nullable in Consumption model to support stationary operations
+- [✅] Update all UI calculations to handle nullable legs safely
+- [✅] Modify ConsumptionView to show "Legs Completed (Optional)" with helpful tooltip
+- [✅] Update validation to allow 0 or null legs for stationary consumption scenarios
+- [✅] Fix all service classes (FleetEfficiencyService, RoutePerformanceService, etc.) to handle nullable legs
+- [✅] Create and apply MakeLegsCompletedNullable database migration
+- [✅] Update UI display to show "Stationary Operation" for null/0 legs cases
+- [✅] Ensure backward compatibility with existing consumption data
+
+### 1.7 Complete Remaining Export Features
 - [ ] Fix "Excel export feature coming soon" in AllocationView (AllocationView.xaml.cs:328)
 - [ ] Fix "Excel export feature coming soon" in SummaryView (SummaryView.xaml.cs:177)
 - [ ] Implement missing print functionality for remaining reports
