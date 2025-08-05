@@ -114,7 +114,7 @@
                     <Rectangle Height="30" Fill="Transparent"/>
 
                     <!-- Utilities -->
-                    <Button x:Name="BackupBtn" Content="💾 Backup Data" Style="{StaticResource NavButtonStyle}" Click="Backup_Click"/>
+                    <Button x:Name="BackupBtn" Content="🗄️ Backup Management" Style="{StaticResource NavButtonStyle}" Click="Backup_Click"/>
                     <Button x:Name="SettingsBtn" Content="⚙️ Settings" Style="{StaticResource NavButtonStyle}" Click="Settings_Click"/>
                 </StackPanel>
             </Border>

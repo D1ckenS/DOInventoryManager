@@ -7,6 +7,9 @@ namespace DOInventoryManager.Views
 {
     public partial class DashboardView : UserControl
     {
+        // Event to request navigation to other views
+        public event Action<string>? NavigationRequested;
+
         public DashboardView()
         {
             InitializeComponent();
@@ -126,20 +129,20 @@ namespace DOInventoryManager.Views
 
         private void NewPurchase_Click(object sender, RoutedEventArgs e)
         {
-            MessageBox.Show("Purchase entry feature coming soon!", "DO Inventory Manager", 
-                          MessageBoxButton.OK, MessageBoxImage.Information);
+            // Navigate to Purchases view
+            NavigationRequested?.Invoke("Purchases");
         }
 
         private void AddConsumption_Click(object sender, RoutedEventArgs e)
         {
-            MessageBox.Show("Consumption entry feature coming soon!", "DO Inventory Manager", 
-                          MessageBoxButton.OK, MessageBoxImage.Information);
+            // Navigate to Consumption view
+            NavigationRequested?.Invoke("Consumption");
         }
 
         private void RunFIFO_Click(object sender, RoutedEventArgs e)
         {
-            MessageBox.Show("FIFO allocation feature coming soon!", "DO Inventory Manager", 
-                          MessageBoxButton.OK, MessageBoxImage.Information);
+            // Navigate to Allocation view
+            NavigationRequested?.Invoke("Allocation");
         }
 
         #endregion

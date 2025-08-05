@@ -94,13 +94,37 @@ namespace DOInventoryManager
         {
             try
             {
-                ContentFrame.Content = new DashboardView();
+                var dashboardView = new DashboardView();
+                
+                // Subscribe to navigation requests from dashboard
+                dashboardView.NavigationRequested += OnDashboardNavigationRequested;
+                
+                ContentFrame.Content = dashboardView;
                 SetActiveButton(DashboardBtn);
                 StatusText.Text = "Dashboard loaded";
             }
             catch (Exception ex)
             {
                 StatusText.Text = $"Error loading dashboard: {ex.Message}";
+            }
+        }
+
+        private void OnDashboardNavigationRequested(string viewName)
+        {
+            switch (viewName)
+            {
+                case "Purchases":
+                    LoadPurchases();
+                    break;
+                case "Consumption":
+                    LoadConsumption();
+                    break;
+                case "Allocation":
+                    LoadAllocation();
+                    break;
+                default:
+                    StatusText.Text = $"Unknown view requested: {viewName}";
+                    break;
             }
         }
 
@@ -262,46 +286,23 @@ namespace DOInventoryManager
                           MessageBoxButton.OK, MessageBoxImage.Information);
         }
 
-        private async void Backup_Click(object sender, RoutedEventArgs e)
+        private void LoadBackupManagement()
         {
             try
             {
-                StatusText.Text = "Creating backup...";
-                var backupService = new BackupService();
-
-                var result = await backupService.CreateBackupAsync("Manual");
-
-                if (result.Success)
-                {
-                    StatusText.Text = $"Backup completed - {result.TotalBackups} total backups";
-
-                    var message = $"✅ {result.Message}\n\n" +
-                                 $"📁 Backup Location: {Path.GetFileName(result.BackupPath)}\n" +
-                                 $"📏 File Size: {result.BackupSizeBytes / 1024.0 / 1024.0:F2} MB\n" +
-                                 $"📊 Total Backups: {result.TotalBackups}\n\n" +
-                                 $"Would you like to open the backup folder?";
-
-                    var openFolder = MessageBox.Show(message, "Backup Completed",
-                                                   MessageBoxButton.YesNo, MessageBoxImage.Information);
-
-                    if (openFolder == MessageBoxResult.Yes)
-                    {
-                        backupService.OpenBackupFolder();
-                    }
-                }
-                else
-                {
-                    StatusText.Text = "Backup failed";
-                    MessageBox.Show($"❌ {result.Message}", "Backup Failed",
-                                  MessageBoxButton.OK, MessageBoxImage.Error);
-                }
+                ContentFrame.Content = new BackupManagementView();
+                SetActiveButton(BackupBtn);
+                StatusText.Text = "Backup management loaded";
             }
             catch (Exception ex)
             {
-                StatusText.Text = "Backup error";
-                MessageBox.Show($"Backup error: {ex.Message}", "Error",
-                              MessageBoxButton.OK, MessageBoxImage.Error);
+                StatusText.Text = $"Error loading backup management: {ex.Message}";
             }
+        }
+
+        private void Backup_Click(object sender, RoutedEventArgs e)
+        {
+            LoadBackupManagement();
         }
 
         private void Settings_Click(object sender, RoutedEventArgs e)

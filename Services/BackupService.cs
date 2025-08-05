@@ -210,7 +210,7 @@ namespace DOInventoryManager.Services
         }
     }
 
-    public class BackupInfo
+    public partial class BackupInfo
     {
         public string FileName { get; set; } = string.Empty;
         public string FilePath { get; set; } = string.Empty;

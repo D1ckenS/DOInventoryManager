@@ -362,3 +362,54 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+
+# Project-specific ignores
+# ========================
+
+# Database files
+*.db
+*.db-shm
+*.db-wal
+DOInventory.db*
+
+# Backup files created by the application
+**/DO Inventory Backups/
+
+# Claude AI session files
+.claude/
+
+# VS Code settings (user-specific)
+.vscode/
+!.vscode/extensions.json
+!.vscode/settings.json
+
+# User-specific project files
+*.csproj.user
+
+# Temporary and cache files
+**/temp/
+**/tmp/
+**/.tmp/
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Runtime database connections
+appsettings.json
+appsettings.*.json
+!appsettings.Development.json.example
+
+# Exported reports and data packages
+**/*_DataPackage_*.zip
+**/*_Report_*.xlsx
+**/*_Export_*.csv
+
+# Personal development notes
+NOTES.md
+DEV_NOTES.md
