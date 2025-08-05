@@ -60,7 +60,19 @@
 - [✅] Add backup folder access and management
 - [✅] Display current backup status and statistics
 
-### 1.5 Complete Remaining Export Features
+### 1.5 History Tab with Bulk Data Management (NEW - COMPLETED)
+- [✅] Restructure BackupManagementView to use TabControl layout
+- [✅] Create History tab with Purchases and Consumptions sub-tabs
+- [✅] Implement advanced filter panels for Purchases (Date From/To, Vessel, Supplier, Invoice Reference)
+- [✅] Implement filter panels for Consumptions (Month, Vessel)
+- [✅] Add DataGrids with checkbox selection functionality and "Select All" feature
+- [✅] Create BulkDataService for filtered queries and bulk deletion operations
+- [✅] Implement selection models with INotifyPropertyChanged for real-time UI updates
+- [✅] Add comprehensive safety features: automatic backups, validation, and confirmation dialogs
+- [✅] Implement transactional bulk deletion with allocation cleanup
+- [✅] Add detailed operation reporting with success/failure counts
+
+### 1.6 Complete Remaining Export Features
 - [ ] Fix "Excel export feature coming soon" in AllocationView (AllocationView.xaml.cs:328)
 - [ ] Fix "Excel export feature coming soon" in SummaryView (SummaryView.xaml.cs:177)
 - [ ] Implement missing print functionality for remaining reports

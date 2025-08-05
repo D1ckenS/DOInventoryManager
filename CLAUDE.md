@@ -50,6 +50,15 @@ The core business logic is in `Services/FIFOAllocationService.cs`. This service:
 - All financial calculations maintain both original currency and USD values
 - Exchange rates stored in supplier records for consistency
 
+### Bulk Data Management System
+The application includes comprehensive bulk data management capabilities:
+- **Advanced Filtering**: Multi-criteria filtering for Purchases (date range, vessel, supplier, invoice) and Consumptions (month, vessel)
+- **Selective Deletion**: Checkbox-based selection system for precise bulk operations
+- **Safety Validation**: Pre-deletion checks for FIFO allocations and data dependencies
+- **Automatic Backups**: Creates backup before any bulk deletion operation
+- **Transaction Safety**: All-or-nothing approach ensures data consistency
+- **Detailed Reporting**: Comprehensive success/failure feedback with error details
+
 ## Development Commands
 
 ### Build and Run
@@ -88,6 +97,7 @@ This project does not currently have automated tests. Manual testing is performe
 - `FIFOAllocationService`: Core inventory allocation logic
 - `ReportService`: Excel report generation for various business scenarios
 - `BackupService`: Database backup functionality with versioning
+- `BulkDataService`: Bulk data operations, filtering, and selective deletion
 - `AlertService`: Due date monitoring and notification system
 - `PrintService`: Report printing with custom print views
 
@@ -95,6 +105,10 @@ This project does not currently have automated tests. Manual testing is performe
 - Each major functional area has its own View (Purchases, Consumption, etc.)
 - Print views in `Views/Print/` folder for formatted report output
 - Navigation managed through MainWindow with frame-based content loading
+- **BackupManagementView**: Tabbed interface with Backup Management and History functionality
+  - History Tab: Selective bulk deletion with advanced filtering for Purchases and Consumptions
+  - Checkbox-based selection system with "Select All" functionality
+  - Safety features: automatic backups, validation, and detailed confirmation dialogs
 
 ### Data Integrity
 - Entity relationships enforced through EF Core foreign keys

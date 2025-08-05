@@ -64,142 +64,405 @@
         </Style>
     </UserControl.Resources>
     
-    <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
-        <Grid Margin="20">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="*"/>
-            </Grid.RowDefinitions>
-            
-            <!-- Header -->
-            <TextBlock Grid.Row="0" Text="🗄️ Backup Management" Style="{StaticResource HeaderTextStyle}"/>
-            
-            <!-- Current Status Section -->
-            <Grid Grid.Row="1" Margin="0,0,0,20">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="*"/>
-                </Grid.ColumnDefinitions>
-                
-                <!-- Last Backup Card -->
-                <Border Grid.Column="0" Style="{StaticResource InfoCardStyle}">
-                    <StackPanel>
-                        <TextBlock Text="📅 Last Backup" FontWeight="SemiBold" FontSize="14" Foreground="#7F8C8D"/>
-                        <TextBlock x:Name="LastBackupText" Text="Never" FontSize="16" FontWeight="Bold" Foreground="#2C3E50"/>
-                        <TextBlock x:Name="LastBackupOperationText" Text="" FontSize="12" Foreground="#7F8C8D"/>
-                    </StackPanel>
-                </Border>
-                
-                <!-- Total Backups Card -->
-                <Border Grid.Column="1" Style="{StaticResource InfoCardStyle}">
-                    <StackPanel>
-                        <TextBlock Text="📊 Total Backups" FontWeight="SemiBold" FontSize="14" Foreground="#7F8C8D"/>
-                        <TextBlock x:Name="TotalBackupsText" Text="0" FontSize="16" FontWeight="Bold" Foreground="#2C3E50"/>
-                        <TextBlock x:Name="TotalBackupSizeText" Text="0 MB" FontSize="12" Foreground="#7F8C8D"/>
-                    </StackPanel>
-                </Border>
-                
-                <!-- Database Size Card -->
-                <Border Grid.Column="2" Style="{StaticResource InfoCardStyle}">
-                    <StackPanel>
-                        <TextBlock Text="💽 Database Size" FontWeight="SemiBold" FontSize="14" Foreground="#7F8C8D"/>
-                        <TextBlock x:Name="DatabaseSizeText" Text="0 MB" FontSize="16" FontWeight="Bold" Foreground="#2C3E50"/>
-                        <TextBlock Text="Current active database" FontSize="12" Foreground="#7F8C8D"/>
-                    </StackPanel>
-                </Border>
-                
-                <!-- Backup Folder Card -->
-                <Border Grid.Column="3" Style="{StaticResource InfoCardStyle}">
-                    <StackPanel>
-                        <TextBlock Text="📁 Backup Location" FontWeight="SemiBold" FontSize="14" Foreground="#7F8C8D"/>
-                        <Button x:Name="OpenFolderBtn" Content="Open Folder" Click="OpenFolder_Click" 
-                                Style="{StaticResource PrimaryButtonStyle}" FontSize="12" MinWidth="100" Padding="8,4"/>
-                        <TextBlock x:Name="BackupFolderText" Text="Documents\DO Inventory Backups" FontSize="10" Foreground="#7F8C8D" TextWrapping="Wrap"/>
-                    </StackPanel>
-                </Border>
-            </Grid>
-            
-            <!-- Action Buttons Section -->
-            <Grid Grid.Row="2" Margin="0,0,0,20">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="Auto"/>
-                </Grid.ColumnDefinitions>
-                
-                <Button Grid.Column="0" x:Name="CreateBackupBtn" Content="🗄️ Create Backup" Click="CreateBackup_Click" 
-                        Style="{StaticResource SuccessButtonStyle}"/>
-                
-                <Button Grid.Column="1" x:Name="RestoreBackupBtn" Content="🔄 Restore Backup" Click="RestoreBackup_Click" 
-                        Style="{StaticResource WarningButtonStyle}"/>
-                
-                <Button Grid.Column="2" x:Name="ExportDataBtn" Content="📦 Export Data Package" Click="ExportData_Click" 
-                        Style="{StaticResource PrimaryButtonStyle}"/>
-                
-                <Button Grid.Column="3" x:Name="UploadDataBtn" Content="📄 Upload Data" Click="UploadData_Click" 
-                        Style="{StaticResource SuccessButtonStyle}"/>
-                
-                <Button Grid.Column="4" x:Name="CleanupBtn" Content="🧹 Cleanup Old Backups" Click="Cleanup_Click" 
-                        Style="{StaticResource DangerButtonStyle}"/>
-                
-                <Button Grid.Column="6" x:Name="RefreshBtn" Content="🔄 Refresh" Click="Refresh_Click" 
-                        Style="{StaticResource ActionButtonStyle}"/>
-            </Grid>
-            
-            <!-- Backup History Section -->
-            <Grid Grid.Row="3">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="*"/>
-                </Grid.RowDefinitions>
-                
-                <TextBlock Grid.Row="0" Text="📋 Backup History" Style="{StaticResource SectionHeaderStyle}"/>
-                
-                <DataGrid Grid.Row="1" x:Name="BackupHistoryGrid" AutoGenerateColumns="False" 
-                          CanUserAddRows="False" CanUserDeleteRows="False" IsReadOnly="True"
-                          GridLinesVisibility="Horizontal" HeadersVisibility="Column"
-                          AlternatingRowBackground="#F8F9FA" RowBackground="White"
-                          BorderBrush="#DEE2E6" BorderThickness="1">
+    <TabControl>
+        
+        <!-- Backup Management Tab -->
+        <TabItem Header="🗄️ Backup Management">
+            <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+                <Grid Margin="20">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
                     
-                    <DataGrid.Columns>
-                        <DataGridTextColumn Header="📅 Date Created" Binding="{Binding FormattedDate}" Width="150"/>
-                        <DataGridTextColumn Header="⚙️ Operation" Binding="{Binding Operation}" Width="120"/>
-                        <DataGridTextColumn Header="📄 File Name" Binding="{Binding FileName}" Width="*" MinWidth="200"/>
-                        <DataGridTextColumn Header="📏 Size" Binding="{Binding FormattedSize}" Width="80"/>
-                        <DataGridTemplateColumn Header="🔧 Actions" Width="200">
-                            <DataGridTemplateColumn.CellTemplate>
-                                <DataTemplate>
-                                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                                        <Button Content="🔄 Restore" Click="RestoreSpecificBackup_Click" 
-                                                Style="{StaticResource WarningButtonStyle}" 
-                                                FontSize="11" MinWidth="70" Padding="6,3" Margin="2"
-                                                Tag="{Binding FilePath}"/>
-                                        <Button Content="🗑️ Delete" Click="DeleteBackup_Click" 
-                                                Style="{StaticResource DangerButtonStyle}" 
-                                                FontSize="11" MinWidth="60" Padding="6,3" Margin="2"
-                                                Tag="{Binding FilePath}"/>
-                                    </StackPanel>
-                                </DataTemplate>
-                            </DataGridTemplateColumn.CellTemplate>
-                        </DataGridTemplateColumn>
-                    </DataGrid.Columns>
-                </DataGrid>
+                    <!-- Header -->
+                    <TextBlock Grid.Row="0" Text="🗄️ Backup Management" Style="{StaticResource HeaderTextStyle}"/>
+                    
+                    <!-- Current Status Section -->
+                    <Grid Grid.Row="1" Margin="0,0,0,20">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        
+                        <!-- Last Backup Card -->
+                        <Border Grid.Column="0" Style="{StaticResource InfoCardStyle}">
+                            <StackPanel>
+                                <TextBlock Text="📅 Last Backup" FontWeight="SemiBold" FontSize="14" Foreground="#7F8C8D"/>
+                                <TextBlock x:Name="LastBackupText" Text="Never" FontSize="16" FontWeight="Bold" Foreground="#2C3E50"/>
+                                <TextBlock x:Name="LastBackupOperationText" Text="" FontSize="12" Foreground="#7F8C8D"/>
+                            </StackPanel>
+                        </Border>
+                        
+                        <!-- Total Backups Card -->
+                        <Border Grid.Column="1" Style="{StaticResource InfoCardStyle}">
+                            <StackPanel>
+                                <TextBlock Text="📊 Total Backups" FontWeight="SemiBold" FontSize="14" Foreground="#7F8C8D"/>
+                                <TextBlock x:Name="TotalBackupsText" Text="0" FontSize="16" FontWeight="Bold" Foreground="#2C3E50"/>
+                                <TextBlock x:Name="TotalBackupSizeText" Text="0 MB" FontSize="12" Foreground="#7F8C8D"/>
+                            </StackPanel>
+                        </Border>
+                        
+                        <!-- Database Size Card -->
+                        <Border Grid.Column="2" Style="{StaticResource InfoCardStyle}">
+                            <StackPanel>
+                                <TextBlock Text="💽 Database Size" FontWeight="SemiBold" FontSize="14" Foreground="#7F8C8D"/>
+                                <TextBlock x:Name="DatabaseSizeText" Text="0 MB" FontSize="16" FontWeight="Bold" Foreground="#2C3E50"/>
+                                <TextBlock Text="Current active database" FontSize="12" Foreground="#7F8C8D"/>
+                            </StackPanel>
+                        </Border>
+                        
+                        <!-- Backup Folder Card -->
+                        <Border Grid.Column="3" Style="{StaticResource InfoCardStyle}">
+                            <StackPanel>
+                                <TextBlock Text="📁 Backup Location" FontWeight="SemiBold" FontSize="14" Foreground="#7F8C8D"/>
+                                <Button x:Name="OpenFolderBtn" Content="Open Folder" Click="OpenFolder_Click" 
+                                        Style="{StaticResource PrimaryButtonStyle}" FontSize="12" MinWidth="100" Padding="8,4"/>
+                                <TextBlock x:Name="BackupFolderText" Text="Documents\DO Inventory Backups" FontSize="10" Foreground="#7F8C8D" TextWrapping="Wrap"/>
+                            </StackPanel>
+                        </Border>
+                    </Grid>
+                    
+                    <!-- Action Buttons Section -->
+                    <Grid Grid.Row="2" Margin="0,0,0,20">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        
+                        <Button Grid.Column="0" x:Name="CreateBackupBtn" Content="🗄️ Create Backup" Click="CreateBackup_Click" 
+                                Style="{StaticResource SuccessButtonStyle}"/>
+                        
+                        <Button Grid.Column="1" x:Name="RestoreBackupBtn" Content="🔄 Restore Backup" Click="RestoreBackup_Click" 
+                                Style="{StaticResource WarningButtonStyle}"/>
+                        
+                        <Button Grid.Column="2" x:Name="ExportDataBtn" Content="📦 Export Data Package" Click="ExportData_Click" 
+                                Style="{StaticResource PrimaryButtonStyle}"/>
+                        
+                        <Button Grid.Column="3" x:Name="UploadDataBtn" Content="📄 Upload Data" Click="UploadData_Click" 
+                                Style="{StaticResource SuccessButtonStyle}"/>
+                        
+                        <Button Grid.Column="4" x:Name="CleanupBtn" Content="🧹 Cleanup Old Backups" Click="Cleanup_Click" 
+                                Style="{StaticResource DangerButtonStyle}"/>
+                        
+                        <Button Grid.Column="6" x:Name="RefreshBtn" Content="🔄 Refresh" Click="Refresh_Click" 
+                                Style="{StaticResource ActionButtonStyle}"/>
+                    </Grid>
+                    
+                    <!-- Backup History Section -->
+                    <Grid Grid.Row="3">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        
+                        <TextBlock Grid.Row="0" Text="📋 Backup History" Style="{StaticResource SectionHeaderStyle}"/>
+                        
+                        <DataGrid Grid.Row="1" x:Name="BackupHistoryGrid" AutoGenerateColumns="False" 
+                                  CanUserAddRows="False" CanUserDeleteRows="False" IsReadOnly="True"
+                                  GridLinesVisibility="Horizontal" HeadersVisibility="Column"
+                                  AlternatingRowBackground="#F8F9FA" RowBackground="White"
+                                  BorderBrush="#DEE2E6" BorderThickness="1">
+                            
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="📅 Date Created" Binding="{Binding FormattedDate}" Width="150"/>
+                                <DataGridTextColumn Header="⚙️ Operation" Binding="{Binding Operation}" Width="120"/>
+                                <DataGridTextColumn Header="📄 File Name" Binding="{Binding FileName}" Width="*" MinWidth="200"/>
+                                <DataGridTextColumn Header="📏 Size" Binding="{Binding FormattedSize}" Width="80"/>
+                                <DataGridTemplateColumn Header="🔧 Actions" Width="200">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                                <Button Content="🔄 Restore" Click="RestoreSpecificBackup_Click" 
+                                                        Style="{StaticResource WarningButtonStyle}" 
+                                                        FontSize="11" MinWidth="70" Padding="6,3" Margin="2"
+                                                        Tag="{Binding FilePath}"/>
+                                                <Button Content="🗑️ Delete" Click="DeleteBackup_Click" 
+                                                        Style="{StaticResource DangerButtonStyle}" 
+                                                        FontSize="11" MinWidth="60" Padding="6,3" Margin="2"
+                                                        Tag="{Binding FilePath}"/>
+                                            </StackPanel>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                        
+                        <!-- Empty State -->
+                        <TextBlock Grid.Row="1" x:Name="NoBackupsMessage" 
+                                   Text="📭 No backups found. Create your first backup to get started!" 
+                                   HorizontalAlignment="Center" VerticalAlignment="Center" 
+                                   FontSize="16" Foreground="#7F8C8D" FontStyle="Italic"
+                                   Visibility="Collapsed"/>
+                    </Grid>
+                </Grid>
+            </ScrollViewer>
+        </TabItem>
+        
+        <!-- History Tab -->
+        <TabItem Header="📋 History">
+            <TabControl>
                 
-                <!-- Empty State -->
-                <TextBlock Grid.Row="1" x:Name="NoBackupsMessage" 
-                           Text="📭 No backups found. Create your first backup to get started!" 
-                           HorizontalAlignment="Center" VerticalAlignment="Center" 
-                           FontSize="16" Foreground="#7F8C8D" FontStyle="Italic"
-                           Visibility="Collapsed"/>
-            </Grid>
-        </Grid>
-    </ScrollViewer>
+                <!-- Purchases Sub-Tab -->
+                <TabItem Header="💰 Purchases">
+                    <Grid Margin="20">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        
+                        <!-- Header -->
+                        <TextBlock Grid.Row="0" Text="💰 Purchase History" Style="{StaticResource HeaderTextStyle}"/>
+                        
+                        <!-- Filter Panel -->
+                        <Border Grid.Row="1" Style="{StaticResource InfoCardStyle}" Margin="0,0,0,20">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                </Grid.RowDefinitions>
+                                
+                                <TextBlock Grid.Row="0" Text="🔍 Filter Options" FontSize="16" FontWeight="SemiBold" Margin="0,0,0,15"/>
+                                
+                                <Grid Grid.Row="1">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                    </Grid.RowDefinitions>
+                                    
+                                    <!-- Date From -->
+                                    <StackPanel Grid.Column="0" Margin="0,0,10,0">
+                                        <TextBlock Text="Date From:" FontWeight="SemiBold" Margin="0,0,0,5"/>
+                                        <DatePicker x:Name="PurchaseDateFromPicker" Width="140"/>
+                                    </StackPanel>
+                                    
+                                    <!-- Date To -->
+                                    <StackPanel Grid.Column="1" Margin="0,0,10,0">
+                                        <TextBlock Text="Date To:" FontWeight="SemiBold" Margin="0,0,0,5"/>
+                                        <DatePicker x:Name="PurchaseDateToPicker" Width="140"/>
+                                    </StackPanel>
+                                    
+                                    <!-- Vessel -->
+                                    <StackPanel Grid.Column="2" Margin="0,0,10,0">
+                                        <TextBlock Text="Vessel:" FontWeight="SemiBold" Margin="0,0,0,5"/>
+                                        <ComboBox x:Name="PurchaseVesselFilter" Width="140" DisplayMemberPath="Name" SelectedValuePath="Id"/>
+                                    </StackPanel>
+                                    
+                                    <!-- Supplier -->
+                                    <StackPanel Grid.Column="3" Margin="0,0,10,0">
+                                        <TextBlock Text="Supplier:" FontWeight="SemiBold" Margin="0,0,0,5"/>
+                                        <ComboBox x:Name="PurchaseSupplierFilter" Width="140" DisplayMemberPath="Name" SelectedValuePath="Id"/>
+                                    </StackPanel>
+                                    
+                                    <!-- Invoice Reference -->
+                                    <StackPanel Grid.Column="4">
+                                        <TextBlock Text="Invoice Reference:" FontWeight="SemiBold" Margin="0,0,0,5"/>
+                                        <TextBox x:Name="PurchaseInvoiceFilter" Width="140"/>
+                                    </StackPanel>
+                                </Grid>
+                                
+                                <!-- Filter Buttons -->
+                                <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,15,0,0">
+                                    <Button x:Name="ApplyPurchaseFilterBtn" Content="🔍 Apply Filter" Click="ApplyPurchaseFilter_Click" 
+                                            Style="{StaticResource PrimaryButtonStyle}" Margin="0,0,10,0"/>
+                                    <Button x:Name="ClearPurchaseFilterBtn" Content="🔄 Clear Filter" Click="ClearPurchaseFilter_Click" 
+                                            Style="{StaticResource ActionButtonStyle}"/>
+                                </StackPanel>
+                            </Grid>
+                        </Border>
+                        
+                        <!-- Selection Actions -->
+                        <Grid Grid.Row="2" Margin="0,0,0,15">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            
+                            <TextBlock x:Name="PurchaseSelectionCountText" Grid.Column="0" Text="0 of 0 records selected" 
+                                       VerticalAlignment="Center" FontWeight="SemiBold" Margin="0,0,20,0"/>
+                            
+                            <Button Grid.Column="2" x:Name="DeleteSelectedPurchasesBtn" Content="🗑️ Delete Selected" 
+                                    Click="DeleteSelectedPurchases_Click" Style="{StaticResource DangerButtonStyle}" 
+                                    IsEnabled="False" Margin="0,0,10,0"/>
+                            
+                            <Button Grid.Column="3" x:Name="RefreshPurchasesBtn" Content="🔄 Refresh" 
+                                    Click="RefreshPurchases_Click" Style="{StaticResource ActionButtonStyle}"/>
+                        </Grid>
+                        
+                        <!-- Purchase History DataGrid -->
+                        <DataGrid Grid.Row="3" x:Name="PurchaseHistoryGrid" AutoGenerateColumns="False" 
+                                  CanUserAddRows="False" CanUserDeleteRows="False" 
+                                  GridLinesVisibility="Horizontal" HeadersVisibility="Column"
+                                  AlternatingRowBackground="#F8F9FA" RowBackground="White"
+                                  BorderBrush="#DEE2E6" BorderThickness="1"
+                                  SelectionChanged="PurchaseHistoryGrid_SelectionChanged">
+                            
+                            <DataGrid.Columns>
+                                <!-- Selection Checkbox -->
+                                <DataGridTemplateColumn Header="" Width="40">
+                                    <DataGridTemplateColumn.HeaderTemplate>
+                                        <DataTemplate>
+                                            <CheckBox x:Name="SelectAllPurchasesCheckBox" 
+                                                      Checked="SelectAllPurchases_Checked" 
+                                                      Unchecked="SelectAllPurchases_Unchecked"/>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.HeaderTemplate>
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <CheckBox IsChecked="{Binding IsSelected, UpdateSourceTrigger=PropertyChanged}" 
+                                                      Checked="PurchaseSelection_Changed" 
+                                                      Unchecked="PurchaseSelection_Changed"/>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                                
+                                <DataGridTextColumn Header="📅 Date" Binding="{Binding PurchaseDate, StringFormat=dd/MM/yyyy}" Width="100"/>
+                                <DataGridTextColumn Header="🚢 Vessel" Binding="{Binding Vessel.Name}" Width="120"/>
+                                <DataGridTextColumn Header="🏭 Supplier" Binding="{Binding Supplier.Name}" Width="120"/>
+                                <DataGridTextColumn Header="📄 Invoice" Binding="{Binding InvoiceReference}" Width="120"/>
+                                <DataGridTextColumn Header="⛽ Liters" Binding="{Binding QuantityLiters, StringFormat=N3}" Width="100"/>
+                                <DataGridTextColumn Header="🏋️ Tons" Binding="{Binding QuantityTons, StringFormat=N3}" Width="100"/>
+                                <DataGridTextColumn Header="💰 Value" Binding="{Binding TotalValueUSD, StringFormat=C2}" Width="100"/>
+                                <DataGridTextColumn Header="🏦 Currency" Binding="{Binding Supplier.Currency}" Width="80"/>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </Grid>
+                </TabItem>
+                
+                <!-- Consumptions Sub-Tab -->
+                <TabItem Header="⛽ Consumptions">
+                    <Grid Margin="20">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        
+                        <!-- Header -->
+                        <TextBlock Grid.Row="0" Text="⛽ Consumption History" Style="{StaticResource HeaderTextStyle}"/>
+                        
+                        <!-- Filter Panel -->
+                        <Border Grid.Row="1" Style="{StaticResource InfoCardStyle}" Margin="0,0,0,20">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                </Grid.RowDefinitions>
+                                
+                                <TextBlock Grid.Row="0" Text="🔍 Filter Options" FontSize="16" FontWeight="SemiBold" Margin="0,0,0,15"/>
+                                
+                                <Grid Grid.Row="1">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+                                    
+                                    <!-- Month -->
+                                    <StackPanel Grid.Column="0" Margin="0,0,20,0">
+                                        <TextBlock Text="Month:" FontWeight="SemiBold" Margin="0,0,0,5"/>
+                                        <DatePicker x:Name="ConsumptionMonthPicker" Width="140"/>
+                                    </StackPanel>
+                                    
+                                    <!-- Vessel -->
+                                    <StackPanel Grid.Column="1" Margin="0,0,20,0">
+                                        <TextBlock Text="Vessel:" FontWeight="SemiBold" Margin="0,0,0,5"/>
+                                        <ComboBox x:Name="ConsumptionVesselFilter" Width="140" DisplayMemberPath="Name" SelectedValuePath="Id"/>
+                                    </StackPanel>
+                                </Grid>
+                                
+                                <!-- Filter Buttons -->
+                                <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,15,0,0">
+                                    <Button x:Name="ApplyConsumptionFilterBtn" Content="🔍 Apply Filter" Click="ApplyConsumptionFilter_Click" 
+                                            Style="{StaticResource PrimaryButtonStyle}" Margin="0,0,10,0"/>
+                                    <Button x:Name="ClearConsumptionFilterBtn" Content="🔄 Clear Filter" Click="ClearConsumptionFilter_Click" 
+                                            Style="{StaticResource ActionButtonStyle}"/>
+                                </StackPanel>
+                            </Grid>
+                        </Border>
+                        
+                        <!-- Selection Actions -->
+                        <Grid Grid.Row="2" Margin="0,0,0,15">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            
+                            <TextBlock x:Name="ConsumptionSelectionCountText" Grid.Column="0" Text="0 of 0 records selected" 
+                                       VerticalAlignment="Center" FontWeight="SemiBold" Margin="0,0,20,0"/>
+                            
+                            <Button Grid.Column="2" x:Name="DeleteSelectedConsumptionsBtn" Content="🗑️ Delete Selected" 
+                                    Click="DeleteSelectedConsumptions_Click" Style="{StaticResource DangerButtonStyle}" 
+                                    IsEnabled="False" Margin="0,0,10,0"/>
+                            
+                            <Button Grid.Column="3" x:Name="RefreshConsumptionsBtn" Content="🔄 Refresh" 
+                                    Click="RefreshConsumptions_Click" Style="{StaticResource ActionButtonStyle}"/>
+                        </Grid>
+                        
+                        <!-- Consumption History DataGrid -->
+                        <DataGrid Grid.Row="3" x:Name="ConsumptionHistoryGrid" AutoGenerateColumns="False" 
+                                  CanUserAddRows="False" CanUserDeleteRows="False" 
+                                  GridLinesVisibility="Horizontal" HeadersVisibility="Column"
+                                  AlternatingRowBackground="#F8F9FA" RowBackground="White"
+                                  BorderBrush="#DEE2E6" BorderThickness="1"
+                                  SelectionChanged="ConsumptionHistoryGrid_SelectionChanged">
+                            
+                            <DataGrid.Columns>
+                                <!-- Selection Checkbox -->
+                                <DataGridTemplateColumn Header="" Width="40">
+                                    <DataGridTemplateColumn.HeaderTemplate>
+                                        <DataTemplate>
+                                            <CheckBox x:Name="SelectAllConsumptionsCheckBox" 
+                                                      Checked="SelectAllConsumptions_Checked" 
+                                                      Unchecked="SelectAllConsumptions_Unchecked"/>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.HeaderTemplate>
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <CheckBox IsChecked="{Binding IsSelected, UpdateSourceTrigger=PropertyChanged}" 
+                                                      Checked="ConsumptionSelection_Changed" 
+                                                      Unchecked="ConsumptionSelection_Changed"/>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                                
+                                <DataGridTextColumn Header="📅 Date" Binding="{Binding ConsumptionDate, StringFormat=dd/MM/yyyy}" Width="120"/>
+                                <DataGridTextColumn Header="🚢 Vessel" Binding="{Binding Vessel.Name}" Width="150"/>
+                                <DataGridTextColumn Header="📅 Month" Binding="{Binding Month}" Width="100"/>
+                                <DataGridTextColumn Header="⛽ Liters" Binding="{Binding ConsumptionLiters, StringFormat=N3}" Width="120"/>
+                                <DataGridTextColumn Header="🚢 Legs" Binding="{Binding LegsCompleted}" Width="80"/>
+                                <DataGridTextColumn Header="📅 Created" Binding="{Binding CreatedDate, StringFormat=dd/MM/yyyy}" Width="120"/>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </Grid>
+                </TabItem>
+                
+            </TabControl>
+        </TabItem>
+    </TabControl>
 </UserControl>
