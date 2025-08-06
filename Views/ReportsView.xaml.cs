@@ -335,8 +335,8 @@ namespace DOInventoryManager.Views
                         return;
                     }
 
-                    MessageBox.Show("Print functionality for other reports is coming soon!", "Print",
-                                  MessageBoxButton.OK, MessageBoxImage.Information);
+                    // Handle other report types using GenericReportPrint
+                    await HandleGenericReportPrintAsync(reportTitle);
                 }
                 else
                 {
@@ -398,8 +398,15 @@ namespace DOInventoryManager.Views
                         return;
                     }
 
-                    MessageBox.Show("Print functionality for other reports is coming soon!", "Print",
-                          MessageBoxButton.OK, MessageBoxImage.Information);
+                    // Handle Supplier Account Report specifically
+                    if (reportTitle.Contains("Supplier Account") && _currentSupplierAccount != null)
+                    {
+                        await HandleSupplierAccountPrintAsync();
+                        return;
+                    }
+
+                    // Handle other report types using GenericReportPrint
+                    await HandleGenericReportPrintAsync(reportTitle);
                 }
             }
             catch (Exception ex)
@@ -1225,6 +1232,334 @@ namespace DOInventoryManager.Views
             {
                 MessageBox.Show($"Export failed: {ex.Message}", "Export Error",
                               MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        #endregion
+
+        #region Additional Print Handlers
+
+        private Task HandleSupplierAccountPrintAsync()
+        {
+            try
+            {
+                // Get selected supplier and date range
+                var selectedSupplier = SupplierAccountComboBox.SelectedItem as Supplier;
+                var fromDate = SupplierFromDatePicker.SelectedDate ?? DateTime.Today.AddMonths(-12);
+                var toDate = SupplierToDatePicker.SelectedDate ?? DateTime.Today;
+
+                if (selectedSupplier == null)
+                {
+                    MessageBox.Show("Please select a supplier first.", "No Supplier Selected",
+                                  MessageBoxButton.OK, MessageBoxImage.Warning);
+                    return Task.CompletedTask;
+                }
+
+                // Create generic print layout
+                var printLayout = new Views.Print.GenericReportPrint();
+                
+                // Set title
+                printLayout.SetReportTitle($"Supplier Account Report - {selectedSupplier.Name}");
+                
+                // Add summary cards
+                printLayout.AddSummaryCard("Beginning Balance", _currentSupplierAccount?.Summary?.FormattedBeginningBalance ?? "N/A");
+                printLayout.AddSummaryCard("Period Purchases", $"{_currentSupplierAccount?.Summary?.PeriodPurchases:N3} L");
+                printLayout.AddSummaryCard("Period Consumption", $"{_currentSupplierAccount?.Summary?.PeriodConsumption:N3} L");
+                printLayout.AddSummaryCard("Ending Balance", _currentSupplierAccount?.Summary?.FormattedEndingBalance ?? "N/A");
+                
+                // Add date range info
+                printLayout.AddTextBlock($"Period: {fromDate:dd/MM/yyyy} - {toDate:dd/MM/yyyy}", true);
+                printLayout.AddSeparator();
+                
+                // Add transactions data
+                printLayout.AddDataGrid(SupplierAccountGrid, "Account Transactions");
+                
+                // Add totals section
+                printLayout.AddSectionTitle("Account Summary");
+                printLayout.AddTextBlock($"Total Purchases: {_currentSupplierAccount?.FormattedTotalPurchases ?? "N/A"}");
+                printLayout.AddTextBlock($"Total Consumption: {_currentSupplierAccount?.FormattedTotalConsumption ?? "N/A"}");
+                printLayout.AddTextBlock($"Net Balance: {_currentSupplierAccount?.FormattedNetBalance ?? "N/A"}");
+                printLayout.AddTextBlock($"Total Value: {_currentSupplierAccount?.FormattedTotalValue ?? "N/A"}");
+                printLayout.AddTextBlock($"Total Value (USD): {_currentSupplierAccount?.FormattedTotalValueUSD ?? "N/A"}");
+
+                // Force layout update
+                printLayout.Measure(new Size(double.PositiveInfinity, double.PositiveInfinity));
+                printLayout.Arrange(new Rect(printLayout.DesiredSize));
+                printLayout.UpdateLayout();
+
+                // Use print service
+                var printService = new Services.PrintService();
+                var result = printService.ShowPrintPreview(printLayout, $"Supplier Account - {selectedSupplier.Name}");
+
+                if (!result.Success && !result.Message.Contains("cancelled"))
+                {
+                    MessageBox.Show(result.Message, "Print Error",
+                                  MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+                return Task.CompletedTask;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error printing supplier account: {ex.Message}", "Print Error",
+                              MessageBoxButton.OK, MessageBoxImage.Error);
+                return Task.CompletedTask;
+            }
+        }
+
+        private async Task HandleGenericReportPrintAsync(string reportTitle)
+        {
+            try
+            {
+                var printLayout = new Views.Print.GenericReportPrint();
+                printLayout.SetReportTitle(reportTitle);
+
+                // Handle different report types
+                if (reportTitle.Contains("Payment Due"))
+                {
+                    await HandlePaymentDuePrintAsync(printLayout);
+                }
+                else if (reportTitle.Contains("Inventory Valuation"))
+                {
+                    await HandleInventoryValuationPrintAsync(printLayout);
+                }
+                else if (reportTitle.Contains("Fleet Efficiency"))
+                {
+                    await HandleFleetEfficiencyPrintAsync(printLayout);
+                }
+                else if (reportTitle.Contains("FIFO Allocation Detail"))
+                {
+                    await HandleFIFODetailPrintAsync(printLayout);
+                }
+                else if (reportTitle.Contains("Cost Analysis"))
+                {
+                    await HandleCostAnalysisPrintAsync(printLayout);
+                }
+                else if (reportTitle.Contains("Route Performance"))
+                {
+                    await HandleRoutePerformancePrintAsync(printLayout);
+                }
+                else
+                {
+                    // Default handling for unknown report types
+                    printLayout.AddTextBlock("This report type is not yet configured for printing.", true);
+                    printLayout.AddTextBlock("Please use the Excel export functionality instead.");
+                }
+
+                // Force layout update
+                printLayout.Measure(new Size(double.PositiveInfinity, double.PositiveInfinity));
+                printLayout.Arrange(new Rect(printLayout.DesiredSize));
+                printLayout.UpdateLayout();
+
+                // Use print service
+                var printService = new Services.PrintService();
+                var result = printService.ShowPrintPreview(printLayout, reportTitle);
+
+                if (!result.Success && !result.Message.Contains("cancelled"))
+                {
+                    MessageBox.Show(result.Message, "Print Error",
+                                  MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error printing report: {ex.Message}", "Print Error",
+                              MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        private async Task HandlePaymentDuePrintAsync(Views.Print.GenericReportPrint printLayout)
+        {
+            try
+            {
+                var summary = await _alertService.GetPaymentSummaryAsync();
+                
+                // Add summary cards
+                printLayout.AddSummaryCard("Overdue", summary.TotalOverdueAmount.ToString("C2"), $"{summary.OverdueCount} invoices");
+                printLayout.AddSummaryCard("Due Today", summary.DueTodayAmount.ToString("C2"), $"{summary.DueTodayCount} invoices");
+                printLayout.AddSummaryCard("Due This Week", summary.DueThisWeekAmount.ToString("C2"), $"{summary.DueThisWeekCount} invoices");
+                printLayout.AddSummaryCard("Total Outstanding", summary.TotalOutstandingAmount.ToString("C2"), $"{summary.TotalOutstandingCount} invoices");
+                
+                printLayout.AddSeparator();
+                
+                // Add payment schedule grid
+                printLayout.AddDataGrid(PaymentScheduleGrid, "Payment Schedule");
+                
+                // Add aging analysis grid
+                printLayout.AddDataGrid(AgingAnalysisGrid, "Aging Analysis by Supplier");
+            }
+            catch (Exception ex)
+            {
+                printLayout.AddTextBlock($"Error loading payment data: {ex.Message}");
+            }
+        }
+
+        private async Task HandleInventoryValuationPrintAsync(Views.Print.GenericReportPrint printLayout)
+        {
+            try
+            {
+                var inventoryReport = await _inventoryService.GenerateInventoryValuationAsync();
+                
+                // Add summary cards
+                printLayout.AddSummaryCard("Total Inventory", $"{inventoryReport.Summary.TotalInventoryLiters:N3} L");
+                printLayout.AddSummaryCard("Total Weight", $"{inventoryReport.Summary.TotalInventoryTons:N3} T");
+                printLayout.AddSummaryCard("FIFO Value", inventoryReport.Summary.TotalFIFOValueUSD.ToString("C2"));
+                printLayout.AddSummaryCard("Purchase Lots", inventoryReport.Summary.NumberOfPurchaseLots.ToString());
+                printLayout.AddSummaryCard("Avg Cost/L", inventoryReport.Summary.AvgCostPerLiterUSD.ToString("C6"));
+                
+                printLayout.AddSeparator();
+                
+                // Add inventory grids - use compact layout for detailed grids
+                printLayout.AddDataGrid(VesselInventoryGrid, "Inventory by Vessel");
+                printLayout.AddDataGrid(SupplierInventoryGrid, "Inventory by Supplier");
+                printLayout.AddCompactDataGrid(PurchaseLotsGrid, "Purchase Lots Detail", 7);
+            }
+            catch (Exception ex)
+            {
+                printLayout.AddTextBlock($"Error loading inventory data: {ex.Message}");
+            }
+        }
+
+        private async Task HandleFleetEfficiencyPrintAsync(Views.Print.GenericReportPrint printLayout)
+        {
+            try
+            {
+                var fromDate = FleetFromDatePicker.SelectedDate ?? DateTime.Today.AddMonths(-12);
+                var toDate = FleetToDatePicker.SelectedDate ?? DateTime.Today;
+                var fleetReport = await _fleetEfficiencyService.GenerateFleetEfficiencyAnalysisAsync(fromDate, toDate);
+                
+                // Add date range
+                printLayout.AddTextBlock($"Period: {fromDate:dd/MM/yyyy} - {toDate:dd/MM/yyyy}", true);
+                printLayout.AddSeparator();
+                
+                // Add summary cards
+                printLayout.AddSummaryCard("Active Vessels", fleetReport.Overview.TotalActiveVessels.ToString());
+                printLayout.AddSummaryCard("Total Legs", fleetReport.Overview.TotalLegsCompleted.ToString());
+                printLayout.AddSummaryCard("Avg Efficiency", $"{fleetReport.Overview.AvgFleetEfficiencyLPerLeg:N3} L/leg");
+                printLayout.AddSummaryCard("Avg Cost/Leg", fleetReport.Overview.AvgCostPerLegUSD.ToString("C2"));
+                
+                // Add best performers info
+                printLayout.AddTextBlock($"Most Efficient Vessel: {fleetReport.Overview.MostEfficientVessel}", true);
+                printLayout.AddTextBlock($"Best Route: {fleetReport.Overview.BestRoute} ({fleetReport.Overview.BestRouteEfficiency:N3} L/Leg)");
+                
+                printLayout.AddSeparator();
+                
+                // Add data grids - use compact for complex performance data
+                printLayout.AddCompactDataGrid(VesselPerformanceGrid, "Vessel Performance", 8);
+                printLayout.AddDataGrid(RouteComparisonGrid, "Route Comparison");
+                printLayout.AddDataGrid(MonthlyTrendsGrid, "Monthly Trends");
+            }
+            catch (Exception ex)
+            {
+                printLayout.AddTextBlock($"Error loading fleet efficiency data: {ex.Message}");
+            }
+        }
+
+        private async Task HandleFIFODetailPrintAsync(Views.Print.GenericReportPrint printLayout)
+        {
+            try
+            {
+                var fromDate = FIFOFromDatePicker.SelectedDate ?? DateTime.Today.AddMonths(-6);
+                var toDate = FIFOToDatePicker.SelectedDate ?? DateTime.Today;
+                var fifoReport = await _fifoDetailService.GenerateFIFOAllocationDetailAsync(fromDate, toDate);
+                
+                // Add date range
+                printLayout.AddTextBlock($"Period: {fromDate:dd/MM/yyyy} - {toDate:dd/MM/yyyy}", true);
+                printLayout.AddSeparator();
+                
+                // Add flow summary cards
+                printLayout.AddSummaryCard("Total Purchases", $"{fifoReport.FlowSummary.TotalPurchasesL:N3} L");
+                printLayout.AddSummaryCard("Total Consumption", $"{fifoReport.FlowSummary.TotalConsumptionL:N3} L");
+                printLayout.AddSummaryCard("Total Allocated", $"{fifoReport.FlowSummary.TotalAllocatedL:N3} L");
+                printLayout.AddSummaryCard("FIFO Value", fifoReport.FlowSummary.FormattedTotalFIFOValue);
+                printLayout.AddSummaryCard("Accuracy", $"{fifoReport.FlowSummary.AllocationAccuracyPercentage:N1}%");
+                
+                // Add balance verification info
+                printLayout.AddTextBlock($"Balance Status: {fifoReport.BalanceVerification.BalanceStatus}", true);
+                printLayout.AddTextBlock($"Data Integrity Score: {fifoReport.BalanceVerification.DataIntegrityScore:N1}%");
+                
+                printLayout.AddSeparator();
+                
+                // Add data grids - use compact for detailed allocation data
+                printLayout.AddCompactDataGrid(AllocationRecordsGrid, "Allocation Records", 7);
+                printLayout.AddCompactDataGrid(PurchaseLotTrackingGrid, "Purchase Lot Tracking", 6);
+            }
+            catch (Exception ex)
+            {
+                printLayout.AddTextBlock($"Error loading FIFO detail data: {ex.Message}");
+            }
+        }
+
+        private async Task HandleCostAnalysisPrintAsync(Views.Print.GenericReportPrint printLayout)
+        {
+            try
+            {
+                var fromDate = CostFromDatePicker.SelectedDate ?? DateTime.Today.AddMonths(-12);
+                var toDate = CostToDatePicker.SelectedDate ?? DateTime.Today;
+                var costAnalysis = await _costAnalysisService.GenerateCostAnalysisAsync(fromDate, toDate);
+                
+                // Add date range
+                printLayout.AddTextBlock($"Period: {fromDate:dd/MM/yyyy} - {toDate:dd/MM/yyyy}", true);
+                printLayout.AddSeparator();
+                
+                // Add overview cards
+                printLayout.AddSummaryCard("Total Procurement", costAnalysis.Overview.FormattedTotalProcurement);
+                printLayout.AddSummaryCard("Avg Cost/L", costAnalysis.Overview.AvgCostPerLiterUSD.ToString("C6"));
+                printLayout.AddSummaryCard("Avg Cost/T", costAnalysis.Overview.AvgCostPerTonUSD.ToString("C2"));
+                printLayout.AddSummaryCard("Price Volatility", $"{costAnalysis.Overview.PriceVolatilityIndex:N1}%");
+                printLayout.AddSummaryCard("Efficiency Score", costAnalysis.Overview.FormattedProcurementScore);
+                
+                // Add key insights
+                printLayout.AddTextBlock($"Best Supplier: {costAnalysis.Overview.BestPerformingSupplier}", true);
+                printLayout.AddTextBlock($"Savings Opportunity: {costAnalysis.Overview.FormattedCostSavings}");
+                printLayout.AddTextBlock($"Price Range: {costAnalysis.Overview.LowestCostPerLiterUSD:C6} - {costAnalysis.Overview.HighestCostPerLiterUSD:C6}");
+                
+                printLayout.AddSeparator();
+                
+                // Add data grids - use compact for detailed cost analysis
+                printLayout.AddDataGrid(PriceTrendsGrid, "Price Trends");
+                printLayout.AddCompactDataGrid(SupplierComparisonGrid, "Supplier Comparison", 8);
+                printLayout.AddDataGrid(CostVarianceGrid, "Cost Variance Analysis");
+            }
+            catch (Exception ex)
+            {
+                printLayout.AddTextBlock($"Error loading cost analysis data: {ex.Message}");
+            }
+        }
+
+        private async Task HandleRoutePerformancePrintAsync(Views.Print.GenericReportPrint printLayout)
+        {
+            try
+            {
+                var fromDate = RouteFromDatePicker.SelectedDate ?? DateTime.Today.AddMonths(-12);
+                var toDate = RouteToDatePicker.SelectedDate ?? DateTime.Today;
+                var routePerformance = await _routePerformanceService.GenerateRoutePerformanceAsync(fromDate, toDate);
+                
+                // Add date range
+                printLayout.AddTextBlock($"Period: {fromDate:dd/MM/yyyy} - {toDate:dd/MM/yyyy}", true);
+                printLayout.AddSeparator();
+                
+                // Add overview cards
+                printLayout.AddSummaryCard("Active Routes", routePerformance.Overview.TotalActiveRoutes.ToString());
+                printLayout.AddSummaryCard("Total Legs", routePerformance.Overview.TotalLegsCompleted.ToString("N0"));
+                printLayout.AddSummaryCard("Total Distance", $"{routePerformance.Overview.TotalRouteDistanceKm:N0} km");
+                printLayout.AddSummaryCard("Total Cost", routePerformance.Overview.FormattedTotalCost);
+                
+                // Add performance insights
+                printLayout.AddTextBlock($"Most Efficient Route: {routePerformance.Overview.MostEfficientRoute}", true);
+                printLayout.AddTextBlock($"Most Profitable Route: {routePerformance.Overview.MostProfitableRoute}");
+                printLayout.AddTextBlock($"Average Cost per km: {routePerformance.Overview.AvgCostPerKm:C6}");
+                printLayout.AddTextBlock($"Best Efficiency: {routePerformance.Overview.BestRouteEfficiencyLPerLeg:N3} L/leg");
+                
+                printLayout.AddSeparator();
+                
+                // Add data grids - use compact for complex route performance data
+                printLayout.AddCompactDataGrid(RoutePerformanceComparisonGrid, "Route Performance Comparison", 7);
+                printLayout.AddCompactDataGrid(RoutePerformanceVesselGrid, "Vessel Performance by Route", 8);
+                printLayout.AddDataGrid(RoutePerformanceTrendsGrid, "Efficiency Trends");
+            }
+            catch (Exception ex)
+            {
+                printLayout.AddTextBlock($"Error loading route performance data: {ex.Message}");
             }
         }
 

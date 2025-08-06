@@ -10,6 +10,9 @@ namespace DOInventoryManager.Views
 {
     public partial class ConsumptionView : UserControl
     {
+        // Event to request navigation to other views
+        public event Action<string>? NavigationRequested;
+        
         private Vessel? _selectedVessel = null;
         private string _currentFilterMonth = "";
         private Consumption? _editingConsumption = null;
@@ -763,8 +766,8 @@ namespace DOInventoryManager.Views
 
         private void MonthSummary_Click(object sender, RoutedEventArgs e)
         {
-            MessageBox.Show("Monthly Summary report feature coming soon!", "DO Inventory Manager",
-                          MessageBoxButton.OK, MessageBoxImage.Information);
+            // Navigate to Reports view for Monthly Summary
+            NavigationRequested?.Invoke("Reports");
         }
 
         private void EditConsumption_Click(object sender, RoutedEventArgs e)

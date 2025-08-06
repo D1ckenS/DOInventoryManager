@@ -1,4 +1,5 @@
 ﻿using DOInventoryManager.Data;
+using DOInventoryManager.Models;
 using DOInventoryManager.Services;
 using OfficeOpenXml;
 using OfficeOpenXml.Style;
@@ -1569,6 +1570,120 @@ namespace DOInventoryManager.Services
             }
 
             return string.Empty;
+        }
+
+        #endregion
+
+        #region Allocation View Export
+
+        public async Task<string> ExportAllocationDataToExcelAsync(List<Allocation> allocations, string month)
+        {
+            try
+            {
+                #pragma warning disable CS0618
+                ExcelPackage.LicenseContext = OfficeOpenXml.LicenseContext.NonCommercial;
+                #pragma warning restore CS0618
+
+                using var package = new ExcelPackage();
+                var sheet = package.Workbook.Worksheets.Add("FIFO Allocations");
+
+                // Title
+                sheet.Cells[1, 1].Value = "FIFO ALLOCATION DETAILS";
+                sheet.Cells[1, 1].Style.Font.Size = 16;
+                sheet.Cells[1, 1].Style.Font.Bold = true;
+                sheet.Cells[1, 1, 1, 12].Merge = true;
+                sheet.Cells[1, 1].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+
+                // Subtitle
+                sheet.Cells[2, 1].Value = $"Month: {month}";
+                sheet.Cells[2, 1].Style.Font.Size = 12;
+                sheet.Cells[2, 1, 2, 12].Merge = true;
+                sheet.Cells[2, 1].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+
+                // Date generated
+                sheet.Cells[3, 1].Value = $"Generated: {DateTime.Now:dd/MM/yyyy HH:mm}";
+                sheet.Cells[3, 1, 3, 12].Merge = true;
+                sheet.Cells[3, 1].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+
+                // Headers
+                var headers = new[] { "Vessel", "Purchase Date", "Invoice Ref", "Supplier", "Invoice Qty (L)", 
+                                    "Allocated Qty (L)", "Allocated Qty (T)", "Balance After (L)", "Balance After (T)", 
+                                    "Allocated Value", "USD Value", "Consumption Date", "Legs", "Month" };
+
+                for (int i = 0; i < headers.Length; i++)
+                {
+                    sheet.Cells[5, i + 1].Value = headers[i];
+                    sheet.Cells[5, i + 1].Style.Font.Bold = true;
+                    sheet.Cells[5, i + 1].Style.Fill.PatternType = ExcelFillStyle.Solid;
+                    sheet.Cells[5, i + 1].Style.Fill.BackgroundColor.SetColor(Color.LightGray);
+                }
+
+                // Data rows
+                for (int row = 0; row < allocations.Count; row++)
+                {
+                    var allocation = allocations[row];
+                    var excelRow = row + 6;
+
+                    sheet.Cells[excelRow, 1].Value = allocation.Purchase?.Vessel?.Name ?? "";
+                    sheet.Cells[excelRow, 2].Value = allocation.Purchase?.PurchaseDate ?? DateTime.MinValue;
+                    sheet.Cells[excelRow, 3].Value = allocation.Purchase?.InvoiceReference ?? "";
+                    sheet.Cells[excelRow, 4].Value = allocation.Purchase?.Supplier?.Name ?? "";
+                    sheet.Cells[excelRow, 5].Value = allocation.Purchase?.QuantityLiters ?? 0;
+                    sheet.Cells[excelRow, 6].Value = allocation.AllocatedQuantity;
+                    sheet.Cells[excelRow, 7].Value = allocation.AllocatedQuantityTons;
+                    sheet.Cells[excelRow, 8].Value = allocation.PurchaseBalanceAfter;
+                    sheet.Cells[excelRow, 9].Value = allocation.PurchaseBalanceAfterTons;
+                    sheet.Cells[excelRow, 10].Value = allocation.AllocatedValue;
+                    sheet.Cells[excelRow, 11].Value = allocation.AllocatedValueUSD;
+                    sheet.Cells[excelRow, 12].Value = allocation.Consumption?.ConsumptionDate ?? DateTime.MinValue;
+                    sheet.Cells[excelRow, 13].Value = allocation.Consumption?.LegsCompleted ?? 0;
+                    sheet.Cells[excelRow, 14].Value = allocation.Month;
+
+                    // Format dates
+                    sheet.Cells[excelRow, 2].Style.Numberformat.Format = "dd/mm/yyyy";
+                    sheet.Cells[excelRow, 12].Style.Numberformat.Format = "dd/mm/yyyy";
+                    
+                    // Format numbers
+                    sheet.Cells[excelRow, 5].Style.Numberformat.Format = "#,##0.000";
+                    sheet.Cells[excelRow, 6].Style.Numberformat.Format = "#,##0.000";
+                    sheet.Cells[excelRow, 7].Style.Numberformat.Format = "#,##0.000";
+                    sheet.Cells[excelRow, 8].Style.Numberformat.Format = "#,##0.000";
+                    sheet.Cells[excelRow, 9].Style.Numberformat.Format = "#,##0.000";
+                    sheet.Cells[excelRow, 10].Style.Numberformat.Format = "#,##0.00";
+                    sheet.Cells[excelRow, 11].Style.Numberformat.Format = "$#,##0.00";
+                }
+
+                // Auto-fit columns
+                sheet.Cells.AutoFitColumns();
+
+                // Summary section
+                var summaryRow = allocations.Count + 8;
+                sheet.Cells[summaryRow, 1].Value = "SUMMARY";
+                sheet.Cells[summaryRow, 1].Style.Font.Bold = true;
+                sheet.Cells[summaryRow, 1, summaryRow, 6].Merge = true;
+
+                sheet.Cells[summaryRow + 1, 1].Value = "Total Allocations:";
+                sheet.Cells[summaryRow + 1, 2].Value = allocations.Count;
+                
+                sheet.Cells[summaryRow + 2, 1].Value = "Total Allocated Quantity (L):";
+                sheet.Cells[summaryRow + 2, 2].Value = allocations.Sum(a => a.AllocatedQuantity);
+                sheet.Cells[summaryRow + 2, 2].Style.Numberformat.Format = "#,##0.000";
+                
+                sheet.Cells[summaryRow + 3, 1].Value = "Total USD Value:";
+                sheet.Cells[summaryRow + 3, 2].Value = allocations.Sum(a => a.AllocatedValueUSD);
+                sheet.Cells[summaryRow + 3, 2].Style.Numberformat.Format = "$#,##0.00";
+
+                // Save to temp file
+                var fileName = $"FIFO_Allocations_{month}_{DateTime.Now:yyyyMMdd_HHmmss}.xlsx";
+                var tempPath = Path.Combine(Path.GetTempPath(), fileName);
+                
+                await package.SaveAsAsync(new FileInfo(tempPath));
+                return tempPath;
+            }
+            catch (Exception ex)
+            {
+                throw new InvalidOperationException($"Error exporting allocation data: {ex.Message}", ex);
+            }
         }
 
         #endregion

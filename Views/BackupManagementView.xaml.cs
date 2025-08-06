@@ -24,9 +24,13 @@ namespace DOInventoryManager.Views
         private ObservableCollection<PurchaseSelectionItem> _purchaseItems = new();
         private List<Vessel> _vessels = new();
         private List<Supplier> _suppliers = new();
+        private bool _purchaseFiltersActive = false;
+        private int _totalPurchaseCount = 0;
         
         // Consumption History Management
         private ObservableCollection<ConsumptionSelectionItem> _consumptionItems = new();
+        private bool _consumptionFiltersActive = false;
+        private int _totalConsumptionCount = 0;
 
         public BackupManagementView()
         {
@@ -239,7 +243,7 @@ namespace DOInventoryManager.Views
             }
         }
 
-        private async void DeleteBackup_Click(object sender, RoutedEventArgs e)
+        private void DeleteBackup_Click(object sender, RoutedEventArgs e)
         {
             if (sender is Button button && button.Tag is string backupPath)
             {
@@ -391,7 +395,7 @@ namespace DOInventoryManager.Views
             }
         }
 
-        private async void Cleanup_Click(object sender, RoutedEventArgs e)
+        private void Cleanup_Click(object sender, RoutedEventArgs e)
         {
             if (_backupHistory.Count <= 5)
             {
@@ -564,7 +568,9 @@ Ready to select your file?";
 
             try
             {
+#pragma warning disable CS0618
                 ExcelPackage.LicenseContext = OfficeOpenXml.LicenseContext.NonCommercial;
+#pragma warning restore CS0618
                 
                 using var package = new ExcelPackage(new FileInfo(filePath));
                 using var context = new InventoryContext();
@@ -676,7 +682,7 @@ Ready to select your file?";
             {
                 // Get header row to map columns
                 var headers = new Dictionary<string, int>();
-                for (int col = 1; col <= worksheet.Dimension.Columns; col++)
+                for (int col = 1; col <= (worksheet.Dimension?.Columns ?? 0); col++)
                 {
                     var header = worksheet.Cells[1, col].Text.Trim();
                     if (!string.IsNullOrEmpty(header))
@@ -790,7 +796,7 @@ Ready to select your file?";
             {
                 // Get header row to map columns
                 var headers = new Dictionary<string, int>();
-                for (int col = 1; col <= worksheet.Dimension.Columns; col++)
+                for (int col = 1; col <= (worksheet.Dimension?.Columns ?? 0); col++)
                 {
                     var header = worksheet.Cells[1, col].Text.Trim();
                     if (!string.IsNullOrEmpty(header))
@@ -1269,8 +1275,22 @@ Ready to select your file?";
         {
             try
             {
-                var filter = new BulkDataService.PurchaseFilter();
-                var purchases = await _bulkDataService.GetFilteredPurchasesAsync(filter);
+                List<PurchaseSelectionItem> purchases;
+                
+                if (_purchaseFiltersActive)
+                {
+                    // Load all filtered data when filters are active
+                    var filter = CreatePurchaseFilter();
+                    purchases = await _bulkDataService.GetFilteredPurchasesAsync(filter);
+                }
+                else
+                {
+                    // Load only recent data by default (30 records)
+                    purchases = await _bulkDataService.GetRecentPurchasesAsync(30);
+                    
+                    // Get total count for UI display
+                    _totalPurchaseCount = await _bulkDataService.GetTotalPurchaseCountAsync();
+                }
 
                 _purchaseItems.Clear();
                 foreach (var purchase in purchases)
@@ -1291,8 +1311,22 @@ Ready to select your file?";
         {
             try
             {
-                var filter = new BulkDataService.ConsumptionFilter();
-                var consumptions = await _bulkDataService.GetFilteredConsumptionsAsync(filter);
+                List<ConsumptionSelectionItem> consumptions;
+                
+                if (_consumptionFiltersActive)
+                {
+                    // Load all filtered data when filters are active
+                    var filter = CreateConsumptionFilter();
+                    consumptions = await _bulkDataService.GetFilteredConsumptionsAsync(filter);
+                }
+                else
+                {
+                    // Load only recent data by default (last 2 months)
+                    consumptions = await _bulkDataService.GetRecentConsumptionsAsync(2);
+                    
+                    // Get total count for UI display
+                    _totalConsumptionCount = await _bulkDataService.GetTotalConsumptionCountAsync();
+                }
 
                 _consumptionItems.Clear();
                 foreach (var consumption in consumptions)
@@ -1309,6 +1343,42 @@ Ready to select your file?";
             }
         }
 
+        private BulkDataService.PurchaseFilter CreatePurchaseFilter()
+        {
+            return new BulkDataService.PurchaseFilter
+            {
+                DateFrom = PurchaseDateFromPicker.SelectedDate,
+                DateTo = PurchaseDateToPicker.SelectedDate,
+                VesselId = PurchaseVesselFilter.SelectedValue as int? == 0 ? null : PurchaseVesselFilter.SelectedValue as int?,
+                SupplierId = PurchaseSupplierFilter.SelectedValue as int? == 0 ? null : PurchaseSupplierFilter.SelectedValue as int?,
+                InvoiceReference = string.IsNullOrWhiteSpace(PurchaseInvoiceFilter.Text) ? null : PurchaseInvoiceFilter.Text.Trim()
+            };
+        }
+
+        private BulkDataService.ConsumptionFilter CreateConsumptionFilter()
+        {
+            return new BulkDataService.ConsumptionFilter
+            {
+                Month = ConsumptionMonthPicker.SelectedDate,
+                VesselId = ConsumptionVesselFilter.SelectedValue as int? == 0 ? null : ConsumptionVesselFilter.SelectedValue as int?
+            };
+        }
+
+        private bool HasPurchaseFilters()
+        {
+            return PurchaseDateFromPicker.SelectedDate.HasValue ||
+                   PurchaseDateToPicker.SelectedDate.HasValue ||
+                   (PurchaseVesselFilter.SelectedValue as int? ?? 0) > 0 ||
+                   (PurchaseSupplierFilter.SelectedValue as int? ?? 0) > 0 ||
+                   !string.IsNullOrWhiteSpace(PurchaseInvoiceFilter.Text);
+        }
+
+        private bool HasConsumptionFilters()
+        {
+            return ConsumptionMonthPicker.SelectedDate.HasValue ||
+                   (ConsumptionVesselFilter.SelectedValue as int? ?? 0) > 0;
+        }
+
         #endregion
 
         #region History Tab - Filter Events
@@ -1317,24 +1387,8 @@ Ready to select your file?";
         {
             try
             {
-                var filter = new BulkDataService.PurchaseFilter
-                {
-                    DateFrom = PurchaseDateFromPicker.SelectedDate,
-                    DateTo = PurchaseDateToPicker.SelectedDate,
-                    VesselId = PurchaseVesselFilter.SelectedValue as int? == 0 ? null : PurchaseVesselFilter.SelectedValue as int?,
-                    SupplierId = PurchaseSupplierFilter.SelectedValue as int? == 0 ? null : PurchaseSupplierFilter.SelectedValue as int?,
-                    InvoiceReference = string.IsNullOrWhiteSpace(PurchaseInvoiceFilter.Text) ? null : PurchaseInvoiceFilter.Text.Trim()
-                };
-
-                var purchases = await _bulkDataService.GetFilteredPurchasesAsync(filter);
-
-                _purchaseItems.Clear();
-                foreach (var purchase in purchases)
-                {
-                    _purchaseItems.Add(purchase);
-                }
-
-                UpdatePurchaseSelectionCount();
+                _purchaseFiltersActive = HasPurchaseFilters();
+                await RefreshPurchaseHistoryAsync();
             }
             catch (Exception ex)
             {
@@ -1351,6 +1405,7 @@ Ready to select your file?";
             PurchaseSupplierFilter.SelectedIndex = 0;
             PurchaseInvoiceFilter.Text = "";
 
+            _purchaseFiltersActive = false;
             await RefreshPurchaseHistoryAsync();
         }
 
@@ -1358,21 +1413,8 @@ Ready to select your file?";
         {
             try
             {
-                var filter = new BulkDataService.ConsumptionFilter
-                {
-                    Month = ConsumptionMonthPicker.SelectedDate,
-                    VesselId = ConsumptionVesselFilter.SelectedValue as int? == 0 ? null : ConsumptionVesselFilter.SelectedValue as int?
-                };
-
-                var consumptions = await _bulkDataService.GetFilteredConsumptionsAsync(filter);
-
-                _consumptionItems.Clear();
-                foreach (var consumption in consumptions)
-                {
-                    _consumptionItems.Add(consumption);
-                }
-
-                UpdateConsumptionSelectionCount();
+                _consumptionFiltersActive = HasConsumptionFilters();
+                await RefreshConsumptionHistoryAsync();
             }
             catch (Exception ex)
             {
@@ -1386,6 +1428,7 @@ Ready to select your file?";
             ConsumptionMonthPicker.SelectedDate = null;
             ConsumptionVesselFilter.SelectedIndex = 0;
 
+            _consumptionFiltersActive = false;
             await RefreshConsumptionHistoryAsync();
         }
 
@@ -1452,18 +1495,38 @@ Ready to select your file?";
         private void UpdatePurchaseSelectionCount()
         {
             var selectedCount = _purchaseItems.Count(p => p.IsSelected);
-            var totalCount = _purchaseItems.Count;
+            var displayedCount = _purchaseItems.Count;
 
-            PurchaseSelectionCountText.Text = $"{selectedCount} of {totalCount} records selected";
+            string countText;
+            if (_purchaseFiltersActive)
+            {
+                countText = $"{selectedCount} of {displayedCount} filtered records selected";
+            }
+            else
+            {
+                countText = $"{selectedCount} of {displayedCount} records selected (showing recent 30 of {_totalPurchaseCount} total - use filters to see more)";
+            }
+
+            PurchaseSelectionCountText.Text = countText;
             DeleteSelectedPurchasesBtn.IsEnabled = selectedCount > 0;
         }
 
         private void UpdateConsumptionSelectionCount()
         {
             var selectedCount = _consumptionItems.Count(c => c.IsSelected);
-            var totalCount = _consumptionItems.Count;
+            var displayedCount = _consumptionItems.Count;
 
-            ConsumptionSelectionCountText.Text = $"{selectedCount} of {totalCount} records selected";
+            string countText;
+            if (_consumptionFiltersActive)
+            {
+                countText = $"{selectedCount} of {displayedCount} filtered records selected";
+            }
+            else
+            {
+                countText = $"{selectedCount} of {displayedCount} records selected (showing last 2 months of {_totalConsumptionCount} total - use filters to see more)";
+            }
+
+            ConsumptionSelectionCountText.Text = countText;
             DeleteSelectedConsumptionsBtn.IsEnabled = selectedCount > 0;
         }
 
@@ -1668,10 +1731,13 @@ Ready to select your file?";
                 backup.DisplayText = $"{backup.FormattedDate} - {backup.Operation} ({backup.FormattedSize})";
             }
             
-            BackupListBox.ItemsSource = backups;
-            if (backups.Any())
+            if (BackupListBox != null)
             {
-                BackupListBox.SelectedIndex = 0; // Select most recent
+                BackupListBox.ItemsSource = backups;
+                if (backups.Any())
+                {
+                    BackupListBox.SelectedIndex = 0; // Select most recent
+                }
             }
         }
 
@@ -1728,7 +1794,7 @@ Ready to select your file?";
             Content = grid;
         }
         
-        private ListBox BackupListBox;
+        private ListBox? BackupListBox;
     }
 }
 

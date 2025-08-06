@@ -573,8 +573,12 @@
                                 <StackPanel Grid.Column="1" Orientation="Horizontal">
                                     <Button x:Name="ExportSupplierBtn" Content="📤 Export" 
                                           Background="#28a745" Foreground="White" BorderThickness="0" 
-                                          Padding="15,10" FontWeight="SemiBold"
+                                          Padding="15,10" Margin="0,0,10,0" FontWeight="SemiBold"
                                           Click="ExportSupplier_Click"/>
+                                    <Button x:Name="PrintSupplierBtn" Content="🖨️ Print Report" 
+                                          Background="#6c757d" Foreground="White" BorderThickness="0" 
+                                          Padding="15,10" FontWeight="SemiBold"
+                                          Click="PrintVesselAccount_Click"/>
                                 </StackPanel>
                             </Grid>
                         </Border>
@@ -738,8 +742,12 @@
                                 <StackPanel Grid.Column="1" Orientation="Horizontal">
                                     <Button x:Name="ExportPaymentBtn" Content="📤 Export" 
                                         Background="#28a745" Foreground="White" BorderThickness="0" 
-                                        Padding="15,10" FontWeight="SemiBold"
+                                        Padding="15,10" Margin="0,0,10,0" FontWeight="SemiBold"
                                         Click="ExportPayment_Click"/>
+                                    <Button x:Name="PrintPaymentBtn" Content="🖨️ Print Report" 
+                                        Background="#6c757d" Foreground="White" BorderThickness="0" 
+                                        Padding="15,10" FontWeight="SemiBold"
+                                        Click="PrintVesselAccount_Click"/>
                                 </StackPanel>
                             </Grid>
                         </Border>
@@ -951,8 +959,12 @@
                                 <StackPanel Grid.Column="1" Orientation="Horizontal">
                                     <Button x:Name="ExportInventoryBtn" Content="📤 Export" 
                                           Background="#28a745" Foreground="White" BorderThickness="0" 
-                                          Padding="15,10" FontWeight="SemiBold"
+                                          Padding="15,10" Margin="0,0,10,0" FontWeight="SemiBold"
                                           Click="ExportInventory_Click"/>
+                                    <Button x:Name="PrintInventoryBtn" Content="🖨️ Print Report" 
+                                          Background="#6c757d" Foreground="White" BorderThickness="0" 
+                                          Padding="15,10" FontWeight="SemiBold"
+                                          Click="PrintVesselAccount_Click"/>
                                 </StackPanel>
                             </Grid>
                         </Border>
@@ -1156,8 +1168,12 @@
                                     <StackPanel Grid.Column="1" Orientation="Horizontal">
                                         <Button x:Name="ExportFleetEfficiencyBtn" Content="📤 Export" 
                                                   Background="#28a745" Foreground="White" BorderThickness="0" 
-                                                  Padding="15,10" FontWeight="SemiBold"
+                                                  Padding="15,10" Margin="0,0,10,0" FontWeight="SemiBold"
                                                   Click="ExportFleetEfficiency_Click"/>
+                                        <Button x:Name="PrintFleetEfficiencyBtn" Content="🖨️ Print Report" 
+                                                  Background="#6c757d" Foreground="White" BorderThickness="0" 
+                                                  Padding="15,10" FontWeight="SemiBold"
+                                                  Click="PrintVesselAccount_Click"/>
                                     </StackPanel>
                                 </Grid>
                             </Border>
@@ -1502,8 +1518,12 @@
                                     <StackPanel Grid.Column="1" Orientation="Horizontal">
                                         <Button x:Name="ExportFIFODetailBtn" Content="📤 Export" 
                               Background="#28a745" Foreground="White" BorderThickness="0" 
-                              Padding="15,10" FontWeight="SemiBold"
+                              Padding="15,10" Margin="0,0,10,0" FontWeight="SemiBold"
                               Click="ExportFIFODetail_Click"/>
+                                        <Button x:Name="PrintFIFODetailBtn" Content="🖨️ Print Report" 
+                              Background="#6c757d" Foreground="White" BorderThickness="0" 
+                              Padding="15,10" FontWeight="SemiBold"
+                              Click="PrintVesselAccount_Click"/>
                                     </StackPanel>
                                 </Grid>
                             </Border>
@@ -1870,6 +1890,7 @@
                                         <ColumnDefinition Width="*"/>
                                         <ColumnDefinition Width="Auto"/>
                                         <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="Auto"/>
                                     </Grid.ColumnDefinitions>
 
                                     <TextBlock Grid.Column="0" Text="From Date:" VerticalAlignment="Center" Margin="0,0,10,0"/>
@@ -1884,7 +1905,10 @@
 
                                     <Button Grid.Column="6" x:Name="ExportCostAnalysis" Content="📤 Export" 
                                             Click="ExportCostAnalysis_Click" 
-                                            Background="#27ae60" Foreground="White" Padding="15,8"/>
+                                            Background="#27ae60" Foreground="White" Padding="15,8" Margin="0,0,10,0"/>
+                                    <Button Grid.Column="7" x:Name="PrintCostAnalysis" Content="🖨️ Print" 
+                                            Click="PrintVesselAccount_Click" 
+                                            Background="#6c757d" Foreground="White" Padding="15,8"/>
                                 </Grid>
                             </Border>
 
@@ -2329,6 +2353,7 @@
                                         <ColumnDefinition Width="*"/>
                                         <ColumnDefinition Width="Auto"/>
                                         <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="Auto"/>
                                     </Grid.ColumnDefinitions>
 
                                     <TextBlock Grid.Column="0" Text="From Date:" VerticalAlignment="Center" Margin="0,0,10,0"/>
@@ -2343,7 +2368,10 @@
 
                                     <Button Grid.Column="6" x:Name="ExportRoutePerformance" Content="📤 Export" 
                                             Click="ExportRoutePerformance_Click" 
-                                            Background="#27ae60" Foreground="White" Padding="15,8"/>
+                                            Background="#27ae60" Foreground="White" Padding="15,8" Margin="0,0,10,0"/>
+                                    <Button Grid.Column="7" x:Name="PrintRoutePerformance" Content="🖨️ Print" 
+                                            Click="PrintVesselAccount_Click" 
+                                            Background="#6c757d" Foreground="White" Padding="15,8"/>
                                 </Grid>
                             </Border>
 

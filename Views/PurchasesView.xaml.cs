@@ -14,6 +14,11 @@ namespace DOInventoryManager.Views
         private Purchase? _editingPurchase = null;
         private bool _isEditMode = false;
         private List<AlertService.DueDateAlert> _currentAlerts = [];
+        
+        // Search/Filter functionality
+        private List<Vessel> _vessels = [];
+        private List<Supplier> _suppliers = [];
+        private bool _searchFiltersActive = false;
 
         public PurchasesView()
         {
@@ -30,17 +35,29 @@ namespace DOInventoryManager.Views
             {
                 using var context = new InventoryContext();
 
-                // Load vessels
+                // Load vessels for main form
                 var vessels = await context.Vessels
                     .OrderBy(v => v.Name)
                     .ToListAsync();
                 VesselComboBox.ItemsSource = vessels;
 
-                // Load suppliers
+                // Load suppliers for main form
                 var suppliers = await context.Suppliers
                     .OrderBy(s => s.Name)
                     .ToListAsync();
                 SupplierComboBox.ItemsSource = suppliers;
+
+                // Store vessels and suppliers for search filters
+                _vessels = vessels;
+                _suppliers = suppliers;
+
+                // Populate search filter dropdowns
+                SearchVesselFilter.ItemsSource = new List<Vessel> { new Vessel { Id = -1, Name = "All Vessels" } }.Concat(vessels).ToList();
+                SearchSupplierFilter.ItemsSource = new List<Supplier> { new Supplier { Id = -1, Name = "All Suppliers" } }.Concat(suppliers).ToList();
+                
+                // Set default selection to "All"
+                SearchVesselFilter.SelectedIndex = 0;
+                SearchSupplierFilter.SelectedIndex = 0;
 
                 // Load recent purchases
                 await LoadPurchasesAsync();
@@ -60,12 +77,64 @@ namespace DOInventoryManager.Views
             try
             {
                 using var context = new InventoryContext();
-                var purchases = await context.Purchases
-                    .Include(p => p.Vessel)
-                    .Include(p => p.Supplier)
-                    .OrderByDescending(p => p.PurchaseDate)
-                    .Take(50) // Show last 50 purchases
-                    .ToListAsync();
+                
+                List<Purchase> purchases;
+                
+                if (_searchFiltersActive)
+                {
+                    // Apply search filters
+                    var query = context.Purchases
+                        .Include(p => p.Vessel)
+                        .Include(p => p.Supplier)
+                        .AsQueryable();
+
+                    // Date range filter
+                    if (SearchDateFromPicker.SelectedDate.HasValue)
+                    {
+                        query = query.Where(p => p.PurchaseDate >= SearchDateFromPicker.SelectedDate.Value);
+                    }
+                    
+                    if (SearchDateToPicker.SelectedDate.HasValue)
+                    {
+                        query = query.Where(p => p.PurchaseDate <= SearchDateToPicker.SelectedDate.Value);
+                    }
+
+                    // Vessel filter
+                    if (SearchVesselFilter.SelectedValue != null && (int)SearchVesselFilter.SelectedValue != -1)
+                    {
+                        query = query.Where(p => p.VesselId == (int)SearchVesselFilter.SelectedValue);
+                    }
+
+                    // Supplier filter
+                    if (SearchSupplierFilter.SelectedValue != null && (int)SearchSupplierFilter.SelectedValue != -1)
+                    {
+                        query = query.Where(p => p.SupplierId == (int)SearchSupplierFilter.SelectedValue);
+                    }
+
+                    // Invoice reference filter
+                    if (!string.IsNullOrWhiteSpace(SearchInvoiceFilter.Text))
+                    {
+                        query = query.Where(p => p.InvoiceReference.Contains(SearchInvoiceFilter.Text));
+                    }
+
+                    purchases = await query
+                        .OrderByDescending(p => p.PurchaseDate)
+                        .ToListAsync();
+                        
+                    SearchResultCountText.Text = $"Found {purchases.Count} purchases";
+                }
+                else
+                {
+                    // Load recent purchases (default view)
+                    purchases = await context.Purchases
+                        .Include(p => p.Vessel)
+                        .Include(p => p.Supplier)
+                        .OrderByDescending(p => p.PurchaseDate)
+                        .Take(50) // Show last 50 purchases
+                        .ToListAsync();
+                        
+                    SearchResultCountText.Text = $"Showing recent {purchases.Count} purchases";
+                }
 
                 PurchasesGrid.ItemsSource = purchases;
 
@@ -719,6 +788,105 @@ namespace DOInventoryManager.Views
 
             MessageBox.Show(alertMessage, "All Payment Alerts",
                            MessageBoxButton.OK, MessageBoxImage.Information);
+        }
+
+        #endregion
+
+        #region Search/Filter Event Handlers
+
+        private async void ApplySearchFilter_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                _searchFiltersActive = true;
+                await LoadPurchasesAsync();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error applying search filter: {ex.Message}", "Error",
+                              MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        private async void ClearSearchFilter_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                // Clear all search controls
+                SearchDateFromPicker.SelectedDate = null;
+                SearchDateToPicker.SelectedDate = null;
+                SearchVesselFilter.SelectedIndex = 0; // "All Vessels"
+                SearchSupplierFilter.SelectedIndex = 0; // "All Suppliers"
+                SearchInvoiceFilter.Text = "";
+                
+                _searchFiltersActive = false;
+                await LoadPurchasesAsync();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error clearing search filter: {ex.Message}", "Error",
+                              MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        private async void Last30Days_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                SearchDateFromPicker.SelectedDate = DateTime.Now.AddDays(-30);
+                SearchDateToPicker.SelectedDate = DateTime.Now;
+                SearchVesselFilter.SelectedIndex = 0;
+                SearchSupplierFilter.SelectedIndex = 0;
+                SearchInvoiceFilter.Text = "";
+                
+                _searchFiltersActive = true;
+                await LoadPurchasesAsync();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error applying Last 30 Days filter: {ex.Message}", "Error",
+                              MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        private async void Last6Months_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                SearchDateFromPicker.SelectedDate = DateTime.Now.AddMonths(-6);
+                SearchDateToPicker.SelectedDate = DateTime.Now;
+                SearchVesselFilter.SelectedIndex = 0;
+                SearchSupplierFilter.SelectedIndex = 0;
+                SearchInvoiceFilter.Text = "";
+                
+                _searchFiltersActive = true;
+                await LoadPurchasesAsync();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error applying Last 6 Months filter: {ex.Message}", "Error",
+                              MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        private async void ThisYear_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                SearchDateFromPicker.SelectedDate = new DateTime(DateTime.Now.Year, 1, 1);
+                SearchDateToPicker.SelectedDate = DateTime.Now;
+                SearchVesselFilter.SelectedIndex = 0;
+                SearchSupplierFilter.SelectedIndex = 0;
+                SearchInvoiceFilter.Text = "";
+                
+                _searchFiltersActive = true;
+                await LoadPurchasesAsync();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error applying This Year filter: {ex.Message}", "Error",
+                              MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
 
         #endregion

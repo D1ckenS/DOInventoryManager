@@ -3,27 +3,32 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              Background="White">
 
-    <ScrollViewer VerticalScrollBarVisibility="Hidden" HorizontalScrollBarVisibility="Hidden">
-        <StackPanel Margin="20">
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <!-- Title -->
+            <RowDefinition Height="Auto"/>
+            <!-- Summary -->
+            <RowDefinition Height="*"/>
+            <!-- Main Content - use remaining space but constrain height -->
+        </Grid.RowDefinitions>
 
-            <!-- Report Title -->
-            <TextBlock x:Name="ReportTitleText" Text="Report" 
-                      FontSize="18" FontWeight="Bold" HorizontalAlignment="Center" 
-                      Margin="0,0,0,20" Foreground="Black"/>
+        <!-- Report Title -->
+        <TextBlock Grid.Row="0" x:Name="ReportTitleText" Text="Report" 
+                   FontSize="14" FontWeight="Bold" HorizontalAlignment="Center" 
+                   Margin="0,0,0,15" Foreground="Black"/>
 
-            <!-- Summary Cards Section -->
-            <Border x:Name="SummarySection" BorderBrush="Black" BorderThickness="1" 
-                   Padding="15" Margin="0,0,0,20" Visibility="Collapsed">
-                <StackPanel x:Name="SummaryCardsPanel">
-                    <!-- Summary cards will be added dynamically -->
-                </StackPanel>
-            </Border>
-
-            <!-- Main Content Section -->
-            <StackPanel x:Name="MainContentPanel">
-                <!-- Main content will be added dynamically -->
+        <!-- Summary Cards Section -->
+        <Border Grid.Row="1" x:Name="SummarySection" BorderBrush="Black" BorderThickness="1" 
+               Padding="15" Margin="0,0,0,15" Visibility="Collapsed">
+            <StackPanel x:Name="SummaryCardsPanel">
+                <!-- Summary cards will be added dynamically -->
             </StackPanel>
+        </Border>
 
+        <!-- Main Content Section - mimic MonthlySummaryPrint structure -->
+        <StackPanel Grid.Row="2" x:Name="MainContentPanel" MaxHeight="480">
+            <!-- Main content will be added dynamically -->
         </StackPanel>
-    </ScrollViewer>
+    </Grid>
 </UserControl>

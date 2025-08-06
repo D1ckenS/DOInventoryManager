@@ -1,6 +1,8 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
 using DOInventoryManager.Services;
+using System.Diagnostics;
+using System.IO;
 using DOInventoryManager.Views.Print;
 
 namespace DOInventoryManager.Views
@@ -165,17 +167,41 @@ namespace DOInventoryManager.Views
             }
         }
 
-        private void Export_Click(object sender, RoutedEventArgs e)
+        private async void Export_Click(object sender, RoutedEventArgs e)
         {
-            if (_currentSummary == null)
+            try
             {
-                MessageBox.Show("Please generate a report first.", "No Data",
-                              MessageBoxButton.OK, MessageBoxImage.Warning);
-                return;
-            }
+                if (_currentSummary == null)
+                {
+                    MessageBox.Show("Please generate a report first.", "No Data",
+                                  MessageBoxButton.OK, MessageBoxImage.Warning);
+                    return;
+                }
 
-            MessageBox.Show("Excel export feature coming soon!", "Export",
-                          MessageBoxButton.OK, MessageBoxImage.Information);
+                var selectedMonth = MonthComboBox.SelectedItem?.ToString();
+                if (string.IsNullOrEmpty(selectedMonth))
+                {
+                    MessageBox.Show("Please select a month first.", "No Month Selected",
+                                  MessageBoxButton.OK, MessageBoxImage.Warning);
+                    return;
+                }
+
+                var exportService = new ExcelExportService();
+                var filePath = await exportService.ExportMonthlySummaryToExcelAsync(_currentSummary, selectedMonth);
+
+                var result = MessageBox.Show($"Monthly summary exported successfully!\n\nFile: {Path.GetFileName(filePath)}\n\nWould you like to open the file?",
+                                           "Export Complete", MessageBoxButton.YesNo, MessageBoxImage.Question);
+
+                if (result == MessageBoxResult.Yes)
+                {
+                    Process.Start(new ProcessStartInfo(filePath) { UseShellExecute = true });
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error exporting summary report: {ex.Message}", "Export Error",
+                              MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
 
         private void Print_Click(object sender, RoutedEventArgs e)

@@ -146,6 +146,109 @@ namespace DOInventoryManager.Services
             }
         }
 
+        public async Task<List<PurchaseSelectionItem>> GetRecentPurchasesAsync(int limit = 30)
+        {
+            try
+            {
+                using var context = new InventoryContext();
+
+                var purchases = await context.Purchases
+                    .Include(p => p.Vessel)
+                    .Include(p => p.Supplier)
+                    .OrderByDescending(p => p.PurchaseDate)
+                    .Take(limit)
+                    .ToListAsync();
+
+                return purchases.Select(p => new PurchaseSelectionItem
+                {
+                    Id = p.Id,
+                    VesselId = p.VesselId,
+                    Vessel = p.Vessel,
+                    SupplierId = p.SupplierId,
+                    Supplier = p.Supplier,
+                    PurchaseDate = p.PurchaseDate,
+                    InvoiceReference = p.InvoiceReference,
+                    QuantityLiters = p.QuantityLiters,
+                    QuantityTons = p.QuantityTons,
+                    TotalValue = p.TotalValue,
+                    TotalValueUSD = p.TotalValueUSD,
+                    InvoiceReceiptDate = p.InvoiceReceiptDate,
+                    DueDate = p.DueDate,
+                    RemainingQuantity = p.RemainingQuantity,
+                    CreatedDate = p.CreatedDate,
+                    PaymentDate = p.PaymentDate,
+                    PaymentAmount = p.PaymentAmount,
+                    PaymentAmountUSD = p.PaymentAmountUSD,
+                    IsSelected = false
+                }).ToList();
+            }
+            catch (Exception ex)
+            {
+                throw new InvalidOperationException($"Error loading recent purchases: {ex.Message}", ex);
+            }
+        }
+
+        public async Task<List<ConsumptionSelectionItem>> GetRecentConsumptionsAsync(int monthsBack = 2)
+        {
+            try
+            {
+                using var context = new InventoryContext();
+
+                // Calculate the cutoff date (monthsBack months ago)
+                var cutoffDate = DateTime.Now.AddMonths(-monthsBack);
+                var cutoffMonthString = cutoffDate.ToString("yyyy-MM");
+
+                var consumptions = await context.Consumptions
+                    .Include(c => c.Vessel)
+                    .Where(c => string.Compare(c.Month, cutoffMonthString) >= 0)
+                    .OrderByDescending(c => c.ConsumptionDate)
+                    .ToListAsync();
+
+                return consumptions.Select(c => new ConsumptionSelectionItem
+                {
+                    Id = c.Id,
+                    VesselId = c.VesselId,
+                    Vessel = c.Vessel,
+                    ConsumptionDate = c.ConsumptionDate,
+                    Month = c.Month,
+                    ConsumptionLiters = c.ConsumptionLiters,
+                    LegsCompleted = c.LegsCompleted,
+                    CreatedDate = c.CreatedDate,
+                    IsSelected = false
+                }).ToList();
+            }
+            catch (Exception ex)
+            {
+                throw new InvalidOperationException($"Error loading recent consumptions: {ex.Message}", ex);
+            }
+        }
+
+        public async Task<int> GetTotalPurchaseCountAsync()
+        {
+            try
+            {
+                using var context = new InventoryContext();
+                return await context.Purchases.CountAsync();
+            }
+            catch (Exception ex)
+            {
+                throw new InvalidOperationException($"Error getting total purchase count: {ex.Message}", ex);
+            }
+        }
+
+        public async Task<int> GetTotalConsumptionCountAsync()
+        {
+            try
+            {
+                using var context = new InventoryContext();
+                return await context.Consumptions.CountAsync();
+            }
+            catch (Exception ex)
+            {
+                throw new InvalidOperationException($"Error getting total consumption count: {ex.Message}", ex);
+            }
+        }
+
         public async Task<BulkDeleteResult> DeleteSelectedPurchasesAsync(List<int> purchaseIds)
         {
             var result = new BulkDeleteResult();

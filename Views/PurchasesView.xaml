@@ -31,6 +31,8 @@
                 <!-- Purchase Form -->
                 <RowDefinition Height="Auto"/>
                 <!-- Calculations Display -->
+                <RowDefinition Height="Auto"/>
+                <!-- Search/Filter Panel -->
                 <RowDefinition Height="*"/>
                 <!-- Purchases List -->
             </Grid.RowDefinitions>
@@ -46,10 +48,10 @@
             <Border x:Name="AlertStatusPanel" Grid.Row="0" Background="#fff3cd" BorderBrush="#ffc107" 
                     BorderThickness="1" CornerRadius="6" Padding="15" Margin="0,50,0,20" Visibility="Collapsed">
                 <StackPanel Orientation="Horizontal">
-                    <TextBlock Text="⚠️" FontSize="20" VerticalAlignment="Center" Margin="0,0,10,0"/>
+                    <TextBlock Text="⚠" FontSize="20" VerticalAlignment="Center" Margin="0,0,10,0"/>
                     <TextBlock x:Name="AlertStatusText" Text="" FontSize="14" FontWeight="SemiBold" 
                             VerticalAlignment="Center" Foreground="#856404"/>
-                    <Button x:Name="ViewAlertsBtn" Content="📋 View All Alerts" 
+                    <Button x:Name="ViewAlertsBtn" Content="View All Alerts" 
                           Background="#ffc107" Foreground="#856404" BorderThickness="0" 
                           Padding="10,5" Margin="20,0,0,0" FontSize="12"
                           Click="ViewAlerts_Click"/>
@@ -186,7 +188,7 @@
 
                             <!-- Payment Status -->
                             <StackPanel Grid.Column="2" VerticalAlignment="Center">
-                                <TextBlock x:Name="PaymentStatusText" Text="📋 Optional Invoice Tracking" 
+                                <TextBlock x:Name="PaymentStatusText" Text="Optional Invoice Tracking" 
                                          FontSize="12" Foreground="#1976d2" FontWeight="SemiBold"/>
                             </StackPanel>
                         </Grid>
@@ -194,22 +196,22 @@
 
                     <!-- Action Buttons -->
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-                        <Button x:Name="EditPurchaseBtn" Content="✏️ Edit Selected" 
+                        <Button x:Name="EditPurchaseBtn" Content="Edit Selected" 
                           Background="#f39c12" Foreground="White" BorderThickness="0" 
                           Padding="15,10" Margin="0,0,10,0" FontWeight="SemiBold"
                           IsEnabled="False" Click="EditPurchase_Click"/>
 
-                        <Button x:Name="DeletePurchaseBtn" Content="🗑️ Delete Selected" 
+                        <Button x:Name="DeletePurchaseBtn" Content="Delete Selected" 
                           Background="#dc3545" Foreground="White" BorderThickness="0" 
                           Padding="15,10" Margin="0,0,15,0" FontWeight="SemiBold"
                           IsEnabled="False" Click="DeletePurchase_Click"/>
 
-                        <Button x:Name="SavePurchaseBtn" Content="💾 Complete Purchase" 
+                        <Button x:Name="SavePurchaseBtn" Content="Complete Purchase" 
                           Background="#27ae60" Foreground="White" BorderThickness="0" 
                           Padding="20,12" Margin="0,0,15,0" FontWeight="SemiBold"
                           Click="SavePurchase_Click"/>
 
-                        <Button x:Name="ClearFormBtn" Content="🔄 Clear Form" 
+                        <Button x:Name="ClearFormBtn" Content="Clear Form" 
                           Background="#6c757d" Foreground="White" BorderThickness="0" 
                           Padding="15,12" FontWeight="SemiBold"
                           Click="ClearForm_Click"/>
@@ -235,7 +237,7 @@
                     </StackPanel>
 
                     <StackPanel Grid.Column="1" HorizontalAlignment="Center">
-                        <TextBlock Text="⚖️ Price per Ton" FontWeight="SemiBold" HorizontalAlignment="Center" FontSize="12"/>
+                        <TextBlock Text="Price per Ton" FontWeight="SemiBold" HorizontalAlignment="Center" FontSize="12"/>
                         <TextBlock x:Name="PricePerTonText" Text="0.000" FontSize="18" FontWeight="Bold" 
                      HorizontalAlignment="Center" Foreground="#856404"/>
                     </StackPanel>
@@ -254,15 +256,111 @@
                 </Grid>
             </Border>
 
+            <!-- Search/Filter Panel -->
+            <Border Grid.Row="3" Background="#f8f9fa" BorderBrush="#dee2e6" BorderThickness="1" 
+                    CornerRadius="6" Padding="20" Margin="0,20,0,20">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    
+                    <TextBlock Grid.Row="0" Text="Search &amp; Filter Purchases" FontSize="16" FontWeight="SemiBold" 
+                               Foreground="#2c3e50" Margin="0,0,0,15"/>
+                    
+                    <Grid Grid.Row="1">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        
+                        <!-- Date From -->
+                        <StackPanel Grid.Column="0" Margin="0,0,10,0">
+                            <TextBlock Text="Date From:" FontWeight="SemiBold" Margin="0,0,0,5"/>
+                            <DatePicker x:Name="SearchDateFromPicker" Width="140"/>
+                        </StackPanel>
+                        
+                        <!-- Date To -->
+                        <StackPanel Grid.Column="1" Margin="0,0,10,0">
+                            <TextBlock Text="Date To:" FontWeight="SemiBold" Margin="0,0,0,5"/>
+                            <DatePicker x:Name="SearchDateToPicker" Width="140"/>
+                        </StackPanel>
+                        
+                        <!-- Vessel -->
+                        <StackPanel Grid.Column="2" Margin="0,0,10,0">
+                            <TextBlock Text="Vessel:" FontWeight="SemiBold" Margin="0,0,0,5"/>
+                            <ComboBox x:Name="SearchVesselFilter" Width="140" DisplayMemberPath="Name" SelectedValuePath="Id"/>
+                        </StackPanel>
+                        
+                        <!-- Supplier -->
+                        <StackPanel Grid.Column="3" Margin="0,0,10,0">
+                            <TextBlock Text="Supplier:" FontWeight="SemiBold" Margin="0,0,0,5"/>
+                            <ComboBox x:Name="SearchSupplierFilter" Width="140" DisplayMemberPath="Name" SelectedValuePath="Id"/>
+                        </StackPanel>
+                        
+                        <!-- Invoice Reference -->
+                        <StackPanel Grid.Column="4">
+                            <TextBlock Text="Invoice Reference:" FontWeight="SemiBold" Margin="0,0,0,5"/>
+                            <TextBox x:Name="SearchInvoiceFilter" Width="140"/>
+                        </StackPanel>
+                    </Grid>
+                    
+                    <!-- Filter Buttons and Quick Filters -->
+                    <Grid Grid.Row="2" Margin="0,15,0,0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        
+                        <Button Grid.Column="0" x:Name="ApplySearchFilterBtn" Content="Apply Filter" 
+                                Click="ApplySearchFilter_Click" Background="#007bff" Foreground="White" 
+                                BorderThickness="0" Padding="15,8" Margin="0,0,10,0" FontWeight="SemiBold"/>
+                                
+                        <Button Grid.Column="1" x:Name="ClearSearchFilterBtn" Content="Clear Filter" 
+                                Click="ClearSearchFilter_Click" Background="#6c757d" Foreground="White" 
+                                BorderThickness="0" Padding="15,8" Margin="0,0,20,0" FontWeight="SemiBold"/>
+                        
+                        <!-- Quick Filter Buttons -->
+                        <StackPanel Grid.Column="3" Orientation="Horizontal" HorizontalAlignment="Right">
+                            <TextBlock Text="Quick Filters:" FontWeight="SemiBold" VerticalAlignment="Center" Margin="0,0,10,0"/>
+                            <Button x:Name="Last30DaysBtn" Content="Last 30 Days" Click="Last30Days_Click" 
+                                    Background="#28a745" Foreground="White" BorderThickness="0" 
+                                    Padding="10,5" Margin="0,0,5,0" FontSize="12"/>
+                            <Button x:Name="Last6MonthsBtn" Content="Last 6 Months" Click="Last6Months_Click" 
+                                    Background="#17a2b8" Foreground="White" BorderThickness="0" 
+                                    Padding="10,5" Margin="0,0,5,0" FontSize="12"/>
+                            <Button x:Name="ThisYearBtn" Content="This Year" Click="ThisYear_Click" 
+                                    Background="#ffc107" Foreground="Black" BorderThickness="0" 
+                                    Padding="10,5" FontSize="12"/>
+                        </StackPanel>
+                        
+                        <TextBlock Grid.Column="5" x:Name="SearchResultCountText" Text="" 
+                                   VerticalAlignment="Center" FontWeight="SemiBold" FontStyle="Italic"/>
+                    </Grid>
+                </Grid>
+            </Border>
+
             <!-- Recent Purchases List -->
-            <Border Grid.Row="3" Background="White" BorderBrush="#dee2e6" BorderThickness="1" 
+            <Border Grid.Row="4" Background="White" BorderBrush="#dee2e6" BorderThickness="1" 
                   CornerRadius="6" Padding="20">
                 <StackPanel>
                     <StackPanel Orientation="Horizontal" Margin="0,0,0,15">
-                        <TextBlock Text="📋 Recent Purchases" FontSize="16" FontWeight="SemiBold" 
+                        <TextBlock Text="Recent Purchases" FontSize="16" FontWeight="SemiBold" 
                                  VerticalAlignment="Center" Foreground="#2c3e50"/>
                         <Rectangle Width="20"/>
-                        <Button Content="🔄 Refresh" Background="#17a2b8" Foreground="White" 
+                        <Button Content="Refresh" Background="#17a2b8" Foreground="White" 
                               BorderThickness="0" Padding="10,5" FontSize="12"
                               Click="RefreshPurchases_Click"/>
                     </StackPanel>

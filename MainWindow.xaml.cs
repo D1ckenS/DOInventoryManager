@@ -128,6 +128,19 @@ namespace DOInventoryManager
             }
         }
 
+        private void OnConsumptionNavigationRequested(string viewName)
+        {
+            switch (viewName)
+            {
+                case "Reports":
+                    LoadSummary(); // This loads ReportsView
+                    break;
+                default:
+                    StatusText.Text = $"Unknown view requested: {viewName}";
+                    break;
+            }
+        }
+
         private void LoadSuppliers()
         {
             try
@@ -174,7 +187,9 @@ namespace DOInventoryManager
         {
             try
             {
-                ContentFrame.Content = new ConsumptionView();
+                var consumptionView = new ConsumptionView();
+                consumptionView.NavigationRequested += OnConsumptionNavigationRequested;
+                ContentFrame.Content = consumptionView;
                 SetActiveButton(ConsumptionBtn);
                 StatusText.Text = "Consumption entry loaded";
             }

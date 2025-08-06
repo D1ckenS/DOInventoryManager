@@ -4,6 +4,8 @@ using DOInventoryManager.Data;
 using DOInventoryManager.Models;
 using DOInventoryManager.Services;
 using Microsoft.EntityFrameworkCore;
+using System.Diagnostics;
+using System.IO;
 
 namespace DOInventoryManager.Views
 {
@@ -323,10 +325,53 @@ namespace DOInventoryManager.Views
             }
         }
 
-        private void Export_Click(object sender, RoutedEventArgs e)
+        private async void Export_Click(object sender, RoutedEventArgs e)
         {
-            MessageBox.Show("Excel export feature coming soon!", "DO Inventory Manager",
-                          MessageBoxButton.OK, MessageBoxImage.Information);
+            try
+            {
+                if (string.IsNullOrEmpty(_currentFilterMonth))
+                {
+                    MessageBox.Show("Please select a month to export allocation data.", "No Month Selected",
+                                  MessageBoxButton.OK, MessageBoxImage.Warning);
+                    return;
+                }
+
+                // Get allocation data for the selected month
+                using var context = new InventoryContext();
+                var allocations = await context.Allocations
+                    .Include(a => a.Purchase)
+                        .ThenInclude(p => p.Vessel)
+                    .Include(a => a.Purchase)
+                        .ThenInclude(p => p.Supplier)
+                    .Include(a => a.Consumption)
+                        .ThenInclude(c => c.Vessel)
+                    .Where(a => a.Month == _currentFilterMonth)
+                    .OrderByDescending(a => a.Purchase.PurchaseDate)
+                    .ToListAsync();
+
+                if (!allocations.Any())
+                {
+                    MessageBox.Show($"No allocation data found for {_currentFilterMonth}.", "No Data",
+                                  MessageBoxButton.OK, MessageBoxImage.Information);
+                    return;
+                }
+
+                var exportService = new ExcelExportService();
+                var filePath = await exportService.ExportAllocationDataToExcelAsync(allocations, _currentFilterMonth);
+
+                var result = MessageBox.Show($"Allocation data exported successfully!\n\nFile: {Path.GetFileName(filePath)}\n\nWould you like to open the file?",
+                                           "Export Complete", MessageBoxButton.YesNo, MessageBoxImage.Question);
+
+                if (result == MessageBoxResult.Yes)
+                {
+                    Process.Start(new ProcessStartInfo(filePath) { UseShellExecute = true });
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error exporting allocation data: {ex.Message}", "Export Error",
+                              MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
 
         #endregion
