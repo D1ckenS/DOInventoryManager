@@ -170,7 +170,6 @@
                         <DataGrid Grid.Row="1" x:Name="BackupHistoryGrid" AutoGenerateColumns="False" 
                                   CanUserAddRows="False" CanUserDeleteRows="False" IsReadOnly="True"
                                   GridLinesVisibility="Horizontal" HeadersVisibility="Column"
-                                  AlternatingRowBackground="#F8F9FA" RowBackground="White"
                                   BorderBrush="#DEE2E6" BorderThickness="1">
                             
                             <DataGrid.Columns>
@@ -314,7 +313,6 @@
                         <DataGrid Grid.Row="3" x:Name="PurchaseHistoryGrid" AutoGenerateColumns="False" 
                                   CanUserAddRows="False" CanUserDeleteRows="False" 
                                   GridLinesVisibility="Horizontal" HeadersVisibility="Column"
-                                  AlternatingRowBackground="#F8F9FA" RowBackground="White"
                                   BorderBrush="#DEE2E6" BorderThickness="1"
                                   SelectionChanged="PurchaseHistoryGrid_SelectionChanged">
                             
@@ -428,7 +426,6 @@
                         <DataGrid Grid.Row="3" x:Name="ConsumptionHistoryGrid" AutoGenerateColumns="False" 
                                   CanUserAddRows="False" CanUserDeleteRows="False" 
                                   GridLinesVisibility="Horizontal" HeadersVisibility="Column"
-                                  AlternatingRowBackground="#F8F9FA" RowBackground="White"
                                   BorderBrush="#DEE2E6" BorderThickness="1"
                                   SelectionChanged="ConsumptionHistoryGrid_SelectionChanged">
                             

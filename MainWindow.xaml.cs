@@ -24,6 +24,13 @@ namespace DOInventoryManager
             // Set window title with version
             this.Title = "DO Inventory Manager - v1.0.0";
 
+            // Load navigation state
+            LoadNavigationState();
+
+            // Initialize theme toggle button
+            var themeService = ThemeService.Instance;
+            UpdateThemeToggleButton(themeService.ActualTheme);
+
             // Check for due date alerts on startup
             await CheckStartupAlertsAsync();
         }
@@ -236,19 +243,19 @@ namespace DOInventoryManager
         private void SetActiveButton(Button activeButton)
         {
             // Reset all buttons to normal style
-            DashboardBtn.Style = (Style)FindResource("NavButtonStyle");
-            SuppliersBtn.Style = (Style)FindResource("NavButtonStyle");
-            VesselsBtn.Style = (Style)FindResource("NavButtonStyle");
-            PurchasesBtn.Style = (Style)FindResource("NavButtonStyle");
-            ConsumptionBtn.Style = (Style)FindResource("NavButtonStyle");
-            TripsBtn.Style = (Style)FindResource("NavButtonStyle");
-            AllocationBtn.Style = (Style)FindResource("NavButtonStyle");
-            SummaryBtn.Style = (Style)FindResource("NavButtonStyle");
-            BackupBtn.Style = (Style)FindResource("NavButtonStyle");
-            SettingsBtn.Style = (Style)FindResource("NavButtonStyle");
+            DashboardBtn.Style = (Style)FindResource("NavigationButtonStyle");
+            SuppliersBtn.Style = (Style)FindResource("NavigationButtonStyle");
+            VesselsBtn.Style = (Style)FindResource("NavigationButtonStyle");
+            PurchasesBtn.Style = (Style)FindResource("NavigationButtonStyle");
+            ConsumptionBtn.Style = (Style)FindResource("NavigationButtonStyle");
+            TripsBtn.Style = (Style)FindResource("NavigationButtonStyle");
+            AllocationBtn.Style = (Style)FindResource("NavigationButtonStyle");
+            SummaryBtn.Style = (Style)FindResource("NavigationButtonStyle");
+            BackupBtn.Style = (Style)FindResource("NavigationButtonStyle");
+            SettingsBtn.Style = (Style)FindResource("NavigationButtonStyle");
 
             // Set active button style
-            activeButton.Style = (Style)FindResource("ActiveNavButtonStyle");
+            activeButton.Style = (Style)FindResource("ActiveNavigationButtonStyle");
         }
 
         #endregion
@@ -325,6 +332,141 @@ namespace DOInventoryManager
             // TODO: Implement settings
             MessageBox.Show("Settings feature coming soon!", "DO Inventory Manager",
                           MessageBoxButton.OK, MessageBoxImage.Information);
+        }
+
+        #endregion
+
+        #region Modern Navigation Features
+
+        private bool _isNavigationCollapsed = false;
+        
+        private void HamburgerMenu_Click(object sender, RoutedEventArgs e)
+        {
+            ToggleNavigationPane();
+        }
+
+        private void ToggleNavigationPane()
+        {
+            _isNavigationCollapsed = !_isNavigationCollapsed;
+
+            if (_isNavigationCollapsed)
+            {
+                // Collapse navigation - show only icons
+                NavigationColumn.Width = new GridLength(56);
+                
+                // Hide all text elements
+                NavigationTitle.Visibility = Visibility.Collapsed;
+                NavigationFooter.Visibility = Visibility.Collapsed;
+                
+                // Hide text in navigation buttons
+                DashboardText.Visibility = Visibility.Collapsed;
+                SuppliersText.Visibility = Visibility.Collapsed;
+                VesselsText.Visibility = Visibility.Collapsed;
+                PurchasesText.Visibility = Visibility.Collapsed;
+                ConsumptionText.Visibility = Visibility.Collapsed;
+                TripsText.Visibility = Visibility.Collapsed;
+                AllocationText.Visibility = Visibility.Collapsed;
+                SummaryText.Visibility = Visibility.Collapsed;
+                BackupText.Visibility = Visibility.Collapsed;
+                SettingsText.Visibility = Visibility.Collapsed;
+            }
+            else
+            {
+                // Expand navigation - show icons and text
+                NavigationColumn.Width = new GridLength(280);
+                
+                // Show all text elements
+                NavigationTitle.Visibility = Visibility.Visible;
+                NavigationFooter.Visibility = Visibility.Visible;
+                
+                // Show text in navigation buttons
+                DashboardText.Visibility = Visibility.Visible;
+                SuppliersText.Visibility = Visibility.Visible;
+                VesselsText.Visibility = Visibility.Visible;
+                PurchasesText.Visibility = Visibility.Visible;
+                ConsumptionText.Visibility = Visibility.Visible;
+                TripsText.Visibility = Visibility.Visible;
+                AllocationText.Visibility = Visibility.Visible;
+                SummaryText.Visibility = Visibility.Visible;
+                BackupText.Visibility = Visibility.Visible;
+                SettingsText.Visibility = Visibility.Visible;
+            }
+
+            // Save navigation state
+            SaveNavigationState();
+        }
+
+        private void SaveNavigationState()
+        {
+            try
+            {
+                // Save navigation state to user preferences
+                var settingsPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "navigation-settings.json");
+                var settings = new { IsCollapsed = _isNavigationCollapsed };
+                var json = System.Text.Json.JsonSerializer.Serialize(settings);
+                File.WriteAllText(settingsPath, json);
+            }
+            catch
+            {
+                // Ignore save errors
+            }
+        }
+
+        private void LoadNavigationState()
+        {
+            try
+            {
+                var settingsPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "navigation-settings.json");
+                if (File.Exists(settingsPath))
+                {
+                    var json = File.ReadAllText(settingsPath);
+                    using var document = System.Text.Json.JsonDocument.Parse(json);
+                    if (document.RootElement.TryGetProperty("IsCollapsed", out var property) && property.GetBoolean())
+                    {
+                        _isNavigationCollapsed = false; // Start expanded, then toggle to collapsed
+                        ToggleNavigationPane();
+                    }
+                }
+            }
+            catch
+            {
+                // Use default expanded state if loading fails
+            }
+        }
+
+        #endregion
+
+        #region Theme Management
+        
+        private void ThemeToggle_Click(object sender, RoutedEventArgs e)
+        {
+            var themeService = ThemeService.Instance;
+            var nextTheme = themeService.ActualTheme == AppTheme.Light ? AppTheme.Dark : AppTheme.Light;
+            themeService.SetTheme(nextTheme);
+            
+            // Update button tooltip and icon
+            UpdateThemeToggleButton(nextTheme);
+        }
+
+        private void UpdateThemeToggleButton(AppTheme currentTheme)
+        {
+            if (ThemeToggleBtn.Content is TextBlock textBlock)
+            {
+                // Show sun icon when in dark mode (to switch to light)
+                // Show moon icon when in light mode (to switch to dark)
+                if (currentTheme == AppTheme.Dark)
+                {
+                    textBlock.Text = "☀️";
+                    textBlock.FontSize = 18;
+                    ThemeToggleBtn.ToolTip = "Switch to Light Theme";
+                }
+                else
+                {
+                    textBlock.Text = "🌙";
+                    textBlock.FontSize = 18;
+                    ThemeToggleBtn.ToolTip = "Switch to Dark Theme";
+                }
+            }
         }
 
         #endregion

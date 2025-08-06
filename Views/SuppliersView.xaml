@@ -11,10 +11,10 @@
         
         <!-- Header -->
         <TextBlock Grid.Row="0" Text="Supplier Management" FontSize="28" FontWeight="Bold" 
-                 Margin="0,0,0,20" Foreground="#2c3e50"/>
+                 Margin="0,0,0,20" Foreground="{DynamicResource TextPrimaryBrush}"/>
         
         <!-- Toolbar -->
-        <Border Grid.Row="1" Background="#f8f9fa" BorderBrush="#dee2e6" BorderThickness="1" 
+        <Border Grid.Row="1" Background="{DynamicResource CardBackgroundBrush}" BorderBrush="{DynamicResource BorderSubtleBrush}" BorderThickness="1" 
               CornerRadius="6" Padding="15" Margin="0,0,0,20">
             <StackPanel Orientation="Horizontal">
                 <Button x:Name="AddSupplierBtn" Content="➕ Add New Supplier" 
@@ -50,11 +50,11 @@
             </Grid.ColumnDefinitions>
             
             <!-- Suppliers List -->
-            <Border Grid.Column="0" Background="White" BorderBrush="#dee2e6" BorderThickness="1" 
+            <Border Grid.Column="0" Background="{DynamicResource CardBackgroundBrush}" BorderBrush="{DynamicResource BorderSubtleBrush}" BorderThickness="1" 
                   CornerRadius="6" Padding="15" Margin="0,0,10,0">
                 <StackPanel>
                     <TextBlock Text="Active Suppliers" FontSize="16" FontWeight="SemiBold" 
-                             Margin="0,0,0,15" Foreground="#2c3e50"/>
+                             Margin="0,0,0,15" Foreground="{DynamicResource TextPrimaryBrush}"/>
                     
                     <DataGrid x:Name="SuppliersGrid" 
                             AutoGenerateColumns="False" 
@@ -65,7 +65,6 @@
                             CanUserSortColumns="True"
                             GridLinesVisibility="Horizontal"
                             HeadersVisibility="Column"
-                            Background="White"
                             BorderThickness="0"
                             SelectionMode="Single"
                             SelectionChanged="SuppliersGrid_SelectionChanged"
@@ -83,15 +82,15 @@
             </Border>
             
             <!-- Splitter -->
-            <GridSplitter Grid.Column="1" Width="3" Background="#dee2e6" 
+            <GridSplitter Grid.Column="1" Width="3" Background="{DynamicResource BorderSubtleBrush}" 
                         HorizontalAlignment="Center" VerticalAlignment="Stretch"/>
             
             <!-- Add/Edit Form -->
-            <Border Grid.Column="2" Background="White" BorderBrush="#dee2e6" BorderThickness="1" 
+            <Border Grid.Column="2" Background="{DynamicResource CardBackgroundBrush}" BorderBrush="{DynamicResource BorderSubtleBrush}" BorderThickness="1" 
                   CornerRadius="6" Padding="20" Margin="10,0,0,0">
                 <StackPanel>
                     <TextBlock x:Name="FormTitle" Text="Add New Supplier" FontSize="16" FontWeight="SemiBold" 
-                             Margin="0,0,0,20" Foreground="#2c3e50"/>
+                             Margin="0,0,0,20" Foreground="{DynamicResource TextPrimaryBrush}"/>
                     
                     <!-- Supplier Name -->
                     <TextBlock Text="Supplier Name *" FontWeight="SemiBold" Margin="0,0,0,5"/>
@@ -129,11 +128,11 @@
                     </StackPanel>
                     
                     <!-- Exchange Rate Info Panel -->
-                    <Border Background="#e3f2fd" BorderBrush="#2196f3" BorderThickness="1" 
+                    <Border Background="{DynamicResource InfoBackgroundBrush}" BorderBrush="{DynamicResource PrimaryBrandBrush}" BorderThickness="1" 
                           CornerRadius="4" Padding="15" Margin="0,30,0,0">
                         <StackPanel>
                             <TextBlock Text="💡 Exchange Rate Information" FontWeight="SemiBold" 
-                                     Foreground="#1976d2" Margin="0,0,0,10"/>
+                                     Foreground="{DynamicResource PrimaryBrandBrush}" Margin="0,0,0,10"/>
                             <TextBlock Text="• USD: Always 1.0 (base currency)" FontSize="12" Margin="0,0,0,3"/>
                             <TextBlock Text="• JOD: Fixed at 1.4104372 (auto-filled)" FontSize="12" Margin="0,0,0,3"/>
                             <TextBlock Text="• EGP: Enter current market rate" FontSize="12" Margin="0,0,0,3"/>

@@ -19,11 +19,11 @@
             <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0,0,0,20">
                 <TextBlock Text="📋" FontSize="32" VerticalAlignment="Center" Margin="0,0,10,0"/>
                 <TextBlock Text="Monthly Allocation - FIFO Results" FontSize="28" FontWeight="Bold" 
-                         VerticalAlignment="Center" Foreground="#2c3e50"/>
+                         VerticalAlignment="Center" Foreground="{DynamicResource TextPrimaryBrush}"/>
             </StackPanel>
 
             <!-- Control Panel -->
-            <Border Grid.Row="1" Background="#f8f9fa" BorderBrush="#dee2e6" BorderThickness="1" 
+            <Border Grid.Row="1" Background="{DynamicResource CardBackgroundBrush}" BorderBrush="{DynamicResource BorderSubtleBrush}" BorderThickness="1" 
                   CornerRadius="8" Padding="20" Margin="0,0,0,20">
                 <Grid>
                     <Grid.ColumnDefinitions>
@@ -61,7 +61,7 @@
             </Border>
 
             <!-- Summary Cards -->
-            <Border Grid.Row="2" Background="#e8f5e8" BorderBrush="#4caf50" BorderThickness="1" 
+            <Border Grid.Row="2" Background="{DynamicResource SuccessBackgroundBrush}" BorderBrush="{DynamicResource SuccessForegroundBrush}" BorderThickness="1" 
                   CornerRadius="8" Padding="20" Margin="0,0,0,20">
                 <Grid>
                     <Grid.ColumnDefinitions>
@@ -75,41 +75,41 @@
                     <StackPanel Grid.Column="0" HorizontalAlignment="Center">
                         <TextBlock Text="📅 Month" FontWeight="SemiBold" HorizontalAlignment="Center" FontSize="12"/>
                         <TextBlock x:Name="CurrentMonthText" Text="Not Selected" FontSize="16" FontWeight="Bold" 
-                                 HorizontalAlignment="Center" Foreground="#2e7d32"/>
+                                 HorizontalAlignment="Center" Foreground="{DynamicResource SuccessForegroundBrush}"/>
                     </StackPanel>
 
                     <StackPanel Grid.Column="1" HorizontalAlignment="Center">
                         <TextBlock Text="📊 Total Allocations" FontWeight="SemiBold" HorizontalAlignment="Center" FontSize="12"/>
                         <TextBlock x:Name="TotalAllocationsText" Text="0" FontSize="16" FontWeight="Bold" 
-                                 HorizontalAlignment="Center" Foreground="#2e7d32"/>
+                                 HorizontalAlignment="Center" Foreground="{DynamicResource SuccessForegroundBrush}"/>
                     </StackPanel>
 
                     <StackPanel Grid.Column="2" HorizontalAlignment="Center">
                         <TextBlock Text="⛽ Allocated Quantity" FontWeight="SemiBold" HorizontalAlignment="Center" FontSize="12"/>
                         <TextBlock x:Name="AllocatedQuantityText" Text="0.000 L" FontSize="16" FontWeight="Bold" 
-                                HorizontalAlignment="Center" Foreground="#2e7d32"/>
+                                HorizontalAlignment="Center" Foreground="{DynamicResource SuccessForegroundBrush}"/>
                     </StackPanel>
 
                     <StackPanel Grid.Column="3" HorizontalAlignment="Center">
                         <TextBlock Text="💰 Allocated Value" FontWeight="SemiBold" HorizontalAlignment="Center" FontSize="12"/>
                         <TextBlock x:Name="AllocatedValueText" Text="$0.00" FontSize="16" FontWeight="Bold" 
-                                 HorizontalAlignment="Center" Foreground="#2e7d32"/>
+                                 HorizontalAlignment="Center" Foreground="{DynamicResource SuccessForegroundBrush}"/>
                     </StackPanel>
 
                     <StackPanel Grid.Column="4" HorizontalAlignment="Center">
                         <TextBlock Text="🚢 Vessels Processed" FontWeight="SemiBold" HorizontalAlignment="Center" FontSize="12"/>
                         <TextBlock x:Name="VesselsProcessedText" Text="0" FontSize="16" FontWeight="Bold" 
-                                 HorizontalAlignment="Center" Foreground="#2e7d32"/>
+                                 HorizontalAlignment="Center" Foreground="{DynamicResource SuccessForegroundBrush}"/>
                     </StackPanel>
                 </Grid>
             </Border>
 
             <!-- Allocation Results -->
-            <Border Grid.Row="3" Background="White" BorderBrush="#dee2e6" BorderThickness="1" 
+            <Border Grid.Row="3" Background="{DynamicResource CardBackgroundBrush}" BorderBrush="{DynamicResource BorderSubtleBrush}" BorderThickness="1" 
                   CornerRadius="6" Padding="20">
                 <StackPanel>
                     <TextBlock Text="🔍 FIFO Allocation Details" FontSize="16" FontWeight="SemiBold" 
-                             Margin="0,0,0,15" Foreground="#2c3e50"/>
+                             Margin="0,0,0,15" Foreground="{DynamicResource TextPrimaryBrush}"/>
 
                     <DataGrid x:Name="AllocationGrid" 
                             AutoGenerateColumns="False" 
@@ -120,7 +120,6 @@
                             CanUserSortColumns="True"
                             GridLinesVisibility="Horizontal"
                             HeadersVisibility="Column"
-                            Background="White"
                             BorderThickness="0"
                             MaxHeight="500"
                             PreviewMouseWheel="DataGrid_PreviewMouseWheel">
@@ -152,7 +151,7 @@
 
                     <!-- Process Log -->
                     <Expander Header="📋 FIFO Process Log" Margin="0,20,0,0" IsExpanded="False">
-                        <Border Background="#f8f9fa" BorderBrush="#dee2e6" BorderThickness="1" 
+                        <Border Background="{DynamicResource SubtleBackgroundBrush}" BorderBrush="{DynamicResource BorderSubtleBrush}" BorderThickness="1" 
                               CornerRadius="4" Padding="10" MaxHeight="200">
                             <ScrollViewer VerticalScrollBarVisibility="Auto">
                                 <TextBlock x:Name="ProcessLogText" Text="No allocation process run yet." 
@@ -162,7 +161,7 @@
                     </Expander>
 
                     <!-- FIFO Information Panel -->
-                    <Border Background="#fff3cd" BorderBrush="#ffc107" BorderThickness="1" 
+                    <Border Background="{DynamicResource WarningBackgroundBrush}" BorderBrush="{DynamicResource WarningForegroundBrush}" BorderThickness="1" 
                           CornerRadius="4" Padding="15" Margin="0,20,0,0">
                         <StackPanel>
                             <TextBlock Text="🔄 FIFO Allocation Process" FontWeight="SemiBold" 

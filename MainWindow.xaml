@@ -56,35 +56,65 @@
             <!-- Status Bar -->
         </Grid.RowDefinitions>
 
-        <!-- Header -->
-        <Border Grid.Row="0" Background="#2c3e50">
-            <Grid>
+        <!-- Modern Header -->
+        <Border Grid.Row="0" Background="{DynamicResource SurfaceBrush}" 
+                BorderBrush="{DynamicResource BorderSubtleBrush}" BorderThickness="0,0,0,1">
+            <Grid Height="56">
                 <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
 
-                <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center" Margin="20,0">
-                    <TextBlock Text="⛽" FontSize="24" Foreground="White" VerticalAlignment="Center" Margin="0,0,10,0"/>
-                    <TextBlock Text="DO Inventory Manager" 
-                             FontSize="20" 
-                             FontWeight="Bold" 
-                             Foreground="White" 
-                             VerticalAlignment="Center"/>
+                <!-- Hamburger Menu and Title -->
+                <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center" Margin="16,0">
+                    <Button x:Name="HamburgerMenuBtn" 
+                            Width="40" Height="40" 
+                            Background="Transparent" 
+                            BorderThickness="0"
+                            Click="HamburgerMenu_Click"
+                            ToolTip="Toggle Navigation">
+                        <TextBlock Text="&#xE700;" 
+                                 Style="{StaticResource FluentIconSmall}"
+                                 Foreground="{DynamicResource TextSecondaryBrush}"/>
+                    </Button>
+                    
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="12,0,0,0">
+                        <TextBlock Text="⛽" FontSize="20" 
+                                 Foreground="{DynamicResource PrimaryBrandBrush}" 
+                                 VerticalAlignment="Center" Margin="0,0,8,0"/>
+                        <TextBlock Text="DO Inventory Manager" 
+                                 Style="{StaticResource HeadlineMediumTextStyle}" 
+                                 VerticalAlignment="Center"/>
+                    </StackPanel>
                 </StackPanel>
 
-                <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center" Margin="0,0,20,0">
+                <!-- Header Actions -->
+                <StackPanel Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Center" Margin="0,0,16,0">
+                    <!-- Theme Toggle Button -->
+                    <Button x:Name="ThemeToggleBtn"
+                            Width="40" Height="32"
+                            Style="{StaticResource FluentSecondaryButtonStyle}"
+                            Margin="0,0,8,0"
+                            Click="ThemeToggle_Click"
+                            ToolTip="Toggle Theme">
+                        <TextBlock Text="🌙" 
+                                 FontSize="18"
+                                 FontWeight="Bold"
+                                 HorizontalAlignment="Center"
+                                 VerticalAlignment="Center"
+                                 Foreground="{DynamicResource TextPrimaryBrush}"/>
+                    </Button>
+                    
                     <TextBlock x:Name="CurrentDateText" 
-                             FontSize="12" 
-                             Foreground="LightGray" 
+                             Style="{StaticResource CaptionTextStyle}"
                              VerticalAlignment="Center" 
-                             Margin="0,0,20,0"/>
-                    <Button Content="📊 Generate Report" 
-                          Background="#27ae60" 
-                          Foreground="White" 
-                          BorderThickness="0" 
-                          Padding="15,10" 
-                          Click="GenerateReport_Click"/>
+                             Margin="0,0,16,0"/>
+                             
+                    <Button x:Name="GenerateReportBtn"
+                            Content="📊 Generate Report" 
+                            Style="{StaticResource FluentButtonStyle}"
+                            Click="GenerateReport_Click"/>
                 </StackPanel>
             </Grid>
         </Border>
@@ -92,41 +122,181 @@
         <!-- Main Content Area -->
         <Grid Grid.Row="1">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="250"/>
-                <!-- Navigation -->
+                <ColumnDefinition x:Name="NavigationColumn" Width="280"/>
                 <ColumnDefinition Width="*"/>
-                <!-- Content -->
             </Grid.ColumnDefinitions>
 
-            <!-- Navigation Panel -->
-            <Border Grid.Column="0" Background="#34495e" BorderBrush="#2c3e50" BorderThickness="0,0,1,0">
-                <StackPanel Margin="0,20,0,0">
-                    <Button x:Name="DashboardBtn" Content="📊 Dashboard" Style="{StaticResource ActiveNavButtonStyle}" Click="Dashboard_Click"/>
-                    <Button x:Name="SuppliersBtn" Content="🏢 Suppliers" Style="{StaticResource NavButtonStyle}" Click="Suppliers_Click"/>
-                    <Button x:Name="VesselsBtn" Content="🚢 Vessels" Style="{StaticResource NavButtonStyle}" Click="Vessels_Click"/>
-                    <Button x:Name="PurchasesBtn" Content="🛒 Purchase Entry" Style="{StaticResource NavButtonStyle}" Click="Purchases_Click"/>
-                    <Button x:Name="ConsumptionBtn" Content="⛽ Consumption Entry" Style="{StaticResource NavButtonStyle}" Click="Consumption_Click"/>
-                    <Button x:Name="TripsBtn" Content="🗺️ Trip Management" Style="{StaticResource NavButtonStyle}" Click="Trips_Click"/>
-                    <Button x:Name="AllocationBtn" Content="📋 Monthly Allocation" Style="{StaticResource NavButtonStyle}" Click="Allocation_Click"/>
-                    <Button x:Name="SummaryBtn" Content="📈 Reports" Style="{StaticResource NavButtonStyle}" Click="Summary_Click"/>
+            <!-- Collapsible Navigation Panel -->
+            <Border x:Name="NavigationPanel" 
+                    Grid.Column="0" 
+                    Background="{DynamicResource NavigationGradientBrush}" 
+                    BorderBrush="{DynamicResource BorderSubtleBrush}" 
+                    BorderThickness="0,0,1,0">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
 
-                    <!-- Spacer -->
-                    <Rectangle Height="30" Fill="Transparent"/>
+                    <!-- Navigation Header -->
+                    <Border Grid.Row="0" Padding="16,20,16,12">
+                        <TextBlock x:Name="NavigationTitle"
+                                 Text="Navigation" 
+                                 Style="{StaticResource TitleMediumTextStyle}"
+                                 Foreground="{DynamicResource TextSecondaryBrush}"/>
+                    </Border>
 
-                    <!-- Utilities -->
-                    <Button x:Name="BackupBtn" Content="🗄️ Backup Management" Style="{StaticResource NavButtonStyle}" Click="Backup_Click"/>
-                    <Button x:Name="SettingsBtn" Content="⚙️ Settings" Style="{StaticResource NavButtonStyle}" Click="Settings_Click"/>
-                </StackPanel>
+                    <!-- Navigation Items -->
+                    <ScrollViewer Grid.Row="1" 
+                                VerticalScrollBarVisibility="Auto" 
+                                HorizontalScrollBarVisibility="Hidden"
+                                Padding="8,0">
+                        <StackPanel>
+                            <!-- Primary Navigation -->
+                            <Button x:Name="DashboardBtn" 
+                                    Style="{StaticResource ActiveNavigationButtonStyle}" 
+                                    Click="Dashboard_Click">
+                                <Button.Content>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="&#xE80F;" Style="{StaticResource FluentIconSmall}" Margin="0,0,12,0"/>
+                                        <TextBlock x:Name="DashboardText" Text="Dashboard"/>
+                                    </StackPanel>
+                                </Button.Content>
+                            </Button>
+                            
+                            <Button x:Name="SuppliersBtn" 
+                                    Style="{StaticResource NavigationButtonStyle}" 
+                                    Click="Suppliers_Click">
+                                <Button.Content>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="&#xE716;" Style="{StaticResource FluentIconSmall}" Margin="0,0,12,0"/>
+                                        <TextBlock x:Name="SuppliersText" Text="Suppliers"/>
+                                    </StackPanel>
+                                </Button.Content>
+                            </Button>
+                            
+                            <Button x:Name="VesselsBtn" 
+                                    Style="{StaticResource NavigationButtonStyle}" 
+                                    Click="Vessels_Click">
+                                <Button.Content>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="&#xE7B8;" Style="{StaticResource FluentIconSmall}" Margin="0,0,12,0"/>
+                                        <TextBlock x:Name="VesselsText" Text="Vessels"/>
+                                    </StackPanel>
+                                </Button.Content>
+                            </Button>
+                            
+                            <Button x:Name="PurchasesBtn" 
+                                    Style="{StaticResource NavigationButtonStyle}" 
+                                    Click="Purchases_Click">
+                                <Button.Content>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="&#xE7BF;" Style="{StaticResource FluentIconSmall}" Margin="0,0,12,0"/>
+                                        <TextBlock x:Name="PurchasesText" Text="Purchase Entry"/>
+                                    </StackPanel>
+                                </Button.Content>
+                            </Button>
+                            
+                            <Button x:Name="ConsumptionBtn" 
+                                    Style="{StaticResource NavigationButtonStyle}" 
+                                    Click="Consumption_Click">
+                                <Button.Content>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="&#xE73F;" Style="{StaticResource FluentIconSmall}" Margin="0,0,12,0"/>
+                                        <TextBlock x:Name="ConsumptionText" Text="Consumption Entry"/>
+                                    </StackPanel>
+                                </Button.Content>
+                            </Button>
+                            
+                            <Button x:Name="TripsBtn" 
+                                    Style="{StaticResource NavigationButtonStyle}" 
+                                    Click="Trips_Click">
+                                <Button.Content>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="&#xE909;" Style="{StaticResource FluentIconSmall}" Margin="0,0,12,0"/>
+                                        <TextBlock x:Name="TripsText" Text="Trip Management"/>
+                                    </StackPanel>
+                                </Button.Content>
+                            </Button>
+                            
+                            <Button x:Name="AllocationBtn" 
+                                    Style="{StaticResource NavigationButtonStyle}" 
+                                    Click="Allocation_Click">
+                                <Button.Content>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="&#xE8FD;" Style="{StaticResource FluentIconSmall}" Margin="0,0,12,0"/>
+                                        <TextBlock x:Name="AllocationText" Text="Monthly Allocation"/>
+                                    </StackPanel>
+                                </Button.Content>
+                            </Button>
+                            
+                            <Button x:Name="SummaryBtn" 
+                                    Style="{StaticResource NavigationButtonStyle}" 
+                                    Click="Summary_Click">
+                                <Button.Content>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="&#xE9A9;" Style="{StaticResource FluentIconSmall}" Margin="0,0,12,0"/>
+                                        <TextBlock x:Name="SummaryText" Text="Reports"/>
+                                    </StackPanel>
+                                </Button.Content>
+                            </Button>
+
+                            <!-- Separator -->
+                            <Border Height="1" 
+                                  Background="{DynamicResource BorderSubtleBrush}" 
+                                  Margin="12,16,12,8"/>
+
+                            <!-- Utility Navigation -->
+                            <Button x:Name="BackupBtn" 
+                                    Style="{StaticResource NavigationButtonStyle}" 
+                                    Click="Backup_Click">
+                                <Button.Content>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="&#xE896;" Style="{StaticResource FluentIconSmall}" Margin="0,0,12,0"/>
+                                        <TextBlock x:Name="BackupText" Text="Backup Management"/>
+                                    </StackPanel>
+                                </Button.Content>
+                            </Button>
+                            
+                            <Button x:Name="SettingsBtn" 
+                                    Style="{StaticResource NavigationButtonStyle}" 
+                                    Click="Settings_Click">
+                                <Button.Content>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="&#xE713;" Style="{StaticResource FluentIconSmall}" Margin="0,0,12,0"/>
+                                        <TextBlock x:Name="SettingsText" Text="Settings"/>
+                                    </StackPanel>
+                                </Button.Content>
+                            </Button>
+                        </StackPanel>
+                    </ScrollViewer>
+
+                    <!-- Navigation Footer -->
+                    <Border Grid.Row="2" 
+                          Padding="16,12,16,16"
+                          BorderBrush="{DynamicResource BorderSubtleBrush}"
+                          BorderThickness="0,1,0,0">
+                        <TextBlock x:Name="NavigationFooter"
+                                 Text="v1.0.0" 
+                                 Style="{StaticResource CaptionTextStyle}"
+                                 HorizontalAlignment="Center"/>
+                    </Border>
+                </Grid>
             </Border>
 
             <!-- Content Area -->
-            <Border Grid.Column="1" Background="White" Padding="20">
-                <Frame x:Name="ContentFrame" NavigationUIVisibility="Hidden"/>
+            <Border Grid.Column="1" Background="{DynamicResource BackgroundBrush}">
+                <Frame x:Name="ContentFrame" NavigationUIVisibility="Hidden" Padding="0"/>
             </Border>
         </Grid>
 
-        <!-- Status Bar -->
-        <Border Grid.Row="2" Background="#ecf0f1" BorderBrush="#bdc3c7" BorderThickness="0,1,0,0">
+        <!-- Modern Status Bar -->
+        <Border Grid.Row="2" 
+                Background="{DynamicResource SubtleBackgroundBrush}" 
+                BorderBrush="{DynamicResource BorderSubtleBrush}" 
+                BorderThickness="0,1,0,0"
+                Height="28">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
@@ -137,25 +307,29 @@
                 <TextBlock x:Name="StatusText" 
                          Grid.Column="0" 
                          Text="Ready" 
+                         Style="{StaticResource CaptionTextStyle}"
                          VerticalAlignment="Center" 
-                         Margin="10,0" 
-                         FontSize="12"/>
+                         Margin="16,0"/>
 
-                <TextBlock x:Name="DatabaseStatus" 
-                         Grid.Column="1" 
-                         Text="Database: Connected" 
-                         VerticalAlignment="Center" 
-                         Margin="10,0" 
-                         FontSize="12" 
-                         Foreground="Green"/>
+                <StackPanel Grid.Column="1" 
+                          Orientation="Horizontal" 
+                          VerticalAlignment="Center">
+                    <Ellipse Width="6" Height="6" 
+                           Fill="{DynamicResource SuccessForegroundBrush}" 
+                           Margin="0,0,6,0"/>
+                    <TextBlock x:Name="DatabaseStatus" 
+                             Text="Database Connected" 
+                             Style="{StaticResource CaptionTextStyle}"
+                             VerticalAlignment="Center" 
+                             Margin="0,0,16,0"/>
+                </StackPanel>
 
                 <TextBlock x:Name="VersionText" 
                          Grid.Column="2" 
                          Text="v1.0.0" 
+                         Style="{StaticResource CaptionTextStyle}"
                          VerticalAlignment="Center" 
-                         Margin="10,0" 
-                         FontSize="12" 
-                         Foreground="Gray"/>
+                         Margin="0,0,16,0"/>
             </Grid>
         </Border>
     </Grid>

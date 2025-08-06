@@ -15,7 +15,7 @@
         <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0,0,0,20">
             <TextBlock Text="📈" FontSize="32" VerticalAlignment="Center" Margin="0,0,10,0"/>
             <TextBlock Text="Reports &amp; Analytics" FontSize="28" FontWeight="Bold" 
-                     VerticalAlignment="Center" Foreground="#2c3e50"/>
+                     VerticalAlignment="Center" Foreground="{DynamicResource TextPrimaryBrush}"/>
         </StackPanel>
 
         <!-- Reports Tabs -->
@@ -32,7 +32,7 @@
                             </Grid.RowDefinitions>
 
                             <!-- Controls -->
-                            <Border Grid.Row="0" Background="#f8f9fa" BorderBrush="#dee2e6" BorderThickness="1" 
+                            <Border Grid.Row="0" Background="{DynamicResource CardBackgroundBrush}" BorderBrush="{DynamicResource BorderSubtleBrush}" BorderThickness="1" 
                                   CornerRadius="8" Padding="20" Margin="0,0,0,20">
                                 <Grid>
                                     <Grid.ColumnDefinitions>
@@ -120,11 +120,11 @@
                                             </Grid>
 
                                             <!-- Executive Metrics -->
-                                            <Border Background="White" BorderBrush="#dee2e6" BorderThickness="1" 
+                                            <Border Background="{DynamicResource CardBackgroundBrush}" BorderBrush="{DynamicResource BorderSubtleBrush}" BorderThickness="1" 
                                                   CornerRadius="6" Padding="20">
                                                 <StackPanel>
                                                     <TextBlock Text="📋 Executive Metrics" FontSize="16" FontWeight="SemiBold" 
-                                                             Margin="0,0,0,15" Foreground="#2c3e50"/>
+                                                             Margin="0,0,0,15" Foreground="{DynamicResource TextPrimaryBrush}"/>
 
                                                     <Grid>
                                                         <Grid.ColumnDefinitions>
@@ -154,7 +154,7 @@
                                 <TabItem Header="⛽ Consumption Summary">
                                     <StackPanel Margin="20">
                                         <TextBlock Text="Vessel Consumption Analysis" FontSize="16" FontWeight="SemiBold" 
-                                                Margin="0,0,0,15" Foreground="#2c3e50"/>
+                                                Margin="0,0,0,15" Foreground="{DynamicResource TextPrimaryBrush}"/>
 
                                         <DataGrid x:Name="ConsumptionSummaryGrid" 
                                                 AutoGenerateColumns="False" 
@@ -162,7 +162,6 @@
                                                 CanUserDeleteRows="False"
                                                 GridLinesVisibility="Horizontal"
                                                 HeadersVisibility="Column"
-                                                Background="White"
                                                 BorderThickness="1"
                                                 BorderBrush="#dee2e6"
                                                 PreviewMouseWheel="DataGrid_PreviewMouseWheel">
@@ -189,7 +188,7 @@
                                 <TabItem Header="🛒 Purchase Summary">
                                     <StackPanel Margin="20">
                                         <TextBlock Text="Supplier Purchase Analysis" FontSize="16" FontWeight="SemiBold" 
-                                                Margin="0,0,0,15" Foreground="#2c3e50"/>
+                                                Margin="0,0,0,15" Foreground="{DynamicResource TextPrimaryBrush}"/>
 
                                         <DataGrid x:Name="PurchaseSummaryGrid" 
                                                 AutoGenerateColumns="False" 
@@ -197,7 +196,6 @@
                                                 CanUserDeleteRows="False"
                                                 GridLinesVisibility="Horizontal"
                                                 HeadersVisibility="Column"
-                                                Background="White"
                                                 BorderThickness="1"
                                                 BorderBrush="#dee2e6"
                                                 PreviewMouseWheel="DataGrid_PreviewMouseWheel">
@@ -236,7 +234,7 @@
                                 <TabItem Header="📋 FIFO Allocation">
                                     <StackPanel Margin="20">
                                         <TextBlock Text="FIFO Allocation Analysis" FontSize="16" FontWeight="SemiBold" 
-                                                Margin="0,0,0,15" Foreground="#2c3e50"/>
+                                                Margin="0,0,0,15" Foreground="{DynamicResource TextPrimaryBrush}"/>
 
                                         <DataGrid x:Name="AllocationSummaryGrid" 
                                                 AutoGenerateColumns="False" 
@@ -244,7 +242,6 @@
                                                 CanUserDeleteRows="False"
                                                 GridLinesVisibility="Horizontal"
                                                 HeadersVisibility="Column"
-                                                Background="White"
                                                 BorderThickness="1"
                                                 BorderBrush="#dee2e6"
                                                 PreviewMouseWheel="DataGrid_PreviewMouseWheel">
@@ -268,11 +265,11 @@
                                     <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" MaxHeight="600">
                                         <StackPanel Margin="20" PreviewMouseWheel="DataGrid_PreviewMouseWheel">
                                             <!-- Financial Overview -->
-                                            <Border Background="White" BorderBrush="#dee2e6" BorderThickness="1" 
+                                            <Border Background="{DynamicResource CardBackgroundBrush}" BorderBrush="{DynamicResource BorderSubtleBrush}" BorderThickness="1" 
                                                     CornerRadius="6" Padding="20" Margin="0,0,0,20" PreviewMouseWheel="DataGrid_PreviewMouseWheel">
                                                 <StackPanel>
                                                     <TextBlock Text="💰 Financial Overview" FontSize="16" FontWeight="SemiBold" 
-                                                            Margin="0,0,0,15" Foreground="#2c3e50"/>
+                                                            Margin="0,0,0,15" Foreground="{DynamicResource TextPrimaryBrush}"/>
 
                                                     <Grid PreviewMouseWheel="DataGrid_PreviewMouseWheel">
                                                         <Grid.ColumnDefinitions>
@@ -295,11 +292,11 @@
                                             </Border>
 
                                             <!-- Currency Breakdown -->
-                                            <Border Background="White" BorderBrush="#dee2e6" BorderThickness="1" 
+                                            <Border Background="{DynamicResource CardBackgroundBrush}" BorderBrush="{DynamicResource BorderSubtleBrush}" BorderThickness="1" 
                                                     CornerRadius="6" Padding="20" Margin="0,0,0,20" PreviewMouseWheel="DataGrid_PreviewMouseWheel">
                                                 <StackPanel>
                                                     <TextBlock Text="💱 Currency Breakdown" FontSize="16" FontWeight="SemiBold" 
-                                                            Margin="0,0,0,15" Foreground="#2c3e50"/>
+                                                            Margin="0,0,0,15" Foreground="{DynamicResource TextPrimaryBrush}"/>
 
                                                     <DataGrid x:Name="CurrencyBreakdownGrid" 
                                                             AutoGenerateColumns="False" 
@@ -307,8 +304,7 @@
                                                             CanUserDeleteRows="False"
                                                             GridLinesVisibility="Horizontal"
                                                             HeadersVisibility="Column"
-                                                            Background="White"
-                                                            BorderThickness="0"
+                                                                        BorderThickness="0"
                                                             PreviewMouseWheel="DataGrid_PreviewMouseWheel">
 
                                                         <DataGrid.Columns>
@@ -322,11 +318,11 @@
                                             </Border>
 
                                             <!-- Payment Status -->
-                                            <Border Background="White" BorderBrush="#dee2e6" BorderThickness="1" 
+                                            <Border Background="{DynamicResource CardBackgroundBrush}" BorderBrush="{DynamicResource BorderSubtleBrush}" BorderThickness="1" 
                                                     CornerRadius="6" Padding="20" PreviewMouseWheel="DataGrid_PreviewMouseWheel">
                                                 <StackPanel>
                                                     <TextBlock Text="📋 Payment Status" FontSize="16" FontWeight="SemiBold" 
-                                                            Margin="0,0,0,15" Foreground="#2c3e50"/>
+                                                            Margin="0,0,0,15" Foreground="{DynamicResource TextPrimaryBrush}"/>
 
                                                     <DataGrid x:Name="PaymentStatusGrid" 
                                                             AutoGenerateColumns="False" 
@@ -334,8 +330,7 @@
                                                             CanUserDeleteRows="False"
                                                             GridLinesVisibility="Horizontal"
                                                             HeadersVisibility="Column"
-                                                            Background="White"
-                                                            BorderThickness="0"
+                                                                        BorderThickness="0"
                                                             PreviewMouseWheel="DataGrid_PreviewMouseWheel">
 
                                                         <DataGrid.Columns>
@@ -371,7 +366,7 @@
                         </Grid.RowDefinitions>
 
                         <!-- Controls -->
-                        <Border Grid.Row="0" Background="#f8f9fa" BorderBrush="#dee2e6" BorderThickness="1" 
+                        <Border Grid.Row="0" Background="{DynamicResource CardBackgroundBrush}" BorderBrush="{DynamicResource BorderSubtleBrush}" BorderThickness="1" 
                               CornerRadius="8" Padding="20" Margin="0,0,0,20">
                             <Grid>
                                 <Grid.ColumnDefinitions>
@@ -412,7 +407,7 @@
                         </Border>
 
                         <!-- Vessel Summary -->
-                        <Border Grid.Row="1" Background="#e8f5e8" BorderBrush="#4caf50" BorderThickness="1" 
+                        <Border Grid.Row="1" Background="{DynamicResource SuccessBackgroundBrush}" BorderBrush="{DynamicResource SuccessForegroundBrush}" BorderThickness="1" 
                               CornerRadius="8" Padding="20" Margin="0,0,0,20">
                             <Grid>
                                 <Grid.ColumnDefinitions>
@@ -426,41 +421,41 @@
                                 <StackPanel Grid.Column="0" HorizontalAlignment="Center">
                                     <TextBlock Text="🚢 Vessel" FontWeight="SemiBold" HorizontalAlignment="Center" FontSize="12"/>
                                     <TextBlock x:Name="VesselNameText" Text="Not Selected" FontSize="16" FontWeight="Bold" 
-                                             HorizontalAlignment="Center" Foreground="#2e7d32"/>
+                                             HorizontalAlignment="Center" Foreground="{DynamicResource SuccessForegroundBrush}"/>
                                 </StackPanel>
 
                                 <StackPanel Grid.Column="1" HorizontalAlignment="Center">
                                     <TextBlock Text="⛽ Total Purchases" FontWeight="SemiBold" HorizontalAlignment="Center" FontSize="12"/>
                                     <TextBlock x:Name="VesselTotalPurchasesText" Text="0.000 L" FontSize="16" FontWeight="Bold" 
-                                             HorizontalAlignment="Center" Foreground="#2e7d32"/>
+                                             HorizontalAlignment="Center" Foreground="{DynamicResource SuccessForegroundBrush}"/>
                                 </StackPanel>
 
                                 <StackPanel Grid.Column="2" HorizontalAlignment="Center">
                                     <TextBlock Text="🔥 Total Consumption" FontWeight="SemiBold" HorizontalAlignment="Center" FontSize="12"/>
                                     <TextBlock x:Name="VesselTotalConsumptionText" Text="0.000 L" FontSize="16" FontWeight="Bold" 
-                                             HorizontalAlignment="Center" Foreground="#2e7d32"/>
+                                             HorizontalAlignment="Center" Foreground="{DynamicResource SuccessForegroundBrush}"/>
                                 </StackPanel>
 
                                 <StackPanel Grid.Column="3" HorizontalAlignment="Center">
                                     <TextBlock Text="📦 Current Balance" FontWeight="SemiBold" HorizontalAlignment="Center" FontSize="12"/>
                                     <TextBlock x:Name="VesselCurrentBalanceText" Text="0.000 L" FontSize="16" FontWeight="Bold" 
-                                             HorizontalAlignment="Center" Foreground="#2e7d32"/>
+                                             HorizontalAlignment="Center" Foreground="{DynamicResource SuccessForegroundBrush}"/>
                                 </StackPanel>
 
                                 <StackPanel Grid.Column="4" HorizontalAlignment="Center">
                                     <TextBlock Text="💰 Total Value" FontWeight="SemiBold" HorizontalAlignment="Center" FontSize="12"/>
                                     <TextBlock x:Name="VesselTotalValueText" Text="$0.00" FontSize="16" FontWeight="Bold" 
-                                             HorizontalAlignment="Center" Foreground="#2e7d32"/>
+                                             HorizontalAlignment="Center" Foreground="{DynamicResource SuccessForegroundBrush}"/>
                                 </StackPanel>
                             </Grid>
                         </Border>
 
                         <!-- Account Statement -->
-                        <Border Grid.Row="2" Background="White" BorderBrush="#dee2e6" BorderThickness="1" 
+                        <Border Grid.Row="2" Background="{DynamicResource CardBackgroundBrush}" BorderBrush="{DynamicResource BorderSubtleBrush}" BorderThickness="1" 
                               CornerRadius="6" Padding="20">
                             <StackPanel>
                                 <TextBlock Text="📋 Vessel Account Statement" FontSize="16" FontWeight="SemiBold" 
-                                         Margin="0,0,0,15" Foreground="#2c3e50"/>
+                                         Margin="0,0,0,15" Foreground="{DynamicResource TextPrimaryBrush}"/>
 
                                 <DataGrid x:Name="VesselAccountGrid" 
                                         AutoGenerateColumns="False" 
@@ -468,7 +463,6 @@
                                         CanUserDeleteRows="False"
                                         GridLinesVisibility="Horizontal"
                                         HeadersVisibility="Column"
-                                        Background="White"
                                         BorderThickness="0"
                                         MaxHeight="400"
                                         ScrollViewer.VerticalScrollBarVisibility="Auto"
@@ -491,9 +485,9 @@
                                 </DataGrid>
 
                                 <!-- Vessel Account Totals -->
-                                <Grid Margin="0,15,0,0" Background="#f8f9fa">
+                                <Grid Margin="0,15,0,0" Background="{DynamicResource SubtleBackgroundBrush}">
                                     <Border BorderBrush="#dee2e6" BorderThickness="1" CornerRadius="4" 
-                                            Background="#f8f9fa" Margin="1,0,0,0">
+                                            Background="{DynamicResource SubtleBackgroundBrush}" Margin="1,0,0,0">
                                         <Grid Margin="6,15,0,15">
                                             <Grid.ColumnDefinitions>
                                                 <ColumnDefinition Width="100"/>
@@ -520,15 +514,15 @@
                                             <TextBlock Grid.Column="1" Text="" FontWeight="Bold"/>
                                             <TextBlock Grid.Column="2" Text="" FontWeight="Bold"/>
                                             <TextBlock Grid.Column="3" Text="TOTALS:" FontWeight="Bold" 
-                                                    HorizontalAlignment="Right" Foreground="#2c3e50"/>
+                                                    HorizontalAlignment="Right" Foreground="{DynamicResource TextPrimaryBrush}"/>
                                             <TextBlock Grid.Column="4" x:Name="VesselTotalDebitsText" Text="0.000" 
-                                                    FontWeight="Bold" HorizontalAlignment="Center" Foreground="#2c3e50"/>
+                                                    FontWeight="Bold" HorizontalAlignment="Center" Foreground="{DynamicResource TextPrimaryBrush}"/>
                                             <TextBlock Grid.Column="5" x:Name="VesselTotalCreditsText" Text="0.000" 
-                                                    FontWeight="Bold" HorizontalAlignment="Center" Foreground="#2c3e50"/>
+                                                    FontWeight="Bold" HorizontalAlignment="Center" Foreground="{DynamicResource TextPrimaryBrush}"/>
                                             <TextBlock Grid.Column="6" x:Name="VesselNetBalanceText" Text="0.000" 
-                                                    FontWeight="Bold" HorizontalAlignment="Center" Foreground="#2c3e50"/>
+                                                    FontWeight="Bold" HorizontalAlignment="Center" Foreground="{DynamicResource TextPrimaryBrush}"/>
                                             <TextBlock Grid.Column="7" x:Name="VesselAccountTotalValueText" Text="$0.00" 
-                                                    FontWeight="Bold" HorizontalAlignment="Center" Foreground="#2c3e50"/>
+                                                    FontWeight="Bold" HorizontalAlignment="Center" Foreground="{DynamicResource TextPrimaryBrush}"/>
                                             <TextBlock Grid.Column="8" Text="" FontWeight="Bold"/>
                                         </Grid>
                                     </Border>
@@ -553,7 +547,7 @@
                         </Grid.RowDefinitions>
 
                         <!-- Controls -->
-                        <Border Grid.Row="0" Background="#f8f9fa" BorderBrush="#dee2e6" BorderThickness="1" 
+                        <Border Grid.Row="0" Background="{DynamicResource CardBackgroundBrush}" BorderBrush="{DynamicResource BorderSubtleBrush}" BorderThickness="1" 
                               CornerRadius="8" Padding="20" Margin="0,0,0,20">
                             <Grid>
                                 <Grid.ColumnDefinitions>
@@ -594,7 +588,7 @@
                         </Border>
 
                         <!-- Supplier Summary -->
-                        <Border Grid.Row="1" Background="#fff3cd" BorderBrush="#ffc107" BorderThickness="1" 
+                        <Border Grid.Row="1" Background="{DynamicResource WarningBackgroundBrush}" BorderBrush="{DynamicResource WarningForegroundBrush}" BorderThickness="1" 
                               CornerRadius="8" Padding="20" Margin="0,0,0,20">
                             <Grid>
                                 <Grid.ColumnDefinitions>
@@ -638,11 +632,11 @@
                         </Border>
 
                         <!-- Supplier Report -->
-                        <Border Grid.Row="2" Background="White" BorderBrush="#dee2e6" BorderThickness="1" 
+                        <Border Grid.Row="2" Background="{DynamicResource CardBackgroundBrush}" BorderBrush="{DynamicResource BorderSubtleBrush}" BorderThickness="1" 
                               CornerRadius="6" Padding="20">
                             <StackPanel>
                                 <TextBlock Text="📋 Supplier Account Report" FontSize="16" FontWeight="SemiBold" 
-                                         Margin="0,0,0,15" Foreground="#2c3e50"/>
+                                         Margin="0,0,0,15" Foreground="{DynamicResource TextPrimaryBrush}"/>
 
                                 <DataGrid x:Name="SupplierAccountGrid" 
                                         AutoGenerateColumns="False" 
@@ -650,7 +644,6 @@
                                         CanUserDeleteRows="False"
                                         GridLinesVisibility="Horizontal"
                                         HeadersVisibility="Column"
-                                        Background="White"
                                         BorderThickness="0"
                                         MaxHeight="400"
                                         ScrollViewer.VerticalScrollBarVisibility="Auto"
@@ -673,9 +666,9 @@
                                 </DataGrid>
 
                                 <!-- Supplier Account Totals -->
-                                <Grid Margin="0,15,0,0" Background="#fff3cd">
+                                <Grid Margin="0,15,0,0" Background="{DynamicResource WarningBackgroundBrush}">
                                     <Border BorderBrush="#ffc107" BorderThickness="1" CornerRadius="4" 
-                                            Background="#fff3cd" Margin="1,0,0,0">
+                                            Background="{DynamicResource WarningBackgroundBrush}" Margin="1,0,0,0">
                                         <Grid Margin="6,15,0,15">
                                             <Grid.ColumnDefinitions>
                                                 <ColumnDefinition Width="100"/>
@@ -736,7 +729,7 @@
                         </Grid.RowDefinitions>
 
                         <!-- Controls -->
-                        <Border Grid.Row="0" Background="#f8f9fa" BorderBrush="#dee2e6" BorderThickness="1" 
+                        <Border Grid.Row="0" Background="{DynamicResource CardBackgroundBrush}" BorderBrush="{DynamicResource BorderSubtleBrush}" BorderThickness="1" 
                             CornerRadius="8" Padding="20" Margin="0,0,0,20">
                             <Grid>
                                 <Grid.ColumnDefinitions>
@@ -769,7 +762,7 @@
                         </Border>
 
                         <!-- Payment Summary Cards -->
-                        <Border Grid.Row="1" Background="#fff" BorderBrush="#dee2e6" BorderThickness="1" 
+                        <Border Grid.Row="1" Background="{DynamicResource CardBackgroundBrush}" BorderBrush="{DynamicResource BorderSubtleBrush}" BorderThickness="1" 
                                 CornerRadius="8" Padding="20" Margin="0,0,0,20">
                             <Grid>
                                 <Grid.ColumnDefinitions>
@@ -829,7 +822,7 @@
                             <TabItem Header="📅 Payment Schedule">
                                 <StackPanel Margin="20">
                                     <TextBlock Text="All Outstanding Invoices by Due Date" FontSize="16" FontWeight="SemiBold" 
-                                            Margin="0,0,0,15" Foreground="#2c3e50"/>
+                                            Margin="0,0,0,15" Foreground="{DynamicResource TextPrimaryBrush}"/>
 
                                     <DataGrid x:Name="PaymentScheduleGrid" 
                                             AutoGenerateColumns="False" 
@@ -837,8 +830,7 @@
                                             CanUserDeleteRows="False"
                                             GridLinesVisibility="Horizontal"
                                             HeadersVisibility="Column"
-                                            Background="White"
-                                            BorderThickness="1"
+                                                BorderThickness="1"
                                             BorderBrush="#dee2e6"
                                             MaxHeight="500">
 
@@ -876,7 +868,7 @@
                             <TabItem Header="📊 Aging Analysis">
                                 <StackPanel Margin="20">
                                     <TextBlock Text="Payment Aging by Supplier" FontSize="16" FontWeight="SemiBold" 
-                                            Margin="0,0,0,15" Foreground="#2c3e50"/>
+                                            Margin="0,0,0,15" Foreground="{DynamicResource TextPrimaryBrush}"/>
 
                                     <DataGrid x:Name="AgingAnalysisGrid" 
                                             AutoGenerateColumns="False" 
@@ -884,8 +876,7 @@
                                             CanUserDeleteRows="False"
                                             GridLinesVisibility="Horizontal"
                                             HeadersVisibility="Column"
-                                            Background="White"
-                                            BorderThickness="1"
+                                                BorderThickness="1"
                                             BorderBrush="#dee2e6"
                                             MaxHeight="500">
 
@@ -906,7 +897,7 @@
                             <TabItem Header="✅ Paid Invoices">
                                 <StackPanel Margin="20">
                                     <TextBlock Text="All Paid Invoices (Most Recent First)" FontSize="16" FontWeight="SemiBold" 
-                                            Margin="0,0,0,15" Foreground="#2c3e50"/>
+                                            Margin="0,0,0,15" Foreground="{DynamicResource TextPrimaryBrush}"/>
 
                                     <DataGrid x:Name="PaidInvoicesGrid" 
                                             AutoGenerateColumns="False" 
@@ -914,8 +905,7 @@
                                             CanUserDeleteRows="False"
                                             GridLinesVisibility="Horizontal"
                                             HeadersVisibility="Column"
-                                            Background="White"
-                                            BorderThickness="1"
+                                                BorderThickness="1"
                                             BorderBrush="#dee2e6"
                                             MaxHeight="500">
 
@@ -953,7 +943,7 @@
                         </Grid.RowDefinitions>
 
                         <!-- Controls -->
-                        <Border Grid.Row="0" Background="#f8f9fa" BorderBrush="#dee2e6" BorderThickness="1" 
+                        <Border Grid.Row="0" Background="{DynamicResource CardBackgroundBrush}" BorderBrush="{DynamicResource BorderSubtleBrush}" BorderThickness="1" 
                                 CornerRadius="8" Padding="20" Margin="0,0,0,20">
                             <Grid>
                                 <Grid.ColumnDefinitions>
@@ -986,7 +976,7 @@
                         </Border>
 
                         <!-- Summary Cards -->
-                        <Border Grid.Row="1" Background="#e8f5e8" BorderBrush="#4caf50" BorderThickness="1" 
+                        <Border Grid.Row="1" Background="{DynamicResource SuccessBackgroundBrush}" BorderBrush="{DynamicResource SuccessForegroundBrush}" BorderThickness="1" 
                                 CornerRadius="8" Padding="20" Margin="0,0,0,20">
                             <Grid>
                                 <Grid.ColumnDefinitions>
@@ -1000,31 +990,31 @@
                                 <StackPanel Grid.Column="0" HorizontalAlignment="Center">
                                     <TextBlock Text="📦 Total Inventory (L)" FontWeight="SemiBold" HorizontalAlignment="Center" FontSize="12"/>
                                     <TextBlock x:Name="InventoryTotalLitersText" Text="0.000 L" FontSize="16" FontWeight="Bold" 
-                                                HorizontalAlignment="Center" Foreground="#2e7d32"/>
+                                                HorizontalAlignment="Center" Foreground="{DynamicResource SuccessForegroundBrush}"/>
                                 </StackPanel>
 
                                 <StackPanel Grid.Column="1" HorizontalAlignment="Center">
                                     <TextBlock Text="⚖️ Total Inventory (T)" FontWeight="SemiBold" HorizontalAlignment="Center" FontSize="12"/>
                                     <TextBlock x:Name="InventoryTotalTonsText" Text="0.000 T" FontSize="16" FontWeight="Bold" 
-                                                HorizontalAlignment="Center" Foreground="#2e7d32"/>
+                                                HorizontalAlignment="Center" Foreground="{DynamicResource SuccessForegroundBrush}"/>
                                 </StackPanel>
 
                                 <StackPanel Grid.Column="2" HorizontalAlignment="Center">
                                     <TextBlock Text="💰 FIFO Value" FontWeight="SemiBold" HorizontalAlignment="Center" FontSize="12"/>
                                     <TextBlock x:Name="InventoryTotalFIFOValueText" Text="$0.00" FontSize="16" FontWeight="Bold" 
-                                                HorizontalAlignment="Center" Foreground="#2e7d32"/>
+                                                HorizontalAlignment="Center" Foreground="{DynamicResource SuccessForegroundBrush}"/>
                                 </StackPanel>
 
                                 <StackPanel Grid.Column="3" HorizontalAlignment="Center">
                                     <TextBlock Text="📄 Purchase Lots" FontWeight="SemiBold" HorizontalAlignment="Center" FontSize="12"/>
                                     <TextBlock x:Name="InventoryPurchaseLotsText" Text="0" FontSize="16" FontWeight="Bold" 
-                                                HorizontalAlignment="Center" Foreground="#2e7d32"/>
+                                                HorizontalAlignment="Center" Foreground="{DynamicResource SuccessForegroundBrush}"/>
                                 </StackPanel>
 
                                 <StackPanel Grid.Column="4" HorizontalAlignment="Center">
                                     <TextBlock Text="💲 Avg Cost/Liter" FontWeight="SemiBold" HorizontalAlignment="Center" FontSize="12"/>
                                     <TextBlock x:Name="InventoryAvgCostPerLiterText" Text="$0.000000" FontSize="16" FontWeight="Bold" 
-                                                HorizontalAlignment="Center" Foreground="#2e7d32"/>
+                                                HorizontalAlignment="Center" Foreground="{DynamicResource SuccessForegroundBrush}"/>
                                 </StackPanel>
                             </Grid>
                         </Border>
@@ -1037,7 +1027,7 @@
                                 <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
                                     <StackPanel Margin="20">
                                     <TextBlock Text="Current Inventory by Vessel (FIFO Valuation)" FontSize="16" FontWeight="SemiBold" 
-                                            Margin="0,0,0,15" Foreground="#2c3e50"/>
+                                            Margin="0,0,0,15" Foreground="{DynamicResource TextPrimaryBrush}"/>
 
                                     <DataGrid x:Name="VesselInventoryGrid" 
                                             AutoGenerateColumns="False" 
@@ -1045,8 +1035,7 @@
                                             CanUserDeleteRows="False"
                                             GridLinesVisibility="Horizontal"
                                             HeadersVisibility="Column"
-                                            Background="White"
-                                            BorderThickness="1"
+                                                BorderThickness="1"
                                             BorderBrush="#dee2e6"
                                             MaxHeight="500">
 
@@ -1073,7 +1062,7 @@
                                 <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
                                     <StackPanel Margin="20">
                                     <TextBlock Text="Current Inventory by Supplier (FIFO Valuation)" FontSize="16" FontWeight="SemiBold" 
-                                            Margin="0,0,0,15" Foreground="#2c3e50"/>
+                                            Margin="0,0,0,15" Foreground="{DynamicResource TextPrimaryBrush}"/>
 
                                     <DataGrid x:Name="SupplierInventoryGrid" 
                                             AutoGenerateColumns="False" 
@@ -1081,8 +1070,7 @@
                                             CanUserDeleteRows="False"
                                             GridLinesVisibility="Horizontal"
                                             HeadersVisibility="Column"
-                                            Background="White"
-                                            BorderThickness="1"
+                                                BorderThickness="1"
                                             BorderBrush="#dee2e6"
                                             MaxHeight="500">
 
@@ -1108,7 +1096,7 @@
                                 <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
                                     <StackPanel Margin="20">
                                     <TextBlock Text="Individual Purchase Lots (FIFO Order)" FontSize="16" FontWeight="SemiBold" 
-                                            Margin="0,0,0,15" Foreground="#2c3e50"/>
+                                            Margin="0,0,0,15" Foreground="{DynamicResource TextPrimaryBrush}"/>
 
                                     <DataGrid x:Name="PurchaseLotsGrid" 
                                             AutoGenerateColumns="False" 
@@ -1117,8 +1105,7 @@
                                             GridLinesVisibility="Horizontal"
                                             HeadersVisibility="Column"
                                             PreviewMouseWheel="DataGrid_PreviewMouseWheel"
-                                            Background="White"
-                                            BorderThickness="1"
+                                                BorderThickness="1"
                                             BorderBrush="#dee2e6"
                                             MaxHeight="500">
 
@@ -1157,7 +1144,7 @@
                             </Grid.RowDefinitions>
 
                             <!-- Controls -->
-                            <Border Grid.Row="0" Background="#f8f9fa" BorderBrush="#dee2e6" BorderThickness="1" 
+                            <Border Grid.Row="0" Background="{DynamicResource CardBackgroundBrush}" BorderBrush="{DynamicResource BorderSubtleBrush}" BorderThickness="1" 
                                     CornerRadius="8" Padding="20" Margin="0,0,0,20">
                                 <Grid>
                                     <Grid.ColumnDefinitions>
@@ -1175,7 +1162,7 @@
                                                     VerticalAlignment="Center" Margin="20,0,0,0" 
                                                     FontStyle="Italic" Foreground="Gray"/>
 
-                                        <Border Margin="20,0,0,0" Background="#e3f2fd" BorderBrush="#1976d2" BorderThickness="1" 
+                                        <Border Margin="20,0,0,0" Background="{DynamicResource InfoBackgroundBrush}" BorderBrush="{DynamicResource PrimaryBrandBrush}" BorderThickness="1" 
                                                 CornerRadius="4" Padding="10,5">
                                             <StackPanel Orientation="Horizontal">
                                                 <TextBlock Text="📅 Period:" FontWeight="SemiBold" VerticalAlignment="Center" Margin="0,0,10,0"/>
@@ -1209,10 +1196,10 @@
                                     <ScrollViewer VerticalScrollBarVisibility="Auto">
                                         <StackPanel Margin="20">
                                             <TextBlock Text="Fleet Performance Overview" FontSize="16" FontWeight="SemiBold" 
-                                                        Margin="0,0,0,15" Foreground="#2c3e50"/>
+                                                        Margin="0,0,0,15" Foreground="{DynamicResource TextPrimaryBrush}"/>
 
                                             <!-- Summary Cards -->
-                                            <Border Background="#e8f5e8" BorderBrush="#4caf50" BorderThickness="1" 
+                                            <Border Background="{DynamicResource SuccessBackgroundBrush}" BorderBrush="{DynamicResource SuccessForegroundBrush}" BorderThickness="1" 
                                                     CornerRadius="8" Padding="20" Margin="0,0,0,20">
                                                 <Grid>
                                                     <Grid.ColumnDefinitions>
@@ -1226,37 +1213,37 @@
                                                     <StackPanel Grid.Column="0" HorizontalAlignment="Center">
                                                         <TextBlock Text="🚢 Active Vessels" FontWeight="SemiBold" HorizontalAlignment="Center" FontSize="12"/>
                                                         <TextBlock x:Name="FleetActiveVesselsText" Text="0" FontSize="16" FontWeight="Bold" 
-                                                                    HorizontalAlignment="Center" Foreground="#2e7d32"/>
+                                                                    HorizontalAlignment="Center" Foreground="{DynamicResource SuccessForegroundBrush}"/>
                                                     </StackPanel>
 
                                                     <StackPanel Grid.Column="1" HorizontalAlignment="Center">
                                                         <TextBlock Text="📍 Total Legs" FontWeight="SemiBold" HorizontalAlignment="Center" FontSize="12"/>
                                                         <TextBlock x:Name="FleetTotalLegsText" Text="0" FontSize="16" FontWeight="Bold" 
-                                                                    HorizontalAlignment="Center" Foreground="#2e7d32"/>
+                                                                    HorizontalAlignment="Center" Foreground="{DynamicResource SuccessForegroundBrush}"/>
                                                     </StackPanel>
 
                                                     <StackPanel Grid.Column="2" HorizontalAlignment="Center">
                                                         <TextBlock Text="⛽ Avg L/Leg" FontWeight="SemiBold" HorizontalAlignment="Center" FontSize="12"/>
                                                         <TextBlock x:Name="FleetAvgEfficiencyLText" Text="0.000" FontSize="16" FontWeight="Bold" 
-                                                                    HorizontalAlignment="Center" Foreground="#2e7d32"/>
+                                                                    HorizontalAlignment="Center" Foreground="{DynamicResource SuccessForegroundBrush}"/>
                                                     </StackPanel>
 
                                                     <StackPanel Grid.Column="3" HorizontalAlignment="Center">
                                                         <TextBlock Text="💰 Avg Cost/Leg" FontWeight="SemiBold" HorizontalAlignment="Center" FontSize="12"/>
                                                         <TextBlock x:Name="FleetAvgCostPerLegText" Text="$0.00" FontSize="16" FontWeight="Bold" 
-                                                                    HorizontalAlignment="Center" Foreground="#2e7d32"/>
+                                                                    HorizontalAlignment="Center" Foreground="{DynamicResource SuccessForegroundBrush}"/>
                                                     </StackPanel>
 
                                                     <StackPanel Grid.Column="4" HorizontalAlignment="Center">
                                                         <TextBlock Text="💲 Total Fleet Cost" FontWeight="SemiBold" HorizontalAlignment="Center" FontSize="12"/>
                                                         <TextBlock x:Name="FleetTotalCostText" Text="$0.00" FontSize="16" FontWeight="Bold" 
-                                                                    HorizontalAlignment="Center" Foreground="#2e7d32"/>
+                                                                    HorizontalAlignment="Center" Foreground="{DynamicResource SuccessForegroundBrush}"/>
                                                     </StackPanel>
                                                 </Grid>
                                             </Border>
 
                                             <!-- Best Performers Cards -->
-                                            <Border Background="#fff3cd" BorderBrush="#ffc107" BorderThickness="1" 
+                                            <Border Background="{DynamicResource WarningBackgroundBrush}" BorderBrush="{DynamicResource WarningForegroundBrush}" BorderThickness="1" 
                                                     CornerRadius="8" Padding="20" Margin="0,0,0,20">
                                                 <Grid>
                                                     <Grid.ColumnDefinitions>
@@ -1292,7 +1279,7 @@
                                 <TabItem Header="🚢 Vessel Performance">
                                     <StackPanel Margin="20">
                                         <TextBlock Text="Individual Vessel Performance Analysis" FontSize="16" FontWeight="SemiBold" 
-                                                    Margin="0,0,0,15" Foreground="#2c3e50"/>
+                                                    Margin="0,0,0,15" Foreground="{DynamicResource TextPrimaryBrush}"/>
 
                                         <DataGrid x:Name="VesselPerformanceGrid" 
                                                   AutoGenerateColumns="False" 
@@ -1301,8 +1288,7 @@
                                                   GridLinesVisibility="Horizontal"
                                                   HeadersVisibility="Column"
                                                   PreviewMouseWheel="DataGrid_PreviewMouseWheel"
-                                                  Background="White"
-                                                  BorderThickness="1"
+                                                    BorderThickness="1"
                                                   BorderBrush="#dee2e6"
                                                   MaxHeight="600">
 
@@ -1328,7 +1314,7 @@
                                 <TabItem Header="🛣️ Route Analysis">
                                     <StackPanel Margin="20">
                                         <TextBlock Text="Route Performance Comparison" FontSize="16" FontWeight="SemiBold" 
-                                                    Margin="0,0,0,15" Foreground="#2c3e50"/>
+                                                    Margin="0,0,0,15" Foreground="{DynamicResource TextPrimaryBrush}"/>
 
                                         <DataGrid x:Name="RouteComparisonGrid" 
                                                   AutoGenerateColumns="False" 
@@ -1336,8 +1322,7 @@
                                                   CanUserDeleteRows="False"
                                                   GridLinesVisibility="Horizontal"
                                                   HeadersVisibility="Column"
-                                                  Background="White"
-                                                  BorderThickness="1"
+                                                    BorderThickness="1"
                                                   BorderBrush="#dee2e6"
                                                   MaxHeight="600">
 
@@ -1362,7 +1347,7 @@
                                 <TabItem Header="📈 Performance Trends">
                                     <StackPanel Margin="20">
                                         <TextBlock Text="Monthly Fleet Performance Trends" FontSize="16" FontWeight="SemiBold" 
-                                                    Margin="0,0,0,15" Foreground="#2c3e50"/>
+                                                    Margin="0,0,0,15" Foreground="{DynamicResource TextPrimaryBrush}"/>
 
                                         <DataGrid x:Name="MonthlyTrendsGrid" 
                                                   AutoGenerateColumns="False" 
@@ -1370,8 +1355,7 @@
                                                   CanUserDeleteRows="False"
                                                   GridLinesVisibility="Horizontal"
                                                   HeadersVisibility="Column"
-                                                  Background="White"
-                                                  BorderThickness="1"
+                                                    BorderThickness="1"
                                                   BorderBrush="#dee2e6"
                                                   MaxHeight="600">
 
@@ -1395,7 +1379,7 @@
                                 <TabItem Header="🏆 Rankings">
                                     <StackPanel Margin="20">
                                         <TextBlock Text="Fleet Efficiency Rankings" FontSize="16" FontWeight="SemiBold" 
-                                                    Margin="0,0,0,15" Foreground="#2c3e50"/>
+                                                    Margin="0,0,0,15" Foreground="{DynamicResource TextPrimaryBrush}"/>
 
                                         <DataGrid x:Name="EfficiencyRankingsGrid" 
                                                   AutoGenerateColumns="False" 
@@ -1403,8 +1387,7 @@
                                                   CanUserDeleteRows="False"
                                                   GridLinesVisibility="Horizontal"
                                                   HeadersVisibility="Column"
-                                                  Background="White"
-                                                  BorderThickness="1"
+                                                    BorderThickness="1"
                                                   BorderBrush="#dee2e6"
                                                   MaxHeight="600">
 
@@ -1429,7 +1412,7 @@
                                 <TabItem Header="💰 Cost Analysis">
                                     <StackPanel Margin="20">
                                         <TextBlock Text="FIFO Cost Efficiency Analysis" FontSize="16" FontWeight="SemiBold" 
-                                                    Margin="0,0,0,15" Foreground="#2c3e50"/>
+                                                    Margin="0,0,0,15" Foreground="{DynamicResource TextPrimaryBrush}"/>
 
                                         <DataGrid x:Name="CostEfficiencyGrid" 
                                                   AutoGenerateColumns="False" 
@@ -1437,8 +1420,7 @@
                                                   CanUserDeleteRows="False"
                                                   GridLinesVisibility="Horizontal"
                                                   HeadersVisibility="Column"
-                                                  Background="White"
-                                                  BorderThickness="1"
+                                                    BorderThickness="1"
                                                   BorderBrush="#dee2e6"
                                                   MaxHeight="600">
 
@@ -1462,7 +1444,7 @@
                                 <TabItem Header="🌍 Seasonal Patterns">
                                     <StackPanel Margin="20">
                                         <TextBlock Text="Seasonal Efficiency Patterns" FontSize="16" FontWeight="SemiBold" 
-                                                    Margin="0,0,0,15" Foreground="#2c3e50"/>
+                                                    Margin="0,0,0,15" Foreground="{DynamicResource TextPrimaryBrush}"/>
 
                                         <DataGrid x:Name="SeasonalPatternsGrid" 
                                                   AutoGenerateColumns="False" 
@@ -1470,8 +1452,7 @@
                                                   CanUserDeleteRows="False"
                                                   GridLinesVisibility="Horizontal"
                                                   HeadersVisibility="Column"
-                                                  Background="White"
-                                                  BorderThickness="1"
+                                                    BorderThickness="1"
                                                   BorderBrush="#dee2e6"
                                                   MaxHeight="600">
 
@@ -1508,7 +1489,7 @@
                             </Grid.RowDefinitions>
 
                             <!-- Controls -->
-                            <Border Grid.Row="0" Background="#f8f9fa" BorderBrush="#dee2e6" BorderThickness="1" 
+                            <Border Grid.Row="0" Background="{DynamicResource CardBackgroundBrush}" BorderBrush="{DynamicResource BorderSubtleBrush}" BorderThickness="1" 
                     CornerRadius="8" Padding="20" Margin="0,0,0,20">
                                 <Grid>
                                     <Grid.ColumnDefinitions>
@@ -1526,7 +1507,7 @@
                             VerticalAlignment="Center" Margin="20,0,0,0" 
                             FontStyle="Italic" Foreground="Gray"/>
 
-                                        <Border Margin="20,0,0,0" Background="#e3f2fd" BorderBrush="#1976d2" BorderThickness="1" 
+                                        <Border Margin="20,0,0,0" Background="{DynamicResource InfoBackgroundBrush}" BorderBrush="{DynamicResource PrimaryBrandBrush}" BorderThickness="1" 
                                 CornerRadius="4" Padding="10,5">
                                             <StackPanel Orientation="Horizontal">
                                                 <TextBlock Text="📅 Period:" FontWeight="SemiBold" VerticalAlignment="Center" Margin="0,0,10,0"/>
@@ -1560,10 +1541,10 @@
                                     <ScrollViewer VerticalScrollBarVisibility="Auto">
                                         <StackPanel Margin="20">
                                             <TextBlock Text="FIFO Allocation Flow Summary" FontSize="16" FontWeight="SemiBold" 
-                                    Margin="0,0,0,15" Foreground="#2c3e50"/>
+                                    Margin="0,0,0,15" Foreground="{DynamicResource TextPrimaryBrush}"/>
 
                                             <!-- Flow Summary Cards -->
-                                            <Border Background="#e8f5e8" BorderBrush="#4caf50" BorderThickness="1" 
+                                            <Border Background="{DynamicResource SuccessBackgroundBrush}" BorderBrush="{DynamicResource SuccessForegroundBrush}" BorderThickness="1" 
                                     CornerRadius="8" Padding="20" Margin="0,0,0,20">
                                                 <Grid>
                                                     <Grid.ColumnDefinitions>
@@ -1577,37 +1558,37 @@
                                                     <StackPanel Grid.Column="0" HorizontalAlignment="Center">
                                                         <TextBlock Text="📦 Total Purchases" FontWeight="SemiBold" HorizontalAlignment="Center" FontSize="12"/>
                                                         <TextBlock x:Name="FIFOTotalPurchasesText" Text="0.000 L" FontSize="16" FontWeight="Bold" 
-                                                   HorizontalAlignment="Center" Foreground="#2e7d32"/>
+                                                   HorizontalAlignment="Center" Foreground="{DynamicResource SuccessForegroundBrush}"/>
                                                     </StackPanel>
 
                                                     <StackPanel Grid.Column="1" HorizontalAlignment="Center">
                                                         <TextBlock Text="⛽ Total Consumption" FontWeight="SemiBold" HorizontalAlignment="Center" FontSize="12"/>
                                                         <TextBlock x:Name="FIFOTotalConsumptionText" Text="0.000 L" FontSize="16" FontWeight="Bold" 
-                                                   HorizontalAlignment="Center" Foreground="#2e7d32"/>
+                                                   HorizontalAlignment="Center" Foreground="{DynamicResource SuccessForegroundBrush}"/>
                                                     </StackPanel>
 
                                                     <StackPanel Grid.Column="2" HorizontalAlignment="Center">
                                                         <TextBlock Text="🔄 Total Allocated" FontWeight="SemiBold" HorizontalAlignment="Center" FontSize="12"/>
                                                         <TextBlock x:Name="FIFOTotalAllocatedText" Text="0.000 L" FontSize="16" FontWeight="Bold" 
-                                                   HorizontalAlignment="Center" Foreground="#2e7d32"/>
+                                                   HorizontalAlignment="Center" Foreground="{DynamicResource SuccessForegroundBrush}"/>
                                                     </StackPanel>
 
                                                     <StackPanel Grid.Column="3" HorizontalAlignment="Center">
                                                         <TextBlock Text="💰 FIFO Value" FontWeight="SemiBold" HorizontalAlignment="Center" FontSize="12"/>
                                                         <TextBlock x:Name="FIFOTotalValueText" Text="$0.00" FontSize="16" FontWeight="Bold" 
-                                                   HorizontalAlignment="Center" Foreground="#2e7d32"/>
+                                                   HorizontalAlignment="Center" Foreground="{DynamicResource SuccessForegroundBrush}"/>
                                                     </StackPanel>
 
                                                     <StackPanel Grid.Column="4" HorizontalAlignment="Center">
                                                         <TextBlock Text="📊 Accuracy" FontWeight="SemiBold" HorizontalAlignment="Center" FontSize="12"/>
                                                         <TextBlock x:Name="FIFOAccuracyText" Text="100.0%" FontSize="16" FontWeight="Bold" 
-                                                   HorizontalAlignment="Center" Foreground="#2e7d32"/>
+                                                   HorizontalAlignment="Center" Foreground="{DynamicResource SuccessForegroundBrush}"/>
                                                     </StackPanel>
                                                 </Grid>
                                             </Border>
 
                                             <!-- Activity Summary -->
-                                            <Border Background="#fff3cd" BorderBrush="#ffc107" BorderThickness="1" 
+                                            <Border Background="{DynamicResource WarningBackgroundBrush}" BorderBrush="{DynamicResource WarningForegroundBrush}" BorderThickness="1" 
                                     CornerRadius="8" Padding="20" Margin="0,0,0,20">
                                                 <Grid>
                                                     <Grid.ColumnDefinitions>
@@ -1657,7 +1638,7 @@
                                 <TabItem Header="📋 Allocation Records">
                                     <StackPanel Margin="20">
                                         <TextBlock Text="Detailed FIFO Allocation Audit Trail" FontSize="16" FontWeight="SemiBold" 
-                                Margin="0,0,0,15" Foreground="#2c3e50"/>
+                                Margin="0,0,0,15" Foreground="{DynamicResource TextPrimaryBrush}"/>
 
                                         <DataGrid x:Name="AllocationRecordsGrid" 
                                   AutoGenerateColumns="False" 
@@ -1666,7 +1647,6 @@
                                   GridLinesVisibility="Horizontal"
                                   HeadersVisibility="Column"
                                   PreviewMouseWheel="DataGrid_PreviewMouseWheel"
-                                  Background="White"
                                   BorderThickness="1"
                                   BorderBrush="#dee2e6"
                                   MaxHeight="600">
@@ -1697,7 +1677,7 @@
                                 <TabItem Header="📦 Purchase Lot Tracking">
                                     <StackPanel Margin="20">
                                         <TextBlock Text="Purchase Lot Consumption Tracking" FontSize="16" FontWeight="SemiBold" 
-                                Margin="0,0,0,15" Foreground="#2c3e50"/>
+                                Margin="0,0,0,15" Foreground="{DynamicResource TextPrimaryBrush}"/>
 
                                         <DataGrid x:Name="PurchaseLotTrackingGrid" 
                                   AutoGenerateColumns="False" 
@@ -1705,7 +1685,6 @@
                                   CanUserDeleteRows="False"
                                   GridLinesVisibility="Horizontal"
                                   HeadersVisibility="Column"
-                                  Background="White"
                                   BorderThickness="1"
                                   BorderBrush="#dee2e6"
                                   MaxHeight="600">
@@ -1736,7 +1715,7 @@
                                     <ScrollViewer VerticalScrollBarVisibility="Auto">
                                         <StackPanel Margin="20">
                                             <TextBlock Text="FIFO Data Integrity and Balance Verification" FontSize="16" FontWeight="SemiBold" 
-                                    Margin="0,0,0,15" Foreground="#2c3e50"/>
+                                    Margin="0,0,0,15" Foreground="{DynamicResource TextPrimaryBrush}"/>
 
                                             <!-- Balance Status Card -->
                                             <Border Background="#d4edda" BorderBrush="#28a745" BorderThickness="1" 
@@ -1776,7 +1755,7 @@
                                             </Border>
 
                                             <!-- Balance Details -->
-                                            <Border Background="#f8f9fa" BorderBrush="#dee2e6" BorderThickness="1" 
+                                            <Border Background="{DynamicResource CardBackgroundBrush}" BorderBrush="{DynamicResource BorderSubtleBrush}" BorderThickness="1" 
                                                     CornerRadius="8" Padding="20" Margin="0,0,0,20">
                                                 <Grid>
                                                     <Grid.RowDefinitions>
@@ -1813,7 +1792,7 @@
 
                                             <!-- Balance Issues -->
                                             <TextBlock Text="Balance Issues (if any):" FontWeight="SemiBold" Margin="0,0,0,10"/>
-                                            <ListBox x:Name="BalanceIssuesList" Background="White" BorderBrush="#dee2e6" 
+                                            <ListBox x:Name="BalanceIssuesList" Background="{DynamicResource CardBackgroundBrush}" BorderBrush="{DynamicResource BorderSubtleBrush}" 
                                                         BorderThickness="1" MaxHeight="150" Margin="0,0,0,20"/>
                                         </StackPanel>
                                     </ScrollViewer>
@@ -1823,7 +1802,7 @@
                                 <TabItem Header="📅 Period Analysis">
                                     <StackPanel Margin="20">
                                         <TextBlock Text="Period-over-Period Allocation Analysis" FontSize="16" FontWeight="SemiBold" 
-                                                    Margin="0,0,0,15" Foreground="#2c3e50"/>
+                                                    Margin="0,0,0,15" Foreground="{DynamicResource TextPrimaryBrush}"/>
 
                                         <DataGrid x:Name="PeriodAnalysisGrid" 
                                                   AutoGenerateColumns="False" 
@@ -1831,8 +1810,7 @@
                                                   CanUserDeleteRows="False"
                                                   GridLinesVisibility="Horizontal"
                                                   HeadersVisibility="Column"
-                                                  Background="White"
-                                                  BorderThickness="1"
+                                                    BorderThickness="1"
                                                   BorderBrush="#dee2e6"
                                                   MaxHeight="600">
 
@@ -1858,7 +1836,7 @@
                                 <TabItem Header="🚨 Exception Report">
                                     <StackPanel Margin="20">
                                         <TextBlock Text="FIFO Allocation Exceptions and Issues" FontSize="16" FontWeight="SemiBold" 
-                                                    Margin="0,0,0,15" Foreground="#2c3e50"/>
+                                                    Margin="0,0,0,15" Foreground="{DynamicResource TextPrimaryBrush}"/>
 
                                         <DataGrid x:Name="ExceptionReportGrid" 
                                                   AutoGenerateColumns="False" 
@@ -1866,8 +1844,7 @@
                                                   CanUserDeleteRows="False"
                                                   GridLinesVisibility="Horizontal"
                                                   HeadersVisibility="Column"
-                                                  Background="White"
-                                                  BorderThickness="1"
+                                                    BorderThickness="1"
                                                   BorderBrush="#dee2e6"
                                                   MaxHeight="600">
 
@@ -1904,7 +1881,7 @@
                             </Grid.RowDefinitions>
 
                             <!-- Controls -->
-                            <Border Grid.Row="0" Background="#f8f9fa" BorderBrush="#dee2e6" BorderThickness="1" 
+                            <Border Grid.Row="0" Background="{DynamicResource CardBackgroundBrush}" BorderBrush="{DynamicResource BorderSubtleBrush}" BorderThickness="1" 
                                     CornerRadius="8" Padding="20" Margin="0,0,0,20">
                                 <Grid>
                                     <Grid.ColumnDefinitions>
@@ -1938,7 +1915,7 @@
                             </Border>
 
                             <!-- Content -->
-                            <TabControl Grid.Row="1" Background="White" BorderBrush="#dee2e6" BorderThickness="1">
+                            <TabControl Grid.Row="1" Background="{DynamicResource CardBackgroundBrush}" BorderBrush="{DynamicResource BorderSubtleBrush}" BorderThickness="1">
 
                                 <!-- Overview Tab -->
                                 <TabItem Header="📋 Overview">
@@ -2006,11 +1983,11 @@
                                             </Grid>
 
                                             <!-- Key Metrics Section -->
-                                            <Border Background="White" BorderBrush="#dee2e6" BorderThickness="1" 
+                                            <Border Background="{DynamicResource CardBackgroundBrush}" BorderBrush="{DynamicResource BorderSubtleBrush}" BorderThickness="1" 
                                                   CornerRadius="6" Padding="20" Margin="0,0,0,20">
                                                 <StackPanel>
                                                     <TextBlock Text="🔍 Key Performance Indicators" FontSize="16" FontWeight="SemiBold" 
-                                                             Margin="0,0,0,15" Foreground="#2c3e50"/>
+                                                             Margin="0,0,0,15" Foreground="{DynamicResource TextPrimaryBrush}"/>
 
                                                     <Grid>
                                                         <Grid.ColumnDefinitions>
@@ -2042,7 +2019,7 @@
                                 <TabItem Header="📈 Price Trends">
                                     <StackPanel Margin="20">
                                         <TextBlock Text="Price Trend Analysis Over Time" FontSize="16" FontWeight="SemiBold" 
-                                                 Margin="0,0,0,15" Foreground="#2c3e50"/>
+                                                 Margin="0,0,0,15" Foreground="{DynamicResource TextPrimaryBrush}"/>
 
                                         <DataGrid x:Name="PriceTrendsGrid" 
                                                 AutoGenerateColumns="False" 
@@ -2050,7 +2027,6 @@
                                                 CanUserDeleteRows="False"
                                                 GridLinesVisibility="Horizontal"
                                                 HeadersVisibility="Column"
-                                                Background="White"
                                                 BorderThickness="1"
                                                 BorderBrush="#dee2e6"
                                                 MaxHeight="700">
@@ -2077,7 +2053,7 @@
                                 <TabItem Header="🏢 Supplier Comparison">
                                     <StackPanel Margin="20">
                                         <TextBlock Text="Supplier Cost Performance Comparison" FontSize="16" FontWeight="SemiBold" 
-                                                 Margin="0,0,0,15" Foreground="#2c3e50"/>
+                                                 Margin="0,0,0,15" Foreground="{DynamicResource TextPrimaryBrush}"/>
 
                                         <DataGrid x:Name="SupplierComparisonGrid" 
                                                 AutoGenerateColumns="False" 
@@ -2086,7 +2062,6 @@
                                                 GridLinesVisibility="Horizontal"
                                                 HeadersVisibility="Column"
                                                 PreviewMouseWheel="DataGrid_PreviewMouseWheel"
-                                                Background="White"
                                                 BorderThickness="1"
                                                 BorderBrush="#dee2e6"
                                                 MaxHeight="700">
@@ -2115,7 +2090,7 @@
                                 <TabItem Header="📊 Cost Variance">
                                     <StackPanel Margin="20">
                                         <TextBlock Text="Actual vs Budgeted Cost Analysis" FontSize="16" FontWeight="SemiBold" 
-                                                 Margin="0,0,0,15" Foreground="#2c3e50"/>
+                                                 Margin="0,0,0,15" Foreground="{DynamicResource TextPrimaryBrush}"/>
 
                                         <DataGrid x:Name="CostVarianceGrid" 
                                                 AutoGenerateColumns="False" 
@@ -2123,7 +2098,6 @@
                                                 CanUserDeleteRows="False"
                                                 GridLinesVisibility="Horizontal"
                                                 HeadersVisibility="Column"
-                                                Background="White"
                                                 BorderThickness="1"
                                                 BorderBrush="#dee2e6"
                                                 MaxHeight="700">
@@ -2152,7 +2126,7 @@
                                 <TabItem Header="🎯 Procurement Efficiency">
                                     <StackPanel Margin="20">
                                         <TextBlock Text="Supplier Procurement Efficiency Metrics" FontSize="16" FontWeight="SemiBold" 
-                                                 Margin="0,0,0,15" Foreground="#2c3e50"/>
+                                                 Margin="0,0,0,15" Foreground="{DynamicResource TextPrimaryBrush}"/>
 
                                         <DataGrid x:Name="ProcurementEfficiencyGrid" 
                                                 AutoGenerateColumns="False" 
@@ -2160,7 +2134,6 @@
                                                 CanUserDeleteRows="False"
                                                 GridLinesVisibility="Horizontal"
                                                 HeadersVisibility="Column"
-                                                Background="White"
                                                 BorderThickness="1"
                                                 BorderBrush="#dee2e6"
                                                 MaxHeight="700">
@@ -2190,7 +2163,7 @@
                                 <TabItem Header="📊 Market Benchmarking">
                                     <StackPanel Margin="20">
                                         <TextBlock Text="Market Position and Competitive Analysis" FontSize="16" FontWeight="SemiBold" 
-                                                 Margin="0,0,0,15" Foreground="#2c3e50"/>
+                                                 Margin="0,0,0,15" Foreground="{DynamicResource TextPrimaryBrush}"/>
 
                                         <DataGrid x:Name="MarketBenchmarkingGrid" 
                                                 AutoGenerateColumns="False" 
@@ -2198,7 +2171,6 @@
                                                 CanUserDeleteRows="False"
                                                 GridLinesVisibility="Horizontal"
                                                 HeadersVisibility="Column"
-                                                Background="White"
                                                 BorderThickness="1"
                                                 BorderBrush="#dee2e6"
                                                 MaxHeight="700">
@@ -2226,14 +2198,14 @@
                                     <ScrollViewer VerticalScrollBarVisibility="Auto">
                                         <StackPanel Margin="20">
                                             <TextBlock Text="Cost Analysis Calculations and Definitions" FontSize="18" FontWeight="Bold" 
-                                                     Margin="0,0,0,20" Foreground="#2c3e50"/>
+                                                     Margin="0,0,0,20" Foreground="{DynamicResource TextPrimaryBrush}"/>
 
                                             <!-- Overview Calculations -->
-                                            <Border Background="#f8f9fa" BorderBrush="#dee2e6" BorderThickness="1" 
+                                            <Border Background="{DynamicResource CardBackgroundBrush}" BorderBrush="{DynamicResource BorderSubtleBrush}" BorderThickness="1" 
                                                   CornerRadius="6" Padding="15" Margin="0,0,0,20">
                                                 <StackPanel>
                                                     <TextBlock Text="📋 Overview" FontSize="16" FontWeight="SemiBold" 
-                                                             Margin="0,0,0,10" Foreground="#2c3e50"/>
+                                                             Margin="0,0,0,10" Foreground="{DynamicResource TextPrimaryBrush}"/>
                                                     <TextBlock Text="• Total Procurement: Sum of all purchase values in USD within date range" FontSize="12" Margin="5,2"/>
                                                     <TextBlock Text="• Avg Cost/Liter: Total procurement value ÷ Total volume in liters" FontSize="12" Margin="5,2"/>
                                                     <TextBlock Text="• Avg Cost/Ton: Total procurement value ÷ Total volume in tons" FontSize="12" Margin="5,2"/>
@@ -2245,11 +2217,11 @@
                                             </Border>
 
                                             <!-- Price Trends Calculations -->
-                                            <Border Background="#f8f9fa" BorderBrush="#dee2e6" BorderThickness="1" 
+                                            <Border Background="{DynamicResource CardBackgroundBrush}" BorderBrush="{DynamicResource BorderSubtleBrush}" BorderThickness="1" 
                                                   CornerRadius="6" Padding="15" Margin="0,0,0,20">
                                                 <StackPanel>
                                                     <TextBlock Text="📈 Price Trends" FontSize="16" FontWeight="SemiBold" 
-                                                             Margin="0,0,0,10" Foreground="#2c3e50"/>
+                                                             Margin="0,0,0,10" Foreground="{DynamicResource TextPrimaryBrush}"/>
                                                     <TextBlock Text="• Avg Cost/L: Monthly total value ÷ Monthly total volume in liters" FontSize="12" Margin="5,2"/>
                                                     <TextBlock Text="• Avg Cost/T: Monthly total value ÷ Monthly total volume in tons" FontSize="12" Margin="5,2"/>
                                                     <TextBlock Text="• Price Change: ((Current month cost - Previous month cost) ÷ Previous month cost) × 100" FontSize="12" Margin="5,2"/>
@@ -2261,11 +2233,11 @@
                                             </Border>
 
                                             <!-- Supplier Comparison Calculations -->
-                                            <Border Background="#f8f9fa" BorderBrush="#dee2e6" BorderThickness="1" 
+                                            <Border Background="{DynamicResource CardBackgroundBrush}" BorderBrush="{DynamicResource BorderSubtleBrush}" BorderThickness="1" 
                                                   CornerRadius="6" Padding="15" Margin="0,0,0,20">
                                                 <StackPanel>
                                                     <TextBlock Text="🏢 Supplier Comparison" FontSize="16" FontWeight="SemiBold" 
-                                                             Margin="0,0,0,10" Foreground="#2c3e50"/>
+                                                             Margin="0,0,0,10" Foreground="{DynamicResource TextPrimaryBrush}"/>
                                                     <TextBlock Text="• Rank: Suppliers ordered by average cost per liter (lowest = rank 1)" FontSize="12" Margin="5,2"/>
                                                     <TextBlock Text="• Avg Cost/L (USD): Total value in USD ÷ Total volume in liters for this supplier" FontSize="12" Margin="5,2"/>
                                                     <TextBlock Text="• Avg Cost/T (USD): Total value in USD ÷ Total volume in tons for this supplier" FontSize="12" Margin="5,2"/>
@@ -2279,11 +2251,11 @@
                                             </Border>
 
                                             <!-- Cost Variance Calculations -->
-                                            <Border Background="#f8f9fa" BorderBrush="#dee2e6" BorderThickness="1" 
+                                            <Border Background="{DynamicResource CardBackgroundBrush}" BorderBrush="{DynamicResource BorderSubtleBrush}" BorderThickness="1" 
                                                   CornerRadius="6" Padding="15" Margin="0,0,0,20">
                                                 <StackPanel>
                                                     <TextBlock Text="📊 Cost Variance" FontSize="16" FontWeight="SemiBold" 
-                                                             Margin="0,0,0,10" Foreground="#2c3e50"/>
+                                                             Margin="0,0,0,10" Foreground="{DynamicResource TextPrimaryBrush}"/>
                                                     <TextBlock Text="• Budgeted Cost/L: Overall average cost per liter (rolling baseline)" FontSize="12" Margin="5,2"/>
                                                     <TextBlock Text="• Variance Amount: Actual cost per liter - Budgeted cost per liter" FontSize="12" Margin="5,2"/>
                                                     <TextBlock Text="• Variance %: (Variance amount ÷ Budgeted cost) × 100" FontSize="12" Margin="5,2"/>
@@ -2295,11 +2267,11 @@
                                             </Border>
 
                                             <!-- Procurement Efficiency Calculations -->
-                                            <Border Background="#f8f9fa" BorderBrush="#dee2e6" BorderThickness="1" 
+                                            <Border Background="{DynamicResource CardBackgroundBrush}" BorderBrush="{DynamicResource BorderSubtleBrush}" BorderThickness="1" 
                                                   CornerRadius="6" Padding="15" Margin="0,0,0,20">
                                                 <StackPanel>
                                                     <TextBlock Text="🎯 Procurement Efficiency" FontSize="16" FontWeight="SemiBold" 
-                                                             Margin="0,0,0,10" Foreground="#2c3e50"/>
+                                                             Margin="0,0,0,10" Foreground="{DynamicResource TextPrimaryBrush}"/>
                                                     <TextBlock Text="• Efficiency Score: Weighted average (30% cost + 20% negotiation + 15% volume + 15% timing + 10% quality + 5% payment + 5% risk)" FontSize="12" Margin="5,2"/>
                                                     <TextBlock Text="• Cost Optimization: Based on cost trend improvement over time (base 75 + improvement %)" FontSize="12" Margin="5,2"/>
                                                     <TextBlock Text="• Price Negotiation: 100 - Price volatility (lower volatility = better negotiation)" FontSize="12" Margin="5,2"/>
@@ -2315,11 +2287,11 @@
                                             </Border>
 
                                             <!-- Market Benchmarking Calculations -->
-                                            <Border Background="#f8f9fa" BorderBrush="#dee2e6" BorderThickness="1" 
+                                            <Border Background="{DynamicResource CardBackgroundBrush}" BorderBrush="{DynamicResource BorderSubtleBrush}" BorderThickness="1" 
                                                   CornerRadius="6" Padding="15" Margin="0,0,0,20">
                                                 <StackPanel>
                                                     <TextBlock Text="📊 Market Benchmarking" FontSize="16" FontWeight="SemiBold" 
-                                                             Margin="0,0,0,10" Foreground="#2c3e50"/>
+                                                             Margin="0,0,0,10" Foreground="{DynamicResource TextPrimaryBrush}"/>
                                                     <TextBlock Text="• Market Avg Cost: Simulated market average (company cost ± 5% random variation)" FontSize="12" Margin="5,2"/>
                                                     <TextBlock Text="• Market Position: ((Market avg - Company avg) ÷ Market avg) × 100 + 50, constrained to 5-95%" FontSize="12" Margin="5,2"/>
                                                     <TextBlock Text="• Cost Advantage: Company average cost - Market average cost" FontSize="12" Margin="5,2"/>
@@ -2332,11 +2304,11 @@
                                             </Border>
 
                                             <!-- General Notes -->
-                                            <Border Background="#e8f4fd" BorderBrush="#3498db" BorderThickness="1" 
+                                            <Border Background="{DynamicResource InfoBackgroundBrush}" BorderBrush="{DynamicResource PrimaryBrandBrush}" BorderThickness="1" 
                                                   CornerRadius="6" Padding="15">
                                                 <StackPanel>
                                                     <TextBlock Text="📝 General Notes" FontSize="16" FontWeight="SemiBold" 
-                                                             Margin="0,0,0,10" Foreground="#2c3e50"/>
+                                                             Margin="0,0,0,10" Foreground="{DynamicResource TextPrimaryBrush}"/>
                                                     <TextBlock Text="• All calculations use FIFO (First-In, First-Out) allocation principles" FontSize="12" Margin="5,2"/>
                                                     <TextBlock Text="• Currency conversions are applied using supplier-specific exchange rates" FontSize="12" Margin="5,2"/>
                                                     <TextBlock Text="• Negative values are displayed in brackets () following accounting standards" FontSize="12" Margin="5,2"/>
@@ -2368,7 +2340,7 @@
                             </Grid.RowDefinitions>
 
                             <!-- Controls -->
-                            <Border Grid.Row="0" Background="#f8f9fa" BorderBrush="#dee2e6" BorderThickness="1" 
+                            <Border Grid.Row="0" Background="{DynamicResource CardBackgroundBrush}" BorderBrush="{DynamicResource BorderSubtleBrush}" BorderThickness="1" 
                                     CornerRadius="8" Padding="20" Margin="0,0,0,20">
                                 <Grid>
                                     <Grid.ColumnDefinitions>
@@ -2402,7 +2374,7 @@
                             </Border>
 
                             <!-- Content -->
-                            <TabControl Grid.Row="1" Background="White" BorderBrush="#dee2e6" BorderThickness="1">
+                            <TabControl Grid.Row="1" Background="{DynamicResource CardBackgroundBrush}" BorderBrush="{DynamicResource BorderSubtleBrush}" BorderThickness="1">
 
                                 <!-- Overview Tab -->
                                 <TabItem Header="📋 Overview">
@@ -2459,11 +2431,11 @@
                                             </Grid>
 
                                             <!-- Route Performance Metrics -->
-                                            <Border Background="White" BorderBrush="#dee2e6" BorderThickness="1" 
+                                            <Border Background="{DynamicResource CardBackgroundBrush}" BorderBrush="{DynamicResource BorderSubtleBrush}" BorderThickness="1" 
                                                   CornerRadius="6" Padding="20" Margin="0,0,0,20">
                                                 <StackPanel>
                                                     <TextBlock Text="🏆 Route Performance Leaders" FontSize="16" FontWeight="SemiBold" 
-                                                             Margin="0,0,0,15" Foreground="#2c3e50"/>
+                                                             Margin="0,0,0,15" Foreground="{DynamicResource TextPrimaryBrush}"/>
 
                                                     <Grid>
                                                         <Grid.ColumnDefinitions>
@@ -2495,7 +2467,7 @@
                                 <TabItem Header="⚖️ Route Comparison">
                                     <StackPanel Margin="20">
                                         <TextBlock Text="Route Type Performance Comparison" FontSize="16" FontWeight="SemiBold" 
-                                                 Margin="0,0,0,15" Foreground="#2c3e50"/>
+                                                 Margin="0,0,0,15" Foreground="{DynamicResource TextPrimaryBrush}"/>
 
                                         <DataGrid x:Name="RoutePerformanceComparisonGrid" 
                                                 AutoGenerateColumns="False" 
@@ -2503,7 +2475,6 @@
                                                 CanUserDeleteRows="False"
                                                 GridLinesVisibility="Horizontal"
                                                 HeadersVisibility="Column"
-                                                Background="White"
                                                 BorderThickness="1"
                                                 BorderBrush="#dee2e6"
                                                 MaxHeight="700">
@@ -2534,7 +2505,7 @@
                                 <TabItem Header="🚢 Vessel Performance">
                                     <StackPanel Margin="20">
                                         <TextBlock Text="Individual Vessel Route Performance" FontSize="16" FontWeight="SemiBold" 
-                                                 Margin="0,0,0,15" Foreground="#2c3e50"/>
+                                                 Margin="0,0,0,15" Foreground="{DynamicResource TextPrimaryBrush}"/>
 
                                         <DataGrid x:Name="RoutePerformanceVesselGrid" 
                                                 AutoGenerateColumns="False" 
@@ -2542,7 +2513,6 @@
                                                 CanUserDeleteRows="False"
                                                 GridLinesVisibility="Horizontal"
                                                 HeadersVisibility="Column"
-                                                Background="White"
                                                 BorderThickness="1"
                                                 BorderBrush="#dee2e6"
                                                 MaxHeight="700">
@@ -2575,7 +2545,7 @@
                                 <TabItem Header="📈 Efficiency Trends">
                                     <StackPanel Margin="20">
                                         <TextBlock Text="Route Efficiency Trends Over Time" FontSize="16" FontWeight="SemiBold" 
-                                                 Margin="0,0,0,15" Foreground="#2c3e50"/>
+                                                 Margin="0,0,0,15" Foreground="{DynamicResource TextPrimaryBrush}"/>
 
                                         <DataGrid x:Name="RoutePerformanceTrendsGrid" 
                                                 AutoGenerateColumns="False" 
@@ -2583,7 +2553,6 @@
                                                 CanUserDeleteRows="False"
                                                 GridLinesVisibility="Horizontal"
                                                 HeadersVisibility="Column"
-                                                Background="White"
                                                 BorderThickness="1"
                                                 BorderBrush="#dee2e6"
                                                 MaxHeight="700">
@@ -2612,7 +2581,7 @@
                                 <TabItem Header="💰 Cost Analysis">
                                     <StackPanel Margin="20">
                                         <TextBlock Text="Route Cost Analysis and Benchmarking" FontSize="16" FontWeight="SemiBold" 
-                                                 Margin="0,0,0,15" Foreground="#2c3e50"/>
+                                                 Margin="0,0,0,15" Foreground="{DynamicResource TextPrimaryBrush}"/>
 
                                         <DataGrid x:Name="RoutePerformanceCostGrid" 
                                                 AutoGenerateColumns="False" 
@@ -2620,7 +2589,6 @@
                                                 CanUserDeleteRows="False"
                                                 GridLinesVisibility="Horizontal"
                                                 HeadersVisibility="Column"
-                                                Background="White"
                                                 BorderThickness="1"
                                                 BorderBrush="#dee2e6"
                                                 MaxHeight="700">
@@ -2649,7 +2617,7 @@
                                 <TabItem Header="🎯 Optimization">
                                     <StackPanel Margin="20">
                                         <TextBlock Text="Route Optimization Recommendations" FontSize="16" FontWeight="SemiBold" 
-                                                 Margin="0,0,0,15" Foreground="#2c3e50"/>
+                                                 Margin="0,0,0,15" Foreground="{DynamicResource TextPrimaryBrush}"/>
 
                                         <DataGrid x:Name="RoutePerformanceOptimizationGrid" 
                                                 AutoGenerateColumns="False" 
@@ -2657,7 +2625,6 @@
                                                 CanUserDeleteRows="False"
                                                 GridLinesVisibility="Horizontal"
                                                 HeadersVisibility="Column"
-                                                Background="White"
                                                 BorderThickness="1"
                                                 BorderBrush="#dee2e6"
                                                 MaxHeight="700">
@@ -2685,7 +2652,7 @@
                                 <TabItem Header="💹 Profitability">
                                     <StackPanel Margin="20">
                                         <TextBlock Text="Route Profitability Analysis" FontSize="16" FontWeight="SemiBold" 
-                                                 Margin="0,0,0,15" Foreground="#2c3e50"/>
+                                                 Margin="0,0,0,15" Foreground="{DynamicResource TextPrimaryBrush}"/>
 
                                         <DataGrid x:Name="RoutePerformanceProfitabilityGrid" 
                                                 AutoGenerateColumns="False" 
@@ -2693,7 +2660,6 @@
                                                 CanUserDeleteRows="False"
                                                 GridLinesVisibility="Horizontal"
                                                 HeadersVisibility="Column"
-                                                Background="White"
                                                 BorderThickness="1"
                                                 BorderBrush="#dee2e6"
                                                 MaxHeight="700">

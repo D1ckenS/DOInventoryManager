@@ -19,11 +19,11 @@
             <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0,0,0,20">
                 <TextBlock Text="⛽" FontSize="32" VerticalAlignment="Center" Margin="0,0,10,0"/>
                 <TextBlock Text="Consumption Entry &amp; Trip Management" FontSize="28" FontWeight="Bold" 
-                         VerticalAlignment="Center" Foreground="#2c3e50"/>
+                         VerticalAlignment="Center" Foreground="{DynamicResource TextPrimaryBrush}"/>
             </StackPanel>
 
             <!-- Quick Stats -->
-            <Border Grid.Row="1" Background="#e8f5e8" BorderBrush="#4caf50" BorderThickness="1" 
+            <Border Grid.Row="1" Background="{DynamicResource SuccessBackgroundBrush}" BorderBrush="{DynamicResource SuccessForegroundBrush}" BorderThickness="1" 
                   CornerRadius="8" Padding="20" Margin="0,0,0,20">
                 <Grid>
                     <Grid.ColumnDefinitions>
@@ -36,38 +36,38 @@
                     <StackPanel Grid.Column="0" HorizontalAlignment="Center">
                         <TextBlock Text="📅 Current Month" FontWeight="SemiBold" HorizontalAlignment="Center" FontSize="12"/>
                         <TextBlock x:Name="CurrentMonthText" Text="2025-07" FontSize="18" FontWeight="Bold" 
-                                 HorizontalAlignment="Center" Foreground="#2e7d32"/>
+                                 HorizontalAlignment="Center" Foreground="{DynamicResource SuccessForegroundBrush}"/>
                     </StackPanel>
 
                     <StackPanel Grid.Column="1" HorizontalAlignment="Center">
                         <TextBlock Text="⛽ Total Consumption" FontWeight="SemiBold" HorizontalAlignment="Center" FontSize="12"/>
                         <TextBlock x:Name="TotalConsumptionText" Text="0 L" FontSize="18" FontWeight="Bold" 
-                                 HorizontalAlignment="Center" Foreground="#2e7d32"/>
+                                 HorizontalAlignment="Center" Foreground="{DynamicResource SuccessForegroundBrush}"/>
                     </StackPanel>
 
                     <StackPanel Grid.Column="2" HorizontalAlignment="Center">
                         <TextBlock Text="🗺️ Total Legs" FontWeight="SemiBold" HorizontalAlignment="Center" FontSize="12"/>
                         <TextBlock x:Name="TotalLegsText" Text="0" FontSize="18" FontWeight="Bold" 
-                                 HorizontalAlignment="Center" Foreground="#2e7d32"/>
+                                 HorizontalAlignment="Center" Foreground="{DynamicResource SuccessForegroundBrush}"/>
                     </StackPanel>
 
                     <StackPanel Grid.Column="3" HorizontalAlignment="Center">
                         <TextBlock Text="📊 Avg. per Leg" FontWeight="SemiBold" HorizontalAlignment="Center" FontSize="12"/>
                         <TextBlock x:Name="AvgPerLegText" Text="0 L/leg" FontSize="18" FontWeight="Bold" 
-                                 HorizontalAlignment="Center" Foreground="#2e7d32"/>
+                                 HorizontalAlignment="Center" Foreground="{DynamicResource SuccessForegroundBrush}"/>
                     </StackPanel>
                 </Grid>
             </Border>
 
             <!-- Consumption Entry Form -->
-            <Border Grid.Row="2" Background="White" BorderBrush="#dee2e6" BorderThickness="1" 
+            <Border Grid.Row="2" Background="{DynamicResource CardBackgroundBrush}" BorderBrush="{DynamicResource BorderSubtleBrush}" BorderThickness="1" 
                   CornerRadius="8" Padding="25" Margin="0,0,0,20">
                 <StackPanel>
                     <StackPanel Orientation="Horizontal" Margin="0,0,0,20">
                         <TextBlock Text="Record Monthly Consumption" FontSize="18" FontWeight="SemiBold" 
-                                 VerticalAlignment="Center" Foreground="#2c3e50"/>
+                                 VerticalAlignment="Center" Foreground="{DynamicResource TextPrimaryBrush}"/>
                         <Rectangle Width="20"/>
-                        <Border Background="#fff3cd" BorderBrush="#ffc107" BorderThickness="1" 
+                        <Border Background="{DynamicResource WarningBackgroundBrush}" BorderBrush="{DynamicResource WarningForegroundBrush}" BorderThickness="1" 
                               CornerRadius="4" Padding="8,4">
                             <TextBlock Text="💡 Usually recorded once per month (99% of cases)" 
                                      FontSize="12" Foreground="#856404"/>
@@ -102,7 +102,7 @@
                         <!-- Auto-Generated Month -->
                         <StackPanel Grid.Column="2">
                             <TextBlock Text="Month (Auto-Generated)" FontWeight="SemiBold" Margin="0,0,0,5"/>
-                            <Border Background="#f8f9fa" BorderBrush="#ced4da" BorderThickness="1" CornerRadius="3">
+                            <Border Background="{DynamicResource SubtleBackgroundBrush}" BorderBrush="{DynamicResource BorderSubtleBrush}" BorderThickness="1" CornerRadius="3">
                                 <TextBlock x:Name="MonthDisplayText" Text="2025-07" Padding="10" 
                                          FontWeight="SemiBold" Foreground="#495057"/>
                             </Border>
@@ -120,7 +120,7 @@
                         <!-- Route Display -->
                         <StackPanel Grid.Column="0" Margin="0,0,15,0">
                             <TextBlock Text="Route (Auto-Assigned)" FontWeight="SemiBold" Margin="0,0,0,5"/>
-                            <Border Background="#e3f2fd" BorderBrush="#2196f3" BorderThickness="1" CornerRadius="3">
+                            <Border Background="{DynamicResource InfoBackgroundBrush}" BorderBrush="{DynamicResource PrimaryBrandBrush}" BorderThickness="1" CornerRadius="3">
                                 <TextBlock x:Name="RouteDisplayText" Text="Select vessel to see route" 
                                          Padding="10" FontStyle="Italic" Foreground="#1976d2"/>
                             </Border>
@@ -143,7 +143,7 @@
                     </Grid>
 
                     <!-- Trip Efficiency Display -->
-                    <Border Background="#fff3cd" BorderBrush="#ffc107" BorderThickness="1" 
+                    <Border Background="{DynamicResource WarningBackgroundBrush}" BorderBrush="{DynamicResource WarningForegroundBrush}" BorderThickness="1" 
                           CornerRadius="6" Padding="15" Margin="0,0,0,15">
                         <Grid>
                             <Grid.ColumnDefinitions>
@@ -203,7 +203,7 @@
             </Border>
 
             <!-- Monthly Consumption List -->
-            <Border Grid.Row="3" Background="White" BorderBrush="#dee2e6" BorderThickness="1" 
+            <Border Grid.Row="3" Background="{DynamicResource CardBackgroundBrush}" BorderBrush="{DynamicResource BorderSubtleBrush}" BorderThickness="1" 
                   CornerRadius="6" Padding="20">
                 <StackPanel>
                     <Grid Margin="0,0,0,15">
@@ -214,7 +214,7 @@
 
                         <StackPanel Grid.Column="0" Orientation="Horizontal">
                             <TextBlock Text="📋 Monthly Consumption Records" FontSize="16" FontWeight="SemiBold" 
-                                     VerticalAlignment="Center" Foreground="#2c3e50"/>
+                                     VerticalAlignment="Center" Foreground="{DynamicResource TextPrimaryBrush}"/>
                             <Rectangle Width="15"/>
                             <ComboBox x:Name="MonthFilterComboBox" MinWidth="120" Padding="8,5" 
                                     SelectionChanged="MonthFilterComboBox_SelectionChanged"/>
@@ -239,7 +239,6 @@
                             CanUserSortColumns="True"
                             GridLinesVisibility="Horizontal"
                             HeadersVisibility="Column"
-                            Background="White"
                             BorderThickness="0"
                             MaxHeight="400"
                             SelectionMode="Single"
@@ -276,7 +275,7 @@
                     </DataGrid>
 
                     <!-- Route Information Panel -->
-                    <Border Background="#e3f2fd" BorderBrush="#2196f3" BorderThickness="1" 
+                    <Border Background="{DynamicResource InfoBackgroundBrush}" BorderBrush="{DynamicResource PrimaryBrandBrush}" BorderThickness="1" 
                           CornerRadius="4" Padding="15" Margin="0,20,0,0">
                         <StackPanel>
                             <TextBlock Text="🗺️ Route &amp; Trip Information" FontWeight="SemiBold" 

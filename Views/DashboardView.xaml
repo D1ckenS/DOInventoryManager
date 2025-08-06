@@ -3,13 +3,15 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     
     <ScrollViewer VerticalScrollBarVisibility="Auto">
-        <StackPanel Margin="20">
+        <StackPanel Margin="24">
             
             <!-- Header -->
-            <TextBlock Text="Dashboard" FontSize="28" FontWeight="Bold" Margin="0,0,0,30" Foreground="#2c3e50"/>
+            <TextBlock Text="Dashboard" 
+                     Style="{StaticResource DisplayMediumTextStyle}" 
+                     Margin="0,0,0,32"/>
             
             <!-- Quick Stats Cards -->
-            <Grid Margin="0,0,0,30">
+            <Grid Margin="0,0,0,32">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="*"/>
@@ -18,54 +20,99 @@
                 </Grid.ColumnDefinitions>
                 
                 <!-- Total Vessels Card -->
-                <Border Grid.Column="0" Background="#3498db" CornerRadius="8" Margin="0,0,15,0" Padding="20">
+                <Border Grid.Column="0" 
+                        Style="{StaticResource StatCardStyle}" 
+                        Margin="0,0,16,0">
                     <StackPanel>
-                        <TextBlock Text="🚢" FontSize="32" HorizontalAlignment="Center" Foreground="White"/>
-                        <TextBlock x:Name="TotalVesselsText" Text="0" FontSize="24" FontWeight="Bold" 
-                                 HorizontalAlignment="Center" Foreground="White" Margin="0,10,0,5"/>
-                        <TextBlock Text="Total Vessels" FontSize="12" HorizontalAlignment="Center" 
-                                 Foreground="LightBlue"/>
+                        <TextBlock Text="&#xE7B8;" 
+                                 Style="{StaticResource FluentIconLarge}" 
+                                 Foreground="{DynamicResource PrimaryBrandBrush}"
+                                 HorizontalAlignment="Center" 
+                                 Margin="0,0,0,12"/>
+                        <TextBlock x:Name="TotalVesselsText" 
+                                 Text="0" 
+                                 Style="{StaticResource HeadlineLargeTextStyle}" 
+                                 HorizontalAlignment="Center" 
+                                 Margin="0,0,0,4"/>
+                        <TextBlock Text="Total Vessels" 
+                                 Style="{StaticResource LabelMediumTextStyle}"
+                                 Foreground="{DynamicResource TextSecondaryBrush}"
+                                 HorizontalAlignment="Center"/>
                     </StackPanel>
                 </Border>
                 
                 <!-- Total Suppliers Card -->
-                <Border Grid.Column="1" Background="#27ae60" CornerRadius="8" Margin="0,0,15,0" Padding="20">
+                <Border Grid.Column="1" 
+                        Style="{StaticResource StatCardStyle}" 
+                        Margin="0,0,16,0">
                     <StackPanel>
-                        <TextBlock Text="🏢" FontSize="32" HorizontalAlignment="Center" Foreground="White"/>
-                        <TextBlock x:Name="TotalSuppliersText" Text="0" FontSize="24" FontWeight="Bold" 
-                                 HorizontalAlignment="Center" Foreground="White" Margin="0,10,0,5"/>
-                        <TextBlock Text="Active Suppliers" FontSize="12" HorizontalAlignment="Center" 
-                                 Foreground="LightGreen"/>
+                        <TextBlock Text="&#xE716;" 
+                                 Style="{StaticResource FluentIconLarge}" 
+                                 Foreground="{DynamicResource SuccessForegroundBrush}"
+                                 HorizontalAlignment="Center" 
+                                 Margin="0,0,0,12"/>
+                        <TextBlock x:Name="TotalSuppliersText" 
+                                 Text="0" 
+                                 Style="{StaticResource HeadlineLargeTextStyle}" 
+                                 HorizontalAlignment="Center" 
+                                 Margin="0,0,0,4"/>
+                        <TextBlock Text="Active Suppliers" 
+                                 Style="{StaticResource LabelMediumTextStyle}"
+                                 Foreground="{DynamicResource TextSecondaryBrush}"
+                                 HorizontalAlignment="Center"/>
                     </StackPanel>
                 </Border>
                 
                 <!-- Current Inventory Card -->
-                <Border Grid.Column="2" Background="#e74c3c" CornerRadius="8" Margin="0,0,15,0" Padding="20">
+                <Border Grid.Column="2" 
+                        Style="{StaticResource StatCardStyle}" 
+                        Margin="0,0,16,0">
                     <StackPanel>
-                        <TextBlock Text="⛽" FontSize="32" HorizontalAlignment="Center" Foreground="White"/>
-                        <TextBlock x:Name="CurrentInventoryText" Text="0" FontSize="24" FontWeight="Bold" 
-                                 HorizontalAlignment="Center" Foreground="White" Margin="0,10,0,5"/>
-                        <TextBlock Text="Liters on Hand" FontSize="12" HorizontalAlignment="Center" 
-                                 Foreground="LightPink"/>
+                        <TextBlock Text="&#xE73F;" 
+                                 Style="{StaticResource FluentIconLarge}" 
+                                 Foreground="{DynamicResource CriticalForegroundBrush}"
+                                 HorizontalAlignment="Center" 
+                                 Margin="0,0,0,12"/>
+                        <TextBlock x:Name="CurrentInventoryText" 
+                                 Text="0" 
+                                 Style="{StaticResource HeadlineLargeTextStyle}" 
+                                 HorizontalAlignment="Center" 
+                                 Margin="0,0,0,4"/>
+                        <TextBlock Text="Liters on Hand" 
+                                 Style="{StaticResource LabelMediumTextStyle}"
+                                 Foreground="{DynamicResource TextSecondaryBrush}"
+                                 HorizontalAlignment="Center"/>
                     </StackPanel>
                 </Border>
                 
                 <!-- Inventory Value Card -->
-                <Border Grid.Column="3" Background="#f39c12" CornerRadius="8" Padding="20">
+                <Border Grid.Column="3" 
+                        Style="{StaticResource StatCardStyle}">
                     <StackPanel>
-                        <TextBlock Text="💰" FontSize="32" HorizontalAlignment="Center" Foreground="White"/>
-                        <TextBlock x:Name="InventoryValueText" Text="$0" FontSize="24" FontWeight="Bold" 
-                                 HorizontalAlignment="Center" Foreground="White" Margin="0,10,0,5"/>
-                        <TextBlock Text="Inventory Value (USD)" FontSize="12" HorizontalAlignment="Center" 
-                                 Foreground="LightYellow"/>
+                        <TextBlock Text="&#xE7BF;" 
+                                 Style="{StaticResource FluentIconLarge}" 
+                                 Foreground="{DynamicResource CautionForegroundBrush}"
+                                 HorizontalAlignment="Center" 
+                                 Margin="0,0,0,12"/>
+                        <TextBlock x:Name="InventoryValueText" 
+                                 Text="$0" 
+                                 Style="{StaticResource HeadlineLargeTextStyle}" 
+                                 HorizontalAlignment="Center" 
+                                 Margin="0,0,0,4"/>
+                        <TextBlock Text="Inventory Value (USD)" 
+                                 Style="{StaticResource LabelMediumTextStyle}"
+                                 Foreground="{DynamicResource TextSecondaryBrush}"
+                                 HorizontalAlignment="Center"/>
                     </StackPanel>
                 </Border>
             </Grid>
             
             <!-- Quick Actions -->
-            <Border Background="#f8f9fa" BorderBrush="#dee2e6" BorderThickness="1" CornerRadius="8" Padding="20" Margin="0,0,0,30">
+            <Border Style="{StaticResource FluentCardStyle}" Margin="0,0,0,32">
                 <StackPanel>
-                    <TextBlock Text="Quick Actions" FontSize="18" FontWeight="SemiBold" Margin="0,0,0,15" Foreground="#2c3e50"/>
+                    <TextBlock Text="Quick Actions" 
+                             Style="{StaticResource TitleLargeTextStyle}" 
+                             Margin="0,0,0,20"/>
                     
                     <Grid>
                         <Grid.ColumnDefinitions>
@@ -74,25 +121,35 @@
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
                         
-                        <Button Grid.Column="0" Content="🛒 New Purchase" Background="#3498db" Foreground="White" 
-                              BorderThickness="0" Padding="15,10" Margin="0,0,10,0" FontWeight="SemiBold"
+                        <Button Grid.Column="0" 
+                              Style="{StaticResource FluentButtonStyle}"
+                              Content="New Purchase" 
+                              Padding="16,12" 
+                              Margin="0,0,12,0"
                               Click="NewPurchase_Click"/>
                         
-                        <Button Grid.Column="1" Content="⛽ Add Consumption" Background="#27ae60" Foreground="White" 
-                              BorderThickness="0" Padding="15,10" Margin="0,0,10,0" FontWeight="SemiBold"
+                        <Button Grid.Column="1" 
+                              Style="{StaticResource FluentSecondaryButtonStyle}"
+                              Content="Add Consumption" 
+                              Padding="16,12" 
+                              Margin="0,0,12,0"
                               Click="AddConsumption_Click"/>
                         
-                        <Button Grid.Column="2" Content="🔄 Run FIFO Allocation" Background="#e74c3c" Foreground="White" 
-                              BorderThickness="0" Padding="15,10" FontWeight="SemiBold"
+                        <Button Grid.Column="2" 
+                              Style="{StaticResource FluentButtonStyle}"
+                              Content="Run FIFO Allocation"
+                              Padding="16,12"
                               Click="RunFIFO_Click"/>
                     </Grid>
                 </StackPanel>
             </Border>
             
             <!-- Recent Activity -->
-            <Border Background="White" BorderBrush="#dee2e6" BorderThickness="1" CornerRadius="8" Padding="20">
+            <Border Style="{StaticResource FluentCardStyle}">
                 <StackPanel>
-                    <TextBlock Text="Recent Activity" FontSize="18" FontWeight="SemiBold" Margin="0,0,0,15" Foreground="#2c3e50"/>
+                    <TextBlock Text="Recent Activity" 
+                             Style="{StaticResource TitleLargeTextStyle}" 
+                             Margin="0,0,0,20"/>
                     
                     <DataGrid x:Name="RecentActivityGrid" 
                             AutoGenerateColumns="False" 
@@ -103,7 +160,6 @@
                             CanUserSortColumns="True"
                             GridLinesVisibility="Horizontal"
                             HeadersVisibility="Column"
-                            Background="White"
                             BorderThickness="0"
                             MaxHeight="300">
                         
@@ -116,9 +172,14 @@
                         </DataGrid.Columns>
                     </DataGrid>
                     
-                    <TextBlock x:Name="NoDataText" Text="No recent activity to display. Start by adding suppliers and vessels." 
-                             Foreground="Gray" FontStyle="Italic" Margin="0,20,0,0" 
-                             HorizontalAlignment="Center" Visibility="Visible"/>
+                    <TextBlock x:Name="NoDataText" 
+                             Text="No recent activity to display. Start by adding suppliers and vessels." 
+                             Style="{StaticResource BodyMediumTextStyle}"
+                             Foreground="{DynamicResource TextTertiaryBrush}"
+                             FontStyle="Italic" 
+                             Margin="0,20,0,0" 
+                             HorizontalAlignment="Center" 
+                             Visibility="Visible"/>
                 </StackPanel>
             </Border>
             

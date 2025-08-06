@@ -5,20 +5,20 @@
     <UserControl.Resources>
         <!-- Alert Row Styles -->
         <Style x:Key="OverdueRowStyle" TargetType="DataGridRow">
-            <Setter Property="Background" Value="#ffebee"/>
-            <Setter Property="Foreground" Value="#c62828"/>
+            <Setter Property="Background" Value="{DynamicResource ErrorBackgroundBrush}"/>
+            <Setter Property="Foreground" Value="{DynamicResource ErrorForegroundBrush}"/>
             <Setter Property="FontWeight" Value="Bold"/>
         </Style>
 
         <Style x:Key="DueTodayRowStyle" TargetType="DataGridRow">
-            <Setter Property="Background" Value="#fff3e0"/>
-            <Setter Property="Foreground" Value="#ef6c00"/>
+            <Setter Property="Background" Value="{DynamicResource WarningBackgroundBrush}"/>
+            <Setter Property="Foreground" Value="{DynamicResource WarningForegroundBrush}"/>
             <Setter Property="FontWeight" Value="SemiBold"/>
         </Style>
 
         <Style x:Key="DueSoonRowStyle" TargetType="DataGridRow">
-            <Setter Property="Background" Value="#e8f5e9"/>
-            <Setter Property="Foreground" Value="#2e7d32"/>
+            <Setter Property="Background" Value="{DynamicResource SuccessBackgroundBrush}"/>
+            <Setter Property="Foreground" Value="{DynamicResource SuccessForegroundBrush}"/>
         </Style>
     </UserControl.Resources>
 
@@ -40,30 +40,36 @@
             <!-- Header -->
             <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0,0,0,30">
                 <TextBlock Text="🛒" FontSize="32" VerticalAlignment="Center" Margin="0,0,10,0"/>
-                <TextBlock Text="Purchase Entry" FontSize="28" FontWeight="Bold" 
-             VerticalAlignment="Center" Foreground="#2c3e50"/>
+                <TextBlock Text="Purchase Entry" 
+                         Style="{StaticResource DisplayMediumTextStyle}"
+                         VerticalAlignment="Center"/>
             </StackPanel>
 
             <!-- Alert Status Panel -->
-            <Border x:Name="AlertStatusPanel" Grid.Row="0" Background="#fff3cd" BorderBrush="#ffc107" 
+            <Border x:Name="AlertStatusPanel" Grid.Row="0" 
+                    Background="{DynamicResource WarningBackgroundBrush}" 
+                    BorderBrush="{DynamicResource WarningForegroundBrush}" 
                     BorderThickness="1" CornerRadius="6" Padding="15" Margin="0,50,0,20" Visibility="Collapsed">
                 <StackPanel Orientation="Horizontal">
                     <TextBlock Text="⚠" FontSize="20" VerticalAlignment="Center" Margin="0,0,10,0"/>
-                    <TextBlock x:Name="AlertStatusText" Text="" FontSize="14" FontWeight="SemiBold" 
-                            VerticalAlignment="Center" Foreground="#856404"/>
+                    <TextBlock x:Name="AlertStatusText" Text="" 
+                             Style="{StaticResource LabelMediumTextStyle}"
+                             FontWeight="SemiBold"
+                             VerticalAlignment="Center" 
+                             Foreground="{DynamicResource WarningForegroundBrush}"/>
                     <Button x:Name="ViewAlertsBtn" Content="View All Alerts" 
-                          Background="#ffc107" Foreground="#856404" BorderThickness="0" 
-                          Padding="10,5" Margin="20,0,0,0" FontSize="12"
-                          Click="ViewAlerts_Click"/>
+                            Style="{StaticResource FluentSecondaryButtonStyle}"
+                            Padding="10,5" Margin="20,0,0,0" FontSize="12"
+                            Click="ViewAlerts_Click"/>
                 </StackPanel>
             </Border>
 
             <!-- Purchase Entry Form -->
-            <Border Grid.Row="1" Background="White" BorderBrush="#dee2e6" BorderThickness="1" 
+            <Border Grid.Row="1" Background="{DynamicResource CardBackgroundBrush}" BorderBrush="{DynamicResource BorderSubtleBrush}" BorderThickness="1" 
                   CornerRadius="8" Padding="25" Margin="0,0,0,20">
                 <StackPanel>
                     <TextBlock Text="New Fuel Purchase" FontSize="18" FontWeight="SemiBold" 
-                             Margin="0,0,0,20" Foreground="#2c3e50"/>
+                             Margin="0,0,0,20" Foreground="{DynamicResource TextPrimaryBrush}"/>
 
                     <!-- Row 1: Basic Information -->
                     <Grid Margin="0,0,0,15">
@@ -153,7 +159,7 @@
                         <!-- Total USD Value (Auto-calculated) -->
                         <StackPanel Grid.Column="2">
                             <TextBlock Text="Total USD Value" FontWeight="SemiBold" Margin="0,0,0,5"/>
-                            <Border Background="#f8f9fa" BorderBrush="#ced4da" BorderThickness="1" CornerRadius="3">
+                            <Border Background="{DynamicResource SubtleBackgroundBrush}" BorderBrush="{DynamicResource BorderSubtleBrush}" BorderThickness="1" CornerRadius="3">
                                 <TextBlock x:Name="TotalUSDValueText" Text="$0.00" Padding="10" 
                                          FontWeight="SemiBold" Foreground="#28a745"/>
                             </Border>
@@ -161,7 +167,7 @@
                     </Grid>
 
                     <!-- Row 4: Invoice Tracking (Optional) -->
-                    <Border Background="#e3f2fd" BorderBrush="#2196f3" BorderThickness="1" 
+                    <Border Background="{DynamicResource InfoBackgroundBrush}" BorderBrush="{DynamicResource PrimaryBrandBrush}" BorderThickness="1" 
                           CornerRadius="6" Padding="15" Margin="0,0,0,15">
                         <Grid>
                             <Grid.ColumnDefinitions>
@@ -220,7 +226,7 @@
             </Border>
 
             <!-- Auto-Calculations Display -->
-            <Border Grid.Row="2" Background="#fff3cd" BorderBrush="#ffc107" BorderThickness="1" 
+            <Border Grid.Row="2" Background="{DynamicResource WarningBackgroundBrush}" BorderBrush="{DynamicResource WarningForegroundBrush}" BorderThickness="1" 
       CornerRadius="6" Padding="20" Margin="0,0,0,20">
                 <Grid>
                     <Grid.ColumnDefinitions>
@@ -257,7 +263,7 @@
             </Border>
 
             <!-- Search/Filter Panel -->
-            <Border Grid.Row="3" Background="#f8f9fa" BorderBrush="#dee2e6" BorderThickness="1" 
+            <Border Grid.Row="3" Background="{DynamicResource CardBackgroundBrush}" BorderBrush="{DynamicResource BorderSubtleBrush}" BorderThickness="1" 
                     CornerRadius="6" Padding="20" Margin="0,20,0,20">
                 <Grid>
                     <Grid.RowDefinitions>
@@ -267,7 +273,7 @@
                     </Grid.RowDefinitions>
                     
                     <TextBlock Grid.Row="0" Text="Search &amp; Filter Purchases" FontSize="16" FontWeight="SemiBold" 
-                               Foreground="#2c3e50" Margin="0,0,0,15"/>
+                               Foreground="{DynamicResource TextPrimaryBrush}" Margin="0,0,0,15"/>
                     
                     <Grid Grid.Row="1">
                         <Grid.ColumnDefinitions>
@@ -353,12 +359,12 @@
             </Border>
 
             <!-- Recent Purchases List -->
-            <Border Grid.Row="4" Background="White" BorderBrush="#dee2e6" BorderThickness="1" 
+            <Border Grid.Row="4" Background="{DynamicResource CardBackgroundBrush}" BorderBrush="{DynamicResource BorderSubtleBrush}" BorderThickness="1" 
                   CornerRadius="6" Padding="20">
                 <StackPanel>
                     <StackPanel Orientation="Horizontal" Margin="0,0,0,15">
                         <TextBlock Text="Recent Purchases" FontSize="16" FontWeight="SemiBold" 
-                                 VerticalAlignment="Center" Foreground="#2c3e50"/>
+                                 VerticalAlignment="Center" Foreground="{DynamicResource TextPrimaryBrush}"/>
                         <Rectangle Width="20"/>
                         <Button Content="Refresh" Background="#17a2b8" Foreground="White" 
                               BorderThickness="0" Padding="10,5" FontSize="12"
@@ -374,7 +380,6 @@
                         CanUserSortColumns="True"
                         GridLinesVisibility="Horizontal"
                         HeadersVisibility="Column"
-                        Background="White"
                         BorderThickness="0"
                         MaxHeight="400"
                         SelectionMode="Single"

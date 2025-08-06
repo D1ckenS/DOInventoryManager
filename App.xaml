@@ -4,6 +4,17 @@
              xmlns:local="clr-namespace:DOInventoryManager"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
-         
+        <!-- Include the modern theme system -->
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Themes/AppTheme.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+            
+            <!-- Global Text Rendering Settings -->
+            <Style TargetType="{x:Type FrameworkElement}">
+                <Setter Property="UseLayoutRounding" Value="True"/>
+                <Setter Property="RenderOptions.ClearTypeHint" Value="Enabled"/>
+            </Style>
+        </ResourceDictionary>
     </Application.Resources>
 </Application>

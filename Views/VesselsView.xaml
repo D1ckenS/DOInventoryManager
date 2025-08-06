@@ -14,10 +14,10 @@
 
         <!-- Header -->
         <TextBlock Grid.Row="0" Text="Vessels &amp; Fleet Management" FontSize="28" FontWeight="Bold" 
-                 Margin="0,0,0,20" Foreground="#2c3e50"/>
+                 Margin="0,0,0,20" Foreground="{DynamicResource TextPrimaryBrush}"/>
 
         <!-- Toolbar -->
-        <Border Grid.Row="1" Background="#f8f9fa" BorderBrush="#dee2e6" BorderThickness="1" 
+        <Border Grid.Row="1" Background="{DynamicResource CardBackgroundBrush}" BorderBrush="{DynamicResource BorderSubtleBrush}" BorderThickness="1" 
               CornerRadius="6" Padding="15" Margin="0,0,0,20">
             <StackPanel Orientation="Horizontal">
                 <Button x:Name="AddVesselBtn" Content="➕ Add New Vessel" 
@@ -56,11 +56,11 @@
             </Grid.ColumnDefinitions>
 
             <!-- Vessels List -->
-            <Border Grid.Column="0" Background="White" BorderBrush="#dee2e6" BorderThickness="1" 
+            <Border Grid.Column="0" Background="{DynamicResource CardBackgroundBrush}" BorderBrush="{DynamicResource BorderSubtleBrush}" BorderThickness="1" 
                   CornerRadius="6" Padding="15" Margin="0,0,10,0">
                 <StackPanel>
                     <TextBlock Text="Fleet Overview" FontSize="16" FontWeight="SemiBold" 
-                             Margin="0,0,0,15" Foreground="#2c3e50"/>
+                             Margin="0,0,0,15" Foreground="{DynamicResource TextPrimaryBrush}"/>
 
                     <DataGrid x:Name="VesselsGrid" 
                             AutoGenerateColumns="False" 
@@ -71,7 +71,6 @@
                             CanUserSortColumns="True"
                             GridLinesVisibility="Horizontal"
                             HeadersVisibility="Column"
-                            Background="White"
                             BorderThickness="0"
                             SelectionMode="Single"
                             SelectionChanged="VesselsGrid_SelectionChanged"
@@ -87,7 +86,7 @@
                     </DataGrid>
 
                     <!-- Fleet Statistics -->
-                    <Border Background="#e3f2fd" BorderBrush="#2196f3" BorderThickness="1" 
+                    <Border Background="{DynamicResource InfoBackgroundBrush}" BorderBrush="{DynamicResource PrimaryBrandBrush}" BorderThickness="1" 
                           CornerRadius="4" Padding="15" Margin="0,20,0,0">
                         <Grid>
                             <Grid.ColumnDefinitions>
@@ -99,20 +98,20 @@
                             <StackPanel Grid.Column="0" HorizontalAlignment="Center">
                                 <TextBlock Text="Total Fleet" FontWeight="SemiBold" HorizontalAlignment="Center" FontSize="12"/>
                                 <TextBlock x:Name="TotalFleetText" Text="0" FontSize="20" FontWeight="Bold" 
-                                         HorizontalAlignment="Center" Foreground="#1976d2"/>
+                                         HorizontalAlignment="Center" Foreground="{DynamicResource PrimaryBrandBrush}"/>
                             </StackPanel>
 
                             <StackPanel Grid.Column="1" HorizontalAlignment="Center">
                                 <TextBlock Text="Vessels" FontWeight="SemiBold" HorizontalAlignment="Center" FontSize="12"/>
                                 <TextBlock x:Name="VesselsCountText" Text="0" FontSize="20" FontWeight="Bold" 
-                                         HorizontalAlignment="Center" Foreground="#1976d2"/>
+                                         HorizontalAlignment="Center" Foreground="{DynamicResource PrimaryBrandBrush}"/>
                                 <TextBlock Text="(Aqaba-Nuweibaa)" FontSize="10" HorizontalAlignment="Center" Foreground="Gray"/>
                             </StackPanel>
 
                             <StackPanel Grid.Column="2" HorizontalAlignment="Center">
                                 <TextBlock Text="Boats" FontWeight="SemiBold" HorizontalAlignment="Center" FontSize="12"/>
                                 <TextBlock x:Name="BoatsCountText" Text="0" FontSize="20" FontWeight="Bold" 
-                                         HorizontalAlignment="Center" Foreground="#1976d2"/>
+                                         HorizontalAlignment="Center" Foreground="{DynamicResource PrimaryBrandBrush}"/>
                                 <TextBlock Text="(Aqaba-Taba)" FontSize="10" HorizontalAlignment="Center" Foreground="Gray"/>
                             </StackPanel>
                         </Grid>
@@ -121,15 +120,15 @@
             </Border>
 
             <!-- Splitter -->
-            <GridSplitter Grid.Column="1" Width="3" Background="#dee2e6" 
+            <GridSplitter Grid.Column="1" Width="3" Background="{DynamicResource BorderSubtleBrush}" 
                         HorizontalAlignment="Center" VerticalAlignment="Stretch"/>
 
             <!-- Add/Edit Form -->
-            <Border Grid.Column="2" Background="White" BorderBrush="#dee2e6" BorderThickness="1" 
+            <Border Grid.Column="2" Background="{DynamicResource CardBackgroundBrush}" BorderBrush="{DynamicResource BorderSubtleBrush}" BorderThickness="1" 
                   CornerRadius="6" Padding="20" Margin="10,0,0,0">
                 <StackPanel>
                     <TextBlock x:Name="FormTitle" Text="Add New Vessel" FontSize="16" FontWeight="SemiBold" 
-                             Margin="0,0,0,20" Foreground="#2c3e50"/>
+                             Margin="0,0,0,20" Foreground="{DynamicResource TextPrimaryBrush}"/>
 
                     <!-- Vessel Name -->
                     <TextBlock Text="Vessel Name *" FontWeight="SemiBold" Margin="0,0,0,5"/>
@@ -147,7 +146,7 @@
 
                     <!-- Route Display -->
                     <TextBlock Text="Assigned Route" FontWeight="SemiBold" Margin="0,0,0,5"/>
-                    <Border Background="#f8f9fa" BorderBrush="#ced4da" BorderThickness="1" 
+                    <Border Background="{DynamicResource SubtleBackgroundBrush}" BorderBrush="{DynamicResource BorderSubtleBrush}" BorderThickness="1" 
                             Margin="0,0,0,15" CornerRadius="3">
                         <TextBlock x:Name="RouteDisplayText" Text="Select vessel type to see route" 
                                  Padding="10" FontStyle="Italic" Foreground="Gray"/>
@@ -167,7 +166,7 @@
                     </StackPanel>
 
                     <!-- Route Information Panel -->
-                    <Border Background="#fff3cd" BorderBrush="#ffc107" BorderThickness="1" 
+                    <Border Background="{DynamicResource WarningBackgroundBrush}" BorderBrush="{DynamicResource WarningForegroundBrush}" BorderThickness="1" 
                           CornerRadius="4" Padding="15" Margin="0,30,0,0">
                         <StackPanel>
                             <TextBlock Text="📍 Route Information" FontWeight="SemiBold" 

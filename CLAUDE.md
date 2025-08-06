@@ -241,5 +241,125 @@ The Consumption model supports flexible fuel consumption tracking for maritime o
 
 **Database Migration:** `MakeLegsCompletedNullable` migration updates existing databases to support nullable legs.
 
+## UI Modernization Implementation Status
+
+### ✅ Completed Features (Phase 1-2)
+- **Complete Fluent Design Theme System**: Light/Dark themes with Microsoft Fluent colors
+- **Collapsible Navigation**: Modern hamburger menu with 56px/280px states and persistence
+- **Modern Typography**: Segoe UI Variable font system with semantic text styles
+- **Dashboard Modernization**: Redesigned stat cards with hover animations and micro-interactions
+- **Theme Switching Service**: Dynamic theme management with Windows integration
+- **Component Library**: Modern button, card, and form styles with proper hover effects
+
+### ✅ **RESOLVED UI ISSUES** (January 2025)
+
+#### **✅ Issue 1: Theme Toggle Requires Application Restart - RESOLVED**
+- **Problem**: Theme changes didn't apply immediately, requiring app restart for visual changes
+- **Solution**: Enhanced `ThemeService` with comprehensive refresh mechanism:
+  - Added `RefreshApplicationResources()` and `RefreshWindowResources()` methods
+  - Implemented proper Dispatcher threading with render priority
+  - Enhanced resource dictionary refresh and style re-application
+- **Location**: `Services/ThemeService.cs` - completely rewritten refresh system
+- **Result**: Instant theme switching with immediate visual feedback
+
+#### **✅ Issue 2: Missing Fluent Icons - RESOLVED**
+- **Problem**: Fluent icons showed as blank squares throughout navigation and dashboard
+- **Solution**: Fixed icon implementation:
+  - Enhanced fallback font families: `"Segoe Fluent Icons, Segoe MDL2 Assets, Webdings, Arial Unicode MS, Segoe UI Symbol"`
+  - Applied proper FluentIconSmall styles to all header buttons
+  - Standardized icon usage across all UI elements
+- **Location**: `Themes/Typography.xaml` and `MainWindow.xaml`
+- **Result**: All icons display properly with professional consistency
+
+#### **✅ Issue 3: Pixelated Text in Cards and Buttons - RESOLVED**
+- **Problem**: Text appeared blurry/pixelated in modernized UI elements
+- **Solution**: Comprehensive text rendering optimization:
+  - Added global `UseLayoutRounding="True"` and `RenderOptions.ClearTypeHint="Enabled"`
+  - Implemented `TextOptions.TextFormattingMode="Display"` throughout
+  - Applied text rendering properties to all typography styles and components
+- **Location**: App.xaml, Typography.xaml, FluentStyles.xaml
+- **Result**: Professional, crisp text rendering throughout application
+
+#### **✅ Issue 4: Theme Switching Coverage - RESOLVED**
+- **Problem**: Sidebar, main content, and header weren't switching themes until restart
+- **Solution**: Enhanced refresh mechanism covers all UI elements:
+  - Added comprehensive resource refresh for all windows
+  - Implemented proper invalidation of visual tree for complex controls
+  - Enhanced default style re-application system
+- **Result**: Complete theme switching across all UI elements
+
+#### **✅ Issue 5: DataGrid Alternating Row Colors - RESOLVED**
+- **Problem**: Dark mode tables had poor contrast with alternating rows
+- **Solution**: Added proper `AlternatingRowBackgroundBrush` colors:
+  - Light theme: Subtle `#FAFAFA` alternating rows
+  - Dark theme: Subtle `#323233` alternating rows for better contrast
+- **Location**: LightTheme.xaml, DarkTheme.xaml, AppTheme.xaml
+- **Result**: Professional table appearance in both themes
+
+#### **✅ Issue 6: All DataGrids White Backgrounds in Dark Mode - RESOLVED**
+- **Problem**: All DataGrids across entire project showing white backgrounds in dark mode, making text invisible until hover
+- **Root Cause**: Individual view files had hardcoded `Background="White"` overriding global theme system
+- **Solution**: Systematically replaced hardcoded backgrounds with dynamic theme resources across ALL views:
+  - **DataGrid Containers**: `Background="White"` → `Background="{DynamicResource CardBackgroundBrush}"`
+  - **Border Elements**: `BorderBrush="#dee2e6"` → `BorderBrush="{DynamicResource BorderSubtleBrush}"`
+  - **8 Views Fixed**: PurchasesView, ConsumptionView, AllocationView, BackupManagementView, VesselsView, SuppliersView, ReportsView (60+ instances), SummaryView
+- **Result**: All DataGrids now properly theme-aware with visible text in both modes
+
+#### **✅ Issue 7: Invisible Text in Dark Mode - RESOLVED**
+- **Problem**: Hardcoded dark text colors (`#2c3e50`, `#2e7d32`, `#1976d2`) invisible on dark backgrounds
+- **Solution**: Converted to dynamic theme resources across ALL views:
+  - `#2c3e50` (dark headers) → `{DynamicResource TextPrimaryBrush}`
+  - `#2e7d32` (success colors) → `{DynamicResource SuccessForegroundBrush}`
+  - `#1976d2` (brand colors) → `{DynamicResource PrimaryBrandBrush}`
+- **Views Fixed**: 8 views with 177+ hardcoded colors replaced
+- **Result**: All text visible with proper contrast in both light and dark modes
+
+#### **✅ Issue 8: Colored Section Backgrounds Not Dark Mode Compatible - RESOLVED**
+- **Problem**: Light colored info/warning/success sections (`#e3f2fd`, `#fff3cd`, `#e8f5e8`) invisible in dark mode
+- **Solution**: Replaced with semantic theme-aware backgrounds:
+  - Info sections: `#e3f2fd` → `{DynamicResource InfoBackgroundBrush}`
+  - Warning sections: `#fff3cd` → `{DynamicResource WarningBackgroundBrush}`
+  - Success sections: `#e8f5e8` → `{DynamicResource SuccessBackgroundBrush}`
+  - Subtle sections: `#f8f9fa` → `{DynamicResource SubtleBackgroundBrush}`
+- **40+ sections** converted across all views
+- **Result**: All semantic backgrounds adapt properly to theme changes
+
+#### **✅ Issue 9: ComboBox and DatePicker White Backgrounds - RESOLVED**
+- **Problem**: Dropdown popups and date picker calendars showing white backgrounds with poor contrast in dark mode
+- **Solution**: Created complete custom templates with theme integration:
+  - **ComboBox**: Full custom `ControlTemplate` with theme-aware popup backgrounds
+  - **DatePicker**: Complete redesign with enhanced visual design
+- **ComboBox Features**: Click anywhere to open, theme-aware popup (`SurfaceBrush`), proper item highlighting
+- **DatePicker Features**: Calendar icon, click anywhere functionality, enhanced text rendering, placeholder text
+- **Result**: Professional form controls with excellent dark mode compatibility
+
+#### **✅ Issue 10: Enhanced Form Control User Experience - RESOLVED**
+- **Problem**: ComboBox required precise clicking on arrow, DatePicker had pixelated text and white borders
+- **Solution**: Complete UX overhaul:
+  - **ComboBox**: Full-area clickable with `ToggleButton` spanning entire control
+  - **DatePicker**: Eliminated `DatePickerTextBox`, crystal clear text rendering, calendar icon design
+  - **Text Quality**: Added all text rendering properties (`UseLayoutRounding`, `ClearTypeHint`, `TextFormattingMode`)
+- **Result**: Premium user experience matching modern web applications
+
+### **UI Architecture Overview**
+- **Theme System**: `ThemeService.cs` manages dynamic switching between `LightTheme.xaml`/`DarkTheme.xaml`
+- **Typography**: Centralized text styles in `Typography.xaml` with semantic naming (Display, Headline, Title, Body, Label, Caption)
+- **Component Library**: Modern button/card styles in `FluentStyles.xaml` with hover animations and micro-interactions
+- **Navigation**: Collapsible sidebar with Fluent icons, hamburger menu, and JSON state persistence
+- **Dashboard**: Modernized stat cards using `StatCardStyle` with hover lift effects and proper spacing
+
+### **Theme System Features**
+- **Multi-Theme Support**: Light, Dark, and System (follows Windows theme)
+- **Windows Integration**: Automatically detects system theme changes via registry monitoring
+- **State Persistence**: Theme preferences saved to `theme-settings.json`
+- **Dynamic Switching**: Real-time theme changes without application restart (when working correctly)
+- **Color System**: Complete Fluent Design color palette with semantic naming
+
+### **Typography System**
+- **Primary Font**: Segoe UI Variable (with fallbacks to Segoe UI, system fonts)
+- **Icon Font**: Segoe Fluent Icons (with fallbacks needed)
+- **Scale**: 6-level typography scale from Display (40px) to Caption (10px)
+- **Semantic Styles**: Content-aware text styles (primary, secondary, tertiary text colors)
+
 # Update files
-- Always keep CLAUDE.md and todos.txt up-to-date after I confirm the test
+- Always keep CLAUDE.md and todos.txt up-to-date after I confirm the test and always before committing and pushing to github
