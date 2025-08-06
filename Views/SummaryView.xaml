@@ -154,7 +154,8 @@
                                 HeadersVisibility="Column"
                                 Background="White"
                                 BorderThickness="1"
-                                BorderBrush="#dee2e6">
+                                BorderBrush="#dee2e6"
+                                PreviewMouseWheel="DataGrid_PreviewMouseWheel">
 
                             <DataGrid.Columns>
                                 <DataGridTextColumn Header="Vessel" Binding="{Binding VesselName}" Width="120"/>
@@ -188,7 +189,8 @@
                                 HeadersVisibility="Column"
                                 Background="White"
                                 BorderThickness="1"
-                                BorderBrush="#dee2e6">
+                                BorderBrush="#dee2e6"
+                                PreviewMouseWheel="DataGrid_PreviewMouseWheel">
 
                             <DataGrid.Columns>
                                 <DataGridTextColumn Header="Supplier" Binding="{Binding SupplierName}" Width="120"/>
@@ -234,7 +236,8 @@
                                 HeadersVisibility="Column"
                                 Background="White"
                                 BorderThickness="1"
-                                BorderBrush="#dee2e6">
+                                BorderBrush="#dee2e6"
+                                PreviewMouseWheel="DataGrid_PreviewMouseWheel">
 
                             <DataGrid.Columns>
                                 <DataGridTextColumn Header="Vessel" Binding="{Binding VesselName}" Width="120"/>

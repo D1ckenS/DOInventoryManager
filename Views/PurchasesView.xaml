@@ -378,7 +378,8 @@
                         BorderThickness="0"
                         MaxHeight="400"
                         SelectionMode="Single"
-                        SelectionChanged="PurchasesGrid_SelectionChanged">
+                        SelectionChanged="PurchasesGrid_SelectionChanged"
+                        PreviewMouseWheel="DataGrid_PreviewMouseWheel">
 
                         <DataGrid.Columns>
                             <DataGridTextColumn Header="Date" Binding="{Binding PurchaseDate, StringFormat=dd/MM/yyyy}" Width="100"/>

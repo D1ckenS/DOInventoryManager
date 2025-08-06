@@ -3,29 +3,27 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:sys="clr-namespace:System;assembly=mscorlib">
 
-    <ScrollViewer VerticalScrollBarVisibility="Auto">
-        <Grid Margin="20">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <!-- Header -->
-                <RowDefinition Height="*"/>
-                <!-- Content -->
-            </Grid.RowDefinitions>
-
+    <Grid Margin="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
             <!-- Header -->
-            <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0,0,0,20">
-                <TextBlock Text="📈" FontSize="32" VerticalAlignment="Center" Margin="0,0,10,0"/>
-                <TextBlock Text="Reports &amp; Analytics" FontSize="28" FontWeight="Bold" 
-                         VerticalAlignment="Center" Foreground="#2c3e50"/>
-            </StackPanel>
+            <RowDefinition Height="*"/>
+            <!-- Content -->
+        </Grid.RowDefinitions>
 
-            <!-- Reports Tabs -->
-            <TabControl Grid.Row="1" x:Name="ReportsTabControl">
+        <!-- Header -->
+        <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0,0,0,20">
+            <TextBlock Text="📈" FontSize="32" VerticalAlignment="Center" Margin="0,0,10,0"/>
+            <TextBlock Text="Reports &amp; Analytics" FontSize="28" FontWeight="Bold" 
+                     VerticalAlignment="Center" Foreground="#2c3e50"/>
+        </StackPanel>
+
+        <!-- Reports Tabs -->
+        <TabControl Grid.Row="1" x:Name="ReportsTabControl">
 
                 <!-- Monthly Summary Tab -->
                 <TabItem Header="📊 Monthly Summary">
-                    <ScrollViewer VerticalScrollBarVisibility="Auto">
-                        <Grid Margin="20">
+                    <Grid Margin="20">
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="Auto"/>
                                 <!-- Controls -->
@@ -166,7 +164,8 @@
                                                 HeadersVisibility="Column"
                                                 Background="White"
                                                 BorderThickness="1"
-                                                BorderBrush="#dee2e6">
+                                                BorderBrush="#dee2e6"
+                                                PreviewMouseWheel="DataGrid_PreviewMouseWheel">
 
                                             <DataGrid.Columns>
                                                 <DataGridTextColumn Header="Vessel" Binding="{Binding VesselName}" Width="120"/>
@@ -200,7 +199,8 @@
                                                 HeadersVisibility="Column"
                                                 Background="White"
                                                 BorderThickness="1"
-                                                BorderBrush="#dee2e6">
+                                                BorderBrush="#dee2e6"
+                                                PreviewMouseWheel="DataGrid_PreviewMouseWheel">
 
                                             <DataGrid.Columns>
                                                 <DataGridTextColumn Header="Supplier" Binding="{Binding SupplierName}" Width="120"/>
@@ -246,7 +246,8 @@
                                                 HeadersVisibility="Column"
                                                 Background="White"
                                                 BorderThickness="1"
-                                                BorderBrush="#dee2e6">
+                                                BorderBrush="#dee2e6"
+                                                PreviewMouseWheel="DataGrid_PreviewMouseWheel">
 
                                             <DataGrid.Columns>
                                                 <DataGridTextColumn Header="Vessel" Binding="{Binding VesselName}" Width="120"/>
@@ -264,16 +265,16 @@
 
                                 <!-- Financial Summary Tab -->
                                 <TabItem Header="💰 Financial Summary">
-                                    <ScrollViewer VerticalScrollBarVisibility="Auto">
-                                        <StackPanel Margin="20">
+                                    <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" MaxHeight="600">
+                                        <StackPanel Margin="20" PreviewMouseWheel="DataGrid_PreviewMouseWheel">
                                             <!-- Financial Overview -->
                                             <Border Background="White" BorderBrush="#dee2e6" BorderThickness="1" 
-                                                    CornerRadius="6" Padding="20" Margin="0,0,0,20">
+                                                    CornerRadius="6" Padding="20" Margin="0,0,0,20" PreviewMouseWheel="DataGrid_PreviewMouseWheel">
                                                 <StackPanel>
                                                     <TextBlock Text="💰 Financial Overview" FontSize="16" FontWeight="SemiBold" 
                                                             Margin="0,0,0,15" Foreground="#2c3e50"/>
 
-                                                    <Grid>
+                                                    <Grid PreviewMouseWheel="DataGrid_PreviewMouseWheel">
                                                         <Grid.ColumnDefinitions>
                                                             <ColumnDefinition Width="*"/>
                                                             <ColumnDefinition Width="*"/>
@@ -295,7 +296,7 @@
 
                                             <!-- Currency Breakdown -->
                                             <Border Background="White" BorderBrush="#dee2e6" BorderThickness="1" 
-                                                    CornerRadius="6" Padding="20" Margin="0,0,0,20">
+                                                    CornerRadius="6" Padding="20" Margin="0,0,0,20" PreviewMouseWheel="DataGrid_PreviewMouseWheel">
                                                 <StackPanel>
                                                     <TextBlock Text="💱 Currency Breakdown" FontSize="16" FontWeight="SemiBold" 
                                                             Margin="0,0,0,15" Foreground="#2c3e50"/>
@@ -307,7 +308,8 @@
                                                             GridLinesVisibility="Horizontal"
                                                             HeadersVisibility="Column"
                                                             Background="White"
-                                                            BorderThickness="0">
+                                                            BorderThickness="0"
+                                                            PreviewMouseWheel="DataGrid_PreviewMouseWheel">
 
                                                         <DataGrid.Columns>
                                                             <DataGridTextColumn Header="Currency" Binding="{Binding Currency}" Width="100"/>
@@ -321,7 +323,7 @@
 
                                             <!-- Payment Status -->
                                             <Border Background="White" BorderBrush="#dee2e6" BorderThickness="1" 
-                                                    CornerRadius="6" Padding="20">
+                                                    CornerRadius="6" Padding="20" PreviewMouseWheel="DataGrid_PreviewMouseWheel">
                                                 <StackPanel>
                                                     <TextBlock Text="📋 Payment Status" FontSize="16" FontWeight="SemiBold" 
                                                             Margin="0,0,0,15" Foreground="#2c3e50"/>
@@ -333,7 +335,8 @@
                                                             GridLinesVisibility="Horizontal"
                                                             HeadersVisibility="Column"
                                                             Background="White"
-                                                            BorderThickness="0">
+                                                            BorderThickness="0"
+                                                            PreviewMouseWheel="DataGrid_PreviewMouseWheel">
 
                                                         <DataGrid.Columns>
                                                             <DataGridTextColumn Header="Supplier" Binding="{Binding SupplierName}" Width="150"/>
@@ -351,13 +354,13 @@
 
                                 <!-- Other Summary tabs will be added here -->
                             </TabControl>
-                        </Grid>
-                    </ScrollViewer>
+                    </Grid>
                 </TabItem>
 
                 <!-- Vessel Account Statement Tab -->
                 <TabItem Header="🚢 Vessel Account Statement">
-                    <Grid Margin="20">
+                    <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+                        <Grid Margin="20">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto"/>
                             <!-- Controls -->
@@ -467,19 +470,24 @@
                                         HeadersVisibility="Column"
                                         Background="White"
                                         BorderThickness="0"
-                                        MaxHeight="500">
+                                        MaxHeight="400"
+                                        ScrollViewer.VerticalScrollBarVisibility="Auto"
+                                        ScrollViewer.HorizontalScrollBarVisibility="Auto"
+                                        ScrollViewer.CanContentScroll="True"
+                                        EnableRowVirtualization="True"
+                                        PreviewMouseWheel="DataGrid_PreviewMouseWheel">
 
-                                    <DataGrid.Columns>
-                                        <DataGridTextColumn Header="Date" Binding="{Binding TransactionDate, StringFormat=dd/MM/yyyy}" Width="100"/>
-                                        <DataGridTextColumn Header="Type" Binding="{Binding TransactionType}" Width="100"/>
-                                        <DataGridTextColumn Header="Reference" Binding="{Binding Reference}" Width="120"/>
-                                        <DataGridTextColumn Header="Supplier" Binding="{Binding SupplierName}" Width="120"/>
-                                        <DataGridTextColumn Header="Debit (L)" Binding="{Binding DebitQuantity, StringFormat=N3}" Width="100"/>
-                                        <DataGridTextColumn Header="Credit (L)" Binding="{Binding CreditQuantity, StringFormat=N3}" Width="100"/>
-                                        <DataGridTextColumn Header="Balance (L)" Binding="{Binding FormattedRunningBalance}" Width="100"/>
-                                        <DataGridTextColumn Header="Value (USD)" Binding="{Binding FormattedValueUSD}" Width="100"/>
-                                        <DataGridTextColumn Header="Description" Binding="{Binding Description}" Width="*"/>
-                                    </DataGrid.Columns>
+                                        <DataGrid.Columns>
+                                        <DataGridTextColumn Header="Date" Binding="{Binding TransactionDate, StringFormat=dd/MM/yyyy}" Width="1*" MinWidth="100"/>
+                                        <DataGridTextColumn Header="Type" Binding="{Binding TransactionType}" Width="1*" MinWidth="100"/>
+                                        <DataGridTextColumn Header="Reference" Binding="{Binding Reference}" Width="1.2*" MinWidth="120"/>
+                                        <DataGridTextColumn Header="Supplier" Binding="{Binding SupplierName}" Width="1.2*" MinWidth="120"/>
+                                        <DataGridTextColumn Header="Debit (L)" Binding="{Binding DebitQuantity, StringFormat=N3}" Width="1*" MinWidth="100"/>
+                                        <DataGridTextColumn Header="Credit (L)" Binding="{Binding CreditQuantity, StringFormat=N3}" Width="1*" MinWidth="100"/>
+                                        <DataGridTextColumn Header="Balance (L)" Binding="{Binding FormattedRunningBalance}" Width="1*" MinWidth="100"/>
+                                        <DataGridTextColumn Header="Value (USD)" Binding="{Binding FormattedValueUSD}" Width="1*" MinWidth="100"/>
+                                        <DataGridTextColumn Header="Description" Binding="{Binding Description}" Width="3*" MinWidth="200"/>
+                                        </DataGrid.Columns>
                                 </DataGrid>
 
                                 <!-- Vessel Account Totals -->
@@ -527,12 +535,14 @@
                                 </Grid>
                             </StackPanel>
                         </Border>
-                    </Grid>
+                        </Grid>
+                    </ScrollViewer>
                 </TabItem>
 
                 <!-- Supplier Account Report Tab -->
                 <TabItem Header="🏢 Supplier Account Report">
-                    <Grid Margin="20">
+                    <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+                        <Grid Margin="20">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto"/>
                             <!-- Controls -->
@@ -642,19 +652,24 @@
                                         HeadersVisibility="Column"
                                         Background="White"
                                         BorderThickness="0"
-                                        MaxHeight="500">
+                                        MaxHeight="400"
+                                        ScrollViewer.VerticalScrollBarVisibility="Auto"
+                                        ScrollViewer.HorizontalScrollBarVisibility="Auto"
+                                        ScrollViewer.CanContentScroll="True"
+                                        EnableRowVirtualization="True"
+                                        PreviewMouseWheel="DataGrid_PreviewMouseWheel">
 
-                                    <DataGrid.Columns>
-                                        <DataGridTextColumn Header="Date" Binding="{Binding TransactionDate, StringFormat=dd/MM/yyyy}" Width="100"/>
-                                        <DataGridTextColumn Header="Vessel" Binding="{Binding VesselName}" Width="120"/>
-                                        <DataGridTextColumn Header="Type" Binding="{Binding TransactionType}" Width="100"/>
-                                        <DataGridTextColumn Header="Reference" Binding="{Binding Reference}" Width="120"/>
-                                        <DataGridTextColumn Header="Purchases (L)" Binding="{Binding PurchaseQuantity, StringFormat=N3}" Width="120"/>
-                                        <DataGridTextColumn Header="Consumption (L)" Binding="{Binding ConsumptionQuantity, StringFormat=N3}" Width="120"/>
-                                        <DataGridTextColumn Header="Value" Binding="{Binding FormattedValue}" Width="120"/>
-                                        <DataGridTextColumn Header="USD Value" Binding="{Binding FormattedValueUSD}" Width="100"/>
-                                        <DataGridTextColumn Header="Balance (L)" Binding="{Binding RunningBalance, StringFormat=N3}" Width="100"/>
-                                    </DataGrid.Columns>
+                                        <DataGrid.Columns>
+                                        <DataGridTextColumn Header="Date" Binding="{Binding TransactionDate, StringFormat=dd/MM/yyyy}" Width="1*" MinWidth="100"/>
+                                        <DataGridTextColumn Header="Vessel" Binding="{Binding VesselName}" Width="1.2*" MinWidth="120"/>
+                                        <DataGridTextColumn Header="Type" Binding="{Binding TransactionType}" Width="1*" MinWidth="100"/>
+                                        <DataGridTextColumn Header="Reference" Binding="{Binding Reference}" Width="1.2*" MinWidth="120"/>
+                                        <DataGridTextColumn Header="Purchases (L)" Binding="{Binding PurchaseQuantity, StringFormat=N3}" Width="1.2*" MinWidth="120"/>
+                                        <DataGridTextColumn Header="Consumption (L)" Binding="{Binding ConsumptionQuantity, StringFormat=N3}" Width="1.2*" MinWidth="120"/>
+                                        <DataGridTextColumn Header="Value" Binding="{Binding FormattedValue}" Width="1.2*" MinWidth="120"/>
+                                        <DataGridTextColumn Header="USD Value" Binding="{Binding FormattedValueUSD}" Width="1*" MinWidth="100"/>
+                                        <DataGridTextColumn Header="Balance (L)" Binding="{Binding RunningBalance, StringFormat=N3}" Width="1*" MinWidth="100"/>
+                                        </DataGrid.Columns>
                                 </DataGrid>
 
                                 <!-- Supplier Account Totals -->
@@ -704,7 +719,8 @@
 
                             </StackPanel>
                         </Border>
-                    </Grid>
+                        </Grid>
+                    </ScrollViewer>
                 </TabItem>
 
                 <!-- Payment Due Report Tab -->
@@ -1018,7 +1034,8 @@
 
                             <!-- Inventory by Vessel Tab -->
                             <TabItem Header="🚢 By Vessel">
-                                <StackPanel Margin="20">
+                                <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+                                    <StackPanel Margin="20">
                                     <TextBlock Text="Current Inventory by Vessel (FIFO Valuation)" FontSize="16" FontWeight="SemiBold" 
                                             Margin="0,0,0,15" Foreground="#2c3e50"/>
 
@@ -1047,12 +1064,14 @@
                                             <DataGridTextColumn Header="Days Old" Binding="{Binding DaysOldestInventory}" Width="80"/>
                                         </DataGrid.Columns>
                                     </DataGrid>
-                                </StackPanel>
+                                    </StackPanel>
+                                </ScrollViewer>
                             </TabItem>
 
                             <!-- Inventory by Supplier Tab -->
                             <TabItem Header="🏢 By Supplier">
-                                <StackPanel Margin="20">
+                                <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+                                    <StackPanel Margin="20">
                                     <TextBlock Text="Current Inventory by Supplier (FIFO Valuation)" FontSize="16" FontWeight="SemiBold" 
                                             Margin="0,0,0,15" Foreground="#2c3e50"/>
 
@@ -1080,12 +1099,14 @@
                                             <DataGridTextColumn Header="Vessels" Binding="{Binding VesselsSupplied}" Width="70"/>
                                         </DataGrid.Columns>
                                     </DataGrid>
-                                </StackPanel>
+                                    </StackPanel>
+                                </ScrollViewer>
                             </TabItem>
 
                             <!-- Purchase Lot Details Tab -->
                             <TabItem Header="📄 Purchase Lots">
-                                <StackPanel Margin="20">
+                                <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+                                    <StackPanel Margin="20">
                                     <TextBlock Text="Individual Purchase Lots (FIFO Order)" FontSize="16" FontWeight="SemiBold" 
                                             Margin="0,0,0,15" Foreground="#2c3e50"/>
 
@@ -1095,6 +1116,7 @@
                                             CanUserDeleteRows="False"
                                             GridLinesVisibility="Horizontal"
                                             HeadersVisibility="Column"
+                                            PreviewMouseWheel="DataGrid_PreviewMouseWheel"
                                             Background="White"
                                             BorderThickness="1"
                                             BorderBrush="#dee2e6"
@@ -1116,7 +1138,8 @@
                                             <DataGridTextColumn Header="Aging" Binding="{Binding AgingCategory}" Width="120"/>
                                         </DataGrid.Columns>
                                     </DataGrid>
-                                </StackPanel>
+                                    </StackPanel>
+                                </ScrollViewer>
                             </TabItem>
                         </TabControl>
                     </Grid>
@@ -1277,6 +1300,7 @@
                                                   CanUserDeleteRows="False"
                                                   GridLinesVisibility="Horizontal"
                                                   HeadersVisibility="Column"
+                                                  PreviewMouseWheel="DataGrid_PreviewMouseWheel"
                                                   Background="White"
                                                   BorderThickness="1"
                                                   BorderBrush="#dee2e6"
@@ -1641,6 +1665,7 @@
                                   CanUserDeleteRows="False"
                                   GridLinesVisibility="Horizontal"
                                   HeadersVisibility="Column"
+                                  PreviewMouseWheel="DataGrid_PreviewMouseWheel"
                                   Background="White"
                                   BorderThickness="1"
                                   BorderBrush="#dee2e6"
@@ -2060,6 +2085,7 @@
                                                 CanUserDeleteRows="False"
                                                 GridLinesVisibility="Horizontal"
                                                 HeadersVisibility="Column"
+                                                PreviewMouseWheel="DataGrid_PreviewMouseWheel"
                                                 Background="White"
                                                 BorderThickness="1"
                                                 BorderBrush="#dee2e6"
@@ -2700,5 +2726,4 @@
                 <!-- More tabs will be added here -->
             </TabControl>
         </Grid>
-    </ScrollViewer>
 </UserControl>

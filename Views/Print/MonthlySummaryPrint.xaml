@@ -69,7 +69,8 @@
                          IsReadOnly="True" HeadersVisibility="Column"
                          GridLinesVisibility="All" BorderThickness="0"
                          Background="White" Foreground="Black"
-                         FontSize="7" MaxHeight="180">
+                         FontSize="7" MaxHeight="180"
+                         PreviewMouseWheel="DataGrid_PreviewMouseWheel">
                     <DataGrid.Columns>
                         <DataGridTextColumn Header="Vessel Name" Binding="{Binding VesselName}" Width="1.2*"/>
                         <DataGridTextColumn Header="Consumption Qty." Binding="{Binding ConsumptionQty, StringFormat=N0}" Width="1.1*"/>
@@ -96,7 +97,8 @@
                          IsReadOnly="True" HeadersVisibility="Column"
                          GridLinesVisibility="All" BorderThickness="0"
                          Background="White" Foreground="Black"
-                         FontSize="7" MaxHeight="120">
+                         FontSize="7" MaxHeight="120"
+                         PreviewMouseWheel="DataGrid_PreviewMouseWheel">
                     <DataGrid.Columns>
                         <DataGridTextColumn Header="Supplier" Binding="{Binding SupplierName}" Width="1.5*"/>
                         <DataGridTextColumn Header="Currency" Binding="{Binding Currency}" Width="0.8*"/>

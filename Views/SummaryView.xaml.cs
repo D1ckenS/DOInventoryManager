@@ -209,6 +209,61 @@ namespace DOInventoryManager.Views
             MessageBox.Show("Print button clicked!");
         }
 
+        private void DataGrid_PreviewMouseWheel(object sender, System.Windows.Input.MouseWheelEventArgs e)
+        {
+            var dataGrid = sender as DataGrid;
+            if (dataGrid == null) return;
+
+            var scrollViewer = FindParent<ScrollViewer>(dataGrid);
+            if (scrollViewer == null) return;
+
+            // Check if DataGrid needs internal scrolling
+            var dataGridScrollViewer = FindChild<ScrollViewer>(dataGrid);
+            if (dataGridScrollViewer != null)
+            {
+                // If scrolling down and can scroll down, let DataGrid handle it
+                if (e.Delta < 0 && dataGridScrollViewer.VerticalOffset < dataGridScrollViewer.ScrollableHeight)
+                    return;
+
+                // If scrolling up and can scroll up, let DataGrid handle it  
+                if (e.Delta > 0 && dataGridScrollViewer.VerticalOffset > 0)
+                    return;
+            }
+
+            // Redirect to parent ScrollViewer
+            e.Handled = true;
+            var newEvent = new System.Windows.Input.MouseWheelEventArgs(e.MouseDevice, e.Timestamp, e.Delta)
+            {
+                RoutedEvent = UIElement.MouseWheelEvent
+            };
+            scrollViewer.RaiseEvent(newEvent);
+        }
+
+        private static T? FindParent<T>(DependencyObject child) where T : DependencyObject
+        {
+            var parent = System.Windows.Media.VisualTreeHelper.GetParent(child);
+            while (parent != null && parent is not T)
+            {
+                parent = System.Windows.Media.VisualTreeHelper.GetParent(parent);
+            }
+            return parent as T;
+        }
+
+        private static T? FindChild<T>(DependencyObject parent) where T : DependencyObject
+        {
+            for (int i = 0; i < System.Windows.Media.VisualTreeHelper.GetChildrenCount(parent); i++)
+            {
+                var child = System.Windows.Media.VisualTreeHelper.GetChild(parent, i);
+                if (child is T result)
+                    return result;
+
+                var childResult = FindChild<T>(child);
+                if (childResult != null)
+                    return childResult;
+            }
+            return null;
+        }
+
         #endregion
     }
 }

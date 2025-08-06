@@ -74,7 +74,8 @@
                             Background="White"
                             BorderThickness="0"
                             SelectionMode="Single"
-                            SelectionChanged="VesselsGrid_SelectionChanged">
+                            SelectionChanged="VesselsGrid_SelectionChanged"
+                            PreviewMouseWheel="DataGrid_PreviewMouseWheel">
 
                         <DataGrid.Columns>
                             <DataGridTextColumn Header="ID" Binding="{Binding Id}" Width="50" IsReadOnly="True"/>

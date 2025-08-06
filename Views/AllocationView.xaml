@@ -122,7 +122,8 @@
                             HeadersVisibility="Column"
                             Background="White"
                             BorderThickness="0"
-                            MaxHeight="500">
+                            MaxHeight="500"
+                            PreviewMouseWheel="DataGrid_PreviewMouseWheel">
 
                         <DataGrid.Columns>
                             <DataGridTextColumn Header="Vessel" Binding="{Binding Purchase.Vessel.Name}" Width="100"/>

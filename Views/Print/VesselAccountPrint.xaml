@@ -93,7 +93,8 @@
                          IsReadOnly="True" HeadersVisibility="Column"
                          GridLinesVisibility="All" BorderThickness="0"
                          Background="White" Foreground="Black"
-                         FontSize="7" MaxHeight="400">
+                         FontSize="7" MaxHeight="400"
+                         PreviewMouseWheel="DataGrid_PreviewMouseWheel">
                     <DataGrid.Columns>
                         <DataGridTextColumn Header="Date" Binding="{Binding TransactionDate, StringFormat=dd/MM/yyyy}" Width="0.8*"/>
                         <DataGridTextColumn Header="Type" Binding="{Binding TransactionType}" Width="0.8*"/>

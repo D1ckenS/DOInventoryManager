@@ -68,7 +68,8 @@
                             Background="White"
                             BorderThickness="0"
                             SelectionMode="Single"
-                            SelectionChanged="SuppliersGrid_SelectionChanged">
+                            SelectionChanged="SuppliersGrid_SelectionChanged"
+                            PreviewMouseWheel="DataGrid_PreviewMouseWheel">
                         
                         <DataGrid.Columns>
                             <DataGridTextColumn Header="ID" Binding="{Binding Id}" Width="50" IsReadOnly="True"/>
