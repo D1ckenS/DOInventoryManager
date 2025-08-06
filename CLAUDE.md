@@ -96,6 +96,7 @@ This project does not currently have automated tests. Manual testing is performe
 ### Services Layer
 - `FIFOAllocationService`: Core inventory allocation logic
 - `ReportService`: Excel report generation for various business scenarios
+- `ExcelExportService`: Comprehensive Excel export functionality for all reports and data views
 - `BackupService`: Database backup functionality with versioning
 - `BulkDataService`: Bulk data operations, filtering, and selective deletion
 - `AlertService`: Due date monitoring and notification system
@@ -109,6 +110,11 @@ This project does not currently have automated tests. Manual testing is performe
   - History Tab: Selective bulk deletion with advanced filtering for Purchases and Consumptions
   - Checkbox-based selection system with "Select All" functionality
   - Safety features: automatic backups, validation, and detailed confirmation dialogs
+- **PurchasesView**: Enhanced with comprehensive search and filtering capabilities
+  - Advanced filter panel: date range, vessel, supplier, and invoice reference filters
+  - Quick filter buttons: Last 30 Days, Last 6 Months, This Year for common searches
+  - Smart data loading: default view shows recent 50 purchases, filtered view searches entire database
+  - Real-time result counter showing exact match counts
 
 ### Data Integrity
 - Entity relationships enforced through EF Core foreign keys
@@ -133,6 +139,59 @@ The Purchase model uses a specific calculation approach where users provide base
 
 **FIFO Tracking:**
 - `RemainingQuantity` - Set to QuantityLiters initially, decremented during allocation
+
+## Print System Implementation Status
+
+### ✅ Completed Features
+- **Print Buttons Added**: All major report tabs now have 🖨️ Print Report buttons
+- **Export & Print Integration**: Complete dual functionality (Excel + Print) for all reports
+- **Print Handlers Implemented**: Comprehensive print functionality for:
+  - Monthly Summary (already working)
+  - Vessel Account Statement (already working)
+  - Supplier Account Report ✅ NEW
+  - Payment Due Report ✅ NEW
+  - Inventory Valuation ✅ NEW
+  - Fleet Efficiency ✅ NEW
+  - FIFO Allocation Detail ✅ NEW
+  - Cost Analysis ✅ NEW
+  - Route Performance ✅ NEW
+
+### ✅ Print Layout System
+- **GenericReportPrint**: Flexible print layout system for all report types
+- **Star-based Column Sizing**: Columns now auto-fit to page width using proportional sizing (1.5*, 0.6*, etc.)
+- **Compact Layout Option**: `AddCompactDataGrid()` method for reports with many columns
+- **Smart Column Selection**: Automatically prioritizes essential columns for printing
+- **Header Abbreviation**: Shortens long headers ("Quantity" → "Qty") for better fit
+
+### ⚠️ CURRENT PRINT ISSUES (Critical - Resume Work Here)
+
+#### **Issue 1: Summary Cards Layout Problem**
+- **Problem**: Metadata/summary cards (Total Inventory, Total Weight, FIFO Value, Purchase Lots, Avg Cost/L) are displaying VERTICALLY instead of horizontally
+- **Impact**: Vertical layout is pushing content downward, consuming excessive vertical space
+- **Root Cause**: `AddSummaryCard()` method in GenericReportPrint.xaml.cs creates vertical StackPanel instead of horizontal layout
+- **Expected**: Cards should display in horizontal row like working MonthlySummaryPrint
+- **Location**: `Views/Print/GenericReportPrint.xaml.cs` lines 19-69
+
+#### **Issue 2: Footer Overflow Still Occurring**
+- **Problem**: Despite MaxHeight constraints (150px for DataGrids, 480px for main content), data still bleeds into footer section
+- **Root Cause**: Vertical summary cards layout + content height is exceeding the allocated print page space
+- **Expected**: Content must NEVER enter footer space regardless of data volume
+- **Current Constraints**: 
+  - Normal DataGrids: `MaxHeight = 150px`
+  - Compact DataGrids: `MaxHeight = 120px`
+  - Main content: `MaxHeight = 480px`
+- **Status**: Constraints are insufficient; vertical metadata is the primary culprit
+
+#### **Next Steps for Tomorrow**
+1. **Fix AddSummaryCard() method**: Change from vertical to horizontal layout like MonthlySummaryPrint
+2. **Analyze MonthlySummaryPrint card layout**: Study working 4-column horizontal card system
+3. **Implement proper height mathematics**: Calculate actual available space after header/title/cards
+4. **Test all report types**: Ensure no report can exceed footer boundary
+5. **Consider ScrollViewer solution**: If content truly exceeds space, implement proper scrolling within bounds
+
+### 🔧 Build Process Enhancement
+- **Build Script Created**: `build.bat` automatically terminates running application before building
+- **Usage**: Run `build.bat` to avoid file locking issues during development
 
 ## Important Conventions
 
@@ -181,3 +240,6 @@ The Consumption model supports flexible fuel consumption tracking for maritime o
 - **Mixed Operations**: Same vessel can have both stationary and moving consumption records
 
 **Database Migration:** `MakeLegsCompletedNullable` migration updates existing databases to support nullable legs.
+
+# Update files
+- Always keep CLAUDE.md and todos.txt up-to-date after I confirm the test
