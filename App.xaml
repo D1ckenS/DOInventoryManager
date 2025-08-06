@@ -8,6 +8,7 @@
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="Themes/AppTheme.xaml"/>
+                <ResourceDictionary Source="Themes/ScrollBarStyles.xaml"/>
             </ResourceDictionary.MergedDictionaries>
             
             <!-- Global Text Rendering Settings -->

@@ -132,4 +132,16 @@
                       ShadowDepth="2" 
                       Direction="270"/>
 
+    <!-- Scrollbar Colors (Dark Theme) -->
+    <Color x:Key="ScrollBarTrack">#2D2D30</Color>
+    <Color x:Key="ScrollBarThumb">#484644</Color>
+    <Color x:Key="ScrollBarThumbHover">#6E6B69</Color>
+    <Color x:Key="ScrollBarThumbPressed">#60CDFF</Color>
+    
+    <!-- Scrollbar Brushes -->
+    <SolidColorBrush x:Key="ScrollBarTrackBrush" Color="{StaticResource ScrollBarTrack}"/>
+    <SolidColorBrush x:Key="ScrollBarThumbBrush" Color="{StaticResource ScrollBarThumb}"/>
+    <SolidColorBrush x:Key="ScrollBarThumbHoverBrush" Color="{StaticResource ScrollBarThumbHover}"/>
+    <SolidColorBrush x:Key="ScrollBarThumbPressedBrush" Color="{StaticResource ScrollBarThumbPressed}"/>
+
 </ResourceDictionary>
