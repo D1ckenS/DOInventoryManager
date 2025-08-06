@@ -29,6 +29,9 @@ namespace DOInventoryManager.Views
         public ReportsView()
         {
             InitializeComponent();
+            
+            // Smooth scrolling temporarily disabled due to scroll conflicts
+            // SmoothScrollingService.AutoEnableSmoothScrolling(this);
             _summaryService = new SummaryService();
             _reportService = new ReportService();
             _alertService = new AlertService();

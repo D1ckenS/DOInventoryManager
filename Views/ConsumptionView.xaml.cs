@@ -23,6 +23,9 @@ namespace DOInventoryManager.Views
             InitializeComponent();
             InitializeForm();
             _ = LoadDataAsync();
+            
+            // Smooth scrolling temporarily disabled due to scroll conflicts
+            // SmoothScrollingService.AutoEnableSmoothScrolling(this);
         }
 
         #region Data Loading

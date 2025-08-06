@@ -1,6 +1,7 @@
 ﻿using DOInventoryManager.Data;
 using DOInventoryManager.Models;
 using DOInventoryManager.Services;
+using DOInventoryManager.Utils;
 using Microsoft.EntityFrameworkCore;
 using System.Globalization;
 using System.Windows;
@@ -25,6 +26,9 @@ namespace DOInventoryManager.Views
             InitializeComponent();
             _ = LoadDataAsync();
             ClearForm();
+            
+            // Pixel scrolling temporarily disabled - investigating data display issue
+            // this.Loaded += (s, e) => PixelScrollingHelper.EnablePixelScrollingForContainer(this);
         }
 
         #region Data Loading

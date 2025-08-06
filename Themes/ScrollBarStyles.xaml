@@ -341,8 +341,7 @@
         </Setter>
     </Style>
 
-    <!-- Apply Modern ScrollViewer Style to all ScrollViewers -->
-    <Style TargetType="{x:Type ScrollViewer}" BasedOn="{StaticResource ModernScrollViewer}" />
+    <!-- NOTE: ModernScrollViewer available but NOT applied globally to preserve theme styling -->
 
     <!-- Smooth Scrolling DataGrid Style -->
     <Style x:Key="SmoothDataGridStyle" TargetType="{x:Type DataGrid}">
@@ -358,8 +357,7 @@
         <Setter Property="local:SmoothScrollBehavior.Duration" Value="200"/>
     </Style>
 
-    <!-- Apply Smooth DataGrid Style to all DataGrids -->
-    <Style TargetType="{x:Type DataGrid}" BasedOn="{StaticResource SmoothDataGridStyle}" />
+    <!-- NOTE: SmoothDataGridStyle available but NOT applied globally to preserve theme styling -->
 
     <!-- Enhanced Smooth Scrolling for ListBox -->
     <Style x:Key="SmoothListBoxStyle" TargetType="{x:Type ListBox}">
@@ -369,7 +367,6 @@
         <Setter Property="local:SmoothScrollBehavior.Duration" Value="200"/>
     </Style>
 
-    <!-- Apply Smooth ListBox Style to all ListBoxes -->
-    <Style TargetType="{x:Type ListBox}" BasedOn="{StaticResource SmoothListBoxStyle}" />
+    <!-- NOTE: SmoothListBoxStyle available but NOT applied globally to preserve theme styling -->
 
 </ResourceDictionary>

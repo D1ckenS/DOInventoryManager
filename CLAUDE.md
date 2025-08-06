@@ -363,3 +363,18 @@ The Consumption model supports flexible fuel consumption tracking for maritime o
 
 # Update files
 - Always keep CLAUDE.md and todos.txt up-to-date after I confirm the test and always before committing and pushing to github
+
+# ⚠️ CRITICAL GIT RULES - NEVER VIOLATE ⚠️
+**ABSOLUTELY NEVER COMMIT AND PUSH TO GITHUB UNTIL THE USER EXPLICITLY CONFIRMS TO COMMIT AND PUSH!**
+- ALWAYS build and test changes first
+- ALWAYS ask user to test the changes before committing
+- ALWAYS wait for explicit user confirmation: "commit and push" or "push to github"
+- NEVER assume user approval for git operations
+- If changes break styling or functionality, fix before any git operations
+- User must verify everything works correctly before any commits
+
+# important-instruction-reminders
+Do what has been asked; nothing more, nothing less.
+NEVER create files unless they're absolutely necessary for achieving your goal.
+ALWAYS prefer editing an existing file to creating a new one.
+NEVER proactively create documentation files (*.md) or README files. Only create documentation files if explicitly requested by the User.

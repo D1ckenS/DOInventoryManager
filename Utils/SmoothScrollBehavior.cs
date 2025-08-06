@@ -252,5 +252,47 @@ namespace DOInventoryManager.Utils
         {
             SmoothScrollBehavior.SetIsEnabled(scrollViewer, false);
         }
+
+        /// <summary>
+        /// Enables smooth scrolling for DataGrid by configuring pixel scrolling and ScrollViewer
+        /// </summary>
+        public static void EnableSmoothScrolling(this DataGrid dataGrid)
+        {
+            // Configure for pixel-perfect smooth scrolling
+            dataGrid.EnableRowVirtualization = true;
+            dataGrid.EnableColumnVirtualization = true;
+            VirtualizingPanel.SetVirtualizationMode(dataGrid, VirtualizationMode.Recycling);
+            VirtualizingPanel.SetScrollUnit(dataGrid, ScrollUnit.Pixel);
+            
+            // Find the ScrollViewer inside the DataGrid and enable smooth scrolling
+            dataGrid.Loaded += (s, e) =>
+            {
+                var scrollViewer = FindScrollViewer(dataGrid);
+                if (scrollViewer != null)
+                {
+                    scrollViewer.CanContentScroll = false; // Essential for pixel scrolling
+                    scrollViewer.EnableSmoothScrolling(200);
+                }
+            };
+        }
+
+        /// <summary>
+        /// Finds the ScrollViewer within a DataGrid
+        /// </summary>
+        private static ScrollViewer? FindScrollViewer(DependencyObject parent)
+        {
+            for (int i = 0; i < System.Windows.Media.VisualTreeHelper.GetChildrenCount(parent); i++)
+            {
+                var child = System.Windows.Media.VisualTreeHelper.GetChild(parent, i);
+                
+                if (child is ScrollViewer scrollViewer)
+                    return scrollViewer;
+                
+                var foundScrollViewer = FindScrollViewer(child);
+                if (foundScrollViewer != null)
+                    return foundScrollViewer;
+            }
+            return null;
+        }
     }
 }
