@@ -31,22 +31,22 @@
 
                     <StackPanel Grid.Column="0" Orientation="Horizontal">
                         <TextBlock Text="Select Month:" FontWeight="SemiBold" VerticalAlignment="Center" Margin="0,0,10,0"/>
-                        <ComboBox x:Name="MonthComboBox" MinWidth="120" Padding="10,8" 
+                        <ComboBox x:Name="MonthComboBox" MinWidth="120" 
+                                Style="{StaticResource FluentComboBoxStyle}"
                                 SelectionChanged="MonthComboBox_SelectionChanged"/>
                         <Button x:Name="GenerateBtn" Content="📊 Generate Report" 
-                              Background="#007bff" Foreground="White" BorderThickness="0" 
-                              Padding="15,10" Margin="15,0,0,0" FontWeight="SemiBold"
+                              Style="{StaticResource FluentButtonStyle}" 
+                              Margin="15,0,0,0"
                               Click="Generate_Click"/>
                     </StackPanel>
 
                     <StackPanel Grid.Column="1" Orientation="Horizontal">
                         <Button x:Name="ExportBtn" Content="📤 Export to Excel" 
-                              Background="#28a745" Foreground="White" BorderThickness="0" 
-                              Padding="15,10" Margin="0,0,10,0" FontWeight="SemiBold"
+                              Style="{StaticResource FluentSuccessButtonStyle}" 
+                              Margin="0,0,10,0"
                               Click="Export_Click"/>
                         <Button x:Name="PrintBtn" Content="🖨️ Print Report" 
-                              Background="#6c757d" Foreground="White" BorderThickness="0" 
-                              Padding="15,10" FontWeight="SemiBold"
+                              Style="{StaticResource FluentSecondaryButtonStyle}" 
                               Click="Print_Click"/>
                     </StackPanel>
                 </Grid>
@@ -68,43 +68,43 @@
                                     <ColumnDefinition Width="*"/>
                                 </Grid.ColumnDefinitions>
 
-                                <Border Grid.Column="0" Background="#007bff" CornerRadius="8" Margin="0,0,15,0" Padding="20">
+                                <Border Grid.Column="0" Background="{DynamicResource PrimaryBrandBrush}" Style="{StaticResource StatCardStyle}" Margin="0,0,15,0">
                                     <StackPanel>
-                                        <TextBlock Text="⛽" FontSize="24" HorizontalAlignment="Center" Foreground="White"/>
+                                        <TextBlock Text="⛽" FontSize="24" HorizontalAlignment="Center" Foreground="{DynamicResource TextOnAccentBrush}"/>
                                         <TextBlock x:Name="TotalConsumptionText" Text="0 L" FontSize="18" FontWeight="Bold" 
-                                                 HorizontalAlignment="Center" Foreground="White" Margin="0,5,0,3"/>
+                                                 HorizontalAlignment="Center" Foreground="{DynamicResource TextOnAccentBrush}" Margin="0,5,0,3"/>
                                         <TextBlock Text="Total Consumption" FontSize="11" HorizontalAlignment="Center" 
-                                                 Foreground="LightBlue"/>
+                                                 Foreground="{DynamicResource TextOnAccentBrush}" Opacity="0.8"/>
                                     </StackPanel>
                                 </Border>
 
-                                <Border Grid.Column="1" Background="#28a745" CornerRadius="8" Margin="0,0,15,0" Padding="20">
+                                <Border Grid.Column="1" Background="{DynamicResource SuccessForegroundBrush}" Style="{StaticResource StatCardStyle}" Margin="0,0,15,0">
                                     <StackPanel>
-                                        <TextBlock Text="🗺️" FontSize="24" HorizontalAlignment="Center" Foreground="White"/>
+                                        <TextBlock Text="🗺️" FontSize="24" HorizontalAlignment="Center" Foreground="{DynamicResource TextOnAccentBrush}"/>
                                         <TextBlock x:Name="TotalLegsText" Text="0" FontSize="18" FontWeight="Bold" 
-                                                 HorizontalAlignment="Center" Foreground="White" Margin="0,5,0,3"/>
+                                                 HorizontalAlignment="Center" Foreground="{DynamicResource TextOnAccentBrush}" Margin="0,5,0,3"/>
                                         <TextBlock Text="Legs Completed" FontSize="11" HorizontalAlignment="Center" 
-                                                 Foreground="LightGreen"/>
+                                                 Foreground="{DynamicResource TextOnAccentBrush}" Opacity="0.8"/>
                                     </StackPanel>
                                 </Border>
 
-                                <Border Grid.Column="2" Background="#dc3545" CornerRadius="8" Margin="0,0,15,0" Padding="20">
+                                <Border Grid.Column="2" Background="{DynamicResource ErrorForegroundBrush}" Style="{StaticResource StatCardStyle}" Margin="0,0,15,0">
                                     <StackPanel>
-                                        <TextBlock Text="💰" FontSize="24" HorizontalAlignment="Center" Foreground="White"/>
+                                        <TextBlock Text="💰" FontSize="24" HorizontalAlignment="Center" Foreground="{DynamicResource TextOnAccentBrush}"/>
                                         <TextBlock x:Name="TotalCostText" Text="$0" FontSize="18" FontWeight="Bold" 
-                                                 HorizontalAlignment="Center" Foreground="White" Margin="0,5,0,3"/>
+                                                 HorizontalAlignment="Center" Foreground="{DynamicResource TextOnAccentBrush}" Margin="0,5,0,3"/>
                                         <TextBlock Text="Operating Cost" FontSize="11" HorizontalAlignment="Center" 
-                                                 Foreground="LightPink"/>
+                                                 Foreground="{DynamicResource TextOnAccentBrush}" Opacity="0.8"/>
                                     </StackPanel>
                                 </Border>
 
-                                <Border Grid.Column="3" Background="#ffc107" CornerRadius="8" Padding="20">
+                                <Border Grid.Column="3" Background="{DynamicResource WarningForegroundBrush}" Style="{StaticResource StatCardStyle}">
                                     <StackPanel>
-                                        <TextBlock Text="📈" FontSize="24" HorizontalAlignment="Center" Foreground="White"/>
+                                        <TextBlock Text="📈" FontSize="24" HorizontalAlignment="Center" Foreground="{DynamicResource TextOnAccentBrush}"/>
                                         <TextBlock x:Name="EfficiencyText" Text="0 L/leg" FontSize="18" FontWeight="Bold" 
-                                                 HorizontalAlignment="Center" Foreground="White" Margin="0,5,0,3"/>
+                                                 HorizontalAlignment="Center" Foreground="{DynamicResource TextOnAccentBrush}" Margin="0,5,0,3"/>
                                         <TextBlock Text="Fleet Efficiency" FontSize="11" HorizontalAlignment="Center" 
-                                                 Foreground="#856404"/>
+                                                 Foreground="{DynamicResource TextOnAccentBrush}" Opacity="0.8"/>
                                     </StackPanel>
                                 </Border>
                             </Grid>
@@ -153,7 +153,10 @@
                                 GridLinesVisibility="Horizontal"
                                 HeadersVisibility="Column"
                                 BorderThickness="1"
-                                BorderBrush="#dee2e6"
+                                BorderBrush="{DynamicResource BorderSubtleBrush}"
+                                Background="{DynamicResource CardBackgroundBrush}"
+                                VirtualizingPanel.IsVirtualizing="True"
+                                VirtualizingPanel.VirtualizationMode="Recycling"
                                 PreviewMouseWheel="DataGrid_PreviewMouseWheel">
 
                             <DataGrid.Columns>
@@ -187,7 +190,10 @@
                                 GridLinesVisibility="Horizontal"
                                 HeadersVisibility="Column"
                                 BorderThickness="1"
-                                BorderBrush="#dee2e6"
+                                BorderBrush="{DynamicResource BorderSubtleBrush}"
+                                Background="{DynamicResource CardBackgroundBrush}"
+                                VirtualizingPanel.IsVirtualizing="True"
+                                VirtualizingPanel.VirtualizationMode="Recycling"
                                 PreviewMouseWheel="DataGrid_PreviewMouseWheel">
 
                             <DataGrid.Columns>
@@ -233,7 +239,10 @@
                                 GridLinesVisibility="Horizontal"
                                 HeadersVisibility="Column"
                                 BorderThickness="1"
-                                BorderBrush="#dee2e6"
+                                BorderBrush="{DynamicResource BorderSubtleBrush}"
+                                Background="{DynamicResource CardBackgroundBrush}"
+                                VirtualizingPanel.IsVirtualizing="True"
+                                VirtualizingPanel.VirtualizationMode="Recycling"
                                 PreviewMouseWheel="DataGrid_PreviewMouseWheel">
 
                             <DataGrid.Columns>
@@ -294,7 +303,10 @@
                                             CanUserDeleteRows="False"
                                             GridLinesVisibility="Horizontal"
                                             HeadersVisibility="Column"
-                                                        BorderThickness="0">
+                                            BorderThickness="0"
+                                            Background="Transparent"
+                                            VirtualizingPanel.IsVirtualizing="True"
+                                            VirtualizingPanel.VirtualizationMode="Recycling">
 
                                         <DataGrid.Columns>
                                             <DataGridTextColumn Header="Currency" Binding="{Binding Currency}" Width="100"/>
@@ -319,7 +331,10 @@
                                             CanUserDeleteRows="False"
                                             GridLinesVisibility="Horizontal"
                                             HeadersVisibility="Column"
-                                                        BorderThickness="0">
+                                            BorderThickness="0"
+                                            Background="Transparent"
+                                            VirtualizingPanel.IsVirtualizing="True"
+                                            VirtualizingPanel.VirtualizationMode="Recycling">
 
                                         <DataGrid.Columns>
                                             <DataGridTextColumn Header="Supplier" Binding="{Binding SupplierName}" Width="150"/>

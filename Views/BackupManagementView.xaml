@@ -10,14 +10,14 @@
         <Style x:Key="HeaderTextStyle" TargetType="TextBlock">
             <Setter Property="FontSize" Value="24"/>
             <Setter Property="FontWeight" Value="Bold"/>
-            <Setter Property="Foreground" Value="#2C3E50"/>
+            <Setter Property="Foreground" Value="{DynamicResource TextPrimaryBrush}"/>
             <Setter Property="Margin" Value="0,0,0,20"/>
         </Style>
         
         <Style x:Key="SectionHeaderStyle" TargetType="TextBlock">
             <Setter Property="FontSize" Value="16"/>
             <Setter Property="FontWeight" Value="SemiBold"/>
-            <Setter Property="Foreground" Value="#34495E"/>
+            <Setter Property="Foreground" Value="{DynamicResource TextPrimaryBrush}"/>
             <Setter Property="Margin" Value="0,20,0,10"/>
         </Style>
         
@@ -30,33 +30,10 @@
             <Setter Property="MinWidth" Value="140"/>
         </Style>
         
-        <Style x:Key="PrimaryButtonStyle" BasedOn="{StaticResource ActionButtonStyle}" TargetType="Button">
-            <Setter Property="Background" Value="#3498DB"/>
-            <Setter Property="Foreground" Value="White"/>
-            <Setter Property="BorderBrush" Value="#2980B9"/>
-        </Style>
-        
-        <Style x:Key="SuccessButtonStyle" BasedOn="{StaticResource ActionButtonStyle}" TargetType="Button">
-            <Setter Property="Background" Value="#27AE60"/>
-            <Setter Property="Foreground" Value="White"/>
-            <Setter Property="BorderBrush" Value="#229954"/>
-        </Style>
-        
-        <Style x:Key="WarningButtonStyle" BasedOn="{StaticResource ActionButtonStyle}" TargetType="Button">
-            <Setter Property="Background" Value="#F39C12"/>
-            <Setter Property="Foreground" Value="White"/>
-            <Setter Property="BorderBrush" Value="#E67E22"/>
-        </Style>
-        
-        <Style x:Key="DangerButtonStyle" BasedOn="{StaticResource ActionButtonStyle}" TargetType="Button">
-            <Setter Property="Background" Value="#E74C3C"/>
-            <Setter Property="Foreground" Value="White"/>
-            <Setter Property="BorderBrush" Value="#C0392B"/>
-        </Style>
         
         <Style x:Key="InfoCardStyle" TargetType="Border">
-            <Setter Property="Background" Value="#ECF0F1"/>
-            <Setter Property="BorderBrush" Value="#BDC3C7"/>
+            <Setter Property="Background" Value="{DynamicResource CardBackgroundBrush}"/>
+            <Setter Property="BorderBrush" Value="{DynamicResource BorderSubtleBrush}"/>
             <Setter Property="BorderThickness" Value="1"/>
             <Setter Property="CornerRadius" Value="6"/>
             <Setter Property="Padding" Value="15"/>
@@ -92,37 +69,37 @@
                         <!-- Last Backup Card -->
                         <Border Grid.Column="0" Style="{StaticResource InfoCardStyle}">
                             <StackPanel>
-                                <TextBlock Text="📅 Last Backup" FontWeight="SemiBold" FontSize="14" Foreground="#7F8C8D"/>
-                                <TextBlock x:Name="LastBackupText" Text="Never" FontSize="16" FontWeight="Bold" Foreground="#2C3E50"/>
-                                <TextBlock x:Name="LastBackupOperationText" Text="" FontSize="12" Foreground="#7F8C8D"/>
+                                <TextBlock Text="📅 Last Backup" FontWeight="SemiBold" FontSize="14" Foreground="{DynamicResource TextSecondaryBrush}"/>
+                                <TextBlock x:Name="LastBackupText" Text="Never" FontSize="16" FontWeight="Bold" Foreground="{DynamicResource TextPrimaryBrush}"/>
+                                <TextBlock x:Name="LastBackupOperationText" Text="" FontSize="12" Foreground="{DynamicResource TextSecondaryBrush}"/>
                             </StackPanel>
                         </Border>
                         
                         <!-- Total Backups Card -->
                         <Border Grid.Column="1" Style="{StaticResource InfoCardStyle}">
                             <StackPanel>
-                                <TextBlock Text="📊 Total Backups" FontWeight="SemiBold" FontSize="14" Foreground="#7F8C8D"/>
-                                <TextBlock x:Name="TotalBackupsText" Text="0" FontSize="16" FontWeight="Bold" Foreground="#2C3E50"/>
-                                <TextBlock x:Name="TotalBackupSizeText" Text="0 MB" FontSize="12" Foreground="#7F8C8D"/>
+                                <TextBlock Text="📊 Total Backups" FontWeight="SemiBold" FontSize="14" Foreground="{DynamicResource TextSecondaryBrush}"/>
+                                <TextBlock x:Name="TotalBackupsText" Text="0" FontSize="16" FontWeight="Bold" Foreground="{DynamicResource TextPrimaryBrush}"/>
+                                <TextBlock x:Name="TotalBackupSizeText" Text="0 MB" FontSize="12" Foreground="{DynamicResource TextSecondaryBrush}"/>
                             </StackPanel>
                         </Border>
                         
                         <!-- Database Size Card -->
                         <Border Grid.Column="2" Style="{StaticResource InfoCardStyle}">
                             <StackPanel>
-                                <TextBlock Text="💽 Database Size" FontWeight="SemiBold" FontSize="14" Foreground="#7F8C8D"/>
-                                <TextBlock x:Name="DatabaseSizeText" Text="0 MB" FontSize="16" FontWeight="Bold" Foreground="#2C3E50"/>
-                                <TextBlock Text="Current active database" FontSize="12" Foreground="#7F8C8D"/>
+                                <TextBlock Text="💽 Database Size" FontWeight="SemiBold" FontSize="14" Foreground="{DynamicResource TextSecondaryBrush}"/>
+                                <TextBlock x:Name="DatabaseSizeText" Text="0 MB" FontSize="16" FontWeight="Bold" Foreground="{DynamicResource TextPrimaryBrush}"/>
+                                <TextBlock Text="Current active database" FontSize="12" Foreground="{DynamicResource TextSecondaryBrush}"/>
                             </StackPanel>
                         </Border>
                         
                         <!-- Backup Folder Card -->
                         <Border Grid.Column="3" Style="{StaticResource InfoCardStyle}">
                             <StackPanel>
-                                <TextBlock Text="📁 Backup Location" FontWeight="SemiBold" FontSize="14" Foreground="#7F8C8D"/>
+                                <TextBlock Text="📁 Backup Location" FontWeight="SemiBold" FontSize="14" Foreground="{DynamicResource TextSecondaryBrush}"/>
                                 <Button x:Name="OpenFolderBtn" Content="Open Folder" Click="OpenFolder_Click" 
-                                        Style="{StaticResource PrimaryButtonStyle}" FontSize="12" MinWidth="100" Padding="8,4"/>
-                                <TextBlock x:Name="BackupFolderText" Text="Documents\DO Inventory Backups" FontSize="10" Foreground="#7F8C8D" TextWrapping="Wrap"/>
+                                        Style="{StaticResource FluentButtonStyle}" FontSize="12" MinWidth="100" Padding="8,4"/>
+                                <TextBlock x:Name="BackupFolderText" Text="Documents\DO Inventory Backups" FontSize="10" Foreground="{DynamicResource TextSecondaryBrush}" TextWrapping="Wrap"/>
                             </StackPanel>
                         </Border>
                     </Grid>
@@ -140,22 +117,22 @@
                         </Grid.ColumnDefinitions>
                         
                         <Button Grid.Column="0" x:Name="CreateBackupBtn" Content="🗄️ Create Backup" Click="CreateBackup_Click" 
-                                Style="{StaticResource SuccessButtonStyle}"/>
+                                Style="{StaticResource FluentSuccessButtonStyle}"/>
                         
                         <Button Grid.Column="1" x:Name="RestoreBackupBtn" Content="🔄 Restore Backup" Click="RestoreBackup_Click" 
-                                Style="{StaticResource WarningButtonStyle}"/>
+                                Style="{StaticResource FluentWarningButtonStyle}"/>
                         
                         <Button Grid.Column="2" x:Name="ExportDataBtn" Content="📦 Export Data Package" Click="ExportData_Click" 
-                                Style="{StaticResource PrimaryButtonStyle}"/>
+                                Style="{StaticResource FluentButtonStyle}"/>
                         
                         <Button Grid.Column="3" x:Name="UploadDataBtn" Content="📄 Upload Data" Click="UploadData_Click" 
-                                Style="{StaticResource SuccessButtonStyle}"/>
+                                Style="{StaticResource FluentSuccessButtonStyle}"/>
                         
                         <Button Grid.Column="4" x:Name="CleanupBtn" Content="🧹 Cleanup Old Backups" Click="Cleanup_Click" 
-                                Style="{StaticResource DangerButtonStyle}"/>
+                                Style="{StaticResource FluentDangerButtonStyle}"/>
                         
                         <Button Grid.Column="6" x:Name="RefreshBtn" Content="🔄 Refresh" Click="Refresh_Click" 
-                                Style="{StaticResource ActionButtonStyle}"/>
+                                Style="{StaticResource FluentSecondaryButtonStyle}"/>
                     </Grid>
                     
                     <!-- Backup History Section -->
@@ -170,7 +147,10 @@
                         <DataGrid Grid.Row="1" x:Name="BackupHistoryGrid" AutoGenerateColumns="False" 
                                   CanUserAddRows="False" CanUserDeleteRows="False" IsReadOnly="True"
                                   GridLinesVisibility="Horizontal" HeadersVisibility="Column"
-                                  BorderBrush="#DEE2E6" BorderThickness="1">
+                                  BorderBrush="{DynamicResource BorderSubtleBrush}" BorderThickness="1"
+                                  Background="{DynamicResource CardBackgroundBrush}"
+                                  VirtualizingPanel.IsVirtualizing="True"
+                                  VirtualizingPanel.VirtualizationMode="Recycling">
                             
                             <DataGrid.Columns>
                                 <DataGridTextColumn Header="📅 Date Created" Binding="{Binding FormattedDate}" Width="150"/>
@@ -182,11 +162,11 @@
                                         <DataTemplate>
                                             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                                                 <Button Content="🔄 Restore" Click="RestoreSpecificBackup_Click" 
-                                                        Style="{StaticResource WarningButtonStyle}" 
+                                                        Style="{StaticResource FluentWarningButtonStyle}" 
                                                         FontSize="11" MinWidth="70" Padding="6,3" Margin="2"
                                                         Tag="{Binding FilePath}"/>
                                                 <Button Content="🗑️ Delete" Click="DeleteBackup_Click" 
-                                                        Style="{StaticResource DangerButtonStyle}" 
+                                                        Style="{StaticResource FluentDangerButtonStyle}" 
                                                         FontSize="11" MinWidth="60" Padding="6,3" Margin="2"
                                                         Tag="{Binding FilePath}"/>
                                             </StackPanel>
@@ -200,7 +180,7 @@
                         <TextBlock Grid.Row="1" x:Name="NoBackupsMessage" 
                                    Text="📭 No backups found. Create your first backup to get started!" 
                                    HorizontalAlignment="Center" VerticalAlignment="Center" 
-                                   FontSize="16" Foreground="#7F8C8D" FontStyle="Italic"
+                                   FontSize="16" Foreground="{DynamicResource TextTertiaryBrush}" FontStyle="Italic"
                                    Visibility="Collapsed"/>
                     </Grid>
                 </Grid>
@@ -282,9 +262,9 @@
                                 <!-- Filter Buttons -->
                                 <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,15,0,0">
                                     <Button x:Name="ApplyPurchaseFilterBtn" Content="🔍 Apply Filter" Click="ApplyPurchaseFilter_Click" 
-                                            Style="{StaticResource PrimaryButtonStyle}" Margin="0,0,10,0"/>
+                                            Style="{StaticResource FluentButtonStyle}" Margin="0,0,10,0"/>
                                     <Button x:Name="ClearPurchaseFilterBtn" Content="🔄 Clear Filter" Click="ClearPurchaseFilter_Click" 
-                                            Style="{StaticResource ActionButtonStyle}"/>
+                                            Style="{StaticResource FluentSecondaryButtonStyle}"/>
                                 </StackPanel>
                             </Grid>
                         </Border>
@@ -302,18 +282,21 @@
                                        VerticalAlignment="Center" FontWeight="SemiBold" Margin="0,0,20,0"/>
                             
                             <Button Grid.Column="2" x:Name="DeleteSelectedPurchasesBtn" Content="🗑️ Delete Selected" 
-                                    Click="DeleteSelectedPurchases_Click" Style="{StaticResource DangerButtonStyle}" 
+                                    Click="DeleteSelectedPurchases_Click" Style="{StaticResource FluentDangerButtonStyle}" 
                                     IsEnabled="False" Margin="0,0,10,0"/>
                             
                             <Button Grid.Column="3" x:Name="RefreshPurchasesBtn" Content="🔄 Refresh" 
-                                    Click="RefreshPurchases_Click" Style="{StaticResource ActionButtonStyle}"/>
+                                    Click="RefreshPurchases_Click" Style="{StaticResource FluentSecondaryButtonStyle}"/>
                         </Grid>
                         
                         <!-- Purchase History DataGrid -->
                         <DataGrid Grid.Row="3" x:Name="PurchaseHistoryGrid" AutoGenerateColumns="False" 
                                   CanUserAddRows="False" CanUserDeleteRows="False" 
                                   GridLinesVisibility="Horizontal" HeadersVisibility="Column"
-                                  BorderBrush="#DEE2E6" BorderThickness="1"
+                                  BorderBrush="{DynamicResource BorderSubtleBrush}" BorderThickness="1"
+                                  Background="{DynamicResource CardBackgroundBrush}"
+                                  VirtualizingPanel.IsVirtualizing="True"
+                                  VirtualizingPanel.VirtualizationMode="Recycling"
                                   SelectionChanged="PurchaseHistoryGrid_SelectionChanged">
                             
                             <DataGrid.Columns>
@@ -395,9 +378,9 @@
                                 <!-- Filter Buttons -->
                                 <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,15,0,0">
                                     <Button x:Name="ApplyConsumptionFilterBtn" Content="🔍 Apply Filter" Click="ApplyConsumptionFilter_Click" 
-                                            Style="{StaticResource PrimaryButtonStyle}" Margin="0,0,10,0"/>
+                                            Style="{StaticResource FluentButtonStyle}" Margin="0,0,10,0"/>
                                     <Button x:Name="ClearConsumptionFilterBtn" Content="🔄 Clear Filter" Click="ClearConsumptionFilter_Click" 
-                                            Style="{StaticResource ActionButtonStyle}"/>
+                                            Style="{StaticResource FluentSecondaryButtonStyle}"/>
                                 </StackPanel>
                             </Grid>
                         </Border>
@@ -415,18 +398,21 @@
                                        VerticalAlignment="Center" FontWeight="SemiBold" Margin="0,0,20,0"/>
                             
                             <Button Grid.Column="2" x:Name="DeleteSelectedConsumptionsBtn" Content="🗑️ Delete Selected" 
-                                    Click="DeleteSelectedConsumptions_Click" Style="{StaticResource DangerButtonStyle}" 
+                                    Click="DeleteSelectedConsumptions_Click" Style="{StaticResource FluentDangerButtonStyle}" 
                                     IsEnabled="False" Margin="0,0,10,0"/>
                             
                             <Button Grid.Column="3" x:Name="RefreshConsumptionsBtn" Content="🔄 Refresh" 
-                                    Click="RefreshConsumptions_Click" Style="{StaticResource ActionButtonStyle}"/>
+                                    Click="RefreshConsumptions_Click" Style="{StaticResource FluentSecondaryButtonStyle}"/>
                         </Grid>
                         
                         <!-- Consumption History DataGrid -->
                         <DataGrid Grid.Row="3" x:Name="ConsumptionHistoryGrid" AutoGenerateColumns="False" 
                                   CanUserAddRows="False" CanUserDeleteRows="False" 
                                   GridLinesVisibility="Horizontal" HeadersVisibility="Column"
-                                  BorderBrush="#DEE2E6" BorderThickness="1"
+                                  BorderBrush="{DynamicResource BorderSubtleBrush}" BorderThickness="1"
+                                  Background="{DynamicResource CardBackgroundBrush}"
+                                  VirtualizingPanel.IsVirtualizing="True"
+                                  VirtualizingPanel.VirtualizationMode="Recycling"
                                   SelectionChanged="ConsumptionHistoryGrid_SelectionChanged">
                             
                             <DataGrid.Columns>

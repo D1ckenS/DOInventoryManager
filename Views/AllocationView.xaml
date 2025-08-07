@@ -33,7 +33,7 @@
 
                     <StackPanel Grid.Column="0" Orientation="Horizontal">
                         <Button x:Name="RunFIFOBtn" Content="🔄 Run FIFO Allocation" 
-                              Background="#e74c3c" Foreground="White" BorderThickness="0" 
+                              Style="{DynamicResource FluentButtonStyle}"
                               Padding="20,12" Margin="0,0,15,0" FontWeight="SemiBold"
                               Click="RunFIFO_Click"/>
 
@@ -41,20 +41,20 @@
                                 Margin="0,0,15,0" SelectionChanged="MonthFilter_SelectionChanged"/>
 
                         <Button x:Name="ExportBtn" Content="📤 Export to Excel" 
-                              Background="#28a745" Foreground="White" BorderThickness="0" 
+                              Style="{DynamicResource FluentSuccessButtonStyle}"
                               Padding="15,12" FontWeight="SemiBold"
                               Click="Export_Click"/>
 
                         <Button x:Name="RecoveryBtn" Content="🔧 Data Recovery" 
-                              Background="#dc3545" Foreground="White" BorderThickness="0" 
+                              Style="{DynamicResource FluentDangerButtonStyle}"
                               Padding="15,12" Margin="15,0,0,0" FontWeight="SemiBold"
                               Click="Recovery_Click"/>
                     </StackPanel>
 
                     <StackPanel Grid.Column="1" Orientation="Horizontal">
-                        <Border Background="#dc3545" CornerRadius="4" Padding="10,5">
+                        <Border Background="{DynamicResource DangerBackgroundBrush}" CornerRadius="4" Padding="10,5">
                             <TextBlock x:Name="StatusText" Text="Ready to run FIFO allocation" 
-                                     Foreground="White" FontWeight="SemiBold"/>
+                                     Foreground="{DynamicResource DangerForegroundBrush}" FontWeight="SemiBold"/>
                         </Border>
                     </StackPanel>
                 </Grid>
@@ -122,6 +122,12 @@
                             HeadersVisibility="Column"
                             BorderThickness="0"
                             MaxHeight="500"
+                            VirtualizingPanel.IsVirtualizing="True"
+                            VirtualizingPanel.VirtualizationMode="Recycling"
+                            VirtualizingPanel.ScrollUnit="Pixel"
+                            EnableRowVirtualization="True"
+                            EnableColumnVirtualization="True"
+                            Background="{DynamicResource CardBackgroundBrush}"
                             PreviewMouseWheel="DataGrid_PreviewMouseWheel">
 
                         <DataGrid.Columns>
@@ -165,7 +171,7 @@
                           CornerRadius="4" Padding="15" Margin="0,20,0,0">
                         <StackPanel>
                             <TextBlock Text="🔄 FIFO Allocation Process" FontWeight="SemiBold" 
-                                     Foreground="#856404" Margin="0,0,0,10"/>
+                                     Foreground="{DynamicResource WarningForegroundBrush}" Margin="0,0,0,10"/>
                             <Grid>
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="*"/>

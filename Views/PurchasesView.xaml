@@ -82,23 +82,23 @@
                         <!-- Vessel -->
                         <StackPanel Grid.Column="0" Margin="0,0,15,0">
                             <TextBlock Text="Vessel *" FontWeight="SemiBold" Margin="0,0,0,5"/>
-                            <ComboBox x:Name="VesselComboBox" Padding="10" BorderBrush="#ced4da" 
-                                    BorderThickness="1" DisplayMemberPath="Name" SelectedValuePath="Id"/>
+                            <ComboBox x:Name="VesselComboBox" Style="{StaticResource FluentComboBoxStyle}" 
+                                    DisplayMemberPath="Name" SelectedValuePath="Id"/>
                         </StackPanel>
 
                         <!-- Purchase Date -->
                         <StackPanel Grid.Column="1" Margin="0,0,15,0">
                             <TextBlock Text="Purchase Date *" FontWeight="SemiBold" Margin="0,0,0,5"/>
-                            <DatePicker x:Name="PurchaseDatePicker" Padding="10" BorderBrush="#ced4da" 
-                                      BorderThickness="1" SelectedDate="{x:Static System:DateTime.Now}"
+                            <DatePicker x:Name="PurchaseDatePicker" Style="{StaticResource FluentDatePickerStyle}" 
+                                      SelectedDate="{x:Static System:DateTime.Now}"
                                       xmlns:System="clr-namespace:System;assembly=mscorlib"/>
                         </StackPanel>
 
                         <!-- Supplier -->
                         <StackPanel Grid.Column="2">
                             <TextBlock Text="Supplier *" FontWeight="SemiBold" Margin="0,0,0,5"/>
-                            <ComboBox x:Name="SupplierComboBox" Padding="10" BorderBrush="#ced4da" 
-                                    BorderThickness="1" DisplayMemberPath="Name" SelectedValuePath="Id"
+                            <ComboBox x:Name="SupplierComboBox" Style="{StaticResource FluentComboBoxStyle}" 
+                                    DisplayMemberPath="Name" SelectedValuePath="Id"
                                     SelectionChanged="SupplierComboBox_SelectionChanged"/>
                         </StackPanel>
                     </Grid>
@@ -114,22 +114,21 @@
                         <!-- Quantity Liters -->
                         <StackPanel Grid.Column="0" Margin="0,0,15,0">
                             <TextBlock Text="Quantity (Liters) *" FontWeight="SemiBold" Margin="0,0,0,5"/>
-                            <TextBox x:Name="QuantityLitersTextBox" Padding="10" BorderBrush="#ced4da" 
-                                   BorderThickness="1" TextChanged="QuantityTextBox_TextChanged"/>
+                            <TextBox x:Name="QuantityLitersTextBox" Style="{StaticResource FluentTextBoxStyle}" 
+                                   TextChanged="QuantityTextBox_TextChanged"/>
                         </StackPanel>
 
                         <!-- Quantity Tons -->
                         <StackPanel Grid.Column="1" Margin="0,0,15,0">
                             <TextBlock Text="Quantity (Tons) *" FontWeight="SemiBold" Margin="0,0,0,5"/>
-                            <TextBox x:Name="QuantityTonsTextBox" Padding="10" BorderBrush="#ced4da" 
-                                   BorderThickness="1" TextChanged="QuantityTextBox_TextChanged"/>
+                            <TextBox x:Name="QuantityTonsTextBox" Style="{StaticResource FluentTextBoxStyle}" 
+                                   TextChanged="QuantityTextBox_TextChanged"/>
                         </StackPanel>
 
                         <!-- Invoice Reference -->
                         <StackPanel Grid.Column="2">
                             <TextBlock Text="Invoice Reference *" FontWeight="SemiBold" Margin="0,0,0,5"/>
-                            <TextBox x:Name="InvoiceRefTextBox" Padding="10" BorderBrush="#ced4da" 
-                                   BorderThickness="1"/>
+                            <TextBox x:Name="InvoiceRefTextBox" Style="{StaticResource FluentTextBoxStyle}"/>
                         </StackPanel>
                     </Grid>
 
@@ -144,15 +143,15 @@
                         <!-- Total Value (Supplier Currency) -->
                         <StackPanel Grid.Column="0" Margin="0,0,15,0">
                             <TextBlock x:Name="TotalValueLabel" Text="Total Value *" FontWeight="SemiBold" Margin="0,0,0,5"/>
-                            <TextBox x:Name="TotalValueTextBox" Padding="10" BorderBrush="#ced4da" 
-                                   BorderThickness="1" TextChanged="TotalValueTextBox_TextChanged"/>
+                            <TextBox x:Name="TotalValueTextBox" Style="{StaticResource FluentTextBoxStyle}" 
+                                   TextChanged="TotalValueTextBox_TextChanged"/>
                         </StackPanel>
 
                         <!-- Exchange Rate (if needed) -->
                         <StackPanel Grid.Column="1" Margin="0,0,15,0">
                             <TextBlock Text="Exchange Rate" FontWeight="SemiBold" Margin="0,0,0,5"/>
-                            <TextBox x:Name="ExchangeRateTextBox" Padding="10" BorderBrush="#ced4da" 
-                                   BorderThickness="1" IsEnabled="False"
+                            <TextBox x:Name="ExchangeRateTextBox" Style="{StaticResource FluentTextBoxStyle}" 
+                                   IsEnabled="False"
                                    TextChanged="TotalValueTextBox_TextChanged"/>
                         </StackPanel>
 
@@ -179,23 +178,21 @@
                             <!-- Invoice Receipt Date -->
                             <StackPanel Grid.Column="0" Margin="0,0,15,0">
                                 <TextBlock Text="Invoice Receipt Date" FontWeight="SemiBold" Margin="0,0,0,5"/>
-                                <DatePicker x:Name="InvoiceReceiptDatePicker" Padding="8" 
-                                          BorderBrush="#90caf9" BorderThickness="1"
+                                <DatePicker x:Name="InvoiceReceiptDatePicker" Style="{StaticResource FluentDatePickerStyle}"
                                           SelectedDateChanged="InvoiceDatePicker_SelectedDateChanged"/>
                             </StackPanel>
 
                             <!-- Due Date -->
                             <StackPanel Grid.Column="1" Margin="0,0,15,0">
                                 <TextBlock Text="Due Date" FontWeight="SemiBold" Margin="0,0,0,5"/>
-                                <DatePicker x:Name="DueDatePicker" Padding="8" 
-                                          BorderBrush="#90caf9" BorderThickness="1"
+                                <DatePicker x:Name="DueDatePicker" Style="{StaticResource FluentDatePickerStyle}"
                                           SelectedDateChanged="InvoiceDatePicker_SelectedDateChanged"/>
                             </StackPanel>
 
                             <!-- Payment Status -->
                             <StackPanel Grid.Column="2" VerticalAlignment="Center">
                                 <TextBlock x:Name="PaymentStatusText" Text="Optional Invoice Tracking" 
-                                         FontSize="12" Foreground="#1976d2" FontWeight="SemiBold"/>
+                                         FontSize="12" Foreground="{DynamicResource PrimaryBrandBrush}" FontWeight="SemiBold"/>
                             </StackPanel>
                         </Grid>
                     </Border>
@@ -203,23 +200,23 @@
                     <!-- Action Buttons -->
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
                         <Button x:Name="EditPurchaseBtn" Content="Edit Selected" 
-                          Background="#f39c12" Foreground="White" BorderThickness="0" 
-                          Padding="15,10" Margin="0,0,10,0" FontWeight="SemiBold"
+                          Style="{StaticResource FluentWarningButtonStyle}"
+                          Padding="15,10" Margin="0,0,10,0"
                           IsEnabled="False" Click="EditPurchase_Click"/>
 
                         <Button x:Name="DeletePurchaseBtn" Content="Delete Selected" 
-                          Background="#dc3545" Foreground="White" BorderThickness="0" 
-                          Padding="15,10" Margin="0,0,15,0" FontWeight="SemiBold"
+                          Style="{StaticResource FluentDangerButtonStyle}"
+                          Padding="15,10" Margin="0,0,15,0"
                           IsEnabled="False" Click="DeletePurchase_Click"/>
 
                         <Button x:Name="SavePurchaseBtn" Content="Complete Purchase" 
-                          Background="#27ae60" Foreground="White" BorderThickness="0" 
-                          Padding="20,12" Margin="0,0,15,0" FontWeight="SemiBold"
+                          Style="{StaticResource FluentSuccessButtonStyle}"
+                          Padding="20,12" Margin="0,0,15,0"
                           Click="SavePurchase_Click"/>
 
                         <Button x:Name="ClearFormBtn" Content="Clear Form" 
-                          Background="#6c757d" Foreground="White" BorderThickness="0" 
-                          Padding="15,12" FontWeight="SemiBold"
+                          Style="{StaticResource FluentSecondaryButtonStyle}"
+                          Padding="15,12"
                           Click="ClearForm_Click"/>
                     </StackPanel>
                 </StackPanel>
@@ -331,24 +328,24 @@
                         </Grid.ColumnDefinitions>
                         
                         <Button Grid.Column="0" x:Name="ApplySearchFilterBtn" Content="Apply Filter" 
-                                Click="ApplySearchFilter_Click" Background="#007bff" Foreground="White" 
-                                BorderThickness="0" Padding="15,8" Margin="0,0,10,0" FontWeight="SemiBold"/>
+                                Click="ApplySearchFilter_Click" Style="{StaticResource FluentButtonStyle}"
+                                Padding="15,8" Margin="0,0,10,0"/>
                                 
                         <Button Grid.Column="1" x:Name="ClearSearchFilterBtn" Content="Clear Filter" 
-                                Click="ClearSearchFilter_Click" Background="#6c757d" Foreground="White" 
-                                BorderThickness="0" Padding="15,8" Margin="0,0,20,0" FontWeight="SemiBold"/>
+                                Click="ClearSearchFilter_Click" Style="{StaticResource FluentSecondaryButtonStyle}"
+                                Padding="15,8" Margin="0,0,20,0"/>
                         
                         <!-- Quick Filter Buttons -->
                         <StackPanel Grid.Column="3" Orientation="Horizontal" HorizontalAlignment="Right">
                             <TextBlock Text="Quick Filters:" FontWeight="SemiBold" VerticalAlignment="Center" Margin="0,0,10,0"/>
                             <Button x:Name="Last30DaysBtn" Content="Last 30 Days" Click="Last30Days_Click" 
-                                    Background="#28a745" Foreground="White" BorderThickness="0" 
+                                    Style="{StaticResource FluentSuccessButtonStyle}"
                                     Padding="10,5" Margin="0,0,5,0" FontSize="12"/>
                             <Button x:Name="Last6MonthsBtn" Content="Last 6 Months" Click="Last6Months_Click" 
-                                    Background="#17a2b8" Foreground="White" BorderThickness="0" 
+                                    Style="{StaticResource FluentButtonStyle}"
                                     Padding="10,5" Margin="0,0,5,0" FontSize="12"/>
                             <Button x:Name="ThisYearBtn" Content="This Year" Click="ThisYear_Click" 
-                                    Background="#ffc107" Foreground="Black" BorderThickness="0" 
+                                    Style="{StaticResource FluentWarningButtonStyle}"
                                     Padding="10,5" FontSize="12"/>
                         </StackPanel>
                         
@@ -366,8 +363,8 @@
                         <TextBlock Text="Recent Purchases" FontSize="16" FontWeight="SemiBold" 
                                  VerticalAlignment="Center" Foreground="{DynamicResource TextPrimaryBrush}"/>
                         <Rectangle Width="20"/>
-                        <Button Content="Refresh" Background="#17a2b8" Foreground="White" 
-                              BorderThickness="0" Padding="10,5" FontSize="12"
+                        <Button Content="Refresh" Style="{StaticResource FluentButtonStyle}"
+                              Padding="10,5" FontSize="12"
                               Click="RefreshPurchases_Click"/>
                     </StackPanel>
 
@@ -384,7 +381,10 @@
                         MaxHeight="400"
                         SelectionMode="Single"
                         SelectionChanged="PurchasesGrid_SelectionChanged"
-                        PreviewMouseWheel="DataGrid_PreviewMouseWheel">
+                        PreviewMouseWheel="DataGrid_PreviewMouseWheel"
+                        Background="{DynamicResource CardBackgroundBrush}"
+                        VirtualizingPanel.IsVirtualizing="True"
+                        VirtualizingPanel.VirtualizationMode="Recycling">
 
                         <DataGrid.Columns>
                             <DataGridTextColumn Header="Date" Binding="{Binding PurchaseDate, StringFormat=dd/MM/yyyy}" Width="100"/>

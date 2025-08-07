@@ -70,7 +70,7 @@
                         <Border Background="{DynamicResource WarningBackgroundBrush}" BorderBrush="{DynamicResource WarningForegroundBrush}" BorderThickness="1" 
                               CornerRadius="4" Padding="8,4">
                             <TextBlock Text="💡 Usually recorded once per month (99% of cases)" 
-                                     FontSize="12" Foreground="#856404"/>
+                                     FontSize="12" Foreground="{DynamicResource WarningForegroundBrush}"/>
                         </Border>
                     </StackPanel>
 
@@ -85,16 +85,16 @@
                         <!-- Vessel -->
                         <StackPanel Grid.Column="0" Margin="0,0,15,0">
                             <TextBlock Text="Vessel *" FontWeight="SemiBold" Margin="0,0,0,5"/>
-                            <ComboBox x:Name="VesselComboBox" Padding="10" BorderBrush="#ced4da" 
-                                    BorderThickness="1" DisplayMemberPath="Name" SelectedValuePath="Id"
+                            <ComboBox x:Name="VesselComboBox" Style="{StaticResource FluentComboBoxStyle}" 
+                                    DisplayMemberPath="Name" SelectedValuePath="Id"
                                     SelectionChanged="VesselComboBox_SelectionChanged"/>
                         </StackPanel>
 
                         <!-- Consumption Date -->
                         <StackPanel Grid.Column="1" Margin="0,0,15,0">
                             <TextBlock Text="Consumption Date *" FontWeight="SemiBold" Margin="0,0,0,5"/>
-                            <DatePicker x:Name="ConsumptionDatePicker" Padding="10" BorderBrush="#ced4da" 
-                                      BorderThickness="1" SelectedDate="{x:Static System:DateTime.Now}"
+                            <DatePicker x:Name="ConsumptionDatePicker" Style="{StaticResource FluentDatePickerStyle}" 
+                                      SelectedDate="{x:Static System:DateTime.Now}"
                                       xmlns:System="clr-namespace:System;assembly=mscorlib"
                                       SelectedDateChanged="ConsumptionDatePicker_SelectedDateChanged"/>
                         </StackPanel>
@@ -104,7 +104,7 @@
                             <TextBlock Text="Month (Auto-Generated)" FontWeight="SemiBold" Margin="0,0,0,5"/>
                             <Border Background="{DynamicResource SubtleBackgroundBrush}" BorderBrush="{DynamicResource BorderSubtleBrush}" BorderThickness="1" CornerRadius="3">
                                 <TextBlock x:Name="MonthDisplayText" Text="2025-07" Padding="10" 
-                                         FontWeight="SemiBold" Foreground="#495057"/>
+                                         FontWeight="SemiBold" Foreground="{DynamicResource TextSecondaryBrush}"/>
                             </Border>
                         </StackPanel>
                     </Grid>
@@ -122,21 +122,21 @@
                             <TextBlock Text="Route (Auto-Assigned)" FontWeight="SemiBold" Margin="0,0,0,5"/>
                             <Border Background="{DynamicResource InfoBackgroundBrush}" BorderBrush="{DynamicResource PrimaryBrandBrush}" BorderThickness="1" CornerRadius="3">
                                 <TextBlock x:Name="RouteDisplayText" Text="Select vessel to see route" 
-                                         Padding="10" FontStyle="Italic" Foreground="#1976d2"/>
+                                         Padding="10" FontStyle="Italic" Foreground="{DynamicResource PrimaryBrandBrush}"/>
                             </Border>
                         </StackPanel>
 
                         <!-- Consumption in Liters -->
                         <StackPanel Grid.Column="1" Margin="0,0,15,0">
                             <TextBlock Text="Consumption (Liters) *" FontWeight="SemiBold" Margin="0,0,0,5"/>
-                            <TextBox x:Name="ConsumptionLitersTextBox" Padding="10" BorderBrush="#ced4da" 
+                            <TextBox x:Name="ConsumptionLitersTextBox" Padding="10" BorderBrush="{DynamicResource BorderSubtleBrush}" 
                                    BorderThickness="1" TextChanged="ConsumptionTextBox_TextChanged"/>
                         </StackPanel>
 
                         <!-- Legs Completed -->
                         <StackPanel Grid.Column="2">
                             <TextBlock Text="Legs Completed (Optional)" FontWeight="SemiBold" Margin="0,0,0,5"/>
-                            <TextBox x:Name="LegsCompletedTextBox" Padding="10" BorderBrush="#ced4da" 
+                            <TextBox x:Name="LegsCompletedTextBox" Padding="10" BorderBrush="{DynamicResource BorderSubtleBrush}" 
                                    BorderThickness="1" TextChanged="ConsumptionTextBox_TextChanged"
                                    ToolTip="Leave empty or enter 0 for stationary consumption (engines running without movement)"/>
                         </StackPanel>
@@ -155,19 +155,19 @@
                             <StackPanel Grid.Column="0" HorizontalAlignment="Center">
                                 <TextBlock Text="🚢 Consumption (T)" FontWeight="SemiBold" HorizontalAlignment="Center" FontSize="12"/>
                                 <TextBlock x:Name="VesselTypeText" Text="Not Selected" FontSize="16" FontWeight="Bold" 
-                                        HorizontalAlignment="Center" Foreground="#856404"/>
+                                        HorizontalAlignment="Center" Foreground="{DynamicResource WarningForegroundBrush}"/>
                             </StackPanel>
 
                             <StackPanel Grid.Column="1" HorizontalAlignment="Center">
                                 <TextBlock Text="⛽ Consumption per Leg" FontWeight="SemiBold" HorizontalAlignment="Center" FontSize="12"/>
                                 <TextBlock x:Name="ConsumptionPerLegText" Text="0.000 L/leg | 0.000 T/leg" FontSize="14" FontWeight="Bold" 
-                                        HorizontalAlignment="Center" Foreground="#856404"/>
+                                        HorizontalAlignment="Center" Foreground="{DynamicResource WarningForegroundBrush}"/>
                             </StackPanel>
 
                             <StackPanel Grid.Column="2" HorizontalAlignment="Center">
                                 <TextBlock Text="📦 Inventory Status" FontWeight="SemiBold" HorizontalAlignment="Center" FontSize="12"/>
                                 <TextBlock x:Name="EfficiencyRatingText" Text="Select Vessel" FontSize="16" FontWeight="Bold" 
-                                        HorizontalAlignment="Center" Foreground="#856404"/>
+                                        HorizontalAlignment="Center" Foreground="{DynamicResource WarningForegroundBrush}"/>
                             </StackPanel>
                         </Grid>
                     </Border>
@@ -175,28 +175,28 @@
                     <!-- Action Buttons -->
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
                         <Button x:Name="EditConsumptionBtn" Content="✏️ Edit Selected" 
-                              Background="#f39c12" Foreground="White" BorderThickness="0" 
-                              Padding="15,12" Margin="0,0,10,0" FontWeight="SemiBold"
+                              Style="{StaticResource FluentWarningButtonStyle}"
+                              Padding="15,12" Margin="0,0,10,0"
                               IsEnabled="False" Click="EditConsumption_Click"/>
 
                         <Button x:Name="DeleteConsumptionBtn" Content="🗑️ Delete Selected" 
-                              Background="#dc3545" Foreground="White" BorderThickness="0" 
-                              Padding="15,12" Margin="0,0,15,0" FontWeight="SemiBold"
+                              Style="{StaticResource FluentDangerButtonStyle}"
+                              Padding="15,12" Margin="0,0,15,0"
                               IsEnabled="False" Click="DeleteConsumption_Click"/>
 
                         <Button x:Name="SaveConsumptionBtn" Content="💾 Save Consumption" 
-                              Background="#27ae60" Foreground="White" BorderThickness="0" 
-                              Padding="20,12" Margin="0,0,15,0" FontWeight="SemiBold"
+                              Style="{StaticResource FluentSuccessButtonStyle}"
+                              Padding="20,12" Margin="0,0,15,0"
                               Click="SaveConsumption_Click"/>
 
                         <Button x:Name="RunFIFOBtn" Content="🔄 Save &amp; Run FIFO" 
-                              Background="#e74c3c" Foreground="White" BorderThickness="0" 
-                              Padding="15,12" Margin="0,0,15,0" FontWeight="SemiBold"
+                              Style="{StaticResource FluentButtonStyle}"
+                              Padding="15,12" Margin="0,0,15,0"
                               Click="RunFIFO_Click"/>
 
                         <Button x:Name="ClearFormBtn" Content="🧹 Clear Form" 
-                              Background="#6c757d" Foreground="White" BorderThickness="0" 
-                              Padding="15,12" FontWeight="SemiBold"
+                              Style="{StaticResource FluentSecondaryButtonStyle}"
+                              Padding="15,12"
                               Click="ClearForm_Click"/>
                     </StackPanel>
                 </StackPanel>
@@ -221,11 +221,11 @@
                         </StackPanel>
 
                         <StackPanel Grid.Column="1" Orientation="Horizontal">
-                            <Button Content="🔄 Refresh" Background="#17a2b8" Foreground="White" 
-                                  BorderThickness="0" Padding="10,5" FontSize="12" Margin="0,0,10,0"
+                            <Button Content="🔄 Refresh" Style="{StaticResource FluentInfoButtonStyle}"
+                                  Padding="10,5" FontSize="12" Margin="0,0,10,0"
                                   Click="RefreshConsumption_Click"/>
-                            <Button Content="📊 Month Summary" Background="#6f42c1" Foreground="White" 
-                                  BorderThickness="0" Padding="10,5" FontSize="12"
+                            <Button Content="📊 Month Summary" Style="{StaticResource FluentButtonStyle}"
+                                  Padding="10,5" FontSize="12"
                                   Click="MonthSummary_Click"/>
                         </StackPanel>
                     </Grid>
@@ -242,6 +242,9 @@
                             BorderThickness="0"
                             MaxHeight="400"
                             SelectionMode="Single"
+                            VirtualizingPanel.IsVirtualizing="True"
+                            VirtualizingPanel.VirtualizationMode="Recycling"
+                            ScrollViewer.CanContentScroll="True"
                             SelectionChanged="ConsumptionGrid_SelectionChanged"
                             PreviewMouseWheel="DataGrid_PreviewMouseWheel">
 
@@ -279,7 +282,7 @@
                           CornerRadius="4" Padding="15" Margin="0,20,0,0">
                         <StackPanel>
                             <TextBlock Text="🗺️ Route &amp; Trip Information" FontWeight="SemiBold" 
-                                     Foreground="#1976d2" Margin="0,0,0,10"/>
+                                     Foreground="{DynamicResource PrimaryBrandBrush}" Margin="0,0,0,10"/>
                             <Grid>
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="*"/>

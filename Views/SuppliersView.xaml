@@ -18,25 +18,24 @@
               CornerRadius="6" Padding="15" Margin="0,0,0,20">
             <StackPanel Orientation="Horizontal">
                 <Button x:Name="AddSupplierBtn" Content="➕ Add New Supplier" 
-                      Background="#27ae60" Foreground="White" BorderThickness="0" 
-                      Padding="15,10" Margin="0,0,15,0" FontWeight="SemiBold"
+                      Style="{StaticResource FluentSuccessButtonStyle}"
+                      Margin="0,0,15,0"
                       Click="AddSupplier_Click"/>
                 
                 <Button x:Name="EditSupplierBtn" Content="✏️ Edit Selected" 
-                      Background="#f39c12" Foreground="White" BorderThickness="0" 
-                      Padding="15,10" Margin="0,0,15,0" FontWeight="SemiBold"
-                      IsEnabled="False" Click="EditSupplier_Click"/>
+                      Style="{StaticResource FluentWarningButtonStyle}"
+                      Margin="0,0,15,0" IsEnabled="False"
+                      Click="EditSupplier_Click"/>
                 
                 <Button x:Name="DeleteSupplierBtn" Content="🗑️ Delete Selected" 
-                      Background="#e74c3c" Foreground="White" BorderThickness="0" 
-                      Padding="15,10" Margin="0,0,15,0" FontWeight="SemiBold"
-                      IsEnabled="False" Click="DeleteSupplier_Click"/>
+                      Style="{StaticResource FluentDangerButtonStyle}"
+                      Margin="0,0,15,0" IsEnabled="False"
+                      Click="DeleteSupplier_Click"/>
                 
-                <Rectangle Width="1" Fill="#dee2e6" Margin="15,0"/>
+                <Rectangle Width="1" Fill="{DynamicResource BorderSubtleBrush}" Margin="15,0"/>
                 
                 <Button x:Name="RefreshBtn" Content="🔄 Refresh" 
-                      Background="#6c757d" Foreground="White" BorderThickness="0" 
-                      Padding="15,10" FontWeight="SemiBold"
+                      Style="{StaticResource FluentSecondaryButtonStyle}"
                       Click="Refresh_Click"/>
             </StackPanel>
         </Border>
@@ -67,6 +66,8 @@
                             HeadersVisibility="Column"
                             BorderThickness="0"
                             SelectionMode="Single"
+                            VirtualizingPanel.IsVirtualizing="True"
+                            VirtualizingPanel.VirtualizationMode="Recycling"
                             SelectionChanged="SuppliersGrid_SelectionChanged"
                             PreviewMouseWheel="DataGrid_PreviewMouseWheel">
                         
@@ -94,13 +95,15 @@
                     
                     <!-- Supplier Name -->
                     <TextBlock Text="Supplier Name *" FontWeight="SemiBold" Margin="0,0,0,5"/>
-                    <TextBox x:Name="SupplierNameTextBox" Padding="10" BorderBrush="#ced4da" 
-                           BorderThickness="1" Margin="0,0,0,15"/>
+                    <TextBox x:Name="SupplierNameTextBox" 
+                           Style="{StaticResource FluentTextBoxStyle}"
+                           Margin="0,0,0,15"/>
                     
                     <!-- Currency -->
                     <TextBlock Text="Currency *" FontWeight="SemiBold" Margin="0,0,0,5"/>
-                    <ComboBox x:Name="CurrencyComboBox" Padding="10" BorderBrush="#ced4da" 
-                            BorderThickness="1" Margin="0,0,0,15"
+                    <ComboBox x:Name="CurrencyComboBox" 
+                            Style="{StaticResource FluentComboBoxStyle}"
+                            Margin="0,0,0,15"
                             SelectionChanged="CurrencyComboBox_SelectionChanged">
                         <ComboBoxItem Content="USD - US Dollar" Tag="USD"/>
                         <ComboBoxItem Content="JOD - Jordanian Dinar" Tag="JOD"/>
@@ -109,21 +112,21 @@
                     
                     <!-- Exchange Rate -->
                     <TextBlock Text="Exchange Rate to USD *" FontWeight="SemiBold" Margin="0,0,0,5"/>
-                    <TextBox x:Name="ExchangeRateTextBox" Padding="10" BorderBrush="#ced4da" 
-                           BorderThickness="1" Margin="0,0,0,5"/>
+                    <TextBox x:Name="ExchangeRateTextBox" 
+                           Style="{StaticResource FluentTextBoxStyle}"
+                           Margin="0,0,0,5"/>
                     <TextBlock x:Name="ExchangeRateHint" Text="1 JOD = 1.4104372 USD (Fixed)" 
                              FontSize="12" Foreground="Gray" Margin="0,0,0,15"/>
                     
                     <!-- Form Buttons -->
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,20,0,0">
                         <Button x:Name="SaveBtn" Content="💾 Save" 
-                              Background="#27ae60" Foreground="White" BorderThickness="0" 
-                              Padding="15,10" Margin="0,0,10,0" FontWeight="SemiBold"
+                              Style="{StaticResource FluentSuccessButtonStyle}"
+                              Margin="0,0,10,0"
                               Click="Save_Click"/>
                         
                         <Button x:Name="CancelBtn" Content="❌ Cancel" 
-                              Background="#6c757d" Foreground="White" BorderThickness="0" 
-                              Padding="15,10" FontWeight="SemiBold"
+                              Style="{StaticResource FluentSecondaryButtonStyle}"
                               Click="Cancel_Click"/>
                     </StackPanel>
                     

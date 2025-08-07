@@ -21,25 +21,25 @@
               CornerRadius="6" Padding="15" Margin="0,0,0,20">
             <StackPanel Orientation="Horizontal">
                 <Button x:Name="AddVesselBtn" Content="➕ Add New Vessel" 
-                      Background="#27ae60" Foreground="White" BorderThickness="0" 
-                      Padding="15,10" Margin="0,0,15,0" FontWeight="SemiBold"
+                      Style="{StaticResource FluentSuccessButtonStyle}"
+                      Padding="15,10" Margin="0,0,15,0"
                       Click="AddVessel_Click"/>
 
                 <Button x:Name="EditVesselBtn" Content="✏️ Edit Selected" 
-                      Background="#f39c12" Foreground="White" BorderThickness="0" 
-                      Padding="15,10" Margin="0,0,15,0" FontWeight="SemiBold"
+                      Style="{StaticResource FluentWarningButtonStyle}"
+                      Padding="15,10" Margin="0,0,15,0"
                       IsEnabled="False" Click="EditVessel_Click"/>
 
                 <Button x:Name="DeleteVesselBtn" Content="🗑️ Delete Selected" 
-                      Background="#e74c3c" Foreground="White" BorderThickness="0" 
-                      Padding="15,10" Margin="0,0,15,0" FontWeight="SemiBold"
+                      Style="{StaticResource FluentDangerButtonStyle}"
+                      Padding="15,10" Margin="0,0,15,0"
                       IsEnabled="False" Click="DeleteVessel_Click"/>
 
-                <Rectangle Width="1" Fill="#dee2e6" Margin="15,0"/>
+                <Rectangle Width="1" Fill="{DynamicResource BorderSubtleBrush}" Margin="15,0"/>
 
                 <Button x:Name="RefreshBtn" Content="🔄 Refresh" 
-                      Background="#6c757d" Foreground="White" BorderThickness="0" 
-                      Padding="15,10" FontWeight="SemiBold"
+                      Style="{StaticResource FluentSecondaryButtonStyle}"
+                      Padding="15,10"
                       Click="Refresh_Click"/>
             </StackPanel>
         </Border>
@@ -74,7 +74,13 @@
                             BorderThickness="0"
                             SelectionMode="Single"
                             SelectionChanged="VesselsGrid_SelectionChanged"
-                            PreviewMouseWheel="DataGrid_PreviewMouseWheel">
+                            PreviewMouseWheel="DataGrid_PreviewMouseWheel"
+                            VirtualizingPanel.VirtualizationMode="Recycling"
+                            VirtualizingPanel.IsVirtualizing="True"
+                            ScrollViewer.CanContentScroll="True"
+                            Background="{DynamicResource CardBackgroundBrush}"
+                            Foreground="{DynamicResource TextPrimaryBrush}"
+                            AlternatingRowBackground="{DynamicResource AlternatingRowBackgroundBrush}">
 
                         <DataGrid.Columns>
                             <DataGridTextColumn Header="ID" Binding="{Binding Id}" Width="50" IsReadOnly="True"/>
@@ -105,14 +111,14 @@
                                 <TextBlock Text="Vessels" FontWeight="SemiBold" HorizontalAlignment="Center" FontSize="12"/>
                                 <TextBlock x:Name="VesselsCountText" Text="0" FontSize="20" FontWeight="Bold" 
                                          HorizontalAlignment="Center" Foreground="{DynamicResource PrimaryBrandBrush}"/>
-                                <TextBlock Text="(Aqaba-Nuweibaa)" FontSize="10" HorizontalAlignment="Center" Foreground="Gray"/>
+                                <TextBlock Text="(Aqaba-Nuweibaa)" FontSize="10" HorizontalAlignment="Center" Foreground="{DynamicResource TextTertiaryBrush}"/>
                             </StackPanel>
 
                             <StackPanel Grid.Column="2" HorizontalAlignment="Center">
                                 <TextBlock Text="Boats" FontWeight="SemiBold" HorizontalAlignment="Center" FontSize="12"/>
                                 <TextBlock x:Name="BoatsCountText" Text="0" FontSize="20" FontWeight="Bold" 
                                          HorizontalAlignment="Center" Foreground="{DynamicResource PrimaryBrandBrush}"/>
-                                <TextBlock Text="(Aqaba-Taba)" FontSize="10" HorizontalAlignment="Center" Foreground="Gray"/>
+                                <TextBlock Text="(Aqaba-Taba)" FontSize="10" HorizontalAlignment="Center" Foreground="{DynamicResource TextTertiaryBrush}"/>
                             </StackPanel>
                         </Grid>
                     </Border>
@@ -132,13 +138,15 @@
 
                     <!-- Vessel Name -->
                     <TextBlock Text="Vessel Name *" FontWeight="SemiBold" Margin="0,0,0,5"/>
-                    <TextBox x:Name="VesselNameTextBox" Padding="10" BorderBrush="#ced4da" 
-                           BorderThickness="1" Margin="0,0,0,15"/>
+                    <TextBox x:Name="VesselNameTextBox" 
+                           Style="{StaticResource FluentTextBoxStyle}"
+                           Margin="0,0,0,15"/>
 
                     <!-- Vessel Type -->
                     <TextBlock Text="Vessel Type *" FontWeight="SemiBold" Margin="0,0,0,5"/>
-                    <ComboBox x:Name="VesselTypeComboBox" Padding="10" BorderBrush="#ced4da" 
-                            BorderThickness="1" Margin="0,0,0,15"
+                    <ComboBox x:Name="VesselTypeComboBox" 
+                            Style="{StaticResource FluentComboBoxStyle}"
+                            Margin="0,0,0,15"
                             SelectionChanged="VesselTypeComboBox_SelectionChanged">
                         <ComboBoxItem Content="Vessel" Tag="Vessel"/>
                         <ComboBoxItem Content="Boat" Tag="Boat"/>
@@ -149,19 +157,19 @@
                     <Border Background="{DynamicResource SubtleBackgroundBrush}" BorderBrush="{DynamicResource BorderSubtleBrush}" BorderThickness="1" 
                             Margin="0,0,0,15" CornerRadius="3">
                         <TextBlock x:Name="RouteDisplayText" Text="Select vessel type to see route" 
-                                 Padding="10" FontStyle="Italic" Foreground="Gray"/>
+                                 Padding="10" FontStyle="Italic" Foreground="{DynamicResource TextTertiaryBrush}"/>
                     </Border>
 
                     <!-- Form Buttons -->
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,20,0,0">
                         <Button x:Name="SaveBtn" Content="💾 Save" 
-                              Background="#27ae60" Foreground="White" BorderThickness="0" 
-                              Padding="15,10" Margin="0,0,10,0" FontWeight="SemiBold"
+                              Style="{StaticResource FluentSuccessButtonStyle}"
+                              Padding="15,10" Margin="0,0,10,0"
                               Click="Save_Click"/>
 
                         <Button x:Name="CancelBtn" Content="❌ Cancel" 
-                              Background="#6c757d" Foreground="White" BorderThickness="0" 
-                              Padding="15,10" FontWeight="SemiBold"
+                              Style="{StaticResource FluentSecondaryButtonStyle}"
+                              Padding="15,10"
                               Click="Cancel_Click"/>
                     </StackPanel>
 
@@ -170,11 +178,11 @@
                           CornerRadius="4" Padding="15" Margin="0,30,0,0">
                         <StackPanel>
                             <TextBlock Text="📍 Route Information" FontWeight="SemiBold" 
-                                     Foreground="#856404" Margin="0,0,0,10"/>
+                                     Foreground="{DynamicResource WarningForegroundBrush}" Margin="0,0,0,10"/>
                             <TextBlock Text="• Vessel: Aqaba → Nuweibaa → Aqaba" FontSize="12" Margin="0,0,0,3"/>
                             <TextBlock Text="• Boat: Aqaba → Taba → Aqaba" FontSize="12" Margin="0,0,0,3"/>
                             <TextBlock Text="• Route is automatically assigned based on vessel type" 
-                                     FontSize="11" FontStyle="Italic" Foreground="Gray" Margin="0,5,0,0"/>
+                                     FontSize="11" FontStyle="Italic" Foreground="{DynamicResource TextTertiaryBrush}" Margin="0,5,0,0"/>
                         </StackPanel>
                     </Border>
                 </StackPanel>

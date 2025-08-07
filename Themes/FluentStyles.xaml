@@ -16,20 +16,20 @@
                 <Trigger.EnterActions>
                     <BeginStoryboard>
                         <Storyboard>
+                            <ColorAnimation Storyboard.TargetProperty="(Border.BorderBrush).(SolidColorBrush.Color)"
+                                          To="{DynamicResource BorderStrong}" Duration="0:0:0.15"/>
                             <DoubleAnimation Storyboard.TargetProperty="Effect.ShadowDepth" 
                                            To="4" Duration="0:0:0.15"/>
-                            <ColorAnimation Storyboard.TargetProperty="BorderBrush.Color" 
-                                          To="#D2D0CE" Duration="0:0:0.15"/>
                         </Storyboard>
                     </BeginStoryboard>
                 </Trigger.EnterActions>
                 <Trigger.ExitActions>
                     <BeginStoryboard>
                         <Storyboard>
+                            <ColorAnimation Storyboard.TargetProperty="(Border.BorderBrush).(SolidColorBrush.Color)"
+                                          To="{DynamicResource BorderSubtle}" Duration="0:0:0.15"/>
                             <DoubleAnimation Storyboard.TargetProperty="Effect.ShadowDepth" 
                                            To="2" Duration="0:0:0.15"/>
-                            <ColorAnimation Storyboard.TargetProperty="BorderBrush.Color" 
-                                          To="#E1DFDD" Duration="0:0:0.15"/>
                         </Storyboard>
                     </BeginStoryboard>
                 </Trigger.ExitActions>
@@ -408,6 +408,179 @@
         </Style.Resources>
     </Style>
     
+    <!-- Semantic Button Styles -->
+    <Style x:Key="FluentSuccessButtonStyle" TargetType="Button" BasedOn="{StaticResource FluentButtonStyle}">
+        <Setter Property="Background" Value="{DynamicResource SuccessForegroundBrush}"/>
+        <Setter Property="Foreground" Value="{DynamicResource TextOnAccentBrush}"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border x:Name="BorderElement"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            CornerRadius="4"
+                            Effect="{DynamicResource SubtleShadowEffect}"
+                            UseLayoutRounding="True"
+                            RenderOptions.ClearTypeHint="Enabled">
+                        <ContentPresenter x:Name="ContentPresenter"
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center"
+                                        Margin="{TemplateBinding Padding}"
+                                        UseLayoutRounding="True"
+                                        TextOptions.TextFormattingMode="Display"
+                                        TextOptions.TextRenderingMode="Auto"/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="BorderElement" Property="Opacity" Value="0.85"/>
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter TargetName="BorderElement" Property="Opacity" Value="0.7"/>
+                            <Setter TargetName="BorderElement" Property="RenderTransform">
+                                <Setter.Value>
+                                    <ScaleTransform ScaleX="0.98" ScaleY="0.98"/>
+                                </Setter.Value>
+                            </Setter>
+                        </Trigger>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter TargetName="BorderElement" Property="Background" Value="{DynamicResource PrimaryBrandDisabledBrush}"/>
+                            <Setter Property="Foreground" Value="{DynamicResource TextDisabledBrush}"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    
+    <Style x:Key="FluentWarningButtonStyle" TargetType="Button" BasedOn="{StaticResource FluentButtonStyle}">
+        <Setter Property="Background" Value="{DynamicResource WarningForegroundBrush}"/>
+        <Setter Property="Foreground" Value="{DynamicResource TextOnAccentBrush}"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border x:Name="BorderElement"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            CornerRadius="4"
+                            Effect="{DynamicResource SubtleShadowEffect}"
+                            UseLayoutRounding="True"
+                            RenderOptions.ClearTypeHint="Enabled">
+                        <ContentPresenter x:Name="ContentPresenter"
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center"
+                                        Margin="{TemplateBinding Padding}"
+                                        UseLayoutRounding="True"
+                                        TextOptions.TextFormattingMode="Display"
+                                        TextOptions.TextRenderingMode="Auto"/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="BorderElement" Property="Opacity" Value="0.85"/>
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter TargetName="BorderElement" Property="Opacity" Value="0.7"/>
+                            <Setter TargetName="BorderElement" Property="RenderTransform">
+                                <Setter.Value>
+                                    <ScaleTransform ScaleX="0.98" ScaleY="0.98"/>
+                                </Setter.Value>
+                            </Setter>
+                        </Trigger>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter TargetName="BorderElement" Property="Background" Value="{DynamicResource PrimaryBrandDisabledBrush}"/>
+                            <Setter Property="Foreground" Value="{DynamicResource TextDisabledBrush}"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    
+    <Style x:Key="FluentDangerButtonStyle" TargetType="Button" BasedOn="{StaticResource FluentButtonStyle}">
+        <Setter Property="Background" Value="{DynamicResource ErrorForegroundBrush}"/>
+        <Setter Property="Foreground" Value="{DynamicResource TextOnAccentBrush}"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border x:Name="BorderElement"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            CornerRadius="4"
+                            Effect="{DynamicResource SubtleShadowEffect}"
+                            UseLayoutRounding="True"
+                            RenderOptions.ClearTypeHint="Enabled">
+                        <ContentPresenter x:Name="ContentPresenter"
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center"
+                                        Margin="{TemplateBinding Padding}"
+                                        UseLayoutRounding="True"
+                                        TextOptions.TextFormattingMode="Display"
+                                        TextOptions.TextRenderingMode="Auto"/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="BorderElement" Property="Opacity" Value="0.85"/>
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter TargetName="BorderElement" Property="Opacity" Value="0.7"/>
+                            <Setter TargetName="BorderElement" Property="RenderTransform">
+                                <Setter.Value>
+                                    <ScaleTransform ScaleX="0.98" ScaleY="0.98"/>
+                                </Setter.Value>
+                            </Setter>
+                        </Trigger>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter TargetName="BorderElement" Property="Background" Value="{DynamicResource PrimaryBrandDisabledBrush}"/>
+                            <Setter Property="Foreground" Value="{DynamicResource TextDisabledBrush}"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    
+    <Style x:Key="FluentNeutralButtonStyle" TargetType="Button" BasedOn="{StaticResource FluentButtonStyle}">
+        <Setter Property="Background" Value="{DynamicResource TextSecondaryBrush}"/>
+        <Setter Property="Foreground" Value="{DynamicResource TextOnAccentBrush}"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border x:Name="BorderElement"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            CornerRadius="4"
+                            Effect="{DynamicResource SubtleShadowEffect}"
+                            UseLayoutRounding="True"
+                            RenderOptions.ClearTypeHint="Enabled">
+                        <ContentPresenter x:Name="ContentPresenter"
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center"
+                                        Margin="{TemplateBinding Padding}"
+                                        UseLayoutRounding="True"
+                                        TextOptions.TextFormattingMode="Display"/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="BorderElement" Property="Background" Value="{DynamicResource SubtleBackgroundBrush}"/>
+                            <Setter Property="Foreground" Value="{DynamicResource TextPrimaryBrush}"/>
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter TargetName="BorderElement" Property="Background" Value="{DynamicResource BorderSubtleBrush}"/>
+                            <Setter Property="Foreground" Value="{DynamicResource TextPrimaryBrush}"/>
+                        </Trigger>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter TargetName="BorderElement" Property="Background" Value="{DynamicResource PrimaryBrandDisabledBrush}"/>
+                            <Setter Property="Foreground" Value="{DynamicResource TextDisabledBrush}"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
     <!-- Modern DatePicker Style -->
     <Style x:Key="FluentDatePickerStyle" TargetType="DatePicker">
         <Setter Property="FontFamily" Value="{StaticResource PrimaryFontFamily}"/>
@@ -568,6 +741,31 @@
                 <Setter Property="FontFamily" Value="{StaticResource PrimaryFontFamily}"/>
             </Style>
         </Style.Resources>
+    </Style>
+
+    <!-- Info Button Style -->
+    <Style x:Key="FluentInfoButtonStyle" TargetType="Button" BasedOn="{StaticResource FluentButtonStyle}">
+        <Setter Property="Background" Value="{DynamicResource PrimaryBrandBrush}"/>
+        <Setter Property="Foreground" Value="{DynamicResource TextOnAccentBrush}"/>
+        
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Background" Value="{DynamicResource AccentBackgroundBrush}"/>
+                <Setter Property="RenderTransform">
+                    <Setter.Value>
+                        <ScaleTransform ScaleX="1.02" ScaleY="1.02"/>
+                    </Setter.Value>
+                </Setter>
+            </Trigger>
+            <Trigger Property="IsPressed" Value="True">
+                <Setter Property="Background" Value="{DynamicResource InfoBackgroundBrush}"/>
+                <Setter Property="RenderTransform">
+                    <Setter.Value>
+                        <ScaleTransform ScaleX="0.98" ScaleY="0.98"/>
+                    </Setter.Value>
+                </Setter>
+            </Trigger>
+        </Style.Triggers>
     </Style>
 
 </ResourceDictionary>

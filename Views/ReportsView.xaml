@@ -45,19 +45,19 @@
                                         <ComboBox x:Name="MonthComboBox" MinWidth="120" Padding="10,8" 
                                                 SelectionChanged="MonthComboBox_SelectionChanged"/>
                                         <Button x:Name="GenerateBtn" Content="📊 Generate Report" 
-                                              Background="#007bff" Foreground="White" BorderThickness="0" 
-                                              Padding="15,10" Margin="15,0,0,0" FontWeight="SemiBold"
+                                              Style="{StaticResource FluentButtonStyle}" 
+                                              Padding="15,10" Margin="15,0,0,0"
                                               Click="Generate_Click"/>
                                     </StackPanel>
 
                                     <StackPanel Grid.Column="1" Orientation="Horizontal">
                                         <Button x:Name="ExportBtn" Content="📤 Export to Excel" 
-                                              Background="#28a745" Foreground="White" BorderThickness="0" 
-                                              Padding="15,10" Margin="0,0,10,0" FontWeight="SemiBold"
+                                              Style="{StaticResource FluentSuccessButtonStyle}" 
+                                              Padding="15,10" Margin="0,0,10,0"
                                               Click="Export_Click"/>
                                         <Button x:Name="PrintBtn" Content="🖨️ Print Report" 
-                                              Background="#6c757d" Foreground="White" BorderThickness="0" 
-                                              Padding="15,10" FontWeight="SemiBold"
+                                              Style="{StaticResource FluentNeutralButtonStyle}" 
+                                              Padding="15,10"
                                               Click="Print_Click"/>
                                     </StackPanel>
                                 </Grid>
@@ -78,43 +78,43 @@
                                                     <ColumnDefinition Width="*"/>
                                                 </Grid.ColumnDefinitions>
 
-                                                <Border Grid.Column="0" Background="#007bff" CornerRadius="8" Margin="0,0,15,0" Padding="20">
+                                                <Border Grid.Column="0" Background="{DynamicResource PrimaryBrandBrush}" CornerRadius="8" Margin="0,0,15,0" Padding="20">
                                                     <StackPanel>
-                                                        <TextBlock Text="⛽" FontSize="24" HorizontalAlignment="Center" Foreground="White"/>
+                                                        <TextBlock Text="⛽" FontSize="24" HorizontalAlignment="Center" Foreground="{DynamicResource TextOnAccentBrush}"/>
                                                         <TextBlock x:Name="TotalConsumptionText" Text="0 L" FontSize="18" FontWeight="Bold" 
-                                                                 HorizontalAlignment="Center" Foreground="White" Margin="0,5,0,3"/>
+                                                                 HorizontalAlignment="Center" Foreground="{DynamicResource TextOnAccentBrush}" Margin="0,5,0,3"/>
                                                         <TextBlock Text="Total Consumption" FontSize="11" HorizontalAlignment="Center" 
-                                                                 Foreground="LightBlue"/>
+                                                                 Foreground="{DynamicResource TextOnAccentBrush}"/>
                                                     </StackPanel>
                                                 </Border>
 
-                                                <Border Grid.Column="1" Background="#28a745" CornerRadius="8" Margin="0,0,15,0" Padding="20">
+                                                <Border Grid.Column="1" Background="{DynamicResource SuccessForegroundBrush}" CornerRadius="8" Margin="0,0,15,0" Padding="20">
                                                     <StackPanel>
-                                                        <TextBlock Text="🗺️" FontSize="24" HorizontalAlignment="Center" Foreground="White"/>
+                                                        <TextBlock Text="🗺️" FontSize="24" HorizontalAlignment="Center" Foreground="{DynamicResource TextOnAccentBrush}"/>
                                                         <TextBlock x:Name="TotalLegsText" Text="0" FontSize="18" FontWeight="Bold" 
-                                                                 HorizontalAlignment="Center" Foreground="White" Margin="0,5,0,3"/>
+                                                                 HorizontalAlignment="Center" Foreground="{DynamicResource TextOnAccentBrush}" Margin="0,5,0,3"/>
                                                         <TextBlock Text="Legs Completed" FontSize="11" HorizontalAlignment="Center" 
-                                                                 Foreground="LightGreen"/>
+                                                                 Foreground="{DynamicResource TextOnAccentBrush}"/>
                                                     </StackPanel>
                                                 </Border>
 
-                                                <Border Grid.Column="2" Background="#dc3545" CornerRadius="8" Margin="0,0,15,0" Padding="20">
+                                                <Border Grid.Column="2" Background="{DynamicResource ErrorForegroundBrush}" CornerRadius="8" Margin="0,0,15,0" Padding="20">
                                                     <StackPanel>
-                                                        <TextBlock Text="💰" FontSize="24" HorizontalAlignment="Center" Foreground="White"/>
+                                                        <TextBlock Text="💰" FontSize="24" HorizontalAlignment="Center" Foreground="{DynamicResource TextOnAccentBrush}"/>
                                                         <TextBlock x:Name="TotalCostText" Text="$0" FontSize="18" FontWeight="Bold" 
-                                                                 HorizontalAlignment="Center" Foreground="White" Margin="0,5,0,3"/>
+                                                                 HorizontalAlignment="Center" Foreground="{DynamicResource TextOnAccentBrush}" Margin="0,5,0,3"/>
                                                         <TextBlock Text="Operating Cost" FontSize="11" HorizontalAlignment="Center" 
-                                                                 Foreground="LightPink"/>
+                                                                 Foreground="{DynamicResource TextOnAccentBrush}"/>
                                                     </StackPanel>
                                                 </Border>
 
-                                                <Border Grid.Column="3" Background="#ffc107" CornerRadius="8" Padding="20">
+                                                <Border Grid.Column="3" Background="{DynamicResource WarningForegroundBrush}" CornerRadius="8" Padding="20">
                                                     <StackPanel>
-                                                        <TextBlock Text="📈" FontSize="24" HorizontalAlignment="Center" Foreground="White"/>
+                                                        <TextBlock Text="📈" FontSize="24" HorizontalAlignment="Center" Foreground="{DynamicResource TextOnAccentBrush}"/>
                                                         <TextBlock x:Name="EfficiencyText" Text="0 L/leg" FontSize="18" FontWeight="Bold" 
-                                                                 HorizontalAlignment="Center" Foreground="White" Margin="0,5,0,3"/>
+                                                                 HorizontalAlignment="Center" Foreground="{DynamicResource TextOnAccentBrush}" Margin="0,5,0,3"/>
                                                         <TextBlock Text="Fleet Efficiency" FontSize="11" HorizontalAlignment="Center" 
-                                                                 Foreground="#856404"/>
+                                                                 Foreground="{DynamicResource TextOnAccentBrush}"/>
                                                     </StackPanel>
                                                 </Border>
                                             </Grid>
@@ -163,7 +163,9 @@
                                                 GridLinesVisibility="Horizontal"
                                                 HeadersVisibility="Column"
                                                 BorderThickness="1"
-                                                BorderBrush="#dee2e6"
+                                                BorderBrush="{DynamicResource BorderSubtleBrush}"
+                                                EnableRowVirtualization="True"
+                                                EnableColumnVirtualization="True"
                                                 PreviewMouseWheel="DataGrid_PreviewMouseWheel">
 
                                             <DataGrid.Columns>
@@ -197,7 +199,9 @@
                                                 GridLinesVisibility="Horizontal"
                                                 HeadersVisibility="Column"
                                                 BorderThickness="1"
-                                                BorderBrush="#dee2e6"
+                                                BorderBrush="{DynamicResource BorderSubtleBrush}"
+                                                EnableRowVirtualization="True"
+                                                EnableColumnVirtualization="True"
                                                 PreviewMouseWheel="DataGrid_PreviewMouseWheel">
 
                                             <DataGrid.Columns>
@@ -243,7 +247,9 @@
                                                 GridLinesVisibility="Horizontal"
                                                 HeadersVisibility="Column"
                                                 BorderThickness="1"
-                                                BorderBrush="#dee2e6"
+                                                BorderBrush="{DynamicResource BorderSubtleBrush}"
+                                                EnableRowVirtualization="True"
+                                                EnableColumnVirtualization="True"
                                                 PreviewMouseWheel="DataGrid_PreviewMouseWheel">
 
                                             <DataGrid.Columns>
@@ -305,6 +311,8 @@
                                                             GridLinesVisibility="Horizontal"
                                                             HeadersVisibility="Column"
                                                                         BorderThickness="0"
+                                                            EnableRowVirtualization="True"
+                                                            EnableColumnVirtualization="True"
                                                             PreviewMouseWheel="DataGrid_PreviewMouseWheel">
 
                                                         <DataGrid.Columns>
@@ -331,6 +339,8 @@
                                                             GridLinesVisibility="Horizontal"
                                                             HeadersVisibility="Column"
                                                                         BorderThickness="0"
+                                                            EnableRowVirtualization="True"
+                                                            EnableColumnVirtualization="True"
                                                             PreviewMouseWheel="DataGrid_PreviewMouseWheel">
 
                                                         <DataGrid.Columns>
@@ -388,19 +398,19 @@
                                               BorderThickness="1" Margin="0,0,15,0"/>
 
                                     <Button x:Name="GenerateVesselAccountBtn" Content="📊 Generate Statement" 
-                                          Background="#007bff" Foreground="White" BorderThickness="0" 
-                                          Padding="15,10" FontWeight="SemiBold"
+                                          Style="{StaticResource FluentButtonStyle}" 
+                                          Padding="15,10"
                                           Click="GenerateVesselAccount_Click"/>
                                 </StackPanel>
 
                                 <StackPanel Grid.Column="1" Orientation="Horizontal">
                                     <Button x:Name="ExportVesselBtn" Content="📤 Export" 
-                                          Background="#28a745" Foreground="White" BorderThickness="0" 
-                                          Padding="15,10" FontWeight="SemiBold"
+                                          Style="{StaticResource FluentSuccessButtonStyle}" 
+                                          Padding="15,10"
                                           Click="ExportVessel_Click"/>
                                     <Button Content="🖨️ Print Report" 
-                                          Background="#6c757d" Foreground="White" BorderThickness="0" 
-                                          Padding="15,8" Margin="10,0,0,0" FontWeight="SemiBold"
+                                          Style="{StaticResource FluentNeutralButtonStyle}" 
+                                          Padding="15,8" Margin="10,0,0,0"
                                           Click="PrintVesselAccount_Click"/>
                                 </StackPanel>
                             </Grid>
@@ -465,10 +475,11 @@
                                         HeadersVisibility="Column"
                                         BorderThickness="0"
                                         MaxHeight="400"
+                                        EnableRowVirtualization="True"
+                                        EnableColumnVirtualization="True"
                                         ScrollViewer.VerticalScrollBarVisibility="Auto"
                                         ScrollViewer.HorizontalScrollBarVisibility="Auto"
                                         ScrollViewer.CanContentScroll="True"
-                                        EnableRowVirtualization="True"
                                         PreviewMouseWheel="DataGrid_PreviewMouseWheel">
 
                                         <DataGrid.Columns>
@@ -486,7 +497,7 @@
 
                                 <!-- Vessel Account Totals -->
                                 <Grid Margin="0,15,0,0" Background="{DynamicResource SubtleBackgroundBrush}">
-                                    <Border BorderBrush="#dee2e6" BorderThickness="1" CornerRadius="4" 
+                                    <Border BorderBrush="{DynamicResource BorderSubtleBrush}" BorderThickness="1" CornerRadius="4" 
                                             Background="{DynamicResource SubtleBackgroundBrush}" Margin="1,0,0,0">
                                         <Grid Margin="6,15,0,15">
                                             <Grid.ColumnDefinitions>
@@ -569,19 +580,19 @@
                                               BorderThickness="1" Margin="0,0,15,0"/>
 
                                     <Button x:Name="GenerateSupplierAccountBtn" Content="📊 Generate Report" 
-                                          Background="#007bff" Foreground="White" BorderThickness="0" 
-                                          Padding="15,10" FontWeight="SemiBold"
+                                          Style="{StaticResource FluentButtonStyle}" 
+                                          Padding="15,10"
                                           Click="GenerateSupplierAccount_Click"/>
                                 </StackPanel>
 
                                 <StackPanel Grid.Column="1" Orientation="Horizontal">
                                     <Button x:Name="ExportSupplierBtn" Content="📤 Export" 
-                                          Background="#28a745" Foreground="White" BorderThickness="0" 
-                                          Padding="15,10" Margin="0,0,10,0" FontWeight="SemiBold"
+                                          Style="{StaticResource FluentSuccessButtonStyle}" 
+                                          Padding="15,10" Margin="0,0,10,0"
                                           Click="ExportSupplier_Click"/>
                                     <Button x:Name="PrintSupplierBtn" Content="🖨️ Print Report" 
-                                          Background="#6c757d" Foreground="White" BorderThickness="0" 
-                                          Padding="15,10" FontWeight="SemiBold"
+                                          Style="{StaticResource FluentNeutralButtonStyle}" 
+                                          Padding="15,10"
                                           Click="PrintVesselAccount_Click"/>
                                 </StackPanel>
                             </Grid>
@@ -602,31 +613,31 @@
                                 <StackPanel Grid.Column="0" HorizontalAlignment="Center">
                                     <TextBlock Text="🏢 Supplier" FontWeight="SemiBold" HorizontalAlignment="Center" FontSize="12"/>
                                     <TextBlock x:Name="SupplierNameText" Text="Not Selected" FontSize="16" FontWeight="Bold" 
-                                             HorizontalAlignment="Center" Foreground="#856404"/>
+                                             HorizontalAlignment="Center" Foreground="{DynamicResource TextSecondaryBrush}"/>
                                 </StackPanel>
 
                                 <StackPanel Grid.Column="1" HorizontalAlignment="Center">
                                     <TextBlock Text="📦 Beginning Balance" FontWeight="SemiBold" HorizontalAlignment="Center" FontSize="12"/>
                                     <TextBlock x:Name="SupplierBeginningBalanceText" Text="0.000 L" FontSize="16" FontWeight="Bold" 
-                                             HorizontalAlignment="Center" Foreground="#856404"/>
+                                             HorizontalAlignment="Center" Foreground="{DynamicResource TextSecondaryBrush}"/>
                                 </StackPanel>
 
                                 <StackPanel Grid.Column="2" HorizontalAlignment="Center">
                                     <TextBlock Text="⛽ Period Purchases" FontWeight="SemiBold" HorizontalAlignment="Center" FontSize="12"/>
                                     <TextBlock x:Name="SupplierPeriodPurchasesText" Text="0.000 L" FontSize="16" FontWeight="Bold" 
-                                             HorizontalAlignment="Center" Foreground="#856404"/>
+                                             HorizontalAlignment="Center" Foreground="{DynamicResource TextSecondaryBrush}"/>
                                 </StackPanel>
 
                                 <StackPanel Grid.Column="3" HorizontalAlignment="Center">
                                     <TextBlock Text="🔥 Period Consumption" FontWeight="SemiBold" HorizontalAlignment="Center" FontSize="12"/>
                                     <TextBlock x:Name="SupplierPeriodConsumptionText" Text="0.000 L" FontSize="16" FontWeight="Bold" 
-                                             HorizontalAlignment="Center" Foreground="#856404"/>
+                                             HorizontalAlignment="Center" Foreground="{DynamicResource TextSecondaryBrush}"/>
                                 </StackPanel>
 
                                 <StackPanel Grid.Column="4" HorizontalAlignment="Center">
                                     <TextBlock Text="📊 Ending Balance" FontWeight="SemiBold" HorizontalAlignment="Center" FontSize="12"/>
                                     <TextBlock x:Name="SupplierEndingBalanceText" Text="0.000 L" FontSize="16" FontWeight="Bold" 
-                                             HorizontalAlignment="Center" Foreground="#856404"/>
+                                             HorizontalAlignment="Center" Foreground="{DynamicResource TextSecondaryBrush}"/>
                                 </StackPanel>
                             </Grid>
                         </Border>
@@ -695,17 +706,17 @@
                                             <TextBlock Grid.Column="1" Text="" FontWeight="Bold"/>
                                             <TextBlock Grid.Column="2" Text="" FontWeight="Bold"/>
                                             <TextBlock Grid.Column="3" Text="TOTALS:" FontWeight="Bold" 
-                                                    HorizontalAlignment="Right" Foreground="#856404"/>
+                                                    HorizontalAlignment="Right" Foreground="{DynamicResource TextSecondaryBrush}"/>
                                             <TextBlock Grid.Column="4" x:Name="SupplierTotalPurchasesText" Text="0.000" 
-                                                    FontWeight="Bold" HorizontalAlignment="Center" Foreground="#856404"/>
+                                                    FontWeight="Bold" HorizontalAlignment="Center" Foreground="{DynamicResource TextSecondaryBrush}"/>
                                             <TextBlock Grid.Column="5" x:Name="SupplierTotalConsumptionText" Text="0.000" 
-                                                    FontWeight="Bold" HorizontalAlignment="Center" Foreground="#856404"/>
+                                                    FontWeight="Bold" HorizontalAlignment="Center" Foreground="{DynamicResource TextSecondaryBrush}"/>
                                             <TextBlock Grid.Column="6" x:Name="SupplierAccountTotalValueText" Text="0.000 USD" 
-                                                    FontWeight="Bold" HorizontalAlignment="Center" Foreground="#856404"/>
+                                                    FontWeight="Bold" HorizontalAlignment="Center" Foreground="{DynamicResource TextSecondaryBrush}"/>
                                             <TextBlock Grid.Column="7" x:Name="SupplierAccountTotalUSDText" Text="$0.00" 
-                                                    FontWeight="Bold" HorizontalAlignment="Center" Foreground="#856404"/>
+                                                    FontWeight="Bold" HorizontalAlignment="Center" Foreground="{DynamicResource TextSecondaryBrush}"/>
                                             <TextBlock Grid.Column="8" x:Name="SupplierNetBalanceText" Text="0.000" 
-                                                    FontWeight="Bold" HorizontalAlignment="Center" Foreground="#856404"/>
+                                                    FontWeight="Bold" HorizontalAlignment="Center" Foreground="{DynamicResource TextSecondaryBrush}"/>
                                         </Grid>
                                     </Border>
                                 </Grid>
@@ -739,23 +750,23 @@
 
                                 <StackPanel Grid.Column="0" Orientation="Horizontal">
                                     <Button x:Name="GeneratePaymentReportBtn" Content="📊 Generate Payment Report" 
-                                        Background="#007bff" Foreground="White" BorderThickness="0" 
-                                        Padding="15,10" FontWeight="SemiBold"
+                                        Style="{StaticResource FluentButtonStyle}" 
+                                        Padding="15,10"
                                         Click="GeneratePaymentReport_Click"/>
 
                                     <TextBlock Text="Real-time payment status and aging analysis" 
                                             VerticalAlignment="Center" Margin="20,0,0,0" 
-                                            FontStyle="Italic" Foreground="Gray"/>
+                                            FontStyle="Italic" Foreground="{DynamicResource TextSecondaryBrush}"/>
                                 </StackPanel>
 
                                 <StackPanel Grid.Column="1" Orientation="Horizontal">
                                     <Button x:Name="ExportPaymentBtn" Content="📤 Export" 
-                                        Background="#28a745" Foreground="White" BorderThickness="0" 
-                                        Padding="15,10" Margin="0,0,10,0" FontWeight="SemiBold"
+                                        Style="{StaticResource FluentSuccessButtonStyle}" 
+                                        Padding="15,10" Margin="0,0,10,0"
                                         Click="ExportPayment_Click"/>
                                     <Button x:Name="PrintPaymentBtn" Content="🖨️ Print Report" 
-                                        Background="#6c757d" Foreground="White" BorderThickness="0" 
-                                        Padding="15,10" FontWeight="SemiBold"
+                                        Style="{StaticResource FluentNeutralButtonStyle}" 
+                                        Padding="15,10"
                                         Click="PrintVesselAccount_Click"/>
                                 </StackPanel>
                             </Grid>
@@ -774,43 +785,43 @@
                                 </Grid.ColumnDefinitions>
 
                                 <StackPanel Grid.Column="0" HorizontalAlignment="Center">
-                                    <TextBlock Text="▲ Overdue" FontWeight="SemiBold" HorizontalAlignment="Center" FontSize="12" Foreground="#dc3545"/>
+                                    <TextBlock Text="▲ Overdue" FontWeight="SemiBold" HorizontalAlignment="Center" FontSize="12" Foreground="{DynamicResource ErrorForegroundBrush}"/>
                                     <TextBlock x:Name="OverdueAmountText" Text="$0.00" FontSize="16" FontWeight="Bold" 
-                                            HorizontalAlignment="Center" Foreground="#dc3545"/>
+                                            HorizontalAlignment="Center" Foreground="{DynamicResource ErrorForegroundBrush}"/>
                                     <TextBlock x:Name="OverdueCountText" Text="0 invoices" FontSize="10" 
-                                            HorizontalAlignment="Center" Foreground="#dc3545"/>
+                                            HorizontalAlignment="Center" Foreground="{DynamicResource ErrorForegroundBrush}"/>
                                 </StackPanel>
 
                                 <StackPanel Grid.Column="1" HorizontalAlignment="Center">
-                                    <TextBlock Text="⚠ Due Today" FontWeight="SemiBold" HorizontalAlignment="Center" FontSize="12" Foreground="#fd7e14"/>
+                                    <TextBlock Text="⚠ Due Today" FontWeight="SemiBold" HorizontalAlignment="Center" FontSize="12" Foreground="{DynamicResource WarningForegroundBrush}"/>
                                     <TextBlock x:Name="DueTodayAmountText" Text="$0.00" FontSize="16" FontWeight="Bold" 
-                                            HorizontalAlignment="Center" Foreground="#fd7e14"/>
+                                            HorizontalAlignment="Center" Foreground="{DynamicResource WarningForegroundBrush}"/>
                                     <TextBlock x:Name="DueTodayCountText" Text="0 invoices" FontSize="10" 
-                                            HorizontalAlignment="Center" Foreground="#fd7e14"/>
+                                            HorizontalAlignment="Center" Foreground="{DynamicResource WarningForegroundBrush}"/>
                                 </StackPanel>
 
                                 <StackPanel Grid.Column="2" HorizontalAlignment="Center">
-                                    <TextBlock Text="⏰ This Week" FontWeight="SemiBold" HorizontalAlignment="Center" FontSize="12" Foreground="#ffc107"/>
+                                    <TextBlock Text="⏰ This Week" FontWeight="SemiBold" HorizontalAlignment="Center" FontSize="12" Foreground="{DynamicResource WarningForegroundBrush}"/>
                                     <TextBlock x:Name="DueThisWeekAmountText" Text="$0.00" FontSize="16" FontWeight="Bold" 
-                                            HorizontalAlignment="Center" Foreground="#ffc107"/>
+                                            HorizontalAlignment="Center" Foreground="{DynamicResource WarningForegroundBrush}"/>
                                     <TextBlock x:Name="DueThisWeekCountText" Text="0 invoices" FontSize="10" 
-                                            HorizontalAlignment="Center" Foreground="#ffc107"/>
+                                            HorizontalAlignment="Center" Foreground="{DynamicResource WarningForegroundBrush}"/>
                                 </StackPanel>
 
                                 <StackPanel Grid.Column="3" HorizontalAlignment="Center">
-                                    <TextBlock Text="→ Next Week" FontWeight="SemiBold" HorizontalAlignment="Center" FontSize="12" Foreground="#28a745"/>
+                                    <TextBlock Text="→ Next Week" FontWeight="SemiBold" HorizontalAlignment="Center" FontSize="12" Foreground="{DynamicResource SuccessForegroundBrush}"/>
                                     <TextBlock x:Name="DueNextWeekAmountText" Text="$0.00" FontSize="16" FontWeight="Bold" 
-                                            HorizontalAlignment="Center" Foreground="#28a745"/>
+                                            HorizontalAlignment="Center" Foreground="{DynamicResource SuccessForegroundBrush}"/>
                                     <TextBlock x:Name="DueNextWeekCountText" Text="0 invoices" FontSize="10" 
-                                            HorizontalAlignment="Center" Foreground="#28a745"/>
+                                            HorizontalAlignment="Center" Foreground="{DynamicResource SuccessForegroundBrush}"/>
                                 </StackPanel>
 
                                 <StackPanel Grid.Column="4" HorizontalAlignment="Center">
-                                    <TextBlock Text="📊 Total Outstanding" FontWeight="SemiBold" HorizontalAlignment="Center" FontSize="12" Foreground="#6c757d"/>
+                                    <TextBlock Text="📊 Total Outstanding" FontWeight="SemiBold" HorizontalAlignment="Center" FontSize="12" Foreground="{DynamicResource TextSecondaryBrush}"/>
                                     <TextBlock x:Name="TotalOutstandingAmountText" Text="$0.00" FontSize="16" FontWeight="Bold" 
-                                            HorizontalAlignment="Center" Foreground="#6c757d"/>
+                                            HorizontalAlignment="Center" Foreground="{DynamicResource TextSecondaryBrush}"/>
                                     <TextBlock x:Name="TotalOutstandingCountText" Text="0 invoices" FontSize="10" 
-                                            HorizontalAlignment="Center" Foreground="#6c757d"/>
+                                            HorizontalAlignment="Center" Foreground="{DynamicResource TextSecondaryBrush}"/>
                                 </StackPanel>
                             </Grid>
                         </Border>
@@ -831,7 +842,7 @@
                                             GridLinesVisibility="Horizontal"
                                             HeadersVisibility="Column"
                                                 BorderThickness="1"
-                                            BorderBrush="#dee2e6"
+                                            BorderBrush="{DynamicResource BorderSubtleBrush}"
                                             MaxHeight="500">
 
                                         <DataGrid.Columns>
@@ -848,8 +859,8 @@
                                                 <DataGridTemplateColumn.CellTemplate>
                                                     <DataTemplate>
                                                         <Button Content="💳 Pay Invoice" 
-                                                               Background="#28a745" 
-                                                               Foreground="White" 
+                                                               Background="{DynamicResource SuccessForegroundBrush}" 
+                                                               Foreground="{DynamicResource TextOnAccentBrush}" 
                                                                BorderThickness="0" 
                                                                Padding="8,4" 
                                                                FontSize="11"
@@ -877,7 +888,7 @@
                                             GridLinesVisibility="Horizontal"
                                             HeadersVisibility="Column"
                                                 BorderThickness="1"
-                                            BorderBrush="#dee2e6"
+                                            BorderBrush="{DynamicResource BorderSubtleBrush}"
                                             MaxHeight="500">
 
                                         <DataGrid.Columns>
@@ -906,7 +917,7 @@
                                             GridLinesVisibility="Horizontal"
                                             HeadersVisibility="Column"
                                                 BorderThickness="1"
-                                            BorderBrush="#dee2e6"
+                                            BorderBrush="{DynamicResource BorderSubtleBrush}"
                                             MaxHeight="500">
 
                                         <DataGrid.Columns>
@@ -953,23 +964,23 @@
 
                                 <StackPanel Grid.Column="0" Orientation="Horizontal">
                                     <Button x:Name="GenerateInventoryBtn" Content="📦 Generate Inventory Report" 
-                                          Background="#007bff" Foreground="White" BorderThickness="0" 
-                                          Padding="15,10" FontWeight="SemiBold"
+                                          Style="{StaticResource FluentButtonStyle}" 
+                                          Padding="15,10"
                                           Click="GenerateInventory_Click"/>
 
                                     <TextBlock Text="Real-time FIFO inventory valuation" 
                                         VerticalAlignment="Center" Margin="20,0,0,0" 
-                                        FontStyle="Italic" Foreground="Gray"/>
+                                        FontStyle="Italic" Foreground="{DynamicResource TextSecondaryBrush}"/>
                                 </StackPanel>
 
                                 <StackPanel Grid.Column="1" Orientation="Horizontal">
                                     <Button x:Name="ExportInventoryBtn" Content="📤 Export" 
-                                          Background="#28a745" Foreground="White" BorderThickness="0" 
-                                          Padding="15,10" Margin="0,0,10,0" FontWeight="SemiBold"
+                                          Style="{StaticResource FluentSuccessButtonStyle}" 
+                                          Padding="15,10" Margin="0,0,10,0"
                                           Click="ExportInventory_Click"/>
                                     <Button x:Name="PrintInventoryBtn" Content="🖨️ Print Report" 
-                                          Background="#6c757d" Foreground="White" BorderThickness="0" 
-                                          Padding="15,10" FontWeight="SemiBold"
+                                          Style="{StaticResource FluentNeutralButtonStyle}" 
+                                          Padding="15,10"
                                           Click="PrintVesselAccount_Click"/>
                                 </StackPanel>
                             </Grid>
@@ -1036,7 +1047,7 @@
                                             GridLinesVisibility="Horizontal"
                                             HeadersVisibility="Column"
                                                 BorderThickness="1"
-                                            BorderBrush="#dee2e6"
+                                            BorderBrush="{DynamicResource BorderSubtleBrush}"
                                             MaxHeight="500">
 
                                         <DataGrid.Columns>
@@ -1071,7 +1082,7 @@
                                             GridLinesVisibility="Horizontal"
                                             HeadersVisibility="Column"
                                                 BorderThickness="1"
-                                            BorderBrush="#dee2e6"
+                                            BorderBrush="{DynamicResource BorderSubtleBrush}"
                                             MaxHeight="500">
 
                                         <DataGrid.Columns>
@@ -1106,7 +1117,7 @@
                                             HeadersVisibility="Column"
                                             PreviewMouseWheel="DataGrid_PreviewMouseWheel"
                                                 BorderThickness="1"
-                                            BorderBrush="#dee2e6"
+                                            BorderBrush="{DynamicResource BorderSubtleBrush}"
                                             MaxHeight="500">
 
                                         <DataGrid.Columns>
@@ -1154,13 +1165,13 @@
 
                                     <StackPanel Grid.Column="0" Orientation="Horizontal">
                                         <Button x:Name="GenerateFleetEfficiencyBtn" Content="🚢 Generate Fleet Analysis" 
-                                                  Background="#007bff" Foreground="White" BorderThickness="0" 
-                                                  Padding="15,10" FontWeight="SemiBold"
+                                                  Style="{StaticResource FluentButtonStyle}" 
+                                                  Padding="15,10"
                                                   Click="GenerateFleetEfficiency_Click"/>
 
                                         <TextBlock Text="Comprehensive fleet performance analysis" 
                                                     VerticalAlignment="Center" Margin="20,0,0,0" 
-                                                    FontStyle="Italic" Foreground="Gray"/>
+                                                    FontStyle="Italic" Foreground="{DynamicResource TextSecondaryBrush}"/>
 
                                         <Border Margin="20,0,0,0" Background="{DynamicResource InfoBackgroundBrush}" BorderBrush="{DynamicResource PrimaryBrandBrush}" BorderThickness="1" 
                                                 CornerRadius="4" Padding="10,5">
@@ -1177,12 +1188,12 @@
 
                                     <StackPanel Grid.Column="1" Orientation="Horizontal">
                                         <Button x:Name="ExportFleetEfficiencyBtn" Content="📤 Export" 
-                                                  Background="#28a745" Foreground="White" BorderThickness="0" 
-                                                  Padding="15,10" Margin="0,0,10,0" FontWeight="SemiBold"
+                                                  Style="{StaticResource FluentSuccessButtonStyle}" 
+                                                  Padding="15,10" Margin="0,0,10,0"
                                                   Click="ExportFleetEfficiency_Click"/>
                                         <Button x:Name="PrintFleetEfficiencyBtn" Content="🖨️ Print Report" 
-                                                  Background="#6c757d" Foreground="White" BorderThickness="0" 
-                                                  Padding="15,10" FontWeight="SemiBold"
+                                                  Style="{StaticResource FluentNeutralButtonStyle}" 
+                                                  Padding="15,10"
                                                   Click="PrintVesselAccount_Click"/>
                                     </StackPanel>
                                 </Grid>
@@ -1255,19 +1266,19 @@
                                                     <StackPanel Grid.Column="0" HorizontalAlignment="Center">
                                                         <TextBlock Text="🏆 Most Efficient Vessel" FontWeight="SemiBold" HorizontalAlignment="Center" FontSize="12"/>
                                                         <TextBlock x:Name="FleetBestVesselText" Text="N/A" FontSize="14" FontWeight="Bold" 
-                                                                    HorizontalAlignment="Center" Foreground="#f57c00"/>
+                                                                    HorizontalAlignment="Center" Foreground="{DynamicResource WarningForegroundBrush}"/>
                                                     </StackPanel>
 
                                                     <StackPanel Grid.Column="1" HorizontalAlignment="Center">
                                                         <TextBlock Text="🎯 Best Route" FontWeight="SemiBold" HorizontalAlignment="Center" FontSize="12"/>
                                                         <TextBlock x:Name="FleetBestRouteText" Text="N/A" FontSize="14" FontWeight="Bold" 
-                                                                    HorizontalAlignment="Center" Foreground="#f57c00"/>
+                                                                    HorizontalAlignment="Center" Foreground="{DynamicResource WarningForegroundBrush}"/>
                                                     </StackPanel>
 
                                                     <StackPanel Grid.Column="2" HorizontalAlignment="Center">
                                                         <TextBlock Text="📉 Best Route Efficiency" FontWeight="SemiBold" HorizontalAlignment="Center" FontSize="12"/>
                                                         <TextBlock x:Name="FleetBestRouteEfficiencyText" Text="0.000 L/Leg" FontSize="14" FontWeight="Bold" 
-                                                                    HorizontalAlignment="Center" Foreground="#f57c00"/>
+                                                                    HorizontalAlignment="Center" Foreground="{DynamicResource WarningForegroundBrush}"/>
                                                     </StackPanel>
                                                 </Grid>
                                             </Border>
@@ -1289,7 +1300,7 @@
                                                   HeadersVisibility="Column"
                                                   PreviewMouseWheel="DataGrid_PreviewMouseWheel"
                                                     BorderThickness="1"
-                                                  BorderBrush="#dee2e6"
+                                                  BorderBrush="{DynamicResource BorderSubtleBrush}"
                                                   MaxHeight="600">
 
                                             <DataGrid.Columns>
@@ -1323,7 +1334,7 @@
                                                   GridLinesVisibility="Horizontal"
                                                   HeadersVisibility="Column"
                                                     BorderThickness="1"
-                                                  BorderBrush="#dee2e6"
+                                                  BorderBrush="{DynamicResource BorderSubtleBrush}"
                                                   MaxHeight="600">
 
                                             <DataGrid.Columns>
@@ -1356,7 +1367,7 @@
                                                   GridLinesVisibility="Horizontal"
                                                   HeadersVisibility="Column"
                                                     BorderThickness="1"
-                                                  BorderBrush="#dee2e6"
+                                                  BorderBrush="{DynamicResource BorderSubtleBrush}"
                                                   MaxHeight="600">
 
                                             <DataGrid.Columns>
@@ -1388,7 +1399,7 @@
                                                   GridLinesVisibility="Horizontal"
                                                   HeadersVisibility="Column"
                                                     BorderThickness="1"
-                                                  BorderBrush="#dee2e6"
+                                                  BorderBrush="{DynamicResource BorderSubtleBrush}"
                                                   MaxHeight="600">
 
                                             <DataGrid.Columns>
@@ -1421,7 +1432,7 @@
                                                   GridLinesVisibility="Horizontal"
                                                   HeadersVisibility="Column"
                                                     BorderThickness="1"
-                                                  BorderBrush="#dee2e6"
+                                                  BorderBrush="{DynamicResource BorderSubtleBrush}"
                                                   MaxHeight="600">
 
                                             <DataGrid.Columns>
@@ -1453,7 +1464,7 @@
                                                   GridLinesVisibility="Horizontal"
                                                   HeadersVisibility="Column"
                                                     BorderThickness="1"
-                                                  BorderBrush="#dee2e6"
+                                                  BorderBrush="{DynamicResource BorderSubtleBrush}"
                                                   MaxHeight="600">
 
                                             <DataGrid.Columns>
@@ -1499,13 +1510,13 @@
 
                                     <StackPanel Grid.Column="0" Orientation="Horizontal">
                                         <Button x:Name="GenerateFIFODetailBtn" Content="🔍 Generate FIFO Detail Report" 
-                              Background="#007bff" Foreground="White" BorderThickness="0" 
-                              Padding="15,10" FontWeight="SemiBold"
+                              Style="{StaticResource FluentButtonStyle}" 
+                              Padding="15,10"
                               Click="GenerateFIFODetail_Click"/>
 
                                         <TextBlock Text="Complete FIFO allocation audit trail and analysis" 
                             VerticalAlignment="Center" Margin="20,0,0,0" 
-                            FontStyle="Italic" Foreground="Gray"/>
+                            FontStyle="Italic" Foreground="{DynamicResource TextSecondaryBrush}"/>
 
                                         <Border Margin="20,0,0,0" Background="{DynamicResource InfoBackgroundBrush}" BorderBrush="{DynamicResource PrimaryBrandBrush}" BorderThickness="1" 
                                 CornerRadius="4" Padding="10,5">
@@ -1522,12 +1533,12 @@
 
                                     <StackPanel Grid.Column="1" Orientation="Horizontal">
                                         <Button x:Name="ExportFIFODetailBtn" Content="📤 Export" 
-                              Background="#28a745" Foreground="White" BorderThickness="0" 
-                              Padding="15,10" Margin="0,0,10,0" FontWeight="SemiBold"
+                              Style="{StaticResource FluentSuccessButtonStyle}" 
+                              Padding="15,10" Margin="0,0,10,0"
                               Click="ExportFIFODetail_Click"/>
                                         <Button x:Name="PrintFIFODetailBtn" Content="🖨️ Print Report" 
-                              Background="#6c757d" Foreground="White" BorderThickness="0" 
-                              Padding="15,10" FontWeight="SemiBold"
+                              Style="{StaticResource FluentNeutralButtonStyle}" 
+                              Padding="15,10"
                               Click="PrintVesselAccount_Click"/>
                                     </StackPanel>
                                 </Grid>
@@ -1602,31 +1613,31 @@
                                                     <StackPanel Grid.Column="0" HorizontalAlignment="Center">
                                                         <TextBlock Text="🔢 Transactions" FontWeight="SemiBold" HorizontalAlignment="Center" FontSize="12"/>
                                                         <TextBlock x:Name="FIFOTransactionsText" Text="0" FontSize="16" FontWeight="Bold" 
-                                                   HorizontalAlignment="Center" Foreground="#f57c00"/>
+                                                   HorizontalAlignment="Center" Foreground="{DynamicResource WarningForegroundBrush}"/>
                                                     </StackPanel>
 
                                                     <StackPanel Grid.Column="1" HorizontalAlignment="Center">
                                                         <TextBlock Text="📄 Purchase Lots" FontWeight="SemiBold" HorizontalAlignment="Center" FontSize="12"/>
                                                         <TextBlock x:Name="FIFOPurchaseLotsText" Text="0" FontSize="16" FontWeight="Bold" 
-                                                   HorizontalAlignment="Center" Foreground="#f57c00"/>
+                                                   HorizontalAlignment="Center" Foreground="{DynamicResource WarningForegroundBrush}"/>
                                                     </StackPanel>
 
                                                     <StackPanel Grid.Column="2" HorizontalAlignment="Center">
                                                         <TextBlock Text="🚢 Vessels" FontWeight="SemiBold" HorizontalAlignment="Center" FontSize="12"/>
                                                         <TextBlock x:Name="FIFOVesselsText" Text="0" FontSize="16" FontWeight="Bold" 
-                                                   HorizontalAlignment="Center" Foreground="#f57c00"/>
+                                                   HorizontalAlignment="Center" Foreground="{DynamicResource WarningForegroundBrush}"/>
                                                     </StackPanel>
 
                                                     <StackPanel Grid.Column="3" HorizontalAlignment="Center">
                                                         <TextBlock Text="🏢 Suppliers" FontWeight="SemiBold" HorizontalAlignment="Center" FontSize="12"/>
                                                         <TextBlock x:Name="FIFOSuppliersText" Text="0" FontSize="16" FontWeight="Bold" 
-                                                   HorizontalAlignment="Center" Foreground="#f57c00"/>
+                                                   HorizontalAlignment="Center" Foreground="{DynamicResource WarningForegroundBrush}"/>
                                                     </StackPanel>
 
                                                     <StackPanel Grid.Column="4" HorizontalAlignment="Center">
                                                         <TextBlock Text="📅 Date Range" FontWeight="SemiBold" HorizontalAlignment="Center" FontSize="12"/>
                                                         <TextBlock x:Name="FIFODateRangeText" Text="No Data" FontSize="14" FontWeight="Bold" 
-                                                   HorizontalAlignment="Center" Foreground="#f57c00"/>
+                                                   HorizontalAlignment="Center" Foreground="{DynamicResource WarningForegroundBrush}"/>
                                                     </StackPanel>
                                                 </Grid>
                                             </Border>
@@ -1648,7 +1659,7 @@
                                   HeadersVisibility="Column"
                                   PreviewMouseWheel="DataGrid_PreviewMouseWheel"
                                   BorderThickness="1"
-                                  BorderBrush="#dee2e6"
+                                  BorderBrush="{DynamicResource BorderSubtleBrush}"
                                   MaxHeight="600">
 
                                             <DataGrid.Columns>
@@ -1686,7 +1697,7 @@
                                   GridLinesVisibility="Horizontal"
                                   HeadersVisibility="Column"
                                   BorderThickness="1"
-                                  BorderBrush="#dee2e6"
+                                  BorderBrush="{DynamicResource BorderSubtleBrush}"
                                   MaxHeight="600">
 
                                             <DataGrid.Columns>
@@ -1718,7 +1729,7 @@
                                     Margin="0,0,0,15" Foreground="{DynamicResource TextPrimaryBrush}"/>
 
                                             <!-- Balance Status Card -->
-                                            <Border Background="#d4edda" BorderBrush="#28a745" BorderThickness="1" 
+                                            <Border Background="{DynamicResource SuccessBackgroundBrush}" BorderBrush="#28a745" BorderThickness="1" 
                                     CornerRadius="8" Padding="20" Margin="0,0,0,20">
                                                 <Grid>
                                                     <Grid.ColumnDefinitions>
@@ -1731,25 +1742,25 @@
                                                     <StackPanel Grid.Column="0" HorizontalAlignment="Center">
                                                         <TextBlock Text="⚖️ Balance Status" FontWeight="SemiBold" HorizontalAlignment="Center" FontSize="12"/>
                                                         <TextBlock x:Name="BalanceStatusText" Text="✅ Balanced" FontSize="16" FontWeight="Bold" 
-                                                   HorizontalAlignment="Center" Foreground="#155724"/>
+                                                   HorizontalAlignment="Center" Foreground="{DynamicResource SuccessForegroundBrush}"/>
                                                     </StackPanel>
 
                                                     <StackPanel Grid.Column="1" HorizontalAlignment="Center">
                                                         <TextBlock Text="📊 Data Integrity" FontWeight="SemiBold" HorizontalAlignment="Center" FontSize="12"/>
                                                         <TextBlock x:Name="DataIntegrityScoreText" Text="100%" FontSize="16" FontWeight="Bold" 
-                                                   HorizontalAlignment="Center" Foreground="#155724"/>
+                                                   HorizontalAlignment="Center" Foreground="{DynamicResource SuccessForegroundBrush}"/>
                                                     </StackPanel>
 
                                                     <StackPanel Grid.Column="2" HorizontalAlignment="Center">
                                                         <TextBlock Text="⚠️ Inconsistencies" FontWeight="SemiBold" HorizontalAlignment="Center" FontSize="12"/>
                                                         <TextBlock x:Name="InconsistenciesText" Text="0" FontSize="16" FontWeight="Bold" 
-                                                                    HorizontalAlignment="Center" Foreground="#155724"/>
+                                                                    HorizontalAlignment="Center" Foreground="{DynamicResource SuccessForegroundBrush}"/>
                                                     </StackPanel>
 
                                                     <StackPanel Grid.Column="3" HorizontalAlignment="Center">
                                                         <TextBlock Text="🎯 Grade" FontWeight="SemiBold" HorizontalAlignment="Center" FontSize="12"/>
                                                         <TextBlock x:Name="DataGradeText" Text="Excellent" FontSize="16" FontWeight="Bold" 
-                                                                    HorizontalAlignment="Center" Foreground="#155724"/>
+                                                                    HorizontalAlignment="Center" Foreground="{DynamicResource SuccessForegroundBrush}"/>
                                                     </StackPanel>
                                                 </Grid>
                                             </Border>
@@ -1811,7 +1822,7 @@
                                                   GridLinesVisibility="Horizontal"
                                                   HeadersVisibility="Column"
                                                     BorderThickness="1"
-                                                  BorderBrush="#dee2e6"
+                                                  BorderBrush="{DynamicResource BorderSubtleBrush}"
                                                   MaxHeight="600">
 
                                             <DataGrid.Columns>
@@ -1845,7 +1856,7 @@
                                                   GridLinesVisibility="Horizontal"
                                                   HeadersVisibility="Column"
                                                     BorderThickness="1"
-                                                  BorderBrush="#dee2e6"
+                                                  BorderBrush="{DynamicResource BorderSubtleBrush}"
                                                   MaxHeight="600">
 
                                             <DataGrid.Columns>
@@ -1903,14 +1914,14 @@
 
                                     <Button Grid.Column="5" x:Name="GenerateCostAnalysis" Content="🔄 Generate Analysis" 
                                             Click="GenerateCostAnalysis_Click" 
-                                            Background="#3498db" Foreground="White" Padding="15,8" Margin="0,0,10,0"/>
+                                            Background="{DynamicResource PrimaryBrandBrush}" Foreground="{DynamicResource TextOnAccentBrush}" Padding="15,8" Margin="0,0,10,0"/>
 
                                     <Button Grid.Column="6" x:Name="ExportCostAnalysis" Content="📤 Export" 
                                             Click="ExportCostAnalysis_Click" 
-                                            Background="#27ae60" Foreground="White" Padding="15,8" Margin="0,0,10,0"/>
+                                            Background="{DynamicResource SuccessForegroundBrush}" Foreground="{DynamicResource TextOnAccentBrush}" Padding="15,8" Margin="0,0,10,0"/>
                                     <Button Grid.Column="7" x:Name="PrintCostAnalysis" Content="🖨️ Print" 
                                             Click="PrintVesselAccount_Click" 
-                                            Background="#6c757d" Foreground="White" Padding="15,8"/>
+                                            Background="{DynamicResource TextSecondaryBrush}" Foreground="{DynamicResource TextOnAccentBrush}" Padding="15,8"/>
                                 </Grid>
                             </Border>
 
@@ -1932,52 +1943,52 @@
                                                 </Grid.ColumnDefinitions>
 
                                                 <!-- Total Procurement Value -->
-                                                <Border Grid.Column="0" Background="#3498db" CornerRadius="8" Padding="20" Margin="0,0,10,0">
+                                                <Border Grid.Column="0" Background="{DynamicResource PrimaryBrandBrush}" CornerRadius="8" Padding="20" Margin="0,0,10,0">
                                                     <StackPanel>
-                                                        <TextBlock Text="💰" FontSize="24" HorizontalAlignment="Center" Foreground="White"/>
-                                                        <TextBlock Text="Total Procurement" FontSize="12" HorizontalAlignment="Center" Foreground="White" Margin="0,5,0,0"/>
+                                                        <TextBlock Text="💰" FontSize="24" HorizontalAlignment="Center" Foreground="{DynamicResource TextOnAccentBrush}"/>
+                                                        <TextBlock Text="Total Procurement" FontSize="12" HorizontalAlignment="Center" Foreground="{DynamicResource TextOnAccentBrush}" Margin="0,5,0,0"/>
                                                         <TextBlock x:Name="CostTotalProcurementText" Text="$0.00" FontSize="16" FontWeight="Bold" 
-                                                                 HorizontalAlignment="Center" Foreground="White" Margin="0,5,0,0"/>
+                                                                 HorizontalAlignment="Center" Foreground="{DynamicResource TextOnAccentBrush}" Margin="0,5,0,0"/>
                                                     </StackPanel>
                                                 </Border>
 
                                                 <!-- Average Cost Per Liter -->
-                                                <Border Grid.Column="1" Background="#e74c3c" CornerRadius="8" Padding="20" Margin="0,0,10,0">
+                                                <Border Grid.Column="1" Background="{DynamicResource ErrorForegroundBrush}" CornerRadius="8" Padding="20" Margin="0,0,10,0">
                                                     <StackPanel>
-                                                        <TextBlock Text="⛽" FontSize="24" HorizontalAlignment="Center" Foreground="White"/>
-                                                        <TextBlock Text="Avg Cost/Liter" FontSize="12" HorizontalAlignment="Center" Foreground="White" Margin="0,5,0,0"/>
+                                                        <TextBlock Text="⛽" FontSize="24" HorizontalAlignment="Center" Foreground="{DynamicResource TextOnAccentBrush}"/>
+                                                        <TextBlock Text="Avg Cost/Liter" FontSize="12" HorizontalAlignment="Center" Foreground="{DynamicResource TextOnAccentBrush}" Margin="0,5,0,0"/>
                                                         <TextBlock x:Name="CostAvgPerLiterText" Text="$0.000000" FontSize="16" FontWeight="Bold" 
-                                                                 HorizontalAlignment="Center" Foreground="White" Margin="0,5,0,0"/>
+                                                                 HorizontalAlignment="Center" Foreground="{DynamicResource TextOnAccentBrush}" Margin="0,5,0,0"/>
                                                     </StackPanel>
                                                 </Border>
 
                                                 <!-- Average Cost Per Ton -->
-                                                <Border Grid.Column="2" Background="#9b59b6" CornerRadius="8" Padding="20" Margin="0,0,10,0">
+                                                <Border Grid.Column="2" Background="{DynamicResource PrimaryBrandBrush}" CornerRadius="8" Padding="20" Margin="0,0,10,0">
                                                     <StackPanel>
-                                                        <TextBlock Text="🏗️" FontSize="24" HorizontalAlignment="Center" Foreground="White"/>
-                                                        <TextBlock Text="Avg Cost/Ton" FontSize="12" HorizontalAlignment="Center" Foreground="White" Margin="0,5,0,0"/>
+                                                        <TextBlock Text="🏗️" FontSize="24" HorizontalAlignment="Center" Foreground="{DynamicResource TextOnAccentBrush}"/>
+                                                        <TextBlock Text="Avg Cost/Ton" FontSize="12" HorizontalAlignment="Center" Foreground="{DynamicResource TextOnAccentBrush}" Margin="0,5,0,0"/>
                                                         <TextBlock x:Name="CostAvgPerTonText" Text="$0.00" FontSize="16" FontWeight="Bold" 
-                                                                 HorizontalAlignment="Center" Foreground="White" Margin="0,5,0,0"/>
+                                                                 HorizontalAlignment="Center" Foreground="{DynamicResource TextOnAccentBrush}" Margin="0,5,0,0"/>
                                                     </StackPanel>
                                                 </Border>
 
                                                 <!-- Price Volatility Index -->
-                                                <Border Grid.Column="3" Background="#f39c12" CornerRadius="8" Padding="20" Margin="0,0,10,0">
+                                                <Border Grid.Column="3" Background="{DynamicResource WarningForegroundBrush}" CornerRadius="8" Padding="20" Margin="0,0,10,0">
                                                     <StackPanel>
-                                                        <TextBlock Text="📈" FontSize="24" HorizontalAlignment="Center" Foreground="White"/>
-                                                        <TextBlock Text="Price Volatility" FontSize="12" HorizontalAlignment="Center" Foreground="White" Margin="0,5,0,0"/>
+                                                        <TextBlock Text="📈" FontSize="24" HorizontalAlignment="Center" Foreground="{DynamicResource TextOnAccentBrush}"/>
+                                                        <TextBlock Text="Price Volatility" FontSize="12" HorizontalAlignment="Center" Foreground="{DynamicResource TextOnAccentBrush}" Margin="0,5,0,0"/>
                                                         <TextBlock x:Name="CostVolatilityText" Text="0.0%" FontSize="16" FontWeight="Bold" 
-                                                                 HorizontalAlignment="Center" Foreground="White" Margin="0,5,0,0"/>
+                                                                 HorizontalAlignment="Center" Foreground="{DynamicResource TextOnAccentBrush}" Margin="0,5,0,0"/>
                                                     </StackPanel>
                                                 </Border>
 
                                                 <!-- Procurement Efficiency Score -->
-                                                <Border Grid.Column="4" Background="#27ae60" CornerRadius="8" Padding="20">
+                                                <Border Grid.Column="4" Background="{DynamicResource SuccessForegroundBrush}" CornerRadius="8" Padding="20">
                                                     <StackPanel>
-                                                        <TextBlock Text="🎯" FontSize="24" HorizontalAlignment="Center" Foreground="White"/>
-                                                        <TextBlock Text="Efficiency Score" FontSize="12" HorizontalAlignment="Center" Foreground="White" Margin="0,5,0,0"/>
+                                                        <TextBlock Text="🎯" FontSize="24" HorizontalAlignment="Center" Foreground="{DynamicResource TextOnAccentBrush}"/>
+                                                        <TextBlock Text="Efficiency Score" FontSize="12" HorizontalAlignment="Center" Foreground="{DynamicResource TextOnAccentBrush}" Margin="0,5,0,0"/>
                                                         <TextBlock x:Name="CostEfficiencyScoreText" Text="0%" FontSize="16" FontWeight="Bold" 
-                                                                 HorizontalAlignment="Center" Foreground="White" Margin="0,5,0,0"/>
+                                                                 HorizontalAlignment="Center" Foreground="{DynamicResource TextOnAccentBrush}" Margin="0,5,0,0"/>
                                                     </StackPanel>
                                                 </Border>
                                             </Grid>
@@ -2028,7 +2039,7 @@
                                                 GridLinesVisibility="Horizontal"
                                                 HeadersVisibility="Column"
                                                 BorderThickness="1"
-                                                BorderBrush="#dee2e6"
+                                                BorderBrush="{DynamicResource BorderSubtleBrush}"
                                                 MaxHeight="700">
 
                                             <DataGrid.Columns>
@@ -2063,7 +2074,7 @@
                                                 HeadersVisibility="Column"
                                                 PreviewMouseWheel="DataGrid_PreviewMouseWheel"
                                                 BorderThickness="1"
-                                                BorderBrush="#dee2e6"
+                                                BorderBrush="{DynamicResource BorderSubtleBrush}"
                                                 MaxHeight="700">
 
                                             <DataGrid.Columns>
@@ -2099,7 +2110,7 @@
                                                 GridLinesVisibility="Horizontal"
                                                 HeadersVisibility="Column"
                                                 BorderThickness="1"
-                                                BorderBrush="#dee2e6"
+                                                BorderBrush="{DynamicResource BorderSubtleBrush}"
                                                 MaxHeight="700">
 
                                             <DataGrid.Columns>
@@ -2135,7 +2146,7 @@
                                                 GridLinesVisibility="Horizontal"
                                                 HeadersVisibility="Column"
                                                 BorderThickness="1"
-                                                BorderBrush="#dee2e6"
+                                                BorderBrush="{DynamicResource BorderSubtleBrush}"
                                                 MaxHeight="700">
 
                                             <DataGrid.Columns>
@@ -2172,7 +2183,7 @@
                                                 GridLinesVisibility="Horizontal"
                                                 HeadersVisibility="Column"
                                                 BorderThickness="1"
-                                                BorderBrush="#dee2e6"
+                                                BorderBrush="{DynamicResource BorderSubtleBrush}"
                                                 MaxHeight="700">
 
                                             <DataGrid.Columns>
@@ -2362,14 +2373,14 @@
 
                                     <Button Grid.Column="5" x:Name="GenerateRoutePerformance" Content="🔄 Generate Analysis" 
                                             Click="GenerateRoutePerformance_Click" 
-                                            Background="#3498db" Foreground="White" Padding="15,8" Margin="0,0,10,0"/>
+                                            Background="{DynamicResource PrimaryBrandBrush}" Foreground="{DynamicResource TextOnAccentBrush}" Padding="15,8" Margin="0,0,10,0"/>
 
                                     <Button Grid.Column="6" x:Name="ExportRoutePerformance" Content="📤 Export" 
                                             Click="ExportRoutePerformance_Click" 
-                                            Background="#27ae60" Foreground="White" Padding="15,8" Margin="0,0,10,0"/>
+                                            Background="{DynamicResource SuccessForegroundBrush}" Foreground="{DynamicResource TextOnAccentBrush}" Padding="15,8" Margin="0,0,10,0"/>
                                     <Button Grid.Column="7" x:Name="PrintRoutePerformance" Content="🖨️ Print" 
                                             Click="PrintVesselAccount_Click" 
-                                            Background="#6c757d" Foreground="White" Padding="15,8"/>
+                                            Background="{DynamicResource TextSecondaryBrush}" Foreground="{DynamicResource TextOnAccentBrush}" Padding="15,8"/>
                                 </Grid>
                             </Border>
 
@@ -2390,42 +2401,42 @@
                                                 </Grid.ColumnDefinitions>
 
                                                 <!-- Total Active Routes -->
-                                                <Border Grid.Column="0" Background="#3498db" CornerRadius="8" Padding="20" Margin="0,0,10,0">
+                                                <Border Grid.Column="0" Background="{DynamicResource PrimaryBrandBrush}" CornerRadius="8" Padding="20" Margin="0,0,10,0">
                                                     <StackPanel>
-                                                        <TextBlock Text="🛣️" FontSize="24" HorizontalAlignment="Center" Foreground="White"/>
-                                                        <TextBlock Text="Active Routes" FontSize="12" HorizontalAlignment="Center" Foreground="White" Margin="0,5,0,0"/>
+                                                        <TextBlock Text="🛣️" FontSize="24" HorizontalAlignment="Center" Foreground="{DynamicResource TextOnAccentBrush}"/>
+                                                        <TextBlock Text="Active Routes" FontSize="12" HorizontalAlignment="Center" Foreground="{DynamicResource TextOnAccentBrush}" Margin="0,5,0,0"/>
                                                         <TextBlock x:Name="RouteTotalActiveRoutesText" Text="0" FontSize="16" FontWeight="Bold" 
-                                                                 HorizontalAlignment="Center" Foreground="White" Margin="0,5,0,0"/>
+                                                                 HorizontalAlignment="Center" Foreground="{DynamicResource TextOnAccentBrush}" Margin="0,5,0,0"/>
                                                     </StackPanel>
                                                 </Border>
 
                                                 <!-- Total Legs Completed -->
-                                                <Border Grid.Column="1" Background="#e74c3c" CornerRadius="8" Padding="20" Margin="0,0,10,0">
+                                                <Border Grid.Column="1" Background="{DynamicResource ErrorForegroundBrush}" CornerRadius="8" Padding="20" Margin="0,0,10,0">
                                                     <StackPanel>
-                                                        <TextBlock Text="🚢" FontSize="24" HorizontalAlignment="Center" Foreground="White"/>
-                                                        <TextBlock Text="Total Legs" FontSize="12" HorizontalAlignment="Center" Foreground="White" Margin="0,5,0,0"/>
+                                                        <TextBlock Text="🚢" FontSize="24" HorizontalAlignment="Center" Foreground="{DynamicResource TextOnAccentBrush}"/>
+                                                        <TextBlock Text="Total Legs" FontSize="12" HorizontalAlignment="Center" Foreground="{DynamicResource TextOnAccentBrush}" Margin="0,5,0,0"/>
                                                         <TextBlock x:Name="RouteTotalLegsText" Text="0" FontSize="16" FontWeight="Bold" 
-                                                                 HorizontalAlignment="Center" Foreground="White" Margin="0,5,0,0"/>
+                                                                 HorizontalAlignment="Center" Foreground="{DynamicResource TextOnAccentBrush}" Margin="0,5,0,0"/>
                                                     </StackPanel>
                                                 </Border>
 
                                                 <!-- Total Distance -->
-                                                <Border Grid.Column="2" Background="#f39c12" CornerRadius="8" Padding="20" Margin="0,0,10,0">
+                                                <Border Grid.Column="2" Background="{DynamicResource WarningForegroundBrush}" CornerRadius="8" Padding="20" Margin="0,0,10,0">
                                                     <StackPanel>
-                                                        <TextBlock Text="📏" FontSize="24" HorizontalAlignment="Center" Foreground="White"/>
-                                                        <TextBlock Text="Total Distance" FontSize="12" HorizontalAlignment="Center" Foreground="White" Margin="0,5,0,0"/>
+                                                        <TextBlock Text="📏" FontSize="24" HorizontalAlignment="Center" Foreground="{DynamicResource TextOnAccentBrush}"/>
+                                                        <TextBlock Text="Total Distance" FontSize="12" HorizontalAlignment="Center" Foreground="{DynamicResource TextOnAccentBrush}" Margin="0,5,0,0"/>
                                                         <TextBlock x:Name="RouteTotalDistanceText" Text="0 km" FontSize="16" FontWeight="Bold" 
-                                                                 HorizontalAlignment="Center" Foreground="White" Margin="0,5,0,0"/>
+                                                                 HorizontalAlignment="Center" Foreground="{DynamicResource TextOnAccentBrush}" Margin="0,5,0,0"/>
                                                     </StackPanel>
                                                 </Border>
 
                                                 <!-- Total Route Cost -->
-                                                <Border Grid.Column="3" Background="#27ae60" CornerRadius="8" Padding="20">
+                                                <Border Grid.Column="3" Background="{DynamicResource SuccessForegroundBrush}" CornerRadius="8" Padding="20">
                                                     <StackPanel>
-                                                        <TextBlock Text="💰" FontSize="24" HorizontalAlignment="Center" Foreground="White"/>
-                                                        <TextBlock Text="Total Cost" FontSize="12" HorizontalAlignment="Center" Foreground="White" Margin="0,5,0,0"/>
+                                                        <TextBlock Text="💰" FontSize="24" HorizontalAlignment="Center" Foreground="{DynamicResource TextOnAccentBrush}"/>
+                                                        <TextBlock Text="Total Cost" FontSize="12" HorizontalAlignment="Center" Foreground="{DynamicResource TextOnAccentBrush}" Margin="0,5,0,0"/>
                                                         <TextBlock x:Name="RouteTotalCostText" Text="$0.00" FontSize="16" FontWeight="Bold" 
-                                                                 HorizontalAlignment="Center" Foreground="White" Margin="0,5,0,0"/>
+                                                                 HorizontalAlignment="Center" Foreground="{DynamicResource TextOnAccentBrush}" Margin="0,5,0,0"/>
                                                     </StackPanel>
                                                 </Border>
                                             </Grid>
@@ -2476,7 +2487,7 @@
                                                 GridLinesVisibility="Horizontal"
                                                 HeadersVisibility="Column"
                                                 BorderThickness="1"
-                                                BorderBrush="#dee2e6"
+                                                BorderBrush="{DynamicResource BorderSubtleBrush}"
                                                 MaxHeight="700">
 
                                             <DataGrid.Columns>
@@ -2514,7 +2525,7 @@
                                                 GridLinesVisibility="Horizontal"
                                                 HeadersVisibility="Column"
                                                 BorderThickness="1"
-                                                BorderBrush="#dee2e6"
+                                                BorderBrush="{DynamicResource BorderSubtleBrush}"
                                                 MaxHeight="700">
 
                                             <DataGrid.Columns>
@@ -2554,7 +2565,7 @@
                                                 GridLinesVisibility="Horizontal"
                                                 HeadersVisibility="Column"
                                                 BorderThickness="1"
-                                                BorderBrush="#dee2e6"
+                                                BorderBrush="{DynamicResource BorderSubtleBrush}"
                                                 MaxHeight="700">
 
                                             <DataGrid.Columns>
@@ -2590,7 +2601,7 @@
                                                 GridLinesVisibility="Horizontal"
                                                 HeadersVisibility="Column"
                                                 BorderThickness="1"
-                                                BorderBrush="#dee2e6"
+                                                BorderBrush="{DynamicResource BorderSubtleBrush}"
                                                 MaxHeight="700">
 
                                             <DataGrid.Columns>
@@ -2626,7 +2637,7 @@
                                                 GridLinesVisibility="Horizontal"
                                                 HeadersVisibility="Column"
                                                 BorderThickness="1"
-                                                BorderBrush="#dee2e6"
+                                                BorderBrush="{DynamicResource BorderSubtleBrush}"
                                                 MaxHeight="700">
 
                                             <DataGrid.Columns>
@@ -2661,7 +2672,7 @@
                                                 GridLinesVisibility="Horizontal"
                                                 HeadersVisibility="Column"
                                                 BorderThickness="1"
-                                                BorderBrush="#dee2e6"
+                                                BorderBrush="{DynamicResource BorderSubtleBrush}"
                                                 MaxHeight="700">
 
                                             <DataGrid.Columns>
