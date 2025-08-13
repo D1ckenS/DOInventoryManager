@@ -117,16 +117,16 @@
                         </Grid.ColumnDefinitions>
                         
                         <Button Grid.Column="0" x:Name="CreateBackupBtn" Content="🗄️ Create Backup" Click="CreateBackup_Click" 
-                                Style="{StaticResource FluentSuccessButtonStyle}"/>
+                                Style="{StaticResource FluentSuccessButtonStyle}" Margin="0,0,10,0"/>
                         
                         <Button Grid.Column="1" x:Name="RestoreBackupBtn" Content="🔄 Restore Backup" Click="RestoreBackup_Click" 
-                                Style="{StaticResource FluentWarningButtonStyle}"/>
+                                Style="{StaticResource FluentWarningButtonStyle}" Margin="0,0,10,0"/>
                         
                         <Button Grid.Column="2" x:Name="ExportDataBtn" Content="📦 Export Data Package" Click="ExportData_Click" 
-                                Style="{StaticResource FluentButtonStyle}"/>
+                                Style="{StaticResource FluentButtonStyle}" Margin="0,0,10,0"/>
                         
                         <Button Grid.Column="3" x:Name="UploadDataBtn" Content="📄 Upload Data" Click="UploadData_Click" 
-                                Style="{StaticResource FluentSuccessButtonStyle}"/>
+                                Style="{StaticResource FluentSuccessButtonStyle}" Margin="0,0,10,0"/>
                         
                         <Button Grid.Column="4" x:Name="CleanupBtn" Content="🧹 Cleanup Old Backups" Click="Cleanup_Click" 
                                 Style="{StaticResource FluentDangerButtonStyle}"/>
@@ -146,9 +146,10 @@
                         
                         <DataGrid Grid.Row="1" x:Name="BackupHistoryGrid" AutoGenerateColumns="False" 
                                   CanUserAddRows="False" CanUserDeleteRows="False" IsReadOnly="True"
-                                  GridLinesVisibility="Horizontal" HeadersVisibility="Column"
-                                  BorderBrush="{DynamicResource BorderSubtleBrush}" BorderThickness="1"
-                                  Background="{DynamicResource CardBackgroundBrush}"
+                                  Style="{StaticResource ModernDataGridStyle}"
+                                  ColumnHeaderStyle="{StaticResource ModernDataGridColumnHeaderStyle}"
+                                  CellStyle="{StaticResource ModernDataGridCellStyle}"
+                                  RowStyle="{StaticResource ModernDataGridRowStyle}"
                                   VirtualizingPanel.IsVirtualizing="True"
                                   VirtualizingPanel.VirtualizationMode="Recycling">
                             
@@ -163,11 +164,11 @@
                                             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                                                 <Button Content="🔄 Restore" Click="RestoreSpecificBackup_Click" 
                                                         Style="{StaticResource FluentWarningButtonStyle}" 
-                                                        FontSize="11" MinWidth="70" Padding="6,3" Margin="2"
+                                                        FontSize="12" MinWidth="80" Padding="8,6" Margin="0,0,5,0"
                                                         Tag="{Binding FilePath}"/>
                                                 <Button Content="🗑️ Delete" Click="DeleteBackup_Click" 
                                                         Style="{StaticResource FluentDangerButtonStyle}" 
-                                                        FontSize="11" MinWidth="60" Padding="6,3" Margin="2"
+                                                        FontSize="12" MinWidth="70" Padding="8,6" Margin="5,0,0,0"
                                                         Tag="{Binding FilePath}"/>
                                             </StackPanel>
                                         </DataTemplate>
@@ -231,31 +232,31 @@
                                     <!-- Date From -->
                                     <StackPanel Grid.Column="0" Margin="0,0,10,0">
                                         <TextBlock Text="Date From:" FontWeight="SemiBold" Margin="0,0,0,5"/>
-                                        <DatePicker x:Name="PurchaseDateFromPicker" Width="140"/>
+                                        <DatePicker x:Name="PurchaseDateFromPicker" Width="140" Style="{DynamicResource FluentDatePickerStyle}"/>
                                     </StackPanel>
                                     
                                     <!-- Date To -->
                                     <StackPanel Grid.Column="1" Margin="0,0,10,0">
                                         <TextBlock Text="Date To:" FontWeight="SemiBold" Margin="0,0,0,5"/>
-                                        <DatePicker x:Name="PurchaseDateToPicker" Width="140"/>
+                                        <DatePicker x:Name="PurchaseDateToPicker" Width="140" Style="{DynamicResource FluentDatePickerStyle}"/>
                                     </StackPanel>
                                     
                                     <!-- Vessel -->
                                     <StackPanel Grid.Column="2" Margin="0,0,10,0">
                                         <TextBlock Text="Vessel:" FontWeight="SemiBold" Margin="0,0,0,5"/>
-                                        <ComboBox x:Name="PurchaseVesselFilter" Width="140" DisplayMemberPath="Name" SelectedValuePath="Id"/>
+                                        <ComboBox x:Name="PurchaseVesselFilter" Width="140" DisplayMemberPath="Name" SelectedValuePath="Id" Style="{DynamicResource FluentComboBoxStyle}"/>
                                     </StackPanel>
                                     
                                     <!-- Supplier -->
                                     <StackPanel Grid.Column="3" Margin="0,0,10,0">
                                         <TextBlock Text="Supplier:" FontWeight="SemiBold" Margin="0,0,0,5"/>
-                                        <ComboBox x:Name="PurchaseSupplierFilter" Width="140" DisplayMemberPath="Name" SelectedValuePath="Id"/>
+                                        <ComboBox x:Name="PurchaseSupplierFilter" Width="140" DisplayMemberPath="Name" SelectedValuePath="Id" Style="{DynamicResource FluentComboBoxStyle}"/>
                                     </StackPanel>
                                     
                                     <!-- Invoice Reference -->
                                     <StackPanel Grid.Column="4">
                                         <TextBlock Text="Invoice Reference:" FontWeight="SemiBold" Margin="0,0,0,5"/>
-                                        <TextBox x:Name="PurchaseInvoiceFilter" Width="140"/>
+                                        <TextBox x:Name="PurchaseInvoiceFilter" Width="140" Style="{DynamicResource FluentTextBoxStyle}"/>
                                     </StackPanel>
                                 </Grid>
                                 
@@ -292,9 +293,10 @@
                         <!-- Purchase History DataGrid -->
                         <DataGrid Grid.Row="3" x:Name="PurchaseHistoryGrid" AutoGenerateColumns="False" 
                                   CanUserAddRows="False" CanUserDeleteRows="False" 
-                                  GridLinesVisibility="Horizontal" HeadersVisibility="Column"
-                                  BorderBrush="{DynamicResource BorderSubtleBrush}" BorderThickness="1"
-                                  Background="{DynamicResource CardBackgroundBrush}"
+                                  Style="{StaticResource ModernDataGridStyle}"
+                                  ColumnHeaderStyle="{StaticResource ModernDataGridColumnHeaderStyle}"
+                                  CellStyle="{StaticResource ModernDataGridCellStyle}"
+                                  RowStyle="{StaticResource ModernDataGridRowStyle}"
                                   VirtualizingPanel.IsVirtualizing="True"
                                   VirtualizingPanel.VirtualizationMode="Recycling"
                                   SelectionChanged="PurchaseHistoryGrid_SelectionChanged">
@@ -365,13 +367,13 @@
                                     <!-- Month -->
                                     <StackPanel Grid.Column="0" Margin="0,0,20,0">
                                         <TextBlock Text="Month:" FontWeight="SemiBold" Margin="0,0,0,5"/>
-                                        <DatePicker x:Name="ConsumptionMonthPicker" Width="140"/>
+                                        <DatePicker x:Name="ConsumptionMonthPicker" Width="140" Style="{DynamicResource FluentDatePickerStyle}"/>
                                     </StackPanel>
                                     
                                     <!-- Vessel -->
                                     <StackPanel Grid.Column="1" Margin="0,0,20,0">
                                         <TextBlock Text="Vessel:" FontWeight="SemiBold" Margin="0,0,0,5"/>
-                                        <ComboBox x:Name="ConsumptionVesselFilter" Width="140" DisplayMemberPath="Name" SelectedValuePath="Id"/>
+                                        <ComboBox x:Name="ConsumptionVesselFilter" Width="140" DisplayMemberPath="Name" SelectedValuePath="Id" Style="{DynamicResource FluentComboBoxStyle}"/>
                                     </StackPanel>
                                 </Grid>
                                 
@@ -408,9 +410,10 @@
                         <!-- Consumption History DataGrid -->
                         <DataGrid Grid.Row="3" x:Name="ConsumptionHistoryGrid" AutoGenerateColumns="False" 
                                   CanUserAddRows="False" CanUserDeleteRows="False" 
-                                  GridLinesVisibility="Horizontal" HeadersVisibility="Column"
-                                  BorderBrush="{DynamicResource BorderSubtleBrush}" BorderThickness="1"
-                                  Background="{DynamicResource CardBackgroundBrush}"
+                                  Style="{StaticResource ModernDataGridStyle}"
+                                  ColumnHeaderStyle="{StaticResource ModernDataGridColumnHeaderStyle}"
+                                  CellStyle="{StaticResource ModernDataGridCellStyle}"
+                                  RowStyle="{StaticResource ModernDataGridRowStyle}"
                                   VirtualizingPanel.IsVirtualizing="True"
                                   VirtualizingPanel.VirtualizationMode="Recycling"
                                   SelectionChanged="ConsumptionHistoryGrid_SelectionChanged">

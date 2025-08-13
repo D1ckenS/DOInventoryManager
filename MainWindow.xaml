@@ -40,7 +40,7 @@
                             Click="HamburgerMenu_Click"
                             ToolTip="Toggle Navigation">
                         <TextBlock Text="&#xE700;" 
-                                 Style="{StaticResource FluentIconSmall}"
+                                 Style="{DynamicResource FluentIconSmall}"
                                  Foreground="{DynamicResource TextSecondaryBrush}"/>
                     </Button>
                     
@@ -49,7 +49,7 @@
                                  Foreground="{DynamicResource PrimaryBrandBrush}" 
                                  VerticalAlignment="Center" Margin="0,0,8,0"/>
                         <TextBlock Text="DO Inventory Manager" 
-                                 Style="{StaticResource HeadlineMediumTextStyle}" 
+                                 Style="{DynamicResource HeadlineMediumTextStyle}" 
                                  VerticalAlignment="Center"/>
                     </StackPanel>
                 </StackPanel>
@@ -59,7 +59,7 @@
                     <!-- Theme Toggle Button -->
                     <Button x:Name="ThemeToggleBtn"
                             Width="40" Height="32"
-                            Style="{StaticResource FluentSecondaryButtonStyle}"
+                            Style="{DynamicResource FluentSecondaryButtonStyle}"
                             Margin="0,0,8,0"
                             Click="ThemeToggle_Click"
                             ToolTip="Toggle Theme">
@@ -72,13 +72,13 @@
                     </Button>
                     
                     <TextBlock x:Name="CurrentDateText" 
-                             Style="{StaticResource CaptionTextStyle}"
+                             Style="{DynamicResource CaptionTextStyle}"
                              VerticalAlignment="Center" 
                              Margin="0,0,16,0"/>
                              
                     <Button x:Name="GenerateReportBtn"
                             Content="📊 Generate Report" 
-                            Style="{StaticResource FluentButtonStyle}"
+                            Style="{DynamicResource FluentButtonStyle}"
                             Click="GenerateReport_Click"/>
                 </StackPanel>
             </Grid>
@@ -108,7 +108,7 @@
                     <Border Grid.Row="0" Padding="16,20,16,12">
                         <TextBlock x:Name="NavigationTitle"
                                  Text="Navigation" 
-                                 Style="{StaticResource TitleMediumTextStyle}"
+                                 Style="{DynamicResource TitleMediumTextStyle}"
                                  Foreground="{DynamicResource TextSecondaryBrush}"/>
                     </Border>
 
@@ -120,88 +120,88 @@
                         <StackPanel>
                             <!-- Primary Navigation -->
                             <Button x:Name="DashboardBtn" 
-                                    Style="{StaticResource ActiveNavigationButtonStyle}" 
+                                    Style="{DynamicResource ActiveNavigationButtonStyle}" 
                                     Click="Dashboard_Click">
                                 <Button.Content>
                                     <StackPanel Orientation="Horizontal">
-                                        <TextBlock Text="&#xE80F;" Style="{StaticResource FluentIconSmall}" Margin="0,0,12,0"/>
+                                        <TextBlock Text="&#xE80F;" Style="{DynamicResource FluentIconSmall}" Margin="0,0,12,0"/>
                                         <TextBlock x:Name="DashboardText" Text="Dashboard"/>
                                     </StackPanel>
                                 </Button.Content>
                             </Button>
                             
                             <Button x:Name="SuppliersBtn" 
-                                    Style="{StaticResource NavigationButtonStyle}" 
+                                    Style="{DynamicResource NavigationButtonStyle}" 
                                     Click="Suppliers_Click">
                                 <Button.Content>
                                     <StackPanel Orientation="Horizontal">
-                                        <TextBlock Text="&#xE716;" Style="{StaticResource FluentIconSmall}" Margin="0,0,12,0"/>
+                                        <TextBlock Text="&#xE716;" Style="{DynamicResource FluentIconSmall}" Margin="0,0,12,0"/>
                                         <TextBlock x:Name="SuppliersText" Text="Suppliers"/>
                                     </StackPanel>
                                 </Button.Content>
                             </Button>
                             
                             <Button x:Name="VesselsBtn" 
-                                    Style="{StaticResource NavigationButtonStyle}" 
+                                    Style="{DynamicResource NavigationButtonStyle}" 
                                     Click="Vessels_Click">
                                 <Button.Content>
                                     <StackPanel Orientation="Horizontal">
-                                        <TextBlock Text="&#xE7B8;" Style="{StaticResource FluentIconSmall}" Margin="0,0,12,0"/>
+                                        <TextBlock Text="&#xE7B8;" Style="{DynamicResource FluentIconSmall}" Margin="0,0,12,0"/>
                                         <TextBlock x:Name="VesselsText" Text="Vessels"/>
                                     </StackPanel>
                                 </Button.Content>
                             </Button>
                             
                             <Button x:Name="PurchasesBtn" 
-                                    Style="{StaticResource NavigationButtonStyle}" 
+                                    Style="{DynamicResource NavigationButtonStyle}" 
                                     Click="Purchases_Click">
                                 <Button.Content>
                                     <StackPanel Orientation="Horizontal">
-                                        <TextBlock Text="&#xE7BF;" Style="{StaticResource FluentIconSmall}" Margin="0,0,12,0"/>
+                                        <TextBlock Text="&#xE7BF;" Style="{DynamicResource FluentIconSmall}" Margin="0,0,12,0"/>
                                         <TextBlock x:Name="PurchasesText" Text="Purchase Entry"/>
                                     </StackPanel>
                                 </Button.Content>
                             </Button>
                             
                             <Button x:Name="ConsumptionBtn" 
-                                    Style="{StaticResource NavigationButtonStyle}" 
+                                    Style="{DynamicResource NavigationButtonStyle}" 
                                     Click="Consumption_Click">
                                 <Button.Content>
                                     <StackPanel Orientation="Horizontal">
-                                        <TextBlock Text="&#xE73F;" Style="{StaticResource FluentIconSmall}" Margin="0,0,12,0"/>
+                                        <TextBlock Text="&#xE73F;" Style="{DynamicResource FluentIconSmall}" Margin="0,0,12,0"/>
                                         <TextBlock x:Name="ConsumptionText" Text="Consumption Entry"/>
                                     </StackPanel>
                                 </Button.Content>
                             </Button>
                             
                             <Button x:Name="TripsBtn" 
-                                    Style="{StaticResource NavigationButtonStyle}" 
+                                    Style="{DynamicResource NavigationButtonStyle}" 
                                     Click="Trips_Click">
                                 <Button.Content>
                                     <StackPanel Orientation="Horizontal">
-                                        <TextBlock Text="&#xE909;" Style="{StaticResource FluentIconSmall}" Margin="0,0,12,0"/>
+                                        <TextBlock Text="&#xE909;" Style="{DynamicResource FluentIconSmall}" Margin="0,0,12,0"/>
                                         <TextBlock x:Name="TripsText" Text="Trip Management"/>
                                     </StackPanel>
                                 </Button.Content>
                             </Button>
                             
                             <Button x:Name="AllocationBtn" 
-                                    Style="{StaticResource NavigationButtonStyle}" 
+                                    Style="{DynamicResource NavigationButtonStyle}" 
                                     Click="Allocation_Click">
                                 <Button.Content>
                                     <StackPanel Orientation="Horizontal">
-                                        <TextBlock Text="&#xE8FD;" Style="{StaticResource FluentIconSmall}" Margin="0,0,12,0"/>
+                                        <TextBlock Text="&#xE8FD;" Style="{DynamicResource FluentIconSmall}" Margin="0,0,12,0"/>
                                         <TextBlock x:Name="AllocationText" Text="Monthly Allocation"/>
                                     </StackPanel>
                                 </Button.Content>
                             </Button>
                             
                             <Button x:Name="SummaryBtn" 
-                                    Style="{StaticResource NavigationButtonStyle}" 
+                                    Style="{DynamicResource NavigationButtonStyle}" 
                                     Click="Summary_Click">
                                 <Button.Content>
                                     <StackPanel Orientation="Horizontal">
-                                        <TextBlock Text="&#xE9A9;" Style="{StaticResource FluentIconSmall}" Margin="0,0,12,0"/>
+                                        <TextBlock Text="&#xE9A9;" Style="{DynamicResource FluentIconSmall}" Margin="0,0,12,0"/>
                                         <TextBlock x:Name="SummaryText" Text="Reports"/>
                                     </StackPanel>
                                 </Button.Content>
@@ -214,22 +214,22 @@
 
                             <!-- Utility Navigation -->
                             <Button x:Name="BackupBtn" 
-                                    Style="{StaticResource NavigationButtonStyle}" 
+                                    Style="{DynamicResource NavigationButtonStyle}" 
                                     Click="Backup_Click">
                                 <Button.Content>
                                     <StackPanel Orientation="Horizontal">
-                                        <TextBlock Text="&#xE896;" Style="{StaticResource FluentIconSmall}" Margin="0,0,12,0"/>
+                                        <TextBlock Text="&#xE896;" Style="{DynamicResource FluentIconSmall}" Margin="0,0,12,0"/>
                                         <TextBlock x:Name="BackupText" Text="Backup Management"/>
                                     </StackPanel>
                                 </Button.Content>
                             </Button>
                             
                             <Button x:Name="SettingsBtn" 
-                                    Style="{StaticResource NavigationButtonStyle}" 
+                                    Style="{DynamicResource NavigationButtonStyle}" 
                                     Click="Settings_Click">
                                 <Button.Content>
                                     <StackPanel Orientation="Horizontal">
-                                        <TextBlock Text="&#xE713;" Style="{StaticResource FluentIconSmall}" Margin="0,0,12,0"/>
+                                        <TextBlock Text="&#xE713;" Style="{DynamicResource FluentIconSmall}" Margin="0,0,12,0"/>
                                         <TextBlock x:Name="SettingsText" Text="Settings"/>
                                     </StackPanel>
                                 </Button.Content>
@@ -244,7 +244,7 @@
                           BorderThickness="0,1,0,0">
                         <TextBlock x:Name="NavigationFooter"
                                  Text="v1.0.0" 
-                                 Style="{StaticResource CaptionTextStyle}"
+                                 Style="{DynamicResource CaptionTextStyle}"
                                  HorizontalAlignment="Center"/>
                     </Border>
                 </Grid>
@@ -284,7 +284,7 @@
                            Margin="0,0,6,0"/>
                     <TextBlock x:Name="DatabaseStatus" 
                              Text="Database Connected" 
-                             Style="{StaticResource CaptionTextStyle}"
+                             Style="{DynamicResource CaptionTextStyle}"
                              VerticalAlignment="Center" 
                              Margin="0,0,16,0"/>
                 </StackPanel>

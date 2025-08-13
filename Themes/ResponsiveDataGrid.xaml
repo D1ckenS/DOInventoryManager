@@ -1,0 +1,233 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <!-- Responsive DataGrid Column Sizing Standards -->
+    
+    <!-- 
+    Professional DataGrid Column Sizing Guidelines:
+    
+    1. DATE COLUMNS: Width="1.2*" MinWidth="100" - Dates need consistent space
+    2. NAME/DESCRIPTION COLUMNS: Width="2*" MinWidth="150" - Primary content needs most space  
+    3. NUMERIC COLUMNS: Width="1*" MinWidth="80" - Numbers are compact but need alignment
+    4. CURRENCY COLUMNS: Width="1.3*" MinWidth="100" - Money values need more space for formatting
+    5. STATUS/CATEGORY COLUMNS: Width="1*" MinWidth="90" - Short text content
+    6. ACTION COLUMNS: Width="Auto" - Buttons size to content
+    7. ID COLUMNS: Width="0.8*" MinWidth="60" - Minimal space for IDs
+    8. PERCENTAGE COLUMNS: Width="0.8*" MinWidth="70" - Compact for percentages
+    -->
+
+    <!-- Enhanced DataGrid Style with Responsive Features -->
+    <Style x:Key="ResponsiveDataGridStyle" TargetType="DataGrid" BasedOn="{StaticResource ModernDataGridStyle}">
+        <Setter Property="AutoGenerateColumns" Value="False"/>
+        <Setter Property="CanUserAddRows" Value="False"/>
+        <Setter Property="CanUserDeleteRows" Value="False"/>
+        <Setter Property="CanUserReorderColumns" Value="True"/>
+        <Setter Property="CanUserResizeColumns" Value="True"/>
+        <Setter Property="CanUserResizeRows" Value="False"/>
+        <Setter Property="CanUserSortColumns" Value="True"/>
+        <Setter Property="SelectionMode" Value="Single"/>
+        <Setter Property="VirtualizingPanel.IsVirtualizing" Value="True"/>
+        <Setter Property="VirtualizingPanel.VirtualizationMode" Value="Recycling"/>
+        <Setter Property="EnableRowVirtualization" Value="True"/>
+        <Setter Property="EnableColumnVirtualization" Value="False"/>
+        <Setter Property="HeadersVisibility" Value="Column"/>
+        <Setter Property="GridLinesVisibility" Value="Horizontal"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="Background" Value="{DynamicResource CardBackgroundBrush}"/>
+        <Setter Property="BorderBrush" Value="{DynamicResource BorderSubtleBrush}"/>
+    </Style>
+    
+    <!-- Column Style Templates for Different Data Types -->
+    
+    <!-- Date Column Style Template -->
+    <Style x:Key="DateColumnStyle" TargetType="DataGridTextColumn">
+        <Setter Property="Width" Value="1.2*"/>
+        <Setter Property="MinWidth" Value="100"/>
+        <Setter Property="HeaderStyle">
+            <Setter.Value>
+                <Style TargetType="DataGridColumnHeader" BasedOn="{StaticResource {x:Type DataGridColumnHeader}}">
+                    <Setter Property="HorizontalContentAlignment" Value="Left"/>
+                    <Setter Property="MinWidth" Value="100"/>
+                </Style>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="ElementStyle">
+            <Setter.Value>
+                <Style TargetType="TextBlock">
+                    <Setter Property="HorizontalAlignment" Value="Left"/>
+                    <Setter Property="VerticalAlignment" Value="Center"/>
+                    <Setter Property="Margin" Value="4,0"/>
+                </Style>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    
+    <!-- Name/Description Column Style Template -->
+    <Style x:Key="NameColumnStyle" TargetType="DataGridTextColumn">
+        <Setter Property="Width" Value="2*"/>
+        <Setter Property="MinWidth" Value="150"/>
+        <Setter Property="HeaderStyle">
+            <Setter.Value>
+                <Style TargetType="DataGridColumnHeader" BasedOn="{StaticResource {x:Type DataGridColumnHeader}}">
+                    <Setter Property="HorizontalContentAlignment" Value="Left"/>
+                    <Setter Property="MinWidth" Value="150"/>
+                </Style>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="ElementStyle">
+            <Setter.Value>
+                <Style TargetType="TextBlock">
+                    <Setter Property="HorizontalAlignment" Value="Left"/>
+                    <Setter Property="VerticalAlignment" Value="Center"/>
+                    <Setter Property="TextTrimming" Value="CharacterEllipsis"/>
+                    <Setter Property="Margin" Value="4,0"/>
+                </Style>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    
+    <!-- Numeric Column Style Template -->
+    <Style x:Key="NumericColumnStyle" TargetType="DataGridTextColumn">
+        <Setter Property="Width" Value="1*"/>
+        <Setter Property="MinWidth" Value="80"/>
+        <Setter Property="HeaderStyle">
+            <Setter.Value>
+                <Style TargetType="DataGridColumnHeader" BasedOn="{StaticResource {x:Type DataGridColumnHeader}}">
+                    <Setter Property="HorizontalContentAlignment" Value="Right"/>
+                    <Setter Property="MinWidth" Value="80"/>
+                </Style>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="ElementStyle">
+            <Setter.Value>
+                <Style TargetType="TextBlock">
+                    <Setter Property="HorizontalAlignment" Value="Right"/>
+                    <Setter Property="VerticalAlignment" Value="Center"/>
+                    <Setter Property="Margin" Value="4,0"/>
+                </Style>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    
+    <!-- Currency Column Style Template -->
+    <Style x:Key="CurrencyColumnStyle" TargetType="DataGridTextColumn">
+        <Setter Property="Width" Value="1.3*"/>
+        <Setter Property="MinWidth" Value="100"/>
+        <Setter Property="HeaderStyle">
+            <Setter.Value>
+                <Style TargetType="DataGridColumnHeader" BasedOn="{StaticResource {x:Type DataGridColumnHeader}}">
+                    <Setter Property="HorizontalContentAlignment" Value="Right"/>
+                    <Setter Property="MinWidth" Value="100"/>
+                </Style>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="ElementStyle">
+            <Setter.Value>
+                <Style TargetType="TextBlock">
+                    <Setter Property="HorizontalAlignment" Value="Right"/>
+                    <Setter Property="VerticalAlignment" Value="Center"/>
+                    <Setter Property="Margin" Value="4,0"/>
+                    <Setter Property="FontWeight" Value="Medium"/>
+                </Style>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    
+    <!-- Status/Category Column Style Template -->
+    <Style x:Key="StatusColumnStyle" TargetType="DataGridTextColumn">
+        <Setter Property="Width" Value="1*"/>
+        <Setter Property="MinWidth" Value="90"/>
+        <Setter Property="HeaderStyle">
+            <Setter.Value>
+                <Style TargetType="DataGridColumnHeader" BasedOn="{StaticResource {x:Type DataGridColumnHeader}}">
+                    <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                    <Setter Property="MinWidth" Value="90"/>
+                </Style>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="ElementStyle">
+            <Setter.Value>
+                <Style TargetType="TextBlock">
+                    <Setter Property="HorizontalAlignment" Value="Center"/>
+                    <Setter Property="VerticalAlignment" Value="Center"/>
+                    <Setter Property="Margin" Value="4,0"/>
+                </Style>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    
+    <!-- ID Column Style Template -->
+    <Style x:Key="IdColumnStyle" TargetType="DataGridTextColumn">
+        <Setter Property="Width" Value="0.8*"/>
+        <Setter Property="MinWidth" Value="60"/>
+        <Setter Property="HeaderStyle">
+            <Setter.Value>
+                <Style TargetType="DataGridColumnHeader" BasedOn="{StaticResource {x:Type DataGridColumnHeader}}">
+                    <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                    <Setter Property="MinWidth" Value="60"/>
+                </Style>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="ElementStyle">
+            <Setter.Value>
+                <Style TargetType="TextBlock">
+                    <Setter Property="HorizontalAlignment" Value="Center"/>
+                    <Setter Property="VerticalAlignment" Value="Center"/>
+                    <Setter Property="Margin" Value="4,0"/>
+                    <Setter Property="FontFamily" Value="{StaticResource MonoFontFamily}"/>
+                    <Setter Property="FontSize" Value="11"/>
+                </Style>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    
+    <!-- Percentage Column Style Template -->
+    <Style x:Key="PercentageColumnStyle" TargetType="DataGridTextColumn">
+        <Setter Property="Width" Value="0.8*"/>
+        <Setter Property="MinWidth" Value="70"/>
+        <Setter Property="HeaderStyle">
+            <Setter.Value>
+                <Style TargetType="DataGridColumnHeader" BasedOn="{StaticResource {x:Type DataGridColumnHeader}}">
+                    <Setter Property="HorizontalContentAlignment" Value="Right"/>
+                    <Setter Property="MinWidth" Value="70"/>
+                </Style>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="ElementStyle">
+            <Setter.Value>
+                <Style TargetType="TextBlock">
+                    <Setter Property="HorizontalAlignment" Value="Right"/>
+                    <Setter Property="VerticalAlignment" Value="Center"/>
+                    <Setter Property="Margin" Value="4,0"/>
+                </Style>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    
+    <!-- Action Column Style Template for Button Columns -->
+    <Style x:Key="ActionColumnHeaderStyle" TargetType="DataGridColumnHeader" BasedOn="{StaticResource {x:Type DataGridColumnHeader}}">
+        <Setter Property="HorizontalContentAlignment" Value="Center"/>
+        <Setter Property="MinWidth" Value="120"/>
+    </Style>
+    
+    <!-- Column Sizing Helper Templates -->
+    
+    <!-- Extra Wide Column (for long descriptions, addresses) -->
+    <Style x:Key="ExtraWideColumnStyle" TargetType="DataGridTextColumn" BasedOn="{StaticResource NameColumnStyle}">
+        <Setter Property="Width" Value="3*"/>
+        <Setter Property="MinWidth" Value="200"/>
+    </Style>
+    
+    <!-- Compact Column (for flags, short codes) -->
+    <Style x:Key="CompactColumnStyle" TargetType="DataGridTextColumn" BasedOn="{StaticResource StatusColumnStyle}">
+        <Setter Property="Width" Value="0.6*"/>
+        <Setter Property="MinWidth" Value="50"/>
+    </Style>
+    
+    <!-- Medium Column (standard text content) -->
+    <Style x:Key="MediumColumnStyle" TargetType="DataGridTextColumn" BasedOn="{StaticResource StatusColumnStyle}">
+        <Setter Property="Width" Value="1.5*"/>
+        <Setter Property="MinWidth" Value="120"/>
+    </Style>
+
+</ResourceDictionary>

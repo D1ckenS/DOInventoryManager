@@ -10,6 +10,7 @@
 *.userosscache
 *.sln.docstates
 tasks.json
+django_app
 
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
@@ -413,3 +414,8 @@ appsettings.*.json
 # Personal development notes
 NOTES.md
 DEV_NOTES.md
+c\#_django_todos.txt
+CLAUDE.md
+CLAUDE.md
+DO_Inventory_Full.code-workspace
+DOInventoryManager/

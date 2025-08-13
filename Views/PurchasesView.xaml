@@ -41,7 +41,8 @@
             <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0,0,0,30">
                 <TextBlock Text="🛒" FontSize="32" VerticalAlignment="Center" Margin="0,0,10,0"/>
                 <TextBlock Text="Purchase Entry" 
-                         Style="{StaticResource DisplayMediumTextStyle}"
+                         FontSize="32" FontWeight="SemiBold"
+                         Foreground="{DynamicResource TextPrimaryBrush}"
                          VerticalAlignment="Center"/>
             </StackPanel>
 
@@ -53,8 +54,7 @@
                 <StackPanel Orientation="Horizontal">
                     <TextBlock Text="⚠" FontSize="20" VerticalAlignment="Center" Margin="0,0,10,0"/>
                     <TextBlock x:Name="AlertStatusText" Text="" 
-                             Style="{StaticResource LabelMediumTextStyle}"
-                             FontWeight="SemiBold"
+                             FontSize="12" FontWeight="SemiBold"
                              VerticalAlignment="Center" 
                              Foreground="{DynamicResource WarningForegroundBrush}"/>
                     <Button x:Name="ViewAlertsBtn" Content="View All Alerts" 
@@ -288,31 +288,31 @@
                         <!-- Date From -->
                         <StackPanel Grid.Column="0" Margin="0,0,10,0">
                             <TextBlock Text="Date From:" FontWeight="SemiBold" Margin="0,0,0,5"/>
-                            <DatePicker x:Name="SearchDateFromPicker" Width="140"/>
+                            <DatePicker x:Name="SearchDateFromPicker" Width="140" Style="{DynamicResource FluentDatePickerStyle}"/>
                         </StackPanel>
                         
                         <!-- Date To -->
                         <StackPanel Grid.Column="1" Margin="0,0,10,0">
                             <TextBlock Text="Date To:" FontWeight="SemiBold" Margin="0,0,0,5"/>
-                            <DatePicker x:Name="SearchDateToPicker" Width="140"/>
+                            <DatePicker x:Name="SearchDateToPicker" Width="140" Style="{DynamicResource FluentDatePickerStyle}"/>
                         </StackPanel>
                         
                         <!-- Vessel -->
                         <StackPanel Grid.Column="2" Margin="0,0,10,0">
                             <TextBlock Text="Vessel:" FontWeight="SemiBold" Margin="0,0,0,5"/>
-                            <ComboBox x:Name="SearchVesselFilter" Width="140" DisplayMemberPath="Name" SelectedValuePath="Id"/>
+                            <ComboBox x:Name="SearchVesselFilter" Width="140" DisplayMemberPath="Name" SelectedValuePath="Id" Style="{DynamicResource FluentComboBoxStyle}"/>
                         </StackPanel>
                         
                         <!-- Supplier -->
                         <StackPanel Grid.Column="3" Margin="0,0,10,0">
                             <TextBlock Text="Supplier:" FontWeight="SemiBold" Margin="0,0,0,5"/>
-                            <ComboBox x:Name="SearchSupplierFilter" Width="140" DisplayMemberPath="Name" SelectedValuePath="Id"/>
+                            <ComboBox x:Name="SearchSupplierFilter" Width="140" DisplayMemberPath="Name" SelectedValuePath="Id" Style="{DynamicResource FluentComboBoxStyle}"/>
                         </StackPanel>
                         
                         <!-- Invoice Reference -->
                         <StackPanel Grid.Column="4">
                             <TextBlock Text="Invoice Reference:" FontWeight="SemiBold" Margin="0,0,0,5"/>
-                            <TextBox x:Name="SearchInvoiceFilter" Width="140"/>
+                            <TextBox x:Name="SearchInvoiceFilter" Width="140" Style="{DynamicResource FluentTextBoxStyle}"/>
                         </StackPanel>
                     </Grid>
                     
@@ -369,65 +369,200 @@
                     </StackPanel>
 
                     <DataGrid x:Name="PurchasesGrid" 
-                        AutoGenerateColumns="False" 
-                        CanUserAddRows="False"
-                        CanUserDeleteRows="False"
-                        CanUserReorderColumns="False"
-                        CanUserResizeRows="False"
-                        CanUserSortColumns="True"
-                        GridLinesVisibility="Horizontal"
-                        HeadersVisibility="Column"
-                        BorderThickness="0"
+                        Style="{StaticResource ResponsiveDataGridStyle}"
                         MaxHeight="400"
-                        SelectionMode="Single"
                         SelectionChanged="PurchasesGrid_SelectionChanged"
-                        PreviewMouseWheel="DataGrid_PreviewMouseWheel"
-                        Background="{DynamicResource CardBackgroundBrush}"
-                        VirtualizingPanel.IsVirtualizing="True"
-                        VirtualizingPanel.VirtualizationMode="Recycling">
+                        PreviewMouseWheel="DataGrid_PreviewMouseWheel">
 
                         <DataGrid.Columns>
-                            <DataGridTextColumn Header="Date" Binding="{Binding PurchaseDate, StringFormat=dd/MM/yyyy}" Width="100"/>
-                            <DataGridTextColumn Header="Vessel" Binding="{Binding Vessel.Name}" Width="120"/>
-                            <DataGridTextColumn Header="Supplier" Binding="{Binding Supplier.Name}" Width="120"/>
-                            <DataGridTextColumn Header="Invoice Ref" Binding="{Binding InvoiceReference}" Width="100"/>
-                            <DataGridTextColumn Header="Qty (L)" Binding="{Binding QuantityLiters, StringFormat=N3}" Width="100"/>
-                            <DataGridTextColumn Header="Qty (T)" Binding="{Binding QuantityTons, StringFormat=N3}" Width="80"/>
-                            <DataGridTextColumn Header="Value" Width="120">
+                            <!-- Date column - using date column sizing -->
+                            <DataGridTextColumn Header="Date" 
+                                              Binding="{Binding PurchaseDate, StringFormat=dd/MM/yyyy}" 
+                                              Width="1.2*" MinWidth="100">
+                                <DataGridTextColumn.ElementStyle>
+                                    <Style TargetType="TextBlock">
+                                        <Setter Property="HorizontalAlignment" Value="Left"/>
+                                        <Setter Property="VerticalAlignment" Value="Center"/>
+                                        <Setter Property="Margin" Value="4,0"/>
+                                    </Style>
+                                </DataGridTextColumn.ElementStyle>
+                            </DataGridTextColumn>
+                            
+                            <!-- Vessel name - primary content -->
+                            <DataGridTextColumn Header="Vessel" 
+                                              Binding="{Binding Vessel.Name}" 
+                                              Width="1.5*" MinWidth="120">
+                                <DataGridTextColumn.ElementStyle>
+                                    <Style TargetType="TextBlock">
+                                        <Setter Property="TextTrimming" Value="CharacterEllipsis"/>
+                                        <Setter Property="VerticalAlignment" Value="Center"/>
+                                        <Setter Property="Margin" Value="4,0"/>
+                                    </Style>
+                                </DataGridTextColumn.ElementStyle>
+                            </DataGridTextColumn>
+                            
+                            <!-- Supplier name - important identification -->
+                            <DataGridTextColumn Header="Supplier" 
+                                              Binding="{Binding Supplier.Name}" 
+                                              Width="1.5*" MinWidth="120">
+                                <DataGridTextColumn.ElementStyle>
+                                    <Style TargetType="TextBlock">
+                                        <Setter Property="TextTrimming" Value="CharacterEllipsis"/>
+                                        <Setter Property="VerticalAlignment" Value="Center"/>
+                                        <Setter Property="Margin" Value="4,0"/>
+                                    </Style>
+                                </DataGridTextColumn.ElementStyle>
+                            </DataGridTextColumn>
+                            
+                            <!-- Invoice Reference - compact ID -->
+                            <DataGridTextColumn Header="Invoice" 
+                                              Binding="{Binding InvoiceReference}" 
+                                              Width="0.8*" MinWidth="80">
+                                <DataGridTextColumn.ElementStyle>
+                                    <Style TargetType="TextBlock">
+                                        <Setter Property="HorizontalAlignment" Value="Center"/>
+                                        <Setter Property="VerticalAlignment" Value="Center"/>
+                                        <Setter Property="FontFamily" Value="{StaticResource MonoFontFamily}"/>
+                                        <Setter Property="FontSize" Value="11"/>
+                                        <Setter Property="Margin" Value="4,0"/>
+                                    </Style>
+                                </DataGridTextColumn.ElementStyle>
+                            </DataGridTextColumn>
+                            
+                            <!-- Quantity columns - numeric with right alignment -->
+                            <DataGridTextColumn Header="Qty (L)" 
+                                              Binding="{Binding QuantityLiters, StringFormat=N3}" 
+                                              Width="1*" MinWidth="80">
+                                <DataGridTextColumn.ElementStyle>
+                                    <Style TargetType="TextBlock">
+                                        <Setter Property="HorizontalAlignment" Value="Right"/>
+                                        <Setter Property="VerticalAlignment" Value="Center"/>
+                                        <Setter Property="Margin" Value="4,0"/>
+                                    </Style>
+                                </DataGridTextColumn.ElementStyle>
+                            </DataGridTextColumn>
+                            
+                            <DataGridTextColumn Header="Qty (T)" 
+                                              Binding="{Binding QuantityTons, StringFormat=N3}" 
+                                              Width="0.8*" MinWidth="70">
+                                <DataGridTextColumn.ElementStyle>
+                                    <Style TargetType="TextBlock">
+                                        <Setter Property="HorizontalAlignment" Value="Right"/>
+                                        <Setter Property="VerticalAlignment" Value="Center"/>
+                                        <Setter Property="Margin" Value="4,0"/>
+                                    </Style>
+                                </DataGridTextColumn.ElementStyle>
+                            </DataGridTextColumn>
+                            
+                            <!-- Currency values - emphasized with larger width -->
+                            <DataGridTextColumn Header="Value" Width="1.3*" MinWidth="110">
                                 <DataGridTextColumn.Binding>
                                     <MultiBinding StringFormat="{}{0:N3} {1}">
                                         <Binding Path="TotalValue"/>
                                         <Binding Path="Supplier.Currency"/>
                                     </MultiBinding>
                                 </DataGridTextColumn.Binding>
+                                <DataGridTextColumn.ElementStyle>
+                                    <Style TargetType="TextBlock">
+                                        <Setter Property="HorizontalAlignment" Value="Right"/>
+                                        <Setter Property="VerticalAlignment" Value="Center"/>
+                                        <Setter Property="FontWeight" Value="Medium"/>
+                                        <Setter Property="Margin" Value="4,0"/>
+                                    </Style>
+                                </DataGridTextColumn.ElementStyle>
                             </DataGridTextColumn>
-                            <DataGridTextColumn Header="USD Value" Binding="{Binding TotalValueUSD, StringFormat=C2}" Width="100"/>
-                            <DataGridTextColumn Header="Price/L" Width="100">
+                            
+                            <DataGridTextColumn Header="USD Value" 
+                                              Binding="{Binding TotalValueUSD, StringFormat=C2}" 
+                                              Width="1.3*" MinWidth="100">
+                                <DataGridTextColumn.ElementStyle>
+                                    <Style TargetType="TextBlock">
+                                        <Setter Property="HorizontalAlignment" Value="Right"/>
+                                        <Setter Property="VerticalAlignment" Value="Center"/>
+                                        <Setter Property="FontWeight" Value="SemiBold"/>
+                                        <Setter Property="Foreground" Value="{DynamicResource SuccessForegroundBrush}"/>
+                                        <Setter Property="Margin" Value="4,0"/>
+                                    </Style>
+                                </DataGridTextColumn.ElementStyle>
+                            </DataGridTextColumn>
+                            
+                            <!-- Rates - compact with precision -->
+                            <DataGridTextColumn Header="Price/L" Width="1*" MinWidth="90">
                                 <DataGridTextColumn.Binding>
-                                    <MultiBinding StringFormat="{}{0:N6} {1}">
+                                    <MultiBinding StringFormat="{}{0:N3} {1}">
                                         <Binding Path="PricePerLiter"/>
                                         <Binding Path="Supplier.Currency"/>
                                     </MultiBinding>
                                 </DataGridTextColumn.Binding>
+                                <DataGridTextColumn.ElementStyle>
+                                    <Style TargetType="TextBlock">
+                                        <Setter Property="HorizontalAlignment" Value="Right"/>
+                                        <Setter Property="VerticalAlignment" Value="Center"/>
+                                        <Setter Property="FontSize" Value="11"/>
+                                        <Setter Property="Margin" Value="4,0"/>
+                                    </Style>
+                                </DataGridTextColumn.ElementStyle>
                             </DataGridTextColumn>
-                            <DataGridTextColumn Header="Price/L USD" Width="100">
+                            
+                            <DataGridTextColumn Header="USD/L" Width="1*" MinWidth="85">
                                 <DataGridTextColumn.Binding>
-                                    <MultiBinding StringFormat="{}{0:N6} USD">
+                                    <MultiBinding StringFormat="{}{0:N3}">
                                         <Binding Path="PricePerLiterUSD"/>
                                     </MultiBinding>
                                 </DataGridTextColumn.Binding>
+                                <DataGridTextColumn.ElementStyle>
+                                    <Style TargetType="TextBlock">
+                                        <Setter Property="HorizontalAlignment" Value="Right"/>
+                                        <Setter Property="VerticalAlignment" Value="Center"/>
+                                        <Setter Property="FontSize" Value="11"/>
+                                        <Setter Property="Margin" Value="4,0"/>
+                                    </Style>
+                                </DataGridTextColumn.ElementStyle>
                             </DataGridTextColumn>
-                            <DataGridTextColumn Header="Price/T USD" Width="100">
+                            
+                            <DataGridTextColumn Header="USD/T" Width="1*" MinWidth="85">
                                 <DataGridTextColumn.Binding>
-                                    <MultiBinding StringFormat="{}{0:N3} USD">
+                                    <MultiBinding StringFormat="{}{0:N0}">
                                         <Binding Path="PricePerTonUSD"/>
                                     </MultiBinding>
                                 </DataGridTextColumn.Binding>
+                                <DataGridTextColumn.ElementStyle>
+                                    <Style TargetType="TextBlock">
+                                        <Setter Property="HorizontalAlignment" Value="Right"/>
+                                        <Setter Property="VerticalAlignment" Value="Center"/>
+                                        <Setter Property="FontSize" Value="11"/>
+                                        <Setter Property="Margin" Value="4,0"/>
+                                    </Style>
+                                </DataGridTextColumn.ElementStyle>
                             </DataGridTextColumn>
-                            <DataGridTextColumn Header="Density" Binding="{Binding Density, StringFormat=N3}" Width="80"/>
-                            <DataGridTextColumn Header="Remaining L" Binding="{Binding RemainingQuantity, StringFormat=N3}" Width="100"/>
-                            <DataGridTextColumn Header="Remaining T" Binding="{Binding RemainingQuantityTons, StringFormat=N3}" Width="100"/>
-                            <DataGridTextColumn Header="Due Date" Binding="{Binding DueDate, StringFormat=dd/MM/yyyy}" Width="100"/>
+                            
+                            <!-- Remaining quantities - tracking information -->
+                            <DataGridTextColumn Header="Rem. L" 
+                                              Binding="{Binding RemainingQuantity, StringFormat=N1}" 
+                                              Width="0.9*" MinWidth="75">
+                                <DataGridTextColumn.ElementStyle>
+                                    <Style TargetType="TextBlock">
+                                        <Setter Property="HorizontalAlignment" Value="Right"/>
+                                        <Setter Property="VerticalAlignment" Value="Center"/>
+                                        <Setter Property="FontSize" Value="11"/>
+                                        <Setter Property="Foreground" Value="{DynamicResource CriticalForegroundBrush}"/>
+                                        <Setter Property="Margin" Value="4,0"/>
+                                    </Style>
+                                </DataGridTextColumn.ElementStyle>
+                            </DataGridTextColumn>
+                            
+                            <!-- Due Date - important for tracking -->
+                            <DataGridTextColumn Header="Due Date" 
+                                              Binding="{Binding DueDate, StringFormat=dd/MM/yyyy}" 
+                                              Width="1.2*" MinWidth="100">
+                                <DataGridTextColumn.ElementStyle>
+                                    <Style TargetType="TextBlock">
+                                        <Setter Property="HorizontalAlignment" Value="Left"/>
+                                        <Setter Property="VerticalAlignment" Value="Center"/>
+                                        <Setter Property="Margin" Value="4,0"/>
+                                    </Style>
+                                </DataGridTextColumn.ElementStyle>
+                            </DataGridTextColumn>
                         </DataGrid.Columns>
                     </DataGrid>
                 </StackPanel>

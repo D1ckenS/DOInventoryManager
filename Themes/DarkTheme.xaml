@@ -102,6 +102,10 @@
     <SolidColorBrush x:Key="InfoBackgroundBrush" Color="{StaticResource InfoBackground}"/>
     <SolidColorBrush x:Key="InfoForegroundBrush" Color="{StaticResource InfoForeground}"/>
     
+    <!-- Danger/Destructive Action Colors (alias for Error) -->
+    <SolidColorBrush x:Key="DangerBackgroundBrush" Color="{StaticResource ErrorBackground}"/>
+    <SolidColorBrush x:Key="DangerForegroundBrush" Color="{StaticResource ErrorForeground}"/>
+    
     <!-- Gradient Brushes for Modern Effects -->
     <LinearGradientBrush x:Key="CardGradientBrush" StartPoint="0,0" EndPoint="0,1">
         <GradientStop Color="#2D2D30" Offset="0"/>

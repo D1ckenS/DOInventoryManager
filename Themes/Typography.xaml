@@ -8,6 +8,9 @@
     <FontFamily x:Key="MonoFontFamily">Cascadia Code, Consolas, 'Courier New', monospace</FontFamily>
     <FontFamily x:Key="FluentIconsFamily">Segoe Fluent Icons, Segoe MDL2 Assets, Webdings, Arial Unicode MS, Segoe UI Symbol</FontFamily>
     
+    <!-- Font Aliases for compatibility -->
+    <FontFamily x:Key="FluentIconFont">Segoe Fluent Icons, Segoe MDL2 Assets, Webdings, Arial Unicode MS, Segoe UI Symbol</FontFamily>
+    
     <!-- Typography Scale -->
     
     <!-- Display Text Styles -->

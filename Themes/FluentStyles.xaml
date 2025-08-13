@@ -13,26 +13,7 @@
         <Setter Property="RenderOptions.ClearTypeHint" Value="Enabled"/>
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
-                <Trigger.EnterActions>
-                    <BeginStoryboard>
-                        <Storyboard>
-                            <ColorAnimation Storyboard.TargetProperty="(Border.BorderBrush).(SolidColorBrush.Color)"
-                                          To="{DynamicResource BorderStrong}" Duration="0:0:0.15"/>
-                            <DoubleAnimation Storyboard.TargetProperty="Effect.ShadowDepth" 
-                                           To="4" Duration="0:0:0.15"/>
-                        </Storyboard>
-                    </BeginStoryboard>
-                </Trigger.EnterActions>
-                <Trigger.ExitActions>
-                    <BeginStoryboard>
-                        <Storyboard>
-                            <ColorAnimation Storyboard.TargetProperty="(Border.BorderBrush).(SolidColorBrush.Color)"
-                                          To="{DynamicResource BorderSubtle}" Duration="0:0:0.15"/>
-                            <DoubleAnimation Storyboard.TargetProperty="Effect.ShadowDepth" 
-                                           To="2" Duration="0:0:0.15"/>
-                        </Storyboard>
-                    </BeginStoryboard>
-                </Trigger.ExitActions>
+                <Setter Property="BorderBrush" Value="{DynamicResource PrimaryBrandBrush}"/>
             </Trigger>
         </Style.Triggers>
     </Style>
@@ -766,6 +747,34 @@
                 </Setter>
             </Trigger>
         </Style.Triggers>
+    </Style>
+
+
+
+    <!-- Missing Text Styles -->
+    <Style x:Key="HeaderTextStyle" TargetType="TextBlock">
+        <Setter Property="FontFamily" Value="{StaticResource PrimaryFontFamily}"/>
+        <Setter Property="FontSize" Value="28"/>
+        <Setter Property="FontWeight" Value="Bold"/>
+        <Setter Property="Foreground" Value="{DynamicResource TextPrimaryBrush}"/>
+        <Setter Property="UseLayoutRounding" Value="True"/>
+        <Setter Property="RenderOptions.ClearTypeHint" Value="Enabled"/>
+    </Style>
+
+    <Style x:Key="SectionHeaderStyle" TargetType="TextBlock">
+        <Setter Property="FontFamily" Value="{StaticResource PrimaryFontFamily}"/>
+        <Setter Property="FontSize" Value="20"/>
+        <Setter Property="FontWeight" Value="SemiBold"/>
+        <Setter Property="Foreground" Value="{DynamicResource TextPrimaryBrush}"/>
+        <Setter Property="UseLayoutRounding" Value="True"/>
+        <Setter Property="RenderOptions.ClearTypeHint" Value="Enabled"/>
+    </Style>
+
+    <!-- Missing Container Styles -->
+    <Style x:Key="InfoCardStyle" TargetType="Border" BasedOn="{StaticResource FluentCardStyle}">
+        <Setter Property="Background" Value="{DynamicResource InfoBackgroundBrush}"/>
+        <Setter Property="BorderBrush" Value="{DynamicResource InfoForegroundBrush}"/>
+        <Setter Property="BorderThickness" Value="1"/>
     </Style>
 
 </ResourceDictionary>

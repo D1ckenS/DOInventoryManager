@@ -147,14 +147,11 @@
                                  Margin="0,0,0,15" Foreground="{DynamicResource TextPrimaryBrush}"/>
 
                         <DataGrid x:Name="ConsumptionSummaryGrid" 
-                                AutoGenerateColumns="False" 
-                                CanUserAddRows="False"
-                                CanUserDeleteRows="False"
-                                GridLinesVisibility="Horizontal"
-                                HeadersVisibility="Column"
-                                BorderThickness="1"
-                                BorderBrush="{DynamicResource BorderSubtleBrush}"
-                                Background="{DynamicResource CardBackgroundBrush}"
+                                Style="{StaticResource ModernDataGridStyle}"
+                                ColumnHeaderStyle="{StaticResource ModernDataGridColumnHeaderStyle}"
+                                CellStyle="{StaticResource ModernDataGridCellStyle}"
+                                RowStyle="{StaticResource ModernDataGridRowStyle}"
+                                AutoGenerateColumns="False"
                                 VirtualizingPanel.IsVirtualizing="True"
                                 VirtualizingPanel.VirtualizationMode="Recycling"
                                 PreviewMouseWheel="DataGrid_PreviewMouseWheel">
@@ -184,14 +181,11 @@
                                  Margin="0,0,0,15" Foreground="{DynamicResource TextPrimaryBrush}"/>
 
                         <DataGrid x:Name="PurchaseSummaryGrid" 
-                                AutoGenerateColumns="False" 
-                                CanUserAddRows="False"
-                                CanUserDeleteRows="False"
-                                GridLinesVisibility="Horizontal"
-                                HeadersVisibility="Column"
-                                BorderThickness="1"
-                                BorderBrush="{DynamicResource BorderSubtleBrush}"
-                                Background="{DynamicResource CardBackgroundBrush}"
+                                Style="{StaticResource ModernDataGridStyle}"
+                                ColumnHeaderStyle="{StaticResource ModernDataGridColumnHeaderStyle}"
+                                CellStyle="{StaticResource ModernDataGridCellStyle}"
+                                RowStyle="{StaticResource ModernDataGridRowStyle}"
+                                AutoGenerateColumns="False"
                                 VirtualizingPanel.IsVirtualizing="True"
                                 VirtualizingPanel.VirtualizationMode="Recycling"
                                 PreviewMouseWheel="DataGrid_PreviewMouseWheel">
@@ -233,14 +227,11 @@
                                  Margin="0,0,0,15" Foreground="{DynamicResource TextPrimaryBrush}"/>
 
                         <DataGrid x:Name="AllocationSummaryGrid" 
-                                AutoGenerateColumns="False" 
-                                CanUserAddRows="False"
-                                CanUserDeleteRows="False"
-                                GridLinesVisibility="Horizontal"
-                                HeadersVisibility="Column"
-                                BorderThickness="1"
-                                BorderBrush="{DynamicResource BorderSubtleBrush}"
-                                Background="{DynamicResource CardBackgroundBrush}"
+                                Style="{StaticResource ModernDataGridStyle}"
+                                ColumnHeaderStyle="{StaticResource ModernDataGridColumnHeaderStyle}"
+                                CellStyle="{StaticResource ModernDataGridCellStyle}"
+                                RowStyle="{StaticResource ModernDataGridRowStyle}"
+                                AutoGenerateColumns="False"
                                 VirtualizingPanel.IsVirtualizing="True"
                                 VirtualizingPanel.VirtualizationMode="Recycling"
                                 PreviewMouseWheel="DataGrid_PreviewMouseWheel">
@@ -298,13 +289,11 @@
                                              Margin="0,0,0,15" Foreground="{DynamicResource TextPrimaryBrush}"/>
 
                                     <DataGrid x:Name="CurrencyBreakdownGrid" 
-                                            AutoGenerateColumns="False" 
-                                            CanUserAddRows="False"
-                                            CanUserDeleteRows="False"
-                                            GridLinesVisibility="Horizontal"
-                                            HeadersVisibility="Column"
-                                            BorderThickness="0"
-                                            Background="Transparent"
+                                            Style="{StaticResource ModernDataGridStyle}"
+                                            ColumnHeaderStyle="{StaticResource ModernDataGridColumnHeaderStyle}"
+                                            CellStyle="{StaticResource ModernDataGridCellStyle}"
+                                            RowStyle="{StaticResource ModernDataGridRowStyle}"
+                                            AutoGenerateColumns="False"
                                             VirtualizingPanel.IsVirtualizing="True"
                                             VirtualizingPanel.VirtualizationMode="Recycling">
 
@@ -326,13 +315,11 @@
                                              Margin="0,0,0,15" Foreground="{DynamicResource TextPrimaryBrush}"/>
 
                                     <DataGrid x:Name="PaymentStatusGrid" 
-                                            AutoGenerateColumns="False" 
-                                            CanUserAddRows="False"
-                                            CanUserDeleteRows="False"
-                                            GridLinesVisibility="Horizontal"
-                                            HeadersVisibility="Column"
-                                            BorderThickness="0"
-                                            Background="Transparent"
+                                            Style="{StaticResource ModernDataGridStyle}"
+                                            ColumnHeaderStyle="{StaticResource ModernDataGridColumnHeaderStyle}"
+                                            CellStyle="{StaticResource ModernDataGridCellStyle}"
+                                            RowStyle="{StaticResource ModernDataGridRowStyle}"
+                                            AutoGenerateColumns="False"
                                             VirtualizingPanel.IsVirtualizing="True"
                                             VirtualizingPanel.VirtualizationMode="Recycling">
 

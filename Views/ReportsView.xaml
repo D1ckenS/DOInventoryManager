@@ -42,7 +42,7 @@
 
                                     <StackPanel Grid.Column="0" Orientation="Horizontal">
                                         <TextBlock Text="Select Month:" FontWeight="SemiBold" VerticalAlignment="Center" Margin="0,0,10,0"/>
-                                        <ComboBox x:Name="MonthComboBox" MinWidth="120" Padding="10,8" 
+                                        <ComboBox x:Name="MonthComboBox" MinWidth="120" Style="{DynamicResource FluentComboBoxStyle}" 
                                                 SelectionChanged="MonthComboBox_SelectionChanged"/>
                                         <Button x:Name="GenerateBtn" Content="📊 Generate Report" 
                                               Style="{StaticResource FluentButtonStyle}" 
@@ -386,15 +386,15 @@
 
                                 <StackPanel Grid.Column="0" Orientation="Horizontal">
                                     <TextBlock Text="Vessel:" FontWeight="SemiBold" VerticalAlignment="Center" Margin="0,0,10,0"/>
-                                    <ComboBox x:Name="VesselAccountComboBox" MinWidth="150" Padding="10,8" 
+                                    <ComboBox x:Name="VesselAccountComboBox" MinWidth="150" Style="{DynamicResource FluentComboBoxStyle}" 
                                             DisplayMemberPath="Name" SelectedValuePath="Id" Margin="0,0,20,0"/>
 
                                     <TextBlock Text="From:" FontWeight="SemiBold" VerticalAlignment="Center" Margin="0,0,10,0"/>
-                                    <DatePicker x:Name="VesselFromDatePicker" Padding="10,8" BorderBrush="#ced4da" 
+                                    <DatePicker x:Name="VesselFromDatePicker" Style="{DynamicResource FluentDatePickerStyle}" 
                                               BorderThickness="1" Margin="0,0,15,0"/>
 
                                     <TextBlock Text="To:" FontWeight="SemiBold" VerticalAlignment="Center" Margin="0,0,10,0"/>
-                                    <DatePicker x:Name="VesselToDatePicker" Padding="10,8" BorderBrush="#ced4da" 
+                                    <DatePicker x:Name="VesselToDatePicker" Style="{DynamicResource FluentDatePickerStyle}" 
                                               BorderThickness="1" Margin="0,0,15,0"/>
 
                                     <Button x:Name="GenerateVesselAccountBtn" Content="📊 Generate Statement" 
@@ -568,15 +568,15 @@
 
                                 <StackPanel Grid.Column="0" Orientation="Horizontal">
                                     <TextBlock Text="Supplier:" FontWeight="SemiBold" VerticalAlignment="Center" Margin="0,0,10,0"/>
-                                    <ComboBox x:Name="SupplierAccountComboBox" MinWidth="150" Padding="10,8" 
+                                    <ComboBox x:Name="SupplierAccountComboBox" MinWidth="150" Style="{DynamicResource FluentComboBoxStyle}" 
                                             DisplayMemberPath="Name" SelectedValuePath="Id" Margin="0,0,20,0"/>
 
                                     <TextBlock Text="From:" FontWeight="SemiBold" VerticalAlignment="Center" Margin="0,0,10,0"/>
-                                    <DatePicker x:Name="SupplierFromDatePicker" Padding="10,8" BorderBrush="#ced4da" 
+                                    <DatePicker x:Name="SupplierFromDatePicker" Style="{DynamicResource FluentDatePickerStyle}" 
                                               BorderThickness="1" Margin="0,0,15,0"/>
 
                                     <TextBlock Text="To:" FontWeight="SemiBold" VerticalAlignment="Center" Margin="0,0,10,0"/>
-                                    <DatePicker x:Name="SupplierToDatePicker" Padding="10,8" BorderBrush="#ced4da" 
+                                    <DatePicker x:Name="SupplierToDatePicker" Style="{DynamicResource FluentDatePickerStyle}" 
                                               BorderThickness="1" Margin="0,0,15,0"/>
 
                                     <Button x:Name="GenerateSupplierAccountBtn" Content="📊 Generate Report" 
@@ -1177,10 +1177,10 @@
                                                 CornerRadius="4" Padding="10,5">
                                             <StackPanel Orientation="Horizontal">
                                                 <TextBlock Text="📅 Period:" FontWeight="SemiBold" VerticalAlignment="Center" Margin="0,0,10,0"/>
-                                                <DatePicker x:Name="FleetFromDatePicker" SelectedDate="{x:Static sys:DateTime.Today}" 
+                                                <DatePicker x:Name="FleetFromDatePicker" SelectedDate="{x:Static sys:DateTime.Today}" Style="{DynamicResource FluentDatePickerStyle}" 
                                                             Margin="0,0,10,0" FirstDayOfWeek="Sunday"/>
                                                 <TextBlock Text="to" VerticalAlignment="Center" Margin="0,0,10,0"/>
-                                                <DatePicker x:Name="FleetToDatePicker" SelectedDate="{x:Static sys:DateTime.Today}" 
+                                                <DatePicker x:Name="FleetToDatePicker" SelectedDate="{x:Static sys:DateTime.Today}" Style="{DynamicResource FluentDatePickerStyle}" 
                                                             FirstDayOfWeek="Sunday"/>
                                             </StackPanel>
                                         </Border>
@@ -1522,10 +1522,10 @@
                                 CornerRadius="4" Padding="10,5">
                                             <StackPanel Orientation="Horizontal">
                                                 <TextBlock Text="📅 Period:" FontWeight="SemiBold" VerticalAlignment="Center" Margin="0,0,10,0"/>
-                                                <DatePicker x:Name="FIFOFromDatePicker" SelectedDate="{x:Static sys:DateTime.Today}" 
+                                                <DatePicker x:Name="FIFOFromDatePicker" SelectedDate="{x:Static sys:DateTime.Today}" Style="{DynamicResource FluentDatePickerStyle}" 
                                            Margin="0,0,10,0" FirstDayOfWeek="Sunday"/>
                                                 <TextBlock Text="to" VerticalAlignment="Center" Margin="0,0,10,0"/>
-                                                <DatePicker x:Name="FIFOToDatePicker" SelectedDate="{x:Static sys:DateTime.Today}" 
+                                                <DatePicker x:Name="FIFOToDatePicker" SelectedDate="{x:Static sys:DateTime.Today}" Style="{DynamicResource FluentDatePickerStyle}" 
                                            FirstDayOfWeek="Sunday"/>
                                             </StackPanel>
                                         </Border>
@@ -1907,10 +1907,10 @@
                                     </Grid.ColumnDefinitions>
 
                                     <TextBlock Grid.Column="0" Text="From Date:" VerticalAlignment="Center" Margin="0,0,10,0"/>
-                                    <DatePicker Grid.Column="1" x:Name="CostFromDatePicker" Width="120" Margin="0,0,20,0"/>
+                                    <DatePicker Grid.Column="1" x:Name="CostFromDatePicker" Width="160" Margin="0,0,20,0" Style="{DynamicResource FluentDatePickerStyle}"/>
 
                                     <TextBlock Grid.Column="2" Text="To Date:" VerticalAlignment="Center" Margin="0,0,10,0"/>
-                                    <DatePicker Grid.Column="3" x:Name="CostToDatePicker" Width="120" Margin="0,0,20,0"/>
+                                    <DatePicker Grid.Column="3" x:Name="CostToDatePicker" Width="160" Margin="0,0,20,0" Style="{DynamicResource FluentDatePickerStyle}"/>
 
                                     <Button Grid.Column="5" x:Name="GenerateCostAnalysis" Content="🔄 Generate Analysis" 
                                             Click="GenerateCostAnalysis_Click" 
@@ -2366,10 +2366,10 @@
                                     </Grid.ColumnDefinitions>
 
                                     <TextBlock Grid.Column="0" Text="From Date:" VerticalAlignment="Center" Margin="0,0,10,0"/>
-                                    <DatePicker Grid.Column="1" x:Name="RouteFromDatePicker" Width="120" Margin="0,0,20,0"/>
+                                    <DatePicker Grid.Column="1" x:Name="RouteFromDatePicker" Width="120" Margin="0,0,20,0" Style="{DynamicResource FluentDatePickerStyle}"/>
 
                                     <TextBlock Grid.Column="2" Text="To Date:" VerticalAlignment="Center" Margin="0,0,10,0"/>
-                                    <DatePicker Grid.Column="3" x:Name="RouteToDatePicker" Width="120" Margin="0,0,20,0"/>
+                                    <DatePicker Grid.Column="3" x:Name="RouteToDatePicker" Width="120" Margin="0,0,20,0" Style="{DynamicResource FluentDatePickerStyle}"/>
 
                                     <Button Grid.Column="5" x:Name="GenerateRoutePerformance" Content="🔄 Generate Analysis" 
                                             Click="GenerateRoutePerformance_Click" 

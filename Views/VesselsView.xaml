@@ -63,24 +63,22 @@
                              Margin="0,0,0,15" Foreground="{DynamicResource TextPrimaryBrush}"/>
 
                     <DataGrid x:Name="VesselsGrid" 
+                            Style="{StaticResource ModernDataGridStyle}"
+                            ColumnHeaderStyle="{StaticResource ModernDataGridColumnHeaderStyle}"
+                            CellStyle="{StaticResource ModernDataGridCellStyle}"
+                            RowStyle="{StaticResource ModernDataGridRowStyle}"
                             AutoGenerateColumns="False" 
                             CanUserAddRows="False"
                             CanUserDeleteRows="False"
                             CanUserReorderColumns="False"
                             CanUserResizeRows="False"
                             CanUserSortColumns="True"
-                            GridLinesVisibility="Horizontal"
-                            HeadersVisibility="Column"
-                            BorderThickness="0"
                             SelectionMode="Single"
                             SelectionChanged="VesselsGrid_SelectionChanged"
                             PreviewMouseWheel="DataGrid_PreviewMouseWheel"
                             VirtualizingPanel.VirtualizationMode="Recycling"
                             VirtualizingPanel.IsVirtualizing="True"
-                            ScrollViewer.CanContentScroll="True"
-                            Background="{DynamicResource CardBackgroundBrush}"
-                            Foreground="{DynamicResource TextPrimaryBrush}"
-                            AlternatingRowBackground="{DynamicResource AlternatingRowBackgroundBrush}">
+                            ScrollViewer.CanContentScroll="True">
 
                         <DataGrid.Columns>
                             <DataGridTextColumn Header="ID" Binding="{Binding Id}" Width="50" IsReadOnly="True"/>

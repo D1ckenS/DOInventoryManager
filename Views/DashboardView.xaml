@@ -7,7 +7,8 @@
             
             <!-- Header -->
             <TextBlock Text="Dashboard" 
-                     Style="{StaticResource DisplayMediumTextStyle}" 
+                     FontSize="28" FontWeight="Bold"
+                     Foreground="{DynamicResource TextPrimaryBrush}"
                      Margin="0,0,0,32"/>
             
             <!-- Quick Stats Cards -->
@@ -25,17 +26,17 @@
                         Margin="0,0,16,0">
                     <StackPanel>
                         <TextBlock Text="&#xE7B8;" 
-                                 Style="{StaticResource FluentIconLarge}" 
+                                 FontSize="32" FontFamily="{StaticResource FluentIconFont}" 
                                  Foreground="{DynamicResource PrimaryBrandBrush}"
                                  HorizontalAlignment="Center" 
                                  Margin="0,0,0,12"/>
                         <TextBlock x:Name="TotalVesselsText" 
                                  Text="0" 
-                                 Style="{StaticResource HeadlineLargeTextStyle}" 
+                                 FontSize="24" FontWeight="SemiBold" 
                                  HorizontalAlignment="Center" 
                                  Margin="0,0,0,4"/>
                         <TextBlock Text="Total Vessels" 
-                                 Style="{StaticResource LabelMediumTextStyle}"
+                                 FontSize="12" FontWeight="Medium"
                                  Foreground="{DynamicResource TextSecondaryBrush}"
                                  HorizontalAlignment="Center"/>
                     </StackPanel>
@@ -47,17 +48,17 @@
                         Margin="0,0,16,0">
                     <StackPanel>
                         <TextBlock Text="&#xE716;" 
-                                 Style="{StaticResource FluentIconLarge}" 
+                                 FontSize="32" FontFamily="{StaticResource FluentIconFont}" 
                                  Foreground="{DynamicResource SuccessForegroundBrush}"
                                  HorizontalAlignment="Center" 
                                  Margin="0,0,0,12"/>
                         <TextBlock x:Name="TotalSuppliersText" 
                                  Text="0" 
-                                 Style="{StaticResource HeadlineLargeTextStyle}" 
+                                 FontSize="24" FontWeight="SemiBold" 
                                  HorizontalAlignment="Center" 
                                  Margin="0,0,0,4"/>
                         <TextBlock Text="Active Suppliers" 
-                                 Style="{StaticResource LabelMediumTextStyle}"
+                                 FontSize="12" FontWeight="Medium"
                                  Foreground="{DynamicResource TextSecondaryBrush}"
                                  HorizontalAlignment="Center"/>
                     </StackPanel>
@@ -69,17 +70,17 @@
                         Margin="0,0,16,0">
                     <StackPanel>
                         <TextBlock Text="&#xE73F;" 
-                                 Style="{StaticResource FluentIconLarge}" 
+                                 FontSize="32" FontFamily="{StaticResource FluentIconFont}" 
                                  Foreground="{DynamicResource CriticalForegroundBrush}"
                                  HorizontalAlignment="Center" 
                                  Margin="0,0,0,12"/>
                         <TextBlock x:Name="CurrentInventoryText" 
                                  Text="0" 
-                                 Style="{StaticResource HeadlineLargeTextStyle}" 
+                                 FontSize="24" FontWeight="SemiBold" 
                                  HorizontalAlignment="Center" 
                                  Margin="0,0,0,4"/>
                         <TextBlock Text="Liters on Hand" 
-                                 Style="{StaticResource LabelMediumTextStyle}"
+                                 FontSize="12" FontWeight="Medium"
                                  Foreground="{DynamicResource TextSecondaryBrush}"
                                  HorizontalAlignment="Center"/>
                     </StackPanel>
@@ -90,17 +91,17 @@
                         Style="{StaticResource StatCardStyle}">
                     <StackPanel>
                         <TextBlock Text="&#xE7BF;" 
-                                 Style="{StaticResource FluentIconLarge}" 
+                                 FontSize="32" FontFamily="{StaticResource FluentIconFont}" 
                                  Foreground="{DynamicResource CautionForegroundBrush}"
                                  HorizontalAlignment="Center" 
                                  Margin="0,0,0,12"/>
                         <TextBlock x:Name="InventoryValueText" 
                                  Text="$0" 
-                                 Style="{StaticResource HeadlineLargeTextStyle}" 
+                                 FontSize="24" FontWeight="SemiBold" 
                                  HorizontalAlignment="Center" 
                                  Margin="0,0,0,4"/>
                         <TextBlock Text="Inventory Value (USD)" 
-                                 Style="{StaticResource LabelMediumTextStyle}"
+                                 FontSize="12" FontWeight="Medium"
                                  Foreground="{DynamicResource TextSecondaryBrush}"
                                  HorizontalAlignment="Center"/>
                     </StackPanel>
@@ -111,7 +112,7 @@
             <Border Style="{StaticResource FluentCardStyle}" Margin="0,0,0,32">
                 <StackPanel>
                     <TextBlock Text="Quick Actions" 
-                             Style="{StaticResource TitleLargeTextStyle}" 
+                             FontSize="20" FontWeight="SemiBold" 
                              Margin="0,0,0,20"/>
                     
                     <Grid>
@@ -148,33 +149,52 @@
             <Border Style="{StaticResource FluentCardStyle}">
                 <StackPanel>
                     <TextBlock Text="Recent Activity" 
-                             Style="{StaticResource TitleLargeTextStyle}" 
+                             FontSize="20" FontWeight="SemiBold" 
                              Margin="0,0,0,20"/>
                     
                     <DataGrid x:Name="RecentActivityGrid" 
-                            AutoGenerateColumns="False" 
-                            CanUserAddRows="False"
-                            CanUserDeleteRows="False"
-                            CanUserReorderColumns="False"
-                            CanUserResizeRows="False"
-                            CanUserSortColumns="True"
-                            GridLinesVisibility="Horizontal"
-                            HeadersVisibility="Column"
-                            BorderThickness="0"
+                            Style="{StaticResource ResponsiveDataGridStyle}"
                             MaxHeight="300">
                         
                         <DataGrid.Columns>
-                            <DataGridTextColumn Header="Date" Binding="{Binding Date, StringFormat=dd/MM/yyyy}" Width="100"/>
-                            <DataGridTextColumn Header="Type" Binding="{Binding Type}" Width="100"/>
-                            <DataGridTextColumn Header="Vessel" Binding="{Binding Vessel}" Width="150"/>
-                            <DataGridTextColumn Header="Description" Binding="{Binding Description}" Width="*"/>
-                            <DataGridTextColumn Header="Amount" Binding="{Binding FormattedAmount}" Width="100"/>
+                            <DataGridTextColumn Header="Date" 
+                                              Binding="{Binding Date, StringFormat=dd/MM/yyyy}" 
+                                              Width="1.2*" MinWidth="100"/>
+                            <DataGridTextColumn Header="Type" 
+                                              Binding="{Binding Type}" 
+                                              Width="1*" MinWidth="90"/>
+                            <DataGridTextColumn Header="Vessel" 
+                                              Binding="{Binding Vessel}" 
+                                              Width="1.5*" MinWidth="120"/>
+                            <DataGridTextColumn Header="Description" 
+                                              Binding="{Binding Description}" 
+                                              Width="2*" MinWidth="150">
+                                <DataGridTextColumn.ElementStyle>
+                                    <Style TargetType="TextBlock">
+                                        <Setter Property="TextTrimming" Value="CharacterEllipsis"/>
+                                        <Setter Property="VerticalAlignment" Value="Center"/>
+                                        <Setter Property="Margin" Value="4,0"/>
+                                    </Style>
+                                </DataGridTextColumn.ElementStyle>
+                            </DataGridTextColumn>
+                            <DataGridTextColumn Header="Amount" 
+                                              Binding="{Binding FormattedAmount}" 
+                                              Width="1.3*" MinWidth="100">
+                                <DataGridTextColumn.ElementStyle>
+                                    <Style TargetType="TextBlock">
+                                        <Setter Property="HorizontalAlignment" Value="Right"/>
+                                        <Setter Property="VerticalAlignment" Value="Center"/>
+                                        <Setter Property="FontWeight" Value="Medium"/>
+                                        <Setter Property="Margin" Value="4,0"/>
+                                    </Style>
+                                </DataGridTextColumn.ElementStyle>
+                            </DataGridTextColumn>
                         </DataGrid.Columns>
                     </DataGrid>
                     
                     <TextBlock x:Name="NoDataText" 
                              Text="No recent activity to display. Start by adding suppliers and vessels." 
-                             Style="{StaticResource BodyMediumTextStyle}"
+                             FontSize="14" FontWeight="Normal"
                              Foreground="{DynamicResource TextTertiaryBrush}"
                              FontStyle="Italic" 
                              Margin="0,20,0,0" 

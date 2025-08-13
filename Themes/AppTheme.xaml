@@ -15,20 +15,14 @@
     
     <!-- Application-wide default styles -->
     
-    <!-- Default TextBlock Style -->
-    <Style TargetType="TextBlock" BasedOn="{StaticResource BodyMediumTextStyle}"/>
+    <!-- Default TextBlock Style - disabled to avoid circular references -->
+    <!-- <Style TargetType="TextBlock" BasedOn="{StaticResource BodyMediumTextStyle}"/> -->
     
-    <!-- Default Button Style -->
-    <Style TargetType="Button" BasedOn="{StaticResource FluentButtonStyle}"/>
-    
-    <!-- Default TextBox Style -->
-    <Style TargetType="TextBox" BasedOn="{StaticResource FluentTextBoxStyle}"/>
-    
-    <!-- Default ComboBox Style -->
-    <Style TargetType="ComboBox" BasedOn="{StaticResource FluentComboBoxStyle}"/>
-    
-    <!-- Default DatePicker Style -->
-    <Style TargetType="DatePicker" BasedOn="{StaticResource FluentDatePickerStyle}"/>
+    <!-- Default styles - disabled to avoid resource loading conflicts -->
+    <!-- <Style TargetType="Button" BasedOn="{StaticResource FluentButtonStyle}"/> -->
+    <!-- <Style TargetType="TextBox" BasedOn="{StaticResource FluentTextBoxStyle}"/> -->
+    <!-- <Style TargetType="ComboBox" BasedOn="{StaticResource FluentComboBoxStyle}"/> -->
+    <!-- <Style TargetType="DatePicker" BasedOn="{StaticResource FluentDatePickerStyle}"/> -->
     
     <!-- Default Border Style for Cards -->
     <Style x:Key="DefaultCardStyle" TargetType="Border" BasedOn="{StaticResource FluentCardStyle}"/>

@@ -12,7 +12,7 @@ namespace DOInventoryManager.Services
         {
             public RoutePerformanceOverview Overview { get; set; } = new();
             public List<RouteComparison> RouteComparisons { get; set; } = [];
-            public List<VesselRoutePerformance> VesselPerformance { get; set; } = [];
+            public List<RouteVesselPerformance> VesselPerformance { get; set; } = [];
             public List<RouteEfficiencyTrend> EfficiencyTrends { get; set; } = [];
             public List<RouteCostAnalysis> CostAnalysis { get; set; } = [];
             public List<RouteOptimizationRecommendation> OptimizationRecommendations { get; set; } = [];
@@ -69,7 +69,7 @@ namespace DOInventoryManager.Services
             public string FormattedAdvantage => CompetitiveAdvantage < 0 ? $"({Math.Abs(CompetitiveAdvantage):N2}%)" : $"{CompetitiveAdvantage:N2}%";
         }
 
-        public class VesselRoutePerformance
+        public class RouteVesselPerformance
         {
             public string VesselName { get; set; } = string.Empty;
             public string VesselType { get; set; } = string.Empty;
@@ -396,7 +396,7 @@ namespace DOInventoryManager.Services
 
         #region Private Methods - Vessel Performance
 
-        private List<VesselRoutePerformance> GenerateVesselPerformance(List<Consumption> consumptions)
+        private List<RouteVesselPerformance> GenerateVesselPerformance(List<Consumption> consumptions)
         {
             var vesselRouteDistance = 520m;
             var boatRouteDistance = 340m;
@@ -465,7 +465,7 @@ namespace DOInventoryManager.Services
                     _ => "Urgent performance review needed"
                 };
 
-                return new VesselRoutePerformance
+                return new RouteVesselPerformance
                 {
                     VesselName = v.VesselName,
                     VesselType = v.VesselType,

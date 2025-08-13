@@ -129,15 +129,15 @@
                         <!-- Consumption in Liters -->
                         <StackPanel Grid.Column="1" Margin="0,0,15,0">
                             <TextBlock Text="Consumption (Liters) *" FontWeight="SemiBold" Margin="0,0,0,5"/>
-                            <TextBox x:Name="ConsumptionLitersTextBox" Padding="10" BorderBrush="{DynamicResource BorderSubtleBrush}" 
-                                   BorderThickness="1" TextChanged="ConsumptionTextBox_TextChanged"/>
+                            <TextBox x:Name="ConsumptionLitersTextBox" Style="{DynamicResource FluentTextBoxStyle}" 
+                                   TextChanged="ConsumptionTextBox_TextChanged"/>
                         </StackPanel>
 
                         <!-- Legs Completed -->
                         <StackPanel Grid.Column="2">
                             <TextBlock Text="Legs Completed (Optional)" FontWeight="SemiBold" Margin="0,0,0,5"/>
-                            <TextBox x:Name="LegsCompletedTextBox" Padding="10" BorderBrush="{DynamicResource BorderSubtleBrush}" 
-                                   BorderThickness="1" TextChanged="ConsumptionTextBox_TextChanged"
+                            <TextBox x:Name="LegsCompletedTextBox" Style="{DynamicResource FluentTextBoxStyle}" 
+                                   TextChanged="ConsumptionTextBox_TextChanged"
                                    ToolTip="Leave empty or enter 0 for stationary consumption (engines running without movement)"/>
                         </StackPanel>
                     </Grid>
@@ -216,7 +216,7 @@
                             <TextBlock Text="📋 Monthly Consumption Records" FontSize="16" FontWeight="SemiBold" 
                                      VerticalAlignment="Center" Foreground="{DynamicResource TextPrimaryBrush}"/>
                             <Rectangle Width="15"/>
-                            <ComboBox x:Name="MonthFilterComboBox" MinWidth="120" Padding="8,5" 
+                            <ComboBox x:Name="MonthFilterComboBox" MinWidth="120" Style="{DynamicResource FluentComboBoxStyle}" 
                                     SelectionChanged="MonthFilterComboBox_SelectionChanged"/>
                         </StackPanel>
 
@@ -231,17 +231,12 @@
                     </Grid>
 
                     <DataGrid x:Name="ConsumptionGrid" 
+                            Style="{StaticResource ModernDataGridStyle}"
+                            ColumnHeaderStyle="{StaticResource ModernDataGridColumnHeaderStyle}"
+                            CellStyle="{StaticResource ModernDataGridCellStyle}"
+                            RowStyle="{StaticResource ModernDataGridRowStyle}"
                             AutoGenerateColumns="False" 
-                            CanUserAddRows="False"
-                            CanUserDeleteRows="False"
-                            CanUserReorderColumns="False"
-                            CanUserResizeRows="False"
-                            CanUserSortColumns="True"
-                            GridLinesVisibility="Horizontal"
-                            HeadersVisibility="Column"
-                            BorderThickness="0"
                             MaxHeight="400"
-                            SelectionMode="Single"
                             VirtualizingPanel.IsVirtualizing="True"
                             VirtualizingPanel.VirtualizationMode="Recycling"
                             ScrollViewer.CanContentScroll="True"

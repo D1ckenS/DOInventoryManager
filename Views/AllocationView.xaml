@@ -37,7 +37,7 @@
                               Padding="20,12" Margin="0,0,15,0" FontWeight="SemiBold"
                               Click="RunFIFO_Click"/>
 
-                        <ComboBox x:Name="MonthFilterComboBox" MinWidth="120" Padding="10,8" 
+                        <ComboBox x:Name="MonthFilterComboBox" MinWidth="120" Style="{DynamicResource FluentComboBoxStyle}" 
                                 Margin="0,0,15,0" SelectionChanged="MonthFilter_SelectionChanged"/>
 
                         <Button x:Name="ExportBtn" Content="📤 Export to Excel" 
